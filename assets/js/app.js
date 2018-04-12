@@ -252,11 +252,12 @@ class App {
       ],
       analogClockActive: false,
       networkTimeInitialized: false,
-      timeIsValid: true,
+      timeIsValid: false,
       timeFetchingMessage: undefined,
       timeAdjustmentMinutes: 0,
       network: {
         status: 'Unknown',
+        connecting: undefined,
         internetStatus: 'Unknown',
         internetAvailable: undefined,
         showInternetAvailability: false,
@@ -296,6 +297,7 @@ class App {
 
     this.data.network.status = states[networkState];
     if (networkState == Connection.WIFI && typeof WifiWizard2 !== 'undefined') {
+      this.data.network.status = 'Checking WiFi SSID...';
       WifiWizard2.getConnectedSSID().then(
         (ssid) => {
           this.data.network.status = states[Connection.WIFI] + ' (' + ssid + ')';
@@ -712,11 +714,7 @@ class App {
     this.data.network.showInternetAvailability = !this.data.network.showInternetAvailability;
     // }
     if (this.data.timeOriginMode == 'network' && this.data.networkTimeApiUrl == this.timeServerApi) {
-      if (checkInternetNow && !this.data.timeIsValid && typeof WifiWizard2 !== 'undefined') {
-        var bindAll = true;
-        var isHiddenSSID = false;
-        WifiWizard2.connect('MDisplay TimeServer', bindAll, '1234567890', 'WPA', isHiddenSSID);
-      }
+      this.tryConnectingToTimeServer();
     } else {
       if (checkInternetNow) {
         this.checkInternetAvailability(
@@ -1096,6 +1094,33 @@ class App {
         this.setFetchingStatus('FAILED to update time from network - ' + err, 'error', false, 999);
       },
     });
+  }
+  tryConnectingToTimeServer() {
+    if (!(this.data.timeOriginMode == 'network' && this.data.networkTimeApiUrl == this.timeServerApi)) {
+      return;
+    }
+    if (this.data.timeIsValid || typeof WifiWizard2 !== 'undefined') {
+      return;
+    }
+    if (this.data.network.connecting === true || this.data.network.connecting === false) {
+      return;
+    }
+    var bindAll = true;
+    var isHiddenSSID = false;
+    this.data.network.connecting = true;
+    this.data.network.status = 'Connecting to MDisplay Server...';
+    WifiWizard2.connect('MDisplay TimeServer', bindAll, '1234567890', 'WPA', isHiddenSSID).then(
+      (res) => {
+        this.data.network.connecting = false;
+        this.data.network.status = 'Connected to MDisplay TimeServer';
+      },
+      (err) => {
+        this.data.network.status = 'ERR MDisplay TimeServer - ' + err;
+        setTimeout(() => {
+          this.tryConnectingToTimeServer();
+        }, 1000);
+      }
+    );
   }
   deviceReady() {
     this.isDeviceReady = true;
