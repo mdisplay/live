@@ -6,7 +6,7 @@
   position: absolute;
   right: 0;
   right: -2rem;
-/*  bottom: 0;
+  /*  bottom: 0;
   bottom: -1.5rem;*/
   left: 0;
   left: -2rem;
@@ -47,7 +47,7 @@
 
 .prayer-info-container .prayer-time,
 .prayer-info-container .iqamah-time {
-/*  font-size: 3rem;
+  /*  font-size: 3rem;
   line-height: 3rem;*/
   font-size: 4rem;
   line-height: 4rem;
@@ -61,7 +61,7 @@
 }
 
 .prayer-info-container .iqamah-time {
-  color: #FFEB3B;
+  color: #ffeb3b;
   /*display: none;*/
 }
 
@@ -69,7 +69,7 @@
   opacity: 0.76;
   opacity: 0.76;
   font-size: 0.75rem;
-/*  position: relative;
+  /*  position: relative;
   bottom: 0.5rem;*/
 
   position: absolute;
@@ -89,8 +89,8 @@
   position: absolute;
 }*/
 
-
-.date-display .hijri-date, .date-display .date {
+.date-display .hijri-date,
+.date-display .date {
   position: absolute;
   top: 0;
   right: 0;
@@ -130,12 +130,11 @@
   right: 5rem;
   top: -1rem;
 
-/*  top: -2rem;
+  /*  top: -2rem;
   font-size: 18rem;
   line-height: 18rem;*/
   height: 18rem;
 }
-
 
 .digital-clock .time .hours,
 .digital-clock .time .colon,
@@ -144,11 +143,9 @@
   /*display: inline-block;*/
 }
 
-
-
 .digital-clock .time .colon {
   opacity: 0.75;
-/*  min-height: 3rem;
+  /*  min-height: 3rem;
   width: 3rem;
   width: 5rem;*/
 }
@@ -167,17 +164,6 @@
   line-height: 2rem;
   opacity: 0.75;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 .digital-clock .time .hours,
 .digital-clock .time .minutes {
@@ -226,7 +212,6 @@
   display: block;
 }
 
-
 .digital-clock .time .seconds-container {
   position: absolute;
   display: block;
@@ -235,7 +220,6 @@
   bottom: 1.5rem;
   top: 0;
 }
-
 
 .digital-clock .seconds {
   top: auto;
@@ -276,31 +260,12 @@
   opacity: 0.8;
 }
 
-
 .digital-clock .date-display .weekday {
   display: block;
   font-size: 2.75rem;
   line-height: 3rem;
   line-height: 2.75rem;
   opacity: 0.8;
-}
-
-
-
-
-.analog-clock-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 15rem;
-  height: 15rem;
-
-  width: 22rem;
-  height: 22rem;
-  top: 2rem;
-
-  width: 15rem;
-  height: 15rem;
 }
 
 .active-timer {
@@ -315,13 +280,12 @@
 }
 
 .active-timer .time {
-/*  font-size: 10rem;
+  /*  font-size: 10rem;
   height: 10rem;
   line-height: 10rem;*/
   font-size: 9rem;
   height: 9rem;
   line-height: 9rem;
-
 
   color: #ff5959;
 }
@@ -336,7 +300,6 @@
   /*color: #FFF;*/
   display: none;
 }
-
 
 .active-timer .time .minutes,
 .active-timer .time .colon,
@@ -386,7 +349,6 @@
   bottom: 8.5rem;
 }
 
-
 /*.next-prayer, .active-prayer {
   display: none;
 }*/
@@ -394,8 +356,6 @@
 .is-active .next-prayer {
   display: none;
 }
-
-
 
 /*.next-prayer, .active-prayer {
   position: absolute;
@@ -442,8 +402,10 @@
   opacity: 0.9;
 }
 
-.prayer-display .iqamah-time, .prayer-display .iqamah-am-pm,
-.prayer-display .time, .prayer-display .am-pm {
+.prayer-display .iqamah-time,
+.prayer-display .iqamah-am-pm,
+.prayer-display .time,
+.prayer-display .am-pm {
   position: absolute;
   right: 0;
   bottom: 0;
@@ -507,7 +469,7 @@
   margin-bottom: 0;
   /*bottom: 1rem;*/
   bottom: 0.5rem;
-/*  font-size: 6rem;
+  /*  font-size: 6rem;
   height: 6rem;
   line-height: 6rem;*/
 }
@@ -528,14 +490,16 @@
   opacity: 0.75;
 }
 
-.prayer-display .time, .prayer-display .am-pm {
+.prayer-display .time,
+.prayer-display .am-pm {
   color: #23ff2c;
   color: #58ff4c;
   color: #7eff74;
 }
 
-.prayer-display .iqamah-time, .prayer-display .iqamah-am-pm {
-  color: #FFEB3B;
+.prayer-display .iqamah-time,
+.prayer-display .iqamah-am-pm {
+  color: #ffeb3b;
 }
 
 .active-prayer .time,
@@ -544,97 +508,6 @@
 .active-prayer .am-pm {
   /*display: none;*/
 }
-
-.analog-clock {
-  background: transparent;
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.analog-clock ul,
-.analog-clock ul li {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  color: rgba(255, 255, 255, 0.75);
-}
-
-.analog-clock div.hours::before {
-  width: 0.5rem;
-  /*height: 5rem;*/
-  background-color: rgba(255, 255, 255, 0.9);
-}
-
-.analog-clock div.minutes::before {
-  /*width: 0.25rem;*/
-  width: 0.5rem;
-  /*height: 7.5rem;*/
-  background-color: rgba(255, 255, 255, 0.8);
-}
-
-.analog-clock div.seconds::before {
-  background-color: #EB6444;
-  width: 0.2rem;
-  width: 0.125rem;
-  /*height: 8rem;*/
-}
-
-.analog-clock span::before, .analog-clock span::after {
-  /*background-color: rgba(255, 255, 255, 0.25);*/
-  background-color: rgba(255, 255, 255, 0.75);
-}
-.analog-clock span.fives::before, .analog-clock span.fives::after {
-  /*background-color: rgba(255, 255, 255, 0.75);*/
-  background-color: rgba(255, 255, 255, 0.9);
-}
-
-
-.analog-clock .cercle {
-  background-color: #EB6444;
-  border: 0;
-  width: 0.5rem;
-  height: 0.5rem;
-  width: 1rem;
-  height: 1rem;
-}
-
-.analog-clock i {
-  font-size: 1.25rem;
-}
-
-/* WNHITE FACE */
-
-
-.white-face .analog-clock {
-  background: #FFF;
-  color: rgba(0, 0, 0, 0.5);
-}
-
-.white-face .analog-clock div.hours::before {
-  background-color: rgba(0, 0, 0, 0.9);
-}
-
-.white-face .analog-clock div.minutes::before {
-  background-color: rgba(0, 0, 0, 0.75);
-}
-
-.white-face .analog-clock div.seconds::before {
-  background-color: #EB6444;
-}
-
-.white-face .analog-clock span::before, .white-face .analog-clock span::after {
-  /*background-color: rgba(255, 255, 255, 0.25);*/
-  background-color: rgba(0, 0, 0, 0.25);
-}
-.white-face .analog-clock span.fives::before, .white-face .analog-clock span.fives::after {
-  /*background-color: rgba(255, 255, 255, 0.75);*/
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-
-/*.analog-clock .cercle {
-  background-color: #EB6444;
-}*/
-
 
 .prayer-info-container .prayer-info .prayer-time,
 .prayer-info-container .prayer-info .iqamah-time {
@@ -656,8 +529,6 @@
   opacity: 1;
 }*/
 
-
-
 .active-prayer-info-iqamah .prayer-info-container .prayer-info .prayer-time {
   transform: translate3d(0, 4rem, 0);
   opacity: 0;
@@ -669,10 +540,8 @@
 }
 */
 
-
-
 .prayer-info-container .prayer-info.is-current {
-  background: #FFF;
+  background: #fff;
   transition: all 300ms;
 }
 
@@ -681,16 +550,14 @@
 }
 
 .active-prayer-info-iqamah .prayer-info.is-current/* .iqamah-time*/ {
-  background: #FFEB3B;
+  background: #ffeb3b;
 }
-
 
 .prayer-info-container .prayer-info.is-current .prayer-name,
 .prayer-info-container .prayer-info.is-current .prayer-time,
 .prayer-info-container .prayer-info.is-current .iqamah-time {
   color: #000;
 }
-
 
 .toast-container {
   position: absolute;
@@ -706,4 +573,26 @@
   padding: 10px 15px;
   box-shadow: 0px 0px 30px 10px rgba(0, 0, 0, 0.75);
   margin-bottom: 10px;
+}
+
+.invalid-time-container {
+  color: #fff;
+  z-index: 3333;
+  position: fixed;
+  width: 100%;
+  height: 4rem;
+  left: 0;
+  top: 50%;
+  margin-top: -2rem;
+}
+
+.invalid-time-container h2 {
+  line-height: 2rem;
+  font-size: 1.5rem;
+  font-weight: normal;
+}
+.invalid-time-container h3 {
+  line-height: 2rem;
+  font-size: 1.25rem;
+  font-weight: normal;
 }

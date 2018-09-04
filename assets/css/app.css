@@ -14,7 +14,7 @@ body {
   font-size: 16px;
   background: #000;
   /*background: green;*/
-  color: #FFF;
+  color: #fff;
   text-align: center;
 }
 
@@ -35,11 +35,9 @@ body {
   left: 2rem;
 }
 
-
 #app * {
   z-index: 10;
 }
-
 
 #splash {
   position: fixed;
@@ -83,7 +81,7 @@ body {
 
 .analog-clock {
   background: #333;
-  color: #EEE;
+  color: #eee;
 }
 
 .analog-clock-container {
@@ -115,8 +113,8 @@ body {
   left: 0;
 }*/
 
-
-#bgful .bgful-image, #bgful .bgful-overlay {
+#bgful .bgful-image,
+#bgful .bgful-overlay {
   position: fixed;
   top: 0;
   right: 0;
@@ -127,7 +125,7 @@ body {
 
 #bgful .bgful-overlay {
   background: rgba(0, 0, 0, 0.75);
-/*  background: rgba(0, 0, 0, 0.5);
+  /*  background: rgba(0, 0, 0, 0.5);
   background: rgba(0, 0, 0, 0.6);*/
   z-index: 2;
 }
@@ -140,16 +138,14 @@ body {
   filter: blur(10px);
 }
 
-
-
 #app .modal-wrapper {
-    position: fixed;
-    z-index: 9999;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    color: #000;
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  color: #000;
 }
 
 #app .modal-overlay {
@@ -202,19 +198,16 @@ body {
 #app .time-config .time-input,
 #app .time-config .time-input-colon,
 #app .time-config .toggle-absolute,
-#app .time-config .time-info
-{
+#app .time-config .time-info {
   font-size: 2rem;
   line-height: 2.5rem;
   height: 2.5rem;
   display: inline-block;
 }
 
-
 #app .time-config:nth-child(even) {
-  background: #DADADA;
+  background: #dadada;
 }
-
 
 #app .time-config .label {
   /* font-size: 2rem;
@@ -225,13 +218,12 @@ body {
   /* height: 100%; */
 }
 
-
 #app .time-config .time-input {
   width: 20px;
   width: 4rem;
   /* font-size: 2rem;
   line-height: 2.5rem; */
-  border: 2px solid #AAA;
+  border: 2px solid #aaa;
   outline: 0;
   display: inline-block;
   /* height: 100%; */
@@ -251,8 +243,8 @@ body {
   line-height: 2.5rem; */
   width: 3rem;
   text-align: center;
-  display: inline-block;  
-  color: #FFF;
+  display: inline-block;
+  color: #fff;
   background: #518d0b;
 }
 
@@ -281,7 +273,6 @@ body {
 #app .configured-info .configured {
   color: #1eb624;
 }
-
 
 #app .update-info {
   font-size: 1rem;
@@ -323,4 +314,17 @@ body {
 
 #app .time-config .time-info {
   font-size: 1.5rem;
+} */
+
+/* @media screen and (min-width: 320px) and (max-width: 767px) and (orientation: portrait) {
+  html {
+    transform: rotate(-90deg);
+    transform-origin: left top;
+    width: 100vh;
+    height: 100vw;
+    overflow-x: hidden;
+    position: absolute;
+    top: 100%;
+    left: 0;
+  }
 } */

@@ -240,6 +240,9 @@ class App {
         { id: 'ta', label: 'Tamil' },
         { id: 'en', label: 'English' },
       ],
+      analogClockActive: false,
+      timeInitialized: false,
+      timeIsValid: true,
     };
     this.isInitial = true;
     this.beforeSeconds = 5 * 60;
@@ -248,7 +251,7 @@ class App {
     // this.afterSeconds = 1;
     // this.afterSeconds = 1*60;
     this.afterSeconds = 2 * 60;
-    this.data.bgVersion = '4';
+    this.data.bgVersion = '7';
   }
 
   languageChanged() {
@@ -322,17 +325,35 @@ class App {
   }
   updateTime() {
     if (!this.data.time) {
-      this.data.time = this.initialTime ? this.initialTime : new Date();
+      this.data.time = this.initialTestTime ? this.initialTestTime : new Date();
       this.data.time.setTime(this.data.time.getTime() - 1000);
+      // if (this.data.timeOriginMode == 'internet') {
+      //   this.data.time.setFullYear(1970);
+      // }
     }
-    this.data.time = this.initialTime ? new Date(this.data.time.getTime() + 1000) : new Date();
+    if (this.initialTestTime || this.data.timeOriginMode == 'internet') {
+      this.data.time = new Date(this.data.time.getTime() + 1000);
+    } else {
+      this.data.time = new Date();
+    }
+    this.data.timeIsValid = this.data.time.getFullYear() >= 2020;
+    if (!this.initialTestTime && !this.data.timeIsValid) {
+      const d = new Date();
+      if (d.getFullYear() >= 2020 /* && d.getSeconds() > 30 */) {
+        // fallback mode
+        this.data.time = d;
+      }
+    }
+    this.data.timeFormatted = moment(this.data.time).format('DD MMM YYYY, h:mm:ss A');
     this.data.timeDisplay = moment(this.data.time).format('hh:mm');
     this.data.timeDisplayHours = moment(this.data.time).format('hh');
     this.data.timeDisplayMinutes = moment(this.data.time).format('mm');
     this.data.timeDisplaySeconds = moment(this.data.time).format('ss');
     this.data.timeDisplayColon = this.data.timeDisplayColon == ':' ? '' : ':';
     this.data.timeDisplayAmPm = moment(this.data.time).format('A');
-    this.updateInternetTime();
+    setTimeout(() => {
+      this.updateInternetTime();
+    }, 2000);
   }
   getDateParams(date) {
     return [date.getFullYear(), date.getMonth(), date.getDate()];
@@ -463,11 +484,22 @@ class App {
       padZero(hijriDate.day) + ' ' + translations[this.lang].hijriMonths[hijriDate.month - 1] + ' ' + hijriDate.year;
     // this.data.hijriDateDisplay = hijriDate.toFormat('dd mm YYYY');
 
+    this.data.hijriDate = hijriDate;
+
     this.data.prayerInfo = 'athan';
-    this.updateBackground();
+    this.updateBackground(true);
   }
-  updateBackground() {
-    this.data.backgroundImage = 'backgrounds/' + this.getRandomNumber(1, 11) + '.jpg?v=' + this.data.bgVersion;
+  updateBackground(isInit) {
+    if (!isInit) {
+      // return;
+    }
+    // const backgroundImages = [
+    //   'https://images.unsplash.com/photo-1523821741446-edb2b68bb7a0?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max',
+    // ];
+    // return (this.data.backgroundImage = backgroundImages[0]);
+    const maxAvailableBackgrounds = 11;
+    this.data.backgroundImage =
+      'backgrounds/' + this.getRandomNumber(1, maxAvailableBackgrounds) + '.jpg?v=' + this.data.bgVersion;
   }
   commitCurrentPrayer() {
     if (!this.data.currentPrayer) {
@@ -540,7 +572,8 @@ class App {
     ) {
       this.onDayUpdate();
     }
-    if (this.data.time.getMinutes() % 5 === 0 && this.data.time.getSeconds() === 0) {
+    const changeBackgroundInMinutes = 1;
+    if (this.data.time.getMinutes() % changeBackgroundInMinutes === 0 && this.data.time.getSeconds() === 0) {
       this.updateBackground();
     }
     if (this.data.time.getSeconds() % 2 === 0) {
@@ -614,7 +647,7 @@ class App {
         }
       }
     }
-    if (this.analogClock) {
+    if (this.analogClock && this.data.analogClockActive) {
       this.analogClock.nextTick();
     }
     this.commitCurrentPrayer();
@@ -648,8 +681,8 @@ class App {
     this.showToast('Application loaded.', 3000);
     // this.simulateTime = 50;
     this.updateTime();
-    if (this.analogClock) {
-      this.analogClock.init(document.getElementById('analog-clock-container'), this.initialTime);
+    if (this.analogClock && this.data.analogClockActive) {
+      this.analogClock.init(document.getElementById('analog-clock-container'), this.initialTestTime);
     }
     if (this.data.timeOriginMode == 'internet' && this.simulateTime) {
       alert('Warning: simulateTime feature is not compatible with internet time');
@@ -802,25 +835,44 @@ class App {
       // console.log('Internet time mode already active');
       return;
     }
-    // console.log('Internet time mode fetching...');
-    const url =
-      'https://api.openweathermap.org/data/2.5/onecall?lat=8.030097&lon=79.829091&exclude=hourly,daily,minutely&appid=434d671bede048ae31c56fce770b3149';
+    const useQurappTime = true;
+    let url =
+      'http://api.openweathermap.org/data/2.5/onecall?lat=8.030097&lon=79.829091&exclude=hourly,daily,minutely&appid=434d671bede048ae31c56fce770b3149';
+    if (useQurappTime) {
+      // url = 'https://www.qurapp.com/api/time';
+      // url = 'http://192.168.1.11/qurapp/qurapp/public/api/time';
+      url = 'http://plaintext.qurapp.com/api/time'; // https won't work when time is invalid
+    }
+    // alert('will get from : ' + url);
+
+    console.log('Internet time mode fetching from...', url);
     ajax.get(url).then(
       (response) => {
-        if (response && response.data && response.data.current && response.data.current.dt) {
-          const timestamp = response.data.current.dt * 1000;
-          this.data.time = new Date(timestamp);
-          this.internetTimeUpdated = true;
+        // alert('response : ' + response);
+        if (!(response && response.data)) {
+          console.log('Invalid response', response);
+          return;
         }
+        const timestamp = useQurappTime ? response.data.timestamp : response.data.current && response.data.current.dt;
+        if (!timestamp) {
+          console.log('Invalid timestamp response', response.data, response);
+          return;
+        }
+        const timestampMillis = timestamp * 1000;
+        // alert('timestampMillis: ' + timestampMillis);
+        this.data.time = new Date(timestampMillis);
+        this.internetTimeUpdated = true;
         console.log('internet data: ', response.data);
       },
       (err) => {
         console.log('err: ', err);
+        // alert('err: ' + err);
       }
     );
   }
-  init(initialTime, callback) {
-    this.initialTime = initialTime;
+  init(initialTestTime, callback, analogClock) {
+    this.initialTestTime = initialTestTime;
+    this.analogClock = analogClock;
     this.initStorage(() => {
       this.nextTick();
       if (callback) {
