@@ -232,7 +232,8 @@ class App {
         },
       },
       toasts: [],
-      timeOriginMode: 'device', // or 'internet'
+      timeOriginMode: 'device', // or 'network'
+      networkMode: 'internet', // or 'timeserver',
       isFriday: false,
       selectedLanguage: this.lang,
       languages: [
@@ -241,8 +242,9 @@ class App {
         { id: 'en', label: 'English' },
       ],
       analogClockActive: false,
-      timeInitialized: false,
+      networkTimeInitialized: false,
       timeIsValid: true,
+      timeFetchingMessage: undefined,
     };
     this.isInitial = true;
     this.beforeSeconds = 5 * 60;
@@ -327,11 +329,11 @@ class App {
     if (!this.data.time) {
       this.data.time = this.initialTestTime ? this.initialTestTime : new Date();
       this.data.time.setTime(this.data.time.getTime() - 1000);
-      // if (this.data.timeOriginMode == 'internet') {
+      // if (this.data.timeOriginMode == 'network') {
       //   this.data.time.setFullYear(1970);
       // }
     }
-    if (this.initialTestTime || this.data.timeOriginMode == 'internet') {
+    if (this.initialTestTime || this.data.timeOriginMode == 'network') {
       this.data.time = new Date(this.data.time.getTime() + 1000);
     } else {
       this.data.time = new Date();
@@ -351,14 +353,12 @@ class App {
     this.data.timeDisplaySeconds = moment(this.data.time).format('ss');
     this.data.timeDisplayColon = this.data.timeDisplayColon == ':' ? '' : ':';
     this.data.timeDisplayAmPm = moment(this.data.time).format('A');
-    setTimeout(() => {
-      this.updateInternetTime();
-    }, 2000);
+    this.updateInternetTime();
   }
   getDateParams(date) {
     return [date.getFullYear(), date.getMonth(), date.getDate()];
   }
-  getTime(monthParam, dayParam, time) {
+  getTime(yearParam, monthParam, dayParam, time) {
     let timeParts = time.split(':');
     let hoursAdd = 0;
     if (timeParts[1].indexOf('p') != -1) {
@@ -366,15 +366,15 @@ class App {
     }
     const hours = hoursAdd + parseInt(timeParts[0]);
     const minutes = parseInt(timeParts[1].replace('a', '').replace('p', ''));
-    return moment(monthParam + 1 + ' ' + dayParam + ' ' + time + 'm', 'M D hh:mma').toDate();
+    return moment(yearParam + ' ' + (monthParam + 1) + ' ' + dayParam + ' ' + time + 'm', 'YYYY M D hh:mma').toDate();
   }
-  getTimes(monthParam, dayParam) {
+  getTimes(yearParam, monthParam, dayParam) {
     const times = [];
     for (let segment of this.prayerData[monthParam]) {
       if (segment.range[0] <= dayParam && segment.range[1] >= dayParam) {
         // this.currentSegment = segment;
         for (let time of segment.times) {
-          times.push(this.getTime(monthParam, dayParam, time));
+          times.push(this.getTime(yearParam, monthParam, dayParam, time));
         }
         break;
       }
@@ -411,14 +411,16 @@ class App {
     this.currentDateParams = dateParams;
     // console.log();
     let times;
-    for (let i = 0; i < 1000; i++) {
-      // try thousand times!;
-      times = this.getTimes(dateParams[1], dateParams[2]);
-      if (!times) {
-        const d = new Date(this.data.time.getTime());
-        d.setDate(d.getDate() + 1);
-        dateParams = this.getDateParams(d);
+    const fallbackToNextDayOnFail = false;
+    for (let i = 0; i < 100; i++) {
+      // try few more times!; - why? - fallback if data is not available for a particular day
+      times = this.getTimes(dateParams[0], dateParams[1], dateParams[2]);
+      if (times || !fallbackToNextDayOnFail) {
+        break;
       }
+      const d = new Date(this.data.time.getTime());
+      d.setDate(d.getDate() + 1);
+      dateParams = this.getDateParams(d);
     }
 
     const d = moment(this.data.time);
@@ -446,7 +448,7 @@ class App {
     this.data.prayers = this.todayPrayers;
 
     const tomorrowParams = this.getDateParams(new Date(this.data.time.getTime() + 24 * 60 * 60 * 1000));
-    let tomorrowTimes = this.getTimes(tomorrowParams[1], tomorrowParams[2]);
+    let tomorrowTimes = this.getTimes(tomorrowParams[0], tomorrowParams[1], tomorrowParams[2]);
     if (!tomorrowTimes) {
       tomorrowTimes = times;
     }
@@ -592,6 +594,10 @@ class App {
         }
       }
       if (!nextPrayer) {
+        if (!(this.nextDayPrayers[0] && nowTime < this.nextDayPrayers[0].time.getTime())) {
+          // this.onDayUpdate();
+          // return this.nextTick();
+        }
         nextPrayer = this.nextDayPrayers[0];
         this.showNextDayPrayers();
       }
@@ -652,6 +658,10 @@ class App {
     }
     this.commitCurrentPrayer();
   }
+  forceTimeUpdate(newDate) {
+    this.data.time = newDate;
+    // this.onDayUpdate();
+  }
   translate(text) {
     return translations[this.lang][text] || text;
   }
@@ -684,8 +694,8 @@ class App {
     if (this.analogClock && this.data.analogClockActive) {
       this.analogClock.init(document.getElementById('analog-clock-container'), this.initialTestTime);
     }
-    if (this.data.timeOriginMode == 'internet' && this.simulateTime) {
-      alert('Warning: simulateTime feature is not compatible with internet time');
+    if (this.data.timeOriginMode == 'network' && this.simulateTime) {
+      alert('Warning: simulateTime feature is not compatible with network time');
     }
     window._theInterval = window.setInterval(
       () => {
@@ -826,12 +836,34 @@ class App {
       }
     };
   }
+  setFetchingStatus(message, mode, status, timeout) {
+    const colors = {
+      init: '#ffff20',
+      error: '#ff1919',
+      success: '#49ff50',
+    };
+    setTimeout(
+      () => {
+        this.data.timeFetchingMessage = {
+          color: colors[mode],
+          text: message,
+        };
+      },
+      timeout ? 500 : 0
+    );
+    setTimeout(() => {
+      this.fetchingInternetTime = status;
+    }, timeout || 0);
+  }
   updateInternetTime() {
-    if (this.data.timeOriginMode != 'internet') {
+    if (this.fetchingInternetTime) {
+      return;
+    }
+    if (this.data.timeOriginMode != 'network') {
       // console.log('Internet time mode disabled');
       return;
     }
-    if (this.internetTimeUpdated) {
+    if (this.data.networkTimeInitialized) {
       // console.log('Internet time mode already active');
       return;
     }
@@ -840,33 +872,42 @@ class App {
       'http://api.openweathermap.org/data/2.5/onecall?lat=8.030097&lon=79.829091&exclude=hourly,daily,minutely&appid=434d671bede048ae31c56fce770b3149';
     if (useQurappTime) {
       // url = 'https://www.qurapp.com/api/time';
-      // url = 'http://192.168.1.11/qurapp/qurapp/public/api/time';
+      url = 'http://192.168.1.11/qurapp/qurapp/public/api/time';
       url = 'http://plaintext.qurapp.com/api/time'; // https won't work when time is invalid
     }
+    const networkName = this.data.networkMode == 'internet' ? 'internet' : 'timeserver';
     // alert('will get from : ' + url);
 
     console.log('Internet time mode fetching from...', url);
+    this.setFetchingStatus('Requesting time from ' + networkName + '...', 'init', true);
     ajax.get(url).then(
       (response) => {
         // alert('response : ' + response);
         if (!(response && response.data)) {
           console.log('Invalid response', response);
+          this.setFetchingStatus('INVALID response', 'error', false, 999);
           return;
         }
         const timestamp = useQurappTime ? response.data.timestamp : response.data.current && response.data.current.dt;
         if (!timestamp) {
+          this.setFetchingStatus('MISSING timestamp from response', 'error', false, 999);
           console.log('Invalid timestamp response', response.data, response);
           return;
         }
         const timestampMillis = timestamp * 1000;
         // alert('timestampMillis: ' + timestampMillis);
-        this.data.time = new Date(timestampMillis);
-        this.internetTimeUpdated = true;
-        console.log('internet data: ', response.data);
+        setTimeout(() => {
+          // show waiting feedback at least 1 second
+          this.forceTimeUpdate(new Date(timestampMillis + 1000));
+        }, 1000);
+        this.data.networkTimeInitialized = true;
+        console.log('network data: ', response.data);
+        this.setFetchingStatus('OK. Updated time from ' + networkName, 'success', false, 1);
       },
       (err) => {
         console.log('err: ', err);
         // alert('err: ' + err);
+        this.setFetchingStatus('FAILED to update time from ' + networkName + ' - ' + err, 'error', false, 999);
       }
     );
   }

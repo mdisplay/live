@@ -6,7 +6,7 @@ if (workbox) {
   console.log(`Boo! Workbox didn't load 😬`);
 }
 
-var appVersion = '1.12.0-62';
+var appVersion = '1.12.1-63';
 var dataVersion = '5';
 var vendorVersion = '5';
 var bgVersion = '7';
@@ -78,11 +78,23 @@ var precacheList = [
     revision: appVersion,
   },
   {
+    url: toUrl('assets/js/analog-clock.js'),
+    revision: appVersion,
+  },
+  {
     url: toUrl('assets/css/app.css'),
     revision: appVersion,
   },
   {
+    url: toUrl('assets/css/analog-clock.css'),
+    revision: appVersion,
+  },
+  {
     url: toUrl('assets/css/theme-default.css'),
+    revision: appVersion,
+  },
+  {
+    url: toUrl('assets/css/analog-clock-theme.css'),
     revision: appVersion,
   },
   // 'prayer-data-*.js',
