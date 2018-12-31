@@ -586,13 +586,19 @@
   margin-top: -2rem;
 }
 
-.invalid-time-container h2 {
-  line-height: 2rem;
-  font-size: 1.5rem;
-  font-weight: normal;
-}
+.invalid-time-container h1,
+.invalid-time-container h2,
 .invalid-time-container h3 {
   line-height: 2rem;
   font-size: 1.25rem;
   font-weight: normal;
+}
+.invalid-time-container h1 {
+  font-size: 1.75rem;
+}
+.invalid-time-container h2 {
+  font-size: 1.5rem;
+}
+.invalid-time-container h3 {
+  font-size: 1.25rem;
 }
