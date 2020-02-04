@@ -13,6 +13,28 @@ body {
   text-align: center;
 }
 
+#splash {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  background: #000;
+}
+
+#splash .splash-content {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  margin-top: -1rem;
+  text-align: center;
+  height: 2rem;
+  font-size: 2rem;
+  line-height: 2rem;
+}
+
 #app {
   position: absolute;
   top: 0;

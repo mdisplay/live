@@ -60,6 +60,7 @@ class AnalogClock {
   }
 
   init(el, time) {
+    time = time || new Date();
     this.time = time;
     this.createSecondLines();
 // (function )();

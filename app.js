@@ -135,6 +135,7 @@ class App {
       }
     }
     this.data = {
+      showSplash: true,
       // currentPrayerWaiting: false,
       // time: new Date(),
       // timeDisplay: 
@@ -157,7 +158,7 @@ class App {
       this.data.time = this.initialTime ? this.initialTime : new Date();
       this.data.time.setTime(this.data.time.getTime() - 1000);
     }
-    this.data.time = new Date(this.data.time.getTime() + 1000);
+    this.data.time = this.initialTime ? new Date(this.data.time.getTime() + 1000) : new Date();
     this.data.timeDisplay = moment(this.data.time).format('hh:mm');
     this.data.timeDisplayHours = moment(this.data.time).format('hh');
     this.data.timeDisplayMinutes = moment(this.data.time).format('mm');
@@ -355,11 +356,12 @@ class App {
     // this.simulateTime = 50;
     this.updateTime();
     if (this.analogClock) {
-      this.analogClock.init(document.getElementById('analog-clock-container'), this.data.time);
+      this.analogClock.init(document.getElementById('analog-clock-container'), this.initialTime);
     }
     window._theInterval = window.setInterval(()=> {
       this.nextTick();
     }, this.simulateTime ? this.simulateTime : 1000);
+    this.data.showSplash = false;
   }
   created() {
     if(window._theInterval){

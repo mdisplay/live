@@ -3,15 +3,19 @@
 <head>
   <meta charset="utf-8">
   <title>Prayer Widget</title>
-  <link rel="stylesheet" type="text/css" href="reboot.css">
-  <link rel="stylesheet" type="text/css" href="analog-clock.css">
-  <link rel="stylesheet" type="text/css" href="app.css">
-  <link rel="stylesheet" type="text/css" href="theme-default.css">
+  <link rel="stylesheet" type="text/css" href="reboot.css?v=1.0.0-6">
+  <link rel="stylesheet" type="text/css" href="analog-clock.css?v=1.0.0-6">
+  <link rel="stylesheet" type="text/css" href="app.css?v=1.0.0-6">
+  <link rel="stylesheet" type="text/css" href="theme-default.css?v=1.0.0-6">
 </head>
 <body>
   <div id="app" :class="{'is-active': currentPrayer, 'is-waiting': currentPrayerWaiting, 'is-before': currentPrayerBefore, 'is-after': currentPrayerAfter}">
 
-
+    <div id="splash" v-if="showSplash">
+      <div class="splash-content">
+        Loading...
+      </div>
+    </div>
     <div class="date-display">
       <div class="hijri-date">{{ hijriDateDisplay }}</div>
       <div class="date">{{ dateDisplay }}</div>
@@ -112,20 +116,22 @@
     </div>
 
   </div>
-  <script type="text/javascript" src="assets/vue.js"></script>
-  <script type="text/javascript" src="assets/moment.js"></script>
+  <script type="text/javascript" src="assets/vue.js?v=1.0.0-6"></script>
+  <script type="text/javascript" src="assets/moment.js?v=1.0.0-6"></script>
   <!-- <script type="text/javascript" src="assets/moment-hijri.js"></script> -->
-  <script type="text/javascript" src="prayer-data-2020.js"></script>
-  <script type="text/javascript" src="hijri.js"></script>
-  <script type="text/javascript" src="analog-clock.js"></script>
-  <script type="text/javascript" src="app.js"></script>
+  <script type="text/javascript" src="prayer-data-2020.js?v=1.0.0-6"></script>
+  <script type="text/javascript" src="hijri.js?v=1.0.0-6"></script>
+  <script type="text/javascript" src="analog-clock.js?v=1.0.0-6"></script>
+  <script type="text/javascript" src="app.js?v=1.0.0-6"></script>
   <script type="text/javascript">
-    // moment.locale('ta');
+
+
     window.initialTime = new Date((new Date()).getFullYear(), (new Date()).getMonth(), (new Date()).getDate(), 
       // 16, 30, 40,
       6, 24, 30,
     0);
-    window.initialTime = new Date();
+
+
     window.app.init(window.initialTime, window.analogClock);
     new Vue({
       el: '#app',
