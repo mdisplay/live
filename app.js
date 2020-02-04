@@ -145,6 +145,7 @@ class App {
     this.beforeSeconds = 5*60;
     // this.beforeSeconds = 1*60;
     this.afterSeconds = 5*60;
+    this.afterSeconds = 0;
     // this.afterSeconds = 1*60;
   }
   padZero(number) {
