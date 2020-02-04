@@ -196,12 +196,12 @@ class App {
     const times = this.getTimes(this.currentDateParams[1], this.currentDateParams[2]);
     console.log(times);
     this.data.prayers = [
-      new Prayer('Subah', times[0], 30, this.lang),
+      new Prayer('Subah', times[0], 20, this.lang),
       // new Prayer('Sunrise', times[1], 10, this.lang),
-      new Prayer('Luhar', times[2], 10, this.lang),
-      new Prayer('Asr', times[3], 10, this.lang),
-      new Prayer('Magrib', times[4], 7, this.lang),
-      new Prayer('Isha', times[5], 20, this.lang),
+      new Prayer('Luhar', times[2], 15, this.lang),
+      new Prayer('Asr', times[3], 15, this.lang),
+      new Prayer('Magrib', times[4], 10, this.lang),
+      new Prayer('Isha', times[5], 15, this.lang),
     ];
 
     const tomorrowParams = this.getDateParams(new Date(this.data.time.getTime() + (24*60*60*1000)));
