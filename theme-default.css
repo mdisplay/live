@@ -1,0 +1,373 @@
+.colon {
+  text-align: center;
+}
+
+.prayer-info-container {
+  position: absolute;
+  right: 0;
+  right: -2rem;
+  bottom: 0;
+  bottom: -1.5rem;
+  left: 0;
+  left: -2rem;
+  font-size: 1.5rem;
+  line-height: 1.5rem;
+  background: #222;
+}
+
+.prayer-info-container .prayer-name {
+  font-size: 1rem;
+  opacity: 0.75;
+}
+
+.prayer-info-container .prayer-time {
+  color: #7eff74;
+}
+
+.prayer-info-container .iqamah-time {
+  color: #FFEB3B;
+}
+
+.prayer-info-container .am-pm {
+  opacity: 0.75;
+  opacity: 0.75;
+  font-size: 0.75rem;
+  position: relative;
+  bottom: 0.5rem;
+}
+/*
+
+.date-display {
+  bottom: auto;
+  left: auto;
+}
+
+.hijri-date {
+  position: absolute;
+}*/
+
+
+.date-display .hijri-date, .date-display .date {
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0.75;
+}
+
+.date-display .hijri-date {
+  font-size: 1.5rem;
+  height: 2rem;
+}
+
+.date-display .date {
+  font-size: 1.75rem;
+  line-height: 2rem;
+  top: 2.5rem;
+}
+
+.digital-clock,
+/*.digital-clock .time,*/
+.digital-clock .seconds,
+.digital-clock .am-pm {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.digital-clock {
+  top: 6rem;
+  /*top: 7.5rem;*/
+}
+.digital-clock .time {
+  position: relative;
+  font-size: 10rem;
+  line-height: 10rem;
+  height: 10rem;
+  width: auto;
+  right: 5rem;
+  top: -1rem;
+
+/*  top: -2rem;
+  font-size: 18rem;
+  line-height: 18rem;*/
+  height: 18rem;
+}
+
+
+.digital-clock .time .hours,
+.digital-clock .time .colon,
+.digital-clock .time .minutes {
+  /*float: left;*/
+  display: inline-block;
+}
+
+.digital-clock .time .colon {
+  opacity: 0.5;
+  min-height: 3rem;
+  width: 3rem;
+  width: 5rem;
+}
+
+.digital-clock .seconds {
+  font-size: 2.5rem;
+  font-size: 3.75rem;
+  opacity: 0.5;
+  top: 3rem;
+}
+
+.digital-clock .am-pm {
+  font-size: 2.5rem;
+  font-size: 2rem;
+  opacity: 0.5;
+}
+
+.analog-clock-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 15rem;
+  height: 15rem;
+
+  width: 22rem;
+  height: 22rem;
+  top: 2rem;
+
+  width: 15rem;
+  height: 15rem;
+}
+
+.active-timer {
+  position: absolute;
+  font-size: 5rem;
+  bottom: 3rem;
+  bottom: 4rem;
+  left: 0;
+  right: 0;
+  text-align: right;
+}
+
+.active-timer .time {
+  font-size: 10rem;
+  height: 10rem;
+  line-height: 10rem;
+}
+
+.active-timer .description {
+  font-size: 3rem;
+  font-size: 2rem;
+  display: block;
+  opacity: 0.5;
+  margin-top: -1rem;
+  /*color: #FFF;*/
+}
+
+
+.active-timer .time .minutes,
+.active-timer .time .colon,
+.active-timer .time .seconds {
+  /*float: left;*/
+  display: inline-block;
+}
+
+.active-timer .time .colon {
+  opacity: 0.5;
+  min-height: 3rem;
+  width: 3rem;
+}
+
+.is-before .active-timer .time {
+  color: #23ff2c;
+  color: #58ff4c;
+  color: #7eff74;
+}
+.is-waiting .active-timer .time {
+  color: #FFEB3B;
+}
+.is-after .active-timer .time {
+  color: #fb2414;
+  color: #ff5959;
+}
+
+/*.next-prayer, .active-prayer {
+  display: none;
+}*/
+
+.is-active .next-prayer {
+  display: none;
+}
+
+.next-prayer, .active-prayer {
+  position: absolute;
+  bottom: 3rem;
+  left: 0;
+  right: 0;
+}
+
+.next-prayer .name,
+.active-prayer .name {
+  font-size: 5rem;
+  /*font-size: 7.5rem;*/
+  position: absolute;
+  left: 0;
+  display: block;
+  /*bottom: 3rem;*/
+  bottom: 0;
+  opacity: 0.75;
+  margin-bottom: 2rem;
+  margin-bottom: 3rem;
+  margin-left: 3rem;
+}
+
+.next-prayer .iqamah-time, .next-prayer .iqamah-am-pm,
+.next-prayer .time, .next-prayer .am-pm {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  /*margin-bottom: 3rem;*/
+}
+
+.next-prayer .iqamah-time,
+.next-prayer .time {
+  height: 7.5rem;
+  line-height: 7.5rem;
+  font-size: 7.5rem;
+  right: 2rem;
+  right: 3rem;
+  opacity: 0.75;
+  opacity: 1;
+}
+
+.next-prayer .iqamah-am-pm,
+.next-prayer .am-pm {
+  font-size: 1.5rem;
+  opacity: 0.5;
+  bottom: 5rem;
+}
+
+.next-prayer .time {
+  bottom: 7rem;
+}
+
+.next-prayer .iqamah-time {
+  margin-bottom: 0;
+  bottom: 1rem;
+  font-size: 6rem;
+  height: 6rem;
+  line-height: 6rem;
+}
+
+.next-prayer .am-pm {
+  bottom: 11.5rem;
+}
+
+.next-prayer .iqamah-am-pm {
+  bottom: 4.5rem;
+}
+
+.next-prayer .colon {
+  opacity: 0.5;
+}
+
+.next-prayer .time, .next-prayer .am-pm {
+  color: #23ff2c;
+  color: #58ff4c;
+  color: #7eff74;
+}
+
+.next-prayer .iqamah-time, .next-prayer .iqamah-am-pm {
+  color: #FFEB3B;
+}
+
+.active-prayer .time {
+  display: none;
+}
+
+.analog-clock {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.analog-clock ul,
+.analog-clock ul li {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.analog-clock div.hours::before {
+  width: 0.5rem;
+  /*height: 5rem;*/
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+.analog-clock div.minutes::before {
+  /*width: 0.25rem;*/
+  width: 0.5rem;
+  /*height: 7.5rem;*/
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+.analog-clock div.seconds::before {
+  background-color: #EB6444;
+  width: 0.2rem;
+  width: 0.125rem;
+  /*height: 8rem;*/
+}
+
+.analog-clock span::before, .analog-clock span::after {
+  /*background-color: rgba(255, 255, 255, 0.25);*/
+  background-color: rgba(255, 255, 255, 0.75);
+}
+.analog-clock span.fives::before, .analog-clock span.fives::after {
+  /*background-color: rgba(255, 255, 255, 0.75);*/
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+
+.analog-clock .cercle {
+  background-color: #EB6444;
+  border: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+  width: 1rem;
+  height: 1rem;
+}
+
+.analog-clock i {
+  font-size: 1.25rem;
+}
+
+/* WNHITE FACE */
+
+
+.white-face .analog-clock {
+  background: #FFF;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.white-face .analog-clock div.hours::before {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.white-face .analog-clock div.minutes::before {
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+.white-face .analog-clock div.seconds::before {
+  background-color: #EB6444;
+}
+
+.white-face .analog-clock span::before, .white-face .analog-clock span::after {
+  /*background-color: rgba(255, 255, 255, 0.25);*/
+  background-color: rgba(0, 0, 0, 0.25);
+}
+.white-face .analog-clock span.fives::before, .white-face .analog-clock span.fives::after {
+  /*background-color: rgba(255, 255, 255, 0.75);*/
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+
+/*.analog-clock .cercle {
+  background-color: #EB6444;
+}*/

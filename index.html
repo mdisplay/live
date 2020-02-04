@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Prayer Widget</title>
+  <link rel="stylesheet" type="text/css" href="reboot.css">
+  <link rel="stylesheet" type="text/css" href="analog-clock.css">
+  <link rel="stylesheet" type="text/css" href="app.css">
+  <link rel="stylesheet" type="text/css" href="theme-default.css">
+</head>
+<body>
+  <div id="app" :class="{'is-active': currentPrayer, 'is-waiting': currentPrayerWaiting, 'is-before': currentPrayerBefore, 'is-after': currentPrayerAfter}">
+
+
+    <div class="date-display">
+      <div class="hijri-date">{{ hijriDateDisplay }}</div>
+      <div class="date">{{ dateDisplay }}</div>
+    </div>
+
+    <div class="digital-clock">
+      <span class="time">
+        <span class="hours">{{ timeDisplayHours }}</span><span class="colon">{{ timeDisplayColon }}</span><span class="minutes">{{ timeDisplayMinutes }}</span>
+      </span>
+      <small class="seconds">{{ timeDisplaySeconds }}</small>
+      <small class="am-pm">{{ timeDisplayAmPm }}</small>
+    </div>
+
+    <div class="next-prayer">
+      <span class="name">{{ nextPrayer.nameDisplay }}</span>
+      <span class="time">
+        <span class="hours">{{ nextPrayer.timeHours }}</span><span class="colon">:</span><span class="minutes">{{ nextPrayer.timeMinutes }}</span>
+      </span>
+      <small class="am-pm">{{ nextPrayer.timeAmPm }}</small>
+      <span class="iqamah-time">
+        <span class="hours">{{ nextPrayer.iqamahTimeHours }}</span><span class="colon">:</span><span class="minutes">{{ nextPrayer.iqamahTimeMinutes }}</span>
+      </span>
+      <small class="iqamah-am-pm">{{ nextPrayer.iqamahTimeAmPm }}</small>
+    </div>
+    <div class="active-prayer" v-if="currentPrayer">
+      <div class="name">{{ currentPrayer.nameDisplay }}</div>
+      <div class="time">{{ currentPrayer.timeDisplay }}
+        <small class="am-pm">{{ currentPrayer.timeAmPm }}</small>
+      </div>
+    </div>
+    <div class="active-timer" v-if="currentPrayer">
+      <div class="timer timer-is-before" v-if="currentPrayerBefore">
+        <div class="time">
+          <!-- {{ currentPrayerBefore }} -->
+          <span class="minutes">{{ currentPrayerBefore.minutes }}</span><span class="colon">{{ currentPrayerBefore.colon }}</span><span class="seconds">{{ currentPrayerBefore.seconds }}</span>
+        </div>
+        <div class="description">{{ currentPrayerDescription }}</div>
+      </div>
+      <div class="timer timer-is-after" v-if="currentPrayerAfter">
+        <div class="time">
+          <!-- {{ currentPrayerAfter }} -->
+          <span class="minutes">{{ currentPrayerAfter.minutes }}</span><span class="colon">{{ currentPrayerAfter.colon }}</span><span class="seconds">{{ currentPrayerAfter.seconds }}</span>
+        </div>
+        <div class="description">{{ currentPrayerDescription }}</div>
+      </div>
+      <div class="timer timer-is-waiting" v-if="currentPrayerWaiting">
+        <div class="time">
+          <!-- {{ currentPrayerWaiting }} -->
+          <span class="minutes">{{ currentPrayerWaiting.minutes }}</span><span class="colon">{{ currentPrayerWaiting.colon }}</span><span class="seconds">{{ currentPrayerWaiting.seconds }}</span>
+        </div>
+        <div class="description">{{ currentPrayerDescription }}</div>
+      </div>
+    </div>
+
+
+    <div id="analog-clock-container" class="analog-clock-container white-facex">
+      <section class="border-clock"></section>
+      <section class="clock analog-clock">
+        <ul class="list-unstyled">
+          <li><i>12</i></li>
+          <li><i>1</i></li>
+          <li><i>2</i></li>
+          <li><i>3</i></li>
+          <li><i>4</i></li>
+          <li><i>5</i></li>
+          <li><i>6</i></li>    
+          <li><i>7</i></li>    
+          <li><i>8</i></li>    
+          <li><i>9</i></li>    
+          <li><i>10</i></li>    
+          <li><i>11</i></li>
+        </ul>
+        
+        <h2>Zetmel</h2>
+        <h3>Innovation, Limitless</h3>
+        
+        <output class="date" style="display: none;"></output>
+        
+        <div class="minutes"></div>
+        <div class="hours"></div> 
+        <div class="seconds"></div>
+        <div class="cercle"></div>
+      </section>
+    </div>
+
+    <div class="prayer-info-container">
+      <div class="prayer-info" v-for="prayer in prayers">
+        <div class="prayer-name">{{ prayer.nameDisplay }}</div>
+        <div class="prayer-time">
+          {{ prayer.timeDisplay }}
+          <span class="am-pm">{{ prayer.timeAmPm }}</span>
+        </div>
+        <div class="iqamah-time">
+          {{ prayer.iqamahTimeDisplay }}
+          <span class="am-pm">{{ prayer.iqamahTimeAmPm }}</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <script type="text/javascript" src="assets/vue.js"></script>
+  <script type="text/javascript" src="assets/moment.js"></script>
+  <!-- <script type="text/javascript" src="assets/moment-hijri.js"></script> -->
+  <script type="text/javascript" src="prayer-data-2020.js"></script>
+  <script type="text/javascript" src="hijri.js"></script>
+  <script type="text/javascript" src="analog-clock.js"></script>
+  <script type="text/javascript" src="app.js"></script>
+  <script type="text/javascript">
+    // moment.locale('ta');
+    window.initialTime = new Date((new Date()).getFullYear(), (new Date()).getMonth(), (new Date()).getDate(), 
+      // 16, 30, 40,
+      12, 24, 30,
+    0);
+    // window.initialTime = new Date();
+    window.app.init(window.initialTime, window.analogClock);
+    new Vue({
+      el: '#app',
+      data: app.data,
+      computed: {
+
+      },
+      created() {
+        app.created();
+      },
+      mounted() {
+        app.mounted();
+      },
+    });
+  </script>
+  </script>
+</body>
+</html>
