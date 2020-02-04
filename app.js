@@ -197,7 +197,7 @@ class App {
     console.log(times);
     this.data.prayers = [
       new Prayer('Subah', times[0], 30, this.lang),
-      new Prayer('Sunrise', times[1], 10, this.lang),
+      // new Prayer('Sunrise', times[1], 10, this.lang),
       new Prayer('Luhar', times[2], 10, this.lang),
       new Prayer('Asr', times[3], 10, this.lang),
       new Prayer('Magrib', times[4], 7, this.lang),
@@ -352,7 +352,7 @@ class App {
     this.commitCurrentPrayer();
   }
   mounted() {
-    this.simulateTime = 50;
+    // this.simulateTime = 50;
     this.updateTime();
     if (this.analogClock) {
       this.analogClock.init(document.getElementById('analog-clock-container'), this.data.time);

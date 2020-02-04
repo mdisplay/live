@@ -123,9 +123,9 @@
     // moment.locale('ta');
     window.initialTime = new Date((new Date()).getFullYear(), (new Date()).getMonth(), (new Date()).getDate(), 
       // 16, 30, 40,
-      12, 24, 30,
+      6, 24, 30,
     0);
-    // window.initialTime = new Date();
+    window.initialTime = new Date();
     window.app.init(window.initialTime, window.analogClock);
     new Vue({
       el: '#app',
