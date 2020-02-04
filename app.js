@@ -1,6 +1,6 @@
 const translations = {
   ta: {
-    Subah: 'பஜ்ர்',
+    Subah: 'சுபஹ்',
     Sunrise: 'சூரியோதயம்',
     Luhar: 'ளுஹர்',
     Asr: 'அஸர்',
