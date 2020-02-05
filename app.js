@@ -1,109 +1,3 @@
-const translations = {
-  ta: {
-    Subah: 'சுபஹ்',
-    Sunrise: 'சூரியோதயம்',
-    Luhar: 'ளுஹர்',
-    Asr: 'அஸர்',
-    Magrib: 'மஃரிப்',
-    Isha: 'இஷா',
-    days: [
-      'ஞாயிறு',
-      'திங்கள்',
-      'செவ்வாய்',
-      'புதன்',
-      'வியாழன்',
-      'வெள்ளி',
-      'சனி',
-    ],
-    months: [
-      'ஜனவரி',
-      'பிப்ரவரி',
-      'மார்ச்',
-      'ஏப்ரல்',
-      'மே',
-      'ஜூன்',
-      'ஜூலை',
-      'ஆகஸ்டு',
-      'செப்டம்பர்',
-      'அக்டோபர்',
-      'நவம்பர்',
-      'டிசம்பர்',
-    ],
-    hijriMonths: [
-      'முஹர்ரம்',
-      'சஃபர்',
-      'ரபி உல் அவ்வல்',
-      'ரபி உல் ஆகிர்',
-      'ஜமா அத்துல் அவ்வல்',
-      'ஜமா அத்துல் ஆகிர்',
-      'ரஜப்',
-      'ஷஃபான்',
-      'ரமலான்',
-      'ஷவ்வால்',
-      'துல் கஃதா',
-      'துல் ஹிஜ்ஜா'
-    ],
-     // currentPrayerBefore: 'அதானுக்கு',
-     // currentPrayerBefore: 'அதான் ஆரம்பம்',
-     currentPrayerBefore: 'அதான் ஆரம்பத்திற்கு',
-     // currentPrayerWaiting: 'இகாமத்துக்கு',
-     // currentPrayerWaiting: 'இகாமத் ஆரம்பம்',
-     currentPrayerWaiting: 'இகாமத் ஆரம்பத்திற்கு',
-     // currentPrayerAfter: 'இகாமத்துக்குப் பின்',
-     // currentPrayerAfter: 'இகாமத் முடிவு',
-     // currentPrayerAfter: 'இகாமத் முடிந்தது',
-     currentPrayerAfter: 'இகாமத் முடிந்து',
-  },
-  en: {
-    Subah: 'Subah',
-    Sunrise: 'Sunrise',
-    Luhar: 'Luhar',
-    Asr: 'Asr',
-    Magrib: 'Magrib',
-    Isha: 'Isha',
-    days: [
-      'Sun',
-      'Mon',
-      'Tue',
-      'Wed',
-      'Thu',
-      'Fri',
-      'Sat',
-    ],
-    months: [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ],
-    hijriMonths: [
-      'Muḥarram',
-      'Ṣafar',
-      'Rabīʿ al-Awwal',
-      'Rabī’ al-Ākhir',
-      'Jumādá al-Ūlá',
-      'Jumādá al-Ākhirah',
-      'Rajab',
-      'Sha‘bān',
-      'Ramaḍān',
-      'Shawwāl',
-      'Dhū al-Qa‘dah',
-      'Dhū al-Ḥijjah'
-     ],
-     currentPrayerBefore: 'for Adhan',
-     currentPrayerWaiting: 'for Iqamath',
-     currentPrayerAfter: 'passed Iqamath',
-  }
-};
-
 class Prayer {
   constructor(name, time, iqamah, lang) {
     this.name = name;
@@ -145,7 +39,7 @@ class App {
     this.beforeSeconds = 5*60;
     // this.beforeSeconds = 1*60;
     this.afterSeconds = 5*60;
-    this.afterSeconds = 0;
+    this.afterSeconds = 1;
     // this.afterSeconds = 1*60;
   }
   padZero(number) {
@@ -153,6 +47,9 @@ class App {
       return '0' + number;
     }
     return '' + number;
+  }
+  getRandomNumber(min, max) {
+    return Math.floor(min + (Math.random() * (max - min + 1)));
   }
   updateTime() {
     if (!this.data.time) {
@@ -196,7 +93,7 @@ class App {
     this.currentDateParams = dateParams;
     // console.log();
     const times = this.getTimes(this.currentDateParams[1], this.currentDateParams[2]);
-    console.log(times);
+    console.log('all the times', times);
     this.data.prayers = [
       new Prayer('Subah', times[0], 20, this.lang),
       // new Prayer('Sunrise', times[1], 10, this.lang),
@@ -233,6 +130,11 @@ class App {
     // this.data.hijriDateDisplay = this.padZero(hijriDate.getDate()) + ' ' + translations.ta.months[hijriDate.getMonth()] + ' ' + hijriDate.getFullYear();
     this.data.hijriDateDisplay = this.padZero(hijriDate.day) + ' ' + translations[this.lang].hijriMonths[hijriDate.month - 1] + ' ' + hijriDate.year;
     // this.data.hijriDateDisplay = hijriDate.toFormat('dd mm YYYY');
+
+    this.updateBackground();
+  }
+  updateBackground() {
+    this.data.backgroundImage = 'backgrounds/' + this.getRandomNumber(1, 11) + '.jpg';
   }
   commitCurrentPrayer() {
     if(!this.data.currentPrayer) {
@@ -291,6 +193,9 @@ class App {
         dateParams[2] === this.currentDateParams[2])) {
       this.onDayUpdate();
     }
+    if (this.data.time.getMinutes() % 5 ===0 && this.data.time.getSeconds() === 0) {
+      this.updateBackground();
+    }
     const nowTime = this.data.time.getTime();
     let nextTime = this.data.nextPrayer ? this.data.nextPrayer.time.getTime() : 0;
     // console.log('nextTick');
@@ -336,9 +241,13 @@ class App {
             prevPrayer = this.data.prayers[this.data.prayers.length - 1];
           } else {
             const idx = this.data.prayers.indexOf(this.data.nextPrayer);
-            prevPrayer = this.data.prayers[idx == 0 ? this.data.prayers.length - 1 : idx - 1];
+            if (idx > 0) { // not subah
+              prevPrayer = this.data.prayers[idx - 1];
+            }
           }
-          this.checkCurrentPrayer(prevPrayer);
+          if (prevPrayer) {
+            this.checkCurrentPrayer(prevPrayer);
+          }
           this.isInitial = false;
         } else {
           this.data.currentPrayer = undefined;
@@ -352,6 +261,9 @@ class App {
       this.analogClock.nextTick();
     }
     this.commitCurrentPrayer();
+  }
+  translate(text) {
+    return translations[this.lang][text] || text;
   }
   mounted() {
     // this.simulateTime = 50;

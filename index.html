@@ -3,34 +3,66 @@
 <head>
   <meta charset="utf-8">
   <title>Prayer Widget</title>
-  <link rel="stylesheet" type="text/css" href="reboot.css?v=1.0.0-9">
-  <!-- <link rel="stylesheet" type="text/css" href="analog-clock.css?v=1.0.0-9"> -->
-  <link rel="stylesheet" type="text/css" href="app.css?v=1.0.0-9">
-  <link rel="stylesheet" type="text/css" href="theme-default.css?v=1.0.0-9">
+  <link rel="stylesheet" type="text/css" href="reboot.css?v=1.1.0-12">
+  <!-- <link rel="stylesheet" type="text/css" href="analog-clock.css?v=1.1.0-12"> -->
+  <link rel="stylesheet" type="text/css" href="app.css?v=1.1.0-12">
+  <link rel="stylesheet" type="text/css" href="theme-default.css?v=1.1.0-12">
 </head>
 <body>
   <div id="app" :class="{'is-active': currentPrayer, 'is-waiting': currentPrayerWaiting, 'is-before': currentPrayerBefore, 'is-after': currentPrayerAfter}">
+
+    <div id="version-info" style="
+    position: fixed;
+    font-size: 1rem;
+    opacity: 0.5;
+    bottom: 6.5rem;
+    text-align: right;
+    right: 1rem;
+    top: 1rem;
+    ">
+      Version {{ '?v=1.1.0-12'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }}
+      ({{ '?v=1.1.0-12'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }})
+    </div>
 
     <div id="splash" v-if="showSplash">
       <div class="splash-content">
         Loading...
       </div>
     </div>
-    <div class="date-display">
-      <div class="hijri-date">{{ hijriDateDisplay }}</div>
-      <div class="date">{{ dateDisplay }}</div>
+
+    <div style="visibility: hidden; position: fixed;">
+      <img v-for="i in 11" :src="'backgrounds/' + i + '.jpg'">
+    </div>
+
+    <div id="bgful" class="bgful-container" v-if="backgroundImage">
+      <div class="bgful-overlay"></div>
+      <div class="bgful-image">
+        <img :src="backgroundImage">
+      </div>
     </div>
 
     <div class="digital-clock">
       <span class="time">
-        <span class="hours">{{ timeDisplayHours }}</span><span class="colon">{{ timeDisplayColon }}</span><span class="minutes">{{ timeDisplayMinutes }}</span>
+        <span class="hours">{{ timeDisplayHours }}
+          <span class="date-display">
+            <span class="datex">{{ dateDisplay }}</span>
+            <span class="hijri-datex">{{ hijriDateDisplay }}</span>
+          </span>
+        </span><span class="colon colon-main">{{ timeDisplayColon }}</span><span class="minutes">{{ timeDisplayMinutes }}
+
+          <span class="seconds-container">
+            <span class="seconds"><span class="colon">&nbsp;{{ timeDisplayColon }}</span>{{ timeDisplaySeconds }}</span>
+            <span class="am-pm">{{ timeDisplayAmPm }}</span>
+          </span>
+
+        </span>
       </span>
-      <small class="seconds">{{ timeDisplaySeconds }}</small>
-      <small class="am-pm">{{ timeDisplayAmPm }}</small>
+<!--       <small class="seconds">{{ timeDisplaySeconds }}</small>
+      <small class="am-pm">{{ timeDisplayAmPm }}</small> -->
     </div>
 
     <div class="next-prayer">
-      <span class="name">{{ nextPrayer.nameDisplay }}</span>
+      <span class="name"><span class="label">{{ translate('nextPrayer.label') }}:</span> {{ nextPrayer.nameDisplay }}</span>
       <span class="time">
         <span class="hours">{{ nextPrayer.timeHours }}</span><span class="colon">:</span><span class="minutes">{{ nextPrayer.timeMinutes }}</span>
       </span>
@@ -41,7 +73,7 @@
       <small class="iqamah-am-pm">{{ nextPrayer.iqamahTimeAmPm }}</small>
     </div>
     <div class="active-prayer" v-if="currentPrayer">
-      <div class="name">{{ currentPrayer.nameDisplay }}</div>
+      <div class="name"><span class="label">{{ translate('currentPrayer.label') }}:</span> {{ currentPrayer.nameDisplay }}</div>
       <div class="time">{{ currentPrayer.timeDisplay }}
         <small class="am-pm">{{ currentPrayer.timeAmPm }}</small>
       </div>
@@ -116,28 +148,43 @@
     </div>
 
   </div>
-  <script type="text/javascript" src="assets/vue.js?v=1.0.0-9"></script>
-  <script type="text/javascript" src="assets/moment.js?v=1.0.0-9"></script>
+  <script type="text/javascript" src="translations.js?v=1.1.0-12"></script>
+  <script type="text/javascript" src="assets/vue.js?v=1.1.0-12"></script>
+  <script type="text/javascript" src="assets/moment.js?v=1.1.0-12"></script>
   <!-- <script type="text/javascript" src="assets/moment-hijri.js"></script> -->
-  <script type="text/javascript" src="prayer-data-2020.js?v=1.0.0-9"></script>
-  <script type="text/javascript" src="hijri.js?v=1.0.0-9"></script>
-  <!-- <script type="text/javascript" src="analog-clock.js?v=1.0.0-9"></script> -->
-  <script type="text/javascript" src="app.js?v=1.0.0-9"></script>
+  <script type="text/javascript" src="prayer-data-2020.js?v=1.1.0-12"></script>
+  <script type="text/javascript" src="hijri.js?v=1.1.0-12"></script>
+  <!-- <script type="text/javascript" src="analog-clock.js?v=1.1.0-12"></script> -->
+  <script type="text/javascript" src="app.js?v=1.1.0-12"></script>
   <script type="text/javascript">
 
 
- //   window.initialTime = new Date((new Date()).getFullYear(), (new Date()).getMonth(), (new Date()).getDate(), 
- //     // 16, 30, 40,
- //     6, 24, 30,
- //   0);
+    window.initialTime = 
+    // undefined;
+    new Date((new Date()).getFullYear(), (new Date()).getMonth(), (new Date()).getDate(), 
+      // 16, 30, 40,
+      // 2, 20, 30,
+      12, 48, 0,
+    0);
+    // window.app.simulateTime = 10;
 
 
+
+    if (location.hostname == 'zetmel.com') {
+      window.initialTime = undefined;
+      window.app.simulateTime = undefined;
+    }
     window.app.init(window.initialTime, window.analogClock);
     new Vue({
       el: '#app',
       data: app.data,
       computed: {
 
+      },
+      methods: {      
+        translate(text) {
+          return app.translate(text);
+        },
       },
       created() {
         app.created();

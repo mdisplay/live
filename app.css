@@ -13,13 +13,36 @@ body {
   text-align: center;
 }
 
+#app {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  /*top: 20px;*/
+  top: 1.5rem;
+  /*right: 30px;*/
+  right: 2rem;
+  /*bottom: 20px;*/
+  /*bottom: 1.5rem;*/
+  bottom: 6rem;
+  /*left: 30px;*/
+  left: 2rem;
+}
+
+
+#app * {
+  z-index: 10;
+}
+
+
 #splash {
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 2;
+  z-index: 20;
   background: #000;
 }
 
@@ -35,29 +58,15 @@ body {
   line-height: 2rem;
 }
 
-#app {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  /*top: 20px;*/
-  top: 1.5rem;
-  /*right: 30px;*/
-  right: 2rem;
-  /*bottom: 20px;*/
-  bottom: 1.5rem;
-  /*left: 30px;*/
-  left: 2rem;
-}
-
 .prayer-info-container {
   background: gray;
+  bottom: -6rem;
+  height: 6rem;
 }
 
 .prayer-info {
   width: 20%;
-  width: 16.66%;
+  /*width: 16.66%;*/
   display: inline-block;
 }
 
@@ -94,3 +103,25 @@ body {
   bottom: 0;
   left: 0;
 }*/
+
+
+#bgful .bgful-image, #bgful .bgful-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+}
+
+#bgful .bgful-overlay {
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 2;
+}
+
+#bgful .bgful-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(10px);
+}
