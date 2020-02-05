@@ -21,6 +21,7 @@ class Prayer {
 
 class App {
   constructor() {
+    this.imagesVersion = '2';
     this.lang = 'ta';
     this.prayerData = [];
     for(let month in window.PRAYER_DATA) {
@@ -134,7 +135,7 @@ class App {
     this.updateBackground();
   }
   updateBackground() {
-    this.data.backgroundImage = 'backgrounds/' + this.getRandomNumber(1, 11) + '.jpg';
+    this.data.backgroundImage = 'backgrounds/' + this.getRandomNumber(1, 11) + '.jpg?v=' + this.imagesVersion;
   }
   commitCurrentPrayer() {
     if(!this.data.currentPrayer) {
