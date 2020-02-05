@@ -21,7 +21,6 @@ class Prayer {
 
 class App {
   constructor() {
-    this.imagesVersion = '2';
     this.lang = 'ta';
     this.prayerData = [];
     for(let month in window.PRAYER_DATA) {
@@ -42,6 +41,7 @@ class App {
     this.afterSeconds = 5*60;
     this.afterSeconds = 1;
     // this.afterSeconds = 1*60;
+    this.data.bgVersion = '3';
   }
   padZero(number) {
     if (number < 10) {
@@ -135,7 +135,7 @@ class App {
     this.updateBackground();
   }
   updateBackground() {
-    this.data.backgroundImage = 'backgrounds/' + this.getRandomNumber(1, 11) + '.jpg?v=' + this.imagesVersion;
+    this.data.backgroundImage = 'backgrounds/' + this.getRandomNumber(1, 11) + '.jpg?v=' + this.data.bgVersion;
   }
   commitCurrentPrayer() {
     if(!this.data.currentPrayer) {
