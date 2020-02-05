@@ -106,7 +106,7 @@ class App {
     const tomorrowParams = this.getDateParams(new Date(this.data.time.getTime() + (24*60*60*1000)));
     const tomorrowTimes = this.getTimes(tomorrowParams[1], tomorrowParams[2]);
     this.nextDayPrayers = [
-      new Prayer('Subah', tomorrowTimes[0], 30, this.lang),
+      new Prayer('Subah', tomorrowTimes[0], 20, this.lang),
     ];
     // this.data.nextPrayer = this.data.prayers[0];
     this.data.currentPrayer = undefined;
