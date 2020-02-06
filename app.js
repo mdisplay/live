@@ -39,8 +39,9 @@ class App {
     this.beforeSeconds = 5*60;
     // this.beforeSeconds = 1*60;
     this.afterSeconds = 5*60;
-    this.afterSeconds = 1;
+    // this.afterSeconds = 1;
     // this.afterSeconds = 1*60;
+    // this.afterSeconds = 2*60;
     this.data.bgVersion = '3';
   }
   padZero(number) {
@@ -122,7 +123,9 @@ class App {
     const day = translations[this.lang].days[parseInt(d.format('d'))];
     const month = translations[this.lang].months[this.data.time.getMonth()];
     // this.data.dateDisplay = d.format('ddd, DD MMM YYYY');
-    this.data.dateDisplay = day + ', ' + this.padZero(this.data.time.getDate()) + ' ' + month + ' ' + this.data.time.getFullYear();
+    this.data.weekDayDisplay = day;
+    this.data.dateDisplay = //day + ', ' + 
+    this.padZero(this.data.time.getDate()) + ' ' + month + ' ' + this.data.time.getFullYear();
     const hijriMonth = parseInt(d.format('iM'));
     // this.data.hijriDateDisplay = d.format('iDD, ___ (iMM) iYYYY').replace('___', translations.ta.months[hijriMonth - 1]);
     // const hijriDate = new HijriDate(this.data.time.getTime());
@@ -132,6 +135,7 @@ class App {
     this.data.hijriDateDisplay = this.padZero(hijriDate.day) + ' ' + translations[this.lang].hijriMonths[hijriDate.month - 1] + ' ' + hijriDate.year;
     // this.data.hijriDateDisplay = hijriDate.toFormat('dd mm YYYY');
 
+    this.data.prayerInfo = 'athan';
     this.updateBackground();
   }
   updateBackground() {
@@ -162,9 +166,9 @@ class App {
         const duration = moment.duration(nowTime - iqamahTime, 'milliseconds');
         // this.data.currentPrayerAfter = this.padZero(duration.minutes()) + ':' + this.padZero(duration.seconds());
         this.data.currentPrayerAfter = {
-          minutes: this.padZero(duration.minutes()),
+          minutes: '00', // this.padZero(duration.minutes()),
           colon: this.data.currentPrayerAfter && this.data.currentPrayerAfter.colon == ':' ? ':' : ':',
-          seconds: this.padZero(duration.seconds()),
+          seconds: '00', // this.padZero(duration.seconds()),
         };
         this.data.currentPrayerWaiting = false;
       } else {
@@ -177,6 +181,15 @@ class App {
       this.data.currentPrayer = currentPrayer;
       this.data.currentPrayerBefore = false;
       this.data.currentPrayerAfter = false;
+      if (nowTime - currentPrayer.time.getTime() < (15 * 1000)) {
+        this.data.currentPrayerWaiting = false;
+        this.data.currentPrayerBefore = {
+          minutes: '00', // this.padZero(duration.minutes()),
+          colon: this.data.currentPrayerBefore && this.data.currentPrayerBefore.colon == ':' ? ':' : ':',
+          seconds: '00', // this.padZero(duration.seconds()),          
+        };
+        return;
+      }
       const duration = moment.duration(iqamahTime - nowTime, 'milliseconds');
       this.data.currentPrayerWaiting = {
           minutes: this.padZero(duration.minutes()),
@@ -194,13 +207,16 @@ class App {
         dateParams[2] === this.currentDateParams[2])) {
       this.onDayUpdate();
     }
-    if (this.data.time.getMinutes() % 5 ===0 && this.data.time.getSeconds() === 0) {
+    if (this.data.time.getMinutes() % 5 === 0 && this.data.time.getSeconds() === 0) {
       this.updateBackground();
+    }
+    if (this.data.time.getSeconds() % 2 === 0) {
+      this.data.prayerInfo = this.data.prayerInfo === 'athan' ? 'iqamah' : 'athan';
     }
     const nowTime = this.data.time.getTime();
     let nextTime = this.data.nextPrayer ? this.data.nextPrayer.time.getTime() : 0;
     // console.log('nextTick');
-    if(nowTime >= nextTime) {
+    if(nowTime >= (nextTime + 1000)) {
       console.log('coming next');
       let nextPrayer;
       for(let prayer of this.data.prayers) {
@@ -220,6 +236,11 @@ class App {
       this.data.currentPrayerBefore = false;
       this.data.currentPrayerAfter = false;
       this.data.currentPrayerWaiting = false;
+      this.data.currentPrayerBefore = {
+        minutes: '00', // this.padZero(duration.minutes()),
+        colon: this.data.currentPrayerBefore && this.data.currentPrayerBefore.colon == ':' ? ':' : ':',
+        seconds: '00', // this.padZero(duration.seconds()),
+      };
     } else if(nextTime - nowTime < this.beforeSeconds * 1000) {
       this.data.currentPrayer = this.data.nextPrayer;
       const duration = moment.duration(nextTime - nowTime, 'milliseconds');

@@ -3,25 +3,33 @@
 <head>
   <meta charset="utf-8">
   <title>Prayer Widget</title>
-  <link rel="stylesheet" type="text/css" href="reboot.css?v=1.1.0-16">
-  <!-- <link rel="stylesheet" type="text/css" href="analog-clock.css?v=1.1.0-16"> -->
-  <link rel="stylesheet" type="text/css" href="app.css?v=1.1.0-16">
-  <link rel="stylesheet" type="text/css" href="theme-default.css?v=1.1.0-16">
+  <link rel="stylesheet" type="text/css" href="reboot.css?v=1.3.0-19">
+  <!-- <link rel="stylesheet" type="text/css" href="analog-clock.css?v=1.3.0-19"> -->
+  <link rel="stylesheet" type="text/css" href="app.css?v=1.3.0-19">
+  <link rel="stylesheet" type="text/css" href="theme-default.css?v=1.3.0-19">
 </head>
 <body>
-  <div id="app" :class="{'is-active': currentPrayer, 'is-waiting': currentPrayerWaiting, 'is-before': currentPrayerBefore, 'is-after': currentPrayerAfter}">
+  <div id="app" :class="[{'is-active': currentPrayer, 'is-waiting': currentPrayerWaiting, 'is-before': currentPrayerBefore, 'is-after': currentPrayerAfter}, 'active-prayer-info-' + prayerInfo]">
 
     <div id="version-info" style="
     position: fixed;
     font-size: 1rem;
-    opacity: 0.5;
     bottom: 6.5rem;
     text-align: right;
     right: 1rem;
     top: 1rem;
     ">
-      Version {{ '?v=1.1.0-16'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }}
-      ({{ '?v=1.1.0-16'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }})
+      <span style="opacity: 0.75;">
+        Version {{ '?v=1.3.0-19'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }}
+      </span>
+      <span style="
+opacity: 0.9;
+background: black;
+font-size: 1.5rem;
+padding: 0.25rem;
+border-radius: 50%;
+text-align: center;
+      ">{{ '?v=1.3.0-19'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span>
     </div>
 
     <div id="splash" v-if="showSplash">
@@ -45,8 +53,13 @@
       <span class="time">
         <span class="hours">{{ timeDisplayHours }}
           <span class="date-display">
-            <span class="datex">{{ dateDisplay }}</span>
             <span class="hijri-datex">{{ hijriDateDisplay }}</span>
+            <span class="datex">{{ dateDisplay }}</span>
+            <!-- <span style="font-size: 2.25rem; display: block; line-height: 3rem;">{{ dateDisplay }}</span> -->
+            <span class="weekday">{{ weekDayDisplay }}</span>
+            <!-- <span style="font-size: 2.75rem; display: block; line-height: 3rem; margin-top: 0.5rem; margin-bottom: 0.75rem;">{{ weekDayDisplay }}</span> -->
+            <!-- <span style="font-size: 2.5rem; display: block; line-height: 3rem;">ஜமா அத்துல் ஆகிர்</span> -->
+            <!-- <span class="hijri-datex">{{ hijriDateDisplay }}</span> -->
           </span>
         </span><span class="colon colon-main">{{ timeDisplayColon }}</span><span class="minutes">{{ timeDisplayMinutes }}
 
@@ -61,7 +74,7 @@
       <small class="am-pm">{{ timeDisplayAmPm }}</small> -->
     </div>
 
-    <div class="next-prayer">
+<!--     <div class="next-prayer prayer-display">
       <span class="name"><span class="label">{{ translate('nextPrayer.label') }}:</span> {{ nextPrayer.nameDisplay }}</span>
       <span class="time">
         <span class="hours">{{ nextPrayer.timeHours }}</span><span class="colon">:</span><span class="minutes">{{ nextPrayer.timeMinutes }}</span>
@@ -71,13 +84,30 @@
         <span class="hours">{{ nextPrayer.iqamahTimeHours }}</span><span class="colon">:</span><span class="minutes">{{ nextPrayer.iqamahTimeMinutes }}</span>
       </span>
       <small class="iqamah-am-pm">{{ nextPrayer.iqamahTimeAmPm }}</small>
-    </div>
-    <div class="active-prayer" v-if="currentPrayer">
+    </div> -->
+
+    <template v-for="display in [
+        {type: 'active', name: 'currentPrayer', prayer: currentPrayer},
+        {type: 'next', name: 'nextPrayer', prayer: nextPrayer}
+      ]">
+      <div :class="[display.type + '-prayer', 'prayer-display']" v-if="display.prayer">
+        <span class="name"><span class="label">{{ translate(display.name + '.label') }}:</span> {{ display.prayer.nameDisplay }}</span>
+        <span class="time">
+          <span class="hours">{{ display.prayer.timeHours }}</span><span class="colon">:</span><span class="minutes">{{ display.prayer.timeMinutes }}</span>
+        </span>
+        <small class="am-pm">{{ display.prayer.timeAmPm }}</small>
+        <span class="iqamah-time">
+          <span class="hours">{{ display.prayer.iqamahTimeHours }}</span><span class="colon">:</span><span class="minutes">{{ display.prayer.iqamahTimeMinutes }}</span>
+        </span>
+        <small class="iqamah-am-pm">{{ display.prayer.iqamahTimeAmPm }}</small>
+      </div>
+    </template>
+<!--     <div class="active-prayer prayer-display" v-if="currentPrayer">
       <div class="name"><span class="label">{{ translate('currentPrayer.label') }}:</span> {{ currentPrayer.nameDisplay }}</div>
       <div class="time">{{ currentPrayer.timeDisplay }}
         <small class="am-pm">{{ currentPrayer.timeAmPm }}</small>
       </div>
-    </div>
+    </div> -->
     <div class="active-timer" v-if="currentPrayer">
       <div class="timer timer-is-before" v-if="currentPrayerBefore">
         <div class="time">
@@ -134,28 +164,30 @@
     </div> -->
 
     <div class="prayer-info-container">
-      <div class="prayer-info" v-for="prayer in prayers">
+      <div class="prayer-info" v-for="prayer in prayers" :class="{'is-current': prayer === currentPrayer}">
         <div class="prayer-name">{{ prayer.nameDisplay }}</div>
-        <div class="prayer-time">
-          {{ prayer.timeDisplay }}
-          <span class="am-pm">{{ prayer.timeAmPm }}</span>
-        </div>
-        <div class="iqamah-time">
-          {{ prayer.iqamahTimeDisplay }}
-          <span class="am-pm">{{ prayer.iqamahTimeAmPm }}</span>
-        </div>
+        <!-- <transition name="fade" mode="out-in"> -->
+          <div class="prayer-time" xv-if="prayerInfo == 'athan'">
+            {{ prayer.timeDisplay }}
+            <span class="am-pm">{{ prayer.timeAmPm }}</span>
+          </div>
+          <div class="iqamah-time" xv-if="prayerInfo == 'iqamah'">
+            {{ prayer.iqamahTimeDisplay }}
+            <span class="am-pm">{{ prayer.iqamahTimeAmPm }}</span>
+          </div>
+        <!-- </transition> -->
       </div>
     </div>
 
   </div>
-  <script type="text/javascript" src="translations.js?v=1.1.0-16"></script>
-  <script type="text/javascript" src="assets/vue.js?v=1.1.0-16"></script>
-  <script type="text/javascript" src="assets/moment.js?v=1.1.0-16"></script>
+  <script type="text/javascript" src="translations.js?v=1.3.0-19"></script>
+  <script type="text/javascript" src="assets/vue.js?v=1.3.0-19"></script>
+  <script type="text/javascript" src="assets/moment.js?v=1.3.0-19"></script>
   <!-- <script type="text/javascript" src="assets/moment-hijri.js"></script> -->
-  <script type="text/javascript" src="prayer-data-2020.js?v=1.1.0-16"></script>
-  <script type="text/javascript" src="hijri.js?v=1.1.0-16"></script>
-  <!-- <script type="text/javascript" src="analog-clock.js?v=1.1.0-16"></script> -->
-  <script type="text/javascript" src="app.js?v=1.1.0-16"></script>
+  <script type="text/javascript" src="prayer-data-2020.js?v=1.3.0-19"></script>
+  <script type="text/javascript" src="hijri.js?v=1.3.0-19"></script>
+  <!-- <script type="text/javascript" src="analog-clock.js?v=1.3.0-19"></script> -->
+  <script type="text/javascript" src="app.js?v=1.3.0-19"></script>
   <script type="text/javascript">
 
 
@@ -164,7 +196,7 @@
     new Date((new Date()).getFullYear(), (new Date()).getMonth(), (new Date()).getDate(), 
       // 16, 30, 40,
       // 2, 20, 30,
-      12, 48, 0,
+      12, 40, 56,
     0);
     // window.app.simulateTime = 10;
 
