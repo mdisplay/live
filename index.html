@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8">
   <title>Prayer Widget</title>
-  <link rel="stylesheet" type="text/css" href="reboot.css?v=1.3.0-19">
-  <!-- <link rel="stylesheet" type="text/css" href="analog-clock.css?v=1.3.0-19"> -->
-  <link rel="stylesheet" type="text/css" href="app.css?v=1.3.0-19">
-  <link rel="stylesheet" type="text/css" href="theme-default.css?v=1.3.0-19">
+  <link rel="stylesheet" type="text/css" href="reboot.css?v=1.4.0-24">
+  <!-- <link rel="stylesheet" type="text/css" href="analog-clock.css?v=1.4.0-24"> -->
+  <link rel="stylesheet" type="text/css" href="app.css?v=1.4.0-24">
+  <link rel="stylesheet" type="text/css" href="theme-default.css?v=1.4.0-24">
 </head>
 <body>
   <div id="app" :class="[{'is-active': currentPrayer, 'is-waiting': currentPrayerWaiting, 'is-before': currentPrayerBefore, 'is-after': currentPrayerAfter}, 'active-prayer-info-' + prayerInfo]">
@@ -18,9 +18,11 @@
     text-align: right;
     right: 1rem;
     top: 1rem;
+    right: 0;
+    top: 0;
     ">
       <span style="opacity: 0.75;">
-        Version {{ '?v=1.3.0-19'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }}
+        Version {{ '?v=1.4.0-24'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }}
       </span>
       <span style="
 opacity: 0.9;
@@ -29,7 +31,7 @@ font-size: 1.5rem;
 padding: 0.25rem;
 border-radius: 50%;
 text-align: center;
-      ">{{ '?v=1.3.0-19'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span>
+      ">{{ '?v=1.4.0-24'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span>
     </div>
 
     <div id="splash" v-if="showSplash">
@@ -94,12 +96,16 @@ text-align: center;
         <span class="name"><span class="label">{{ translate(display.name + '.label') }}:</span> {{ display.prayer.nameDisplay }}</span>
         <span class="time">
           <span class="hours">{{ display.prayer.timeHours }}</span><span class="colon">:</span><span class="minutes">{{ display.prayer.timeMinutes }}</span>
+          <small class="am-pm">{{ display.prayer.timeAmPm }}</small>
+          <small class="label">{{ translate('prayer.label') }}</small>
         </span>
-        <small class="am-pm">{{ display.prayer.timeAmPm }}</small>
+        <!-- <small class="am-pm">{{ display.prayer.timeAmPm }}</small> -->
         <span class="iqamah-time">
           <span class="hours">{{ display.prayer.iqamahTimeHours }}</span><span class="colon">:</span><span class="minutes">{{ display.prayer.iqamahTimeMinutes }}</span>
+          <small class="iqamah-am-pm">{{ display.prayer.iqamahTimeAmPm }}</small>
+          <small class="iqamah-label">{{ translate('prayer.iqamah-label') }}</small>
         </span>
-        <small class="iqamah-am-pm">{{ display.prayer.iqamahTimeAmPm }}</small>
+        <!-- <small class="iqamah-am-pm">{{ display.prayer.iqamahTimeAmPm }}</small> -->
       </div>
     </template>
 <!--     <div class="active-prayer prayer-display" v-if="currentPrayer">
@@ -180,14 +186,14 @@ text-align: center;
     </div>
 
   </div>
-  <script type="text/javascript" src="translations.js?v=1.3.0-19"></script>
-  <script type="text/javascript" src="assets/vue.js?v=1.3.0-19"></script>
-  <script type="text/javascript" src="assets/moment.js?v=1.3.0-19"></script>
+  <script type="text/javascript" src="translations.js?v=1.4.0-24"></script>
+  <script type="text/javascript" src="assets/vue.js?v=1.4.0-24"></script>
+  <script type="text/javascript" src="assets/moment.js?v=1.4.0-24"></script>
   <!-- <script type="text/javascript" src="assets/moment-hijri.js"></script> -->
-  <script type="text/javascript" src="prayer-data-2020.js?v=1.3.0-19"></script>
-  <script type="text/javascript" src="hijri.js?v=1.3.0-19"></script>
-  <!-- <script type="text/javascript" src="analog-clock.js?v=1.3.0-19"></script> -->
-  <script type="text/javascript" src="app.js?v=1.3.0-19"></script>
+  <script type="text/javascript" src="prayer-data-2020.js?v=1.4.0-24"></script>
+  <script type="text/javascript" src="hijri.js?v=1.4.0-24"></script>
+  <!-- <script type="text/javascript" src="analog-clock.js?v=1.4.0-24"></script> -->
+  <script type="text/javascript" src="app.js?v=1.4.0-24"></script>
   <script type="text/javascript">
 
 
@@ -196,7 +202,7 @@ text-align: center;
     new Date((new Date()).getFullYear(), (new Date()).getMonth(), (new Date()).getDate(), 
       // 16, 30, 40,
       // 2, 20, 30,
-      12, 40, 56,
+      12, 24, 58,
     0);
     // window.app.simulateTime = 10;
 

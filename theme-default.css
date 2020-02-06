@@ -20,6 +20,7 @@
 .prayer-info-container .prayer-info {
   position: relative;
   height: 6rem;
+  overflow: hidden;
 }
 
 .prayer-info-container .prayer-info:nth-child(even) {
@@ -40,7 +41,8 @@
   background: #333;
   display: block;
   opacity: 0.76;
-  background: rgba(255, 255, 255, 0.25);
+  /*background: rgba(255, 255, 255, 0.25);*/
+  background: rgba(255, 255, 255, 0.125);
 }
 
 .prayer-info-container .prayer-time,
@@ -305,6 +307,7 @@
   position: absolute;
   font-size: 5rem;
   bottom: 2rem;
+  bottom: 0.5rem;
   /*bottom: 4rem;*/
   left: 0;
   right: 0;
@@ -312,9 +315,15 @@
 }
 
 .active-timer .time {
-  font-size: 10rem;
+/*  font-size: 10rem;
   height: 10rem;
-  line-height: 10rem;
+  line-height: 10rem;*/
+  font-size: 9rem;
+  height: 9rem;
+  line-height: 9rem;
+
+
+  color: #ff5959;
 }
 
 .active-timer .description {
@@ -325,6 +334,7 @@
   opacity: 0.75;
   margin-top: -1rem;
   /*color: #FFF;*/
+  display: none;
 }
 
 
@@ -341,7 +351,7 @@
   width: 3rem;
 }
 
-.is-before .active-timer .time {
+/*.is-before .active-timer .time {
   color: #23ff2c;
   color: #58ff4c;
   color: #7eff74;
@@ -352,7 +362,29 @@
 .is-after .active-timer .time {
   color: #fb2414;
   color: #ff5959;
+}*/
+
+.is-waiting .active-prayer .time,
+.is-waiting .active-prayer .am-pm,
+.is-after .active-prayer .time,
+.is-after .active-prayer .am-pm {
+  display: none;
 }
+
+.is-before .active-prayer .iqamah-time,
+.is-before .active-prayer .iqamah-am-pm {
+  display: none;
+}
+
+.is-before .active-timer {
+  bottom: 0.5rem;
+}
+
+.is-waiting .active-timer,
+.is-after .active-timer {
+  bottom: 8.5rem;
+}
+
 
 /*.next-prayer, .active-prayer {
   display: none;
@@ -361,6 +393,8 @@
 .is-active .next-prayer {
   display: none;
 }
+
+
 
 /*.next-prayer, .active-prayer {
   position: absolute;
@@ -393,6 +427,9 @@
 
   font-size: 4rem;
   bottom: 12.5rem;
+
+  bottom: 15rem;
+  bottom: 14rem;
 }
 
 .prayer-display .name .label {
@@ -417,8 +454,14 @@
   height: 7.5rem;
   line-height: 7.5rem;
   font-size: 7.5rem;
+
+  height: 9rem;
+  line-height: 9rem;
+  font-size: 9rem;
+
   right: 2rem;
   right: 3rem;
+  right: 0;
   opacity: 0.76;
   opacity: 1;
 }
@@ -428,30 +471,57 @@
   font-size: 1.5rem;
   opacity: 0.75;
   bottom: 5rem;
+  right: 4rem;
+
+  bottom: auto;
+  right: auto;
+  left: -3rem;
+  top: 1.5rem;
+  line-height: 1.5rem;
+}
+
+.prayer-display .iqamah-time .iqamah-label,
+.prayer-display .time .label {
+  position: absolute;
+  right: auto;
+  top: 3.5rem;
+  font-size: 1.5rem;
+  line-height: 1.5rem;
+  opacity: 0.75;
+  opacity: 0.9;
+  text-align: right;
+  display: block;
+  width: 7rem;
+  left: -7.5rem;
 }
 
 .prayer-display .time {
   bottom: 7rem;
   bottom: 8rem;
+  bottom: 9rem;
+  bottom: 8.5rem;
 }
 
 .prayer-display .iqamah-time {
   margin-bottom: 0;
-  bottom: 1rem;
+  /*bottom: 1rem;*/
+  bottom: 0.5rem;
 /*  font-size: 6rem;
   height: 6rem;
   line-height: 6rem;*/
 }
 
-.prayer-display .am-pm {
+/*.prayer-display .am-pm {
   bottom: 11.5rem;
   bottom: 12.5rem;
+  bottom: 14.5rem;
 }
 
 .prayer-display .iqamah-am-pm {
   bottom: 4.5rem;
   bottom: 5.5rem;
-}
+  bottom: 6.5rem;
+}*/
 
 .prayer-display .colon {
   opacity: 0.75;
@@ -471,7 +541,7 @@
 .active-prayer .iqamah-time,
 .active-prayer .iqamah-am-pm,
 .active-prayer .am-pm {
-  display: none;
+  /*display: none;*/
 }
 
 .analog-clock {

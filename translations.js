@@ -2,6 +2,8 @@ window.translations = {
   ta: {
     'currentPrayer.label': 'இப்போது',
     'nextPrayer.label': 'அடுத்து',
+    'prayer.label': 'அதான்',
+    'prayer.iqamah-label': 'இகாமத்',
     Subah: 'சுபஹ்',
     Sunrise: 'சூரியோதயம்',
     Luhar: 'ளுஹர்',

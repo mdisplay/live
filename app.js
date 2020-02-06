@@ -41,7 +41,7 @@ class App {
     this.afterSeconds = 5*60;
     // this.afterSeconds = 1;
     // this.afterSeconds = 1*60;
-    // this.afterSeconds = 2*60;
+    this.afterSeconds = 2*60;
     this.data.bgVersion = '3';
   }
   padZero(number) {
