@@ -165,10 +165,12 @@ class App {
         // this.data.currentPrayerAfter = true;
         const duration = moment.duration(nowTime - iqamahTime, 'milliseconds');
         // this.data.currentPrayerAfter = this.padZero(duration.minutes()) + ':' + this.padZero(duration.seconds());
+        let pause = nowTime - iqamahTime < (15 * 1000);
+        pause = true;
         this.data.currentPrayerAfter = {
-          minutes: '00', // this.padZero(duration.minutes()),
+          minutes: pause ? '00' : this.padZero(duration.minutes()),
           colon: this.data.currentPrayerAfter && this.data.currentPrayerAfter.colon == ':' ? ':' : ':',
-          seconds: '00', // this.padZero(duration.seconds()),
+          seconds: pause ? '00' : this.padZero(duration.seconds()),
         };
         this.data.currentPrayerWaiting = false;
       } else {
@@ -193,7 +195,7 @@ class App {
       const duration = moment.duration(iqamahTime - nowTime, 'milliseconds');
       this.data.currentPrayerWaiting = {
           minutes: this.padZero(duration.minutes()),
-          colon: this.data.currentPrayerWaiting && this.data.currentPrayerWaiting.colon == ':' ? ':' : ':',
+          colon: this.data.currentPrayerWaiting && this.data.currentPrayerWaiting.colon == ':' ? '' : ':',
           seconds: this.padZero(duration.seconds()),
       };
     }
@@ -246,7 +248,7 @@ class App {
       const duration = moment.duration(nextTime - nowTime, 'milliseconds');
       this.data.currentPrayerBefore = {
         minutes: this.padZero(duration.minutes()),
-        colon: this.data.currentPrayerBefore && this.data.currentPrayerBefore.colon == ':' ? ':' : ':',
+        colon: this.data.currentPrayerBefore && this.data.currentPrayerBefore.colon == ':' ? '' : ':',
         seconds: this.padZero(duration.seconds()),
       };
       this.data.currentPrayerAfter = false;

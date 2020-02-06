@@ -349,6 +349,7 @@
   opacity: 0.75;
   min-height: 3rem;
   width: 3rem;
+  display: inline-block;
 }
 
 /*.is-before .active-timer .time {
