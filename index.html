@@ -3,15 +3,51 @@
 <head>
   <meta charset="utf-8">
   <title>Prayer Widget</title>
-  <link rel="stylesheet" type="text/css" href="reboot.css?v=1.4.0-25">
-  <!-- <link rel="stylesheet" type="text/css" href="analog-clock.css?v=1.4.0-25"> -->
-  <link rel="stylesheet" type="text/css" href="app.css?v=1.4.0-25">
-  <link rel="stylesheet" type="text/css" href="theme-default.css?v=1.4.0-25">
+  <link rel="stylesheet" type="text/css" href="reboot.css?v=1.5.0-26">
+  <!-- <link rel="stylesheet" type="text/css" href="analog-clock.css?v=1.5.0-26"> -->
+  <link rel="stylesheet" type="text/css" href="app.css?v=1.5.0-26">
+  <link rel="stylesheet" type="text/css" href="theme-default.css?v=1.5.0-26">
 </head>
 <body>
   <div id="app" :class="[{'is-active': currentPrayer, 'is-waiting': currentPrayerWaiting, 'is-before': currentPrayerBefore, 'is-after': currentPrayerAfter}, 'active-prayer-info-' + prayerInfo]">
 
-    <div id="version-info" style="
+    <div class="modal-wrapper" v-if="settingsMode">
+      <div class="modal-overlay" @click="closeSettings()"></div>
+      <div class="modal-dialog">
+        <div @click="closeSettings()" class="modal-close">Close</div>
+        <div class="modal-content">
+          <div class="configured-info">
+            <span class="configured" v-if="iqamahTimesConfigured">Configured</span>
+            <span class="not-configured" v-else>Not Configured</span>
+          </div>
+          <div class="times-config">
+            <div class="time-config" v-for="(iqamahTime, name) in iqamahTimes">
+              <span class="label">{{ name }}</span>
+              <!-- {{ name }}: {{ iqamahTime }} -->
+              <!-- <input type="checkbox" v-model="iqamahTime.absolute" @change="updateSettings()"> -->
+              <span class="toggle-absolute" :class="{'is-absolute': iqamahTime.absolute, 'is-not-absolute': !iqamahTime.absolute}" @click="toggleAbsolute(iqamahTime)">
+                <span class="at" v-if="iqamahTime.absolute">@</span>
+                <span class="plus" v-else>+</span>
+              </span>
+              <template v-if="iqamahTime.absolute">
+                <input class="time-input" type="number" v-model="iqamahTime.hours" @input="updateSettings()" @change="updateSettings()">
+                <span class="time-input-colon">:</span>
+              </template>
+              <input class="time-input" type="number" v-model="iqamahTime.minutes" @input="updateSettings()" @change="updateSettings()">
+              <span class="time-info">
+                <span v-if="iqamahTime.absolute">
+                  <span v-if="name == 'Subah'">AM</span>
+                  <span v-else>PM</span>
+                </span>
+                <span class="" v-else>minutes</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div @click="openSettings()" id="version-info" style="
     position: fixed;
     font-size: 1rem;
     bottom: 6.5rem;
@@ -22,7 +58,7 @@
     top: 0;
     ">
       <span style="opacity: 0.75;">
-        Version {{ '?v=1.4.0-25'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }}
+        Version {{ '?v=1.5.0-26'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }}
       </span>
       <span style="
 opacity: 0.9;
@@ -31,7 +67,7 @@ font-size: 1.5rem;
 padding: 0.25rem;
 border-radius: 50%;
 text-align: center;
-      ">{{ '?v=1.4.0-25'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span>
+      ">{{ '?v=1.5.0-26'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span>
     </div>
 
     <div id="splash" v-if="showSplash">
@@ -186,14 +222,14 @@ text-align: center;
     </div>
 
   </div>
-  <script type="text/javascript" src="translations.js?v=1.4.0-25"></script>
-  <script type="text/javascript" src="assets/vue.js?v=1.4.0-25"></script>
-  <script type="text/javascript" src="assets/moment.js?v=1.4.0-25"></script>
+  <script type="text/javascript" src="translations.js?v=1.5.0-26"></script>
+  <script type="text/javascript" src="assets/vue.js?v=1.5.0-26"></script>
+  <script type="text/javascript" src="assets/moment.js?v=1.5.0-26"></script>
   <!-- <script type="text/javascript" src="assets/moment-hijri.js"></script> -->
-  <script type="text/javascript" src="prayer-data-2020.js?v=1.4.0-25"></script>
-  <script type="text/javascript" src="hijri.js?v=1.4.0-25"></script>
-  <!-- <script type="text/javascript" src="analog-clock.js?v=1.4.0-25"></script> -->
-  <script type="text/javascript" src="app.js?v=1.4.0-25"></script>
+  <script type="text/javascript" src="prayer-data-2020.js?v=1.5.0-26"></script>
+  <script type="text/javascript" src="hijri.js?v=1.5.0-26"></script>
+  <!-- <script type="text/javascript" src="analog-clock.js?v=1.5.0-26"></script> -->
+  <script type="text/javascript" src="app.js?v=1.5.0-26"></script>
   <script type="text/javascript">
 
 
@@ -202,7 +238,7 @@ text-align: center;
     new Date((new Date()).getFullYear(), (new Date()).getMonth(), (new Date()).getDate(), 
       // 16, 30, 40,
       // 2, 20, 30,
-      12, 34, 56,
+      12, 14, 56,
     0);
     // window.app.simulateTime = 10;
 
@@ -212,24 +248,38 @@ text-align: center;
       window.initialTime = undefined;
       window.app.simulateTime = undefined;
     }
-    window.app.init(window.initialTime, window.analogClock);
-    new Vue({
-      el: '#app',
-      data: app.data,
-      computed: {
+    window.app.init(window.initialTime, function(){
+      new Vue({
+        el: '#app',
+        data: app.data,
+        computed: {
 
-      },
-      methods: {      
-        translate(text) {
-          return app.translate(text);
         },
-      },
-      created() {
-        app.created();
-      },
-      mounted() {
-        app.mounted();
-      },
+        methods: {      
+          translate(text) {
+            return app.translate(text);
+          },
+          updateSettings() {
+            app.updateSettings();
+          },
+          closeSettings() {
+            app.closeSettings();
+          },
+          openSettings() {
+            app.openSettings();
+          },
+          toggleAbsolute(iqamahTime) {
+            iqamahTime.absolute = !iqamahTime.absolute;
+            this.updateSettings();
+          },
+        },
+        created() {
+          app.created();
+        },
+        mounted() {
+          app.mounted();
+        },
+      });
     });
   </script>
   </script>

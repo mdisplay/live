@@ -127,3 +127,117 @@ body {
   object-fit: cover;
   filter: blur(10px);
 }
+
+
+
+#app .modal-wrapper {
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    color: #000;
+}
+
+#app .modal-overlay {
+  background: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+}
+
+#app .modal-dialog {
+  background: rgba(255, 255, 255, 0.95);
+  width: 500px;
+  height: calc(100vh - 6rem);
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  padding: 1rem;
+  overflow-y: auto;
+}
+
+#app .modal-close {
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.5);
+  margin-bottom: 0.5rem;
+}
+
+#app .times-config {
+  text-align: left;
+}
+
+#app .time-config {
+  height: 4rem;
+  line-height: 3rem;
+  padding: 0.5rem;
+}
+
+#app .time-config:nth-child(even) {
+  background: #DADADA;
+}
+
+
+#app .time-config .label {
+  font-size: 2rem;
+  width: 7rem;
+  display: inline-block;
+}
+
+
+#app .time-config .time-input {
+  width: 20px;
+  width: 4rem;
+  font-size: 2rem;
+  line-height: 2.5rem;
+  border: 2px solid #AAA;
+  outline: 0;
+  display: inline-block;
+}
+
+#app .time-config .time-input-colon {
+  font-size: 2rem;
+}
+
+#app .time-config .time-input:focus {
+  border-color: #0f6f9b;
+  outline: 0;
+}
+
+#app .time-config .toggle-absolute {
+  font-size: 2rem;
+  line-height: 2.5rem;
+  width: 3rem;
+  text-align: center;
+  display: inline-block;  
+  color: #FFF;
+  background: #518d0b;
+}
+
+#app .time-config .toggle-absolute.is-absolute {
+  font-size: 1.5rem;
+  background: #555;
+}
+
+#app .time-config .time-info {
+  font-size: 2rem;
+  margin-left: 0.5rem;
+}
+
+#app .configured-info {
+  margin-bottom: 0.5rem;
+}
+
+#app .configured-info .not-configured {
+  color: #d91010;
+}
+
+#app .configured-info .configured {
+  color: #1eb624;
+}
