@@ -156,6 +156,9 @@ class App {
     }
     return iqamahTimes;
   }
+  showNextDayPrayers() {
+    this.data.prayers = this.nextDayPrayers;
+  }
   onDayUpdate() {
     const dateParams = this.getDateParams(this.data.time);
     this.currentDateParams = dateParams;
@@ -163,7 +166,7 @@ class App {
     const times = this.getTimes(this.currentDateParams[1], this.currentDateParams[2]);
     console.log('all the times', times);
     const iqamahTimes = this.getIqamahTimes(times, this.currentDateParams[1], this.currentDateParams[2]);
-    this.data.prayers = [
+    this.todayPrayers = [
       new Prayer('Subah', times.Subah, iqamahTimes.Subah, this.lang),
       // new Prayer('Sunrise', times[1], 10, this.lang),
       new Prayer('Luhar', times.Luhar, iqamahTimes.Luhar, this.lang),
@@ -171,11 +174,17 @@ class App {
       new Prayer('Magrib', times.Magrib, iqamahTimes.Magrib, this.lang),
       new Prayer('Isha', times.Isha, iqamahTimes.Isha, this.lang),
     ];
+    this.data.prayers = this.todayPrayers;
 
     const tomorrowParams = this.getDateParams(new Date(this.data.time.getTime() + (24*60*60*1000)));
     const tomorrowTimes = this.getTimes(tomorrowParams[1], tomorrowParams[2]);
+    const tomorrowIqamahTimes = this.getIqamahTimes(tomorrowTimes, tomorrowParams[1], tomorrowParams[2]);
     this.nextDayPrayers = [
-      new Prayer('Subah', tomorrowTimes.Subah, iqamahTimes.Subah, this.lang),
+      new Prayer('Subah', tomorrowTimes.Subah, tomorrowIqamahTimes.Subah, this.lang),
+      new Prayer('Luhar', tomorrowTimes.Luhar, tomorrowIqamahTimes.Luhar, this.lang),
+      new Prayer('Asr', tomorrowTimes.Asr, tomorrowIqamahTimes.Asr, this.lang),
+      new Prayer('Magrib', tomorrowTimes.Magrib, tomorrowIqamahTimes.Magrib, this.lang),
+      new Prayer('Isha', tomorrowTimes.Isha, tomorrowIqamahTimes.Isha, this.lang),
     ];
     // this.data.nextPrayer = this.data.prayers[0];
     this.data.currentPrayer = undefined;
@@ -288,7 +297,7 @@ class App {
     if(nowTime >= (nextTime + 1000)) {
       console.log('coming next');
       let nextPrayer;
-      for(let prayer of this.data.prayers) {
+      for(let prayer of this.todayPrayers) {
         if(nowTime < prayer.time.getTime()) {
           nextPrayer = prayer;
           break;
@@ -296,6 +305,7 @@ class App {
       }
       if (!nextPrayer) {
         nextPrayer = this.nextDayPrayers[0];
+        this.showNextDayPrayers();
       }
       console.log('recalculate next prayer!', nextPrayer);
       this.data.nextPrayer = nextPrayer;
@@ -329,11 +339,11 @@ class App {
           // if (nowTime < ) {}
           let prevPrayer;
           if(this.data.nextPrayer === this.nextDayPrayers[0]){
-            prevPrayer = this.data.prayers[this.data.prayers.length - 1];
+            prevPrayer = this.todayPrayers[this.todayPrayers.length - 1];
           } else {
-            const idx = this.data.prayers.indexOf(this.data.nextPrayer);
+            const idx = this.todayPrayers.indexOf(this.data.nextPrayer);
             if (idx > 0) { // not subah
-              prevPrayer = this.data.prayers[idx - 1];
+              prevPrayer = this.todayPrayers[idx - 1];
             }
           }
           if (prevPrayer) {
