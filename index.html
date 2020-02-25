@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <title>Prayer Widget</title>
-  <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=1.5.2-28">
-  <link rel="stylesheet" type="text/css" href="assets/css/app.css?v=1.5.2-28">
-  <link rel="stylesheet" type="text/css" href="assets/css/theme-default.css?v=1.5.2-28">
+  <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=1.6.0-29">
+  <link rel="stylesheet" type="text/css" href="assets/css/app.css?v=1.6.0-29">
+  <link rel="stylesheet" type="text/css" href="assets/css/theme-default.css?v=1.6.0-29">
 </head>
 <body>
   <div id="app" :class="[{'is-active': currentPrayer, 'is-waiting': currentPrayerWaiting, 'is-before': currentPrayerBefore, 'is-after': currentPrayerAfter}, 'active-prayer-info-' + prayerInfo]">
@@ -57,7 +57,7 @@
     top: 0;
     ">
       <span style="opacity: 0.75;">
-        Version {{ '?v=1.5.2-28'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }}
+        Version {{ '?v=1.6.0-29'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }}
       </span>
       <span style="
 opacity: 0.9;
@@ -66,7 +66,7 @@ font-size: 1.5rem;
 padding: 0.25rem;
 border-radius: 50%;
 text-align: center;
-      ">{{ '?v=1.5.2-28'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span>
+      ">{{ '?v=1.6.0-29'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span>
     </div>
 
     <div id="splash" v-if="showSplash">
@@ -221,12 +221,12 @@ text-align: center;
     </div>
 
   </div>
-  <script type="text/javascript" src="prayer-data.js?v=1.5.2-28"></script>
-  <script type="text/javascript" src="assets/vendors/vue.min.js?v=1.5.2-28"></script>
-  <script type="text/javascript" src="assets/vendors/moment.min.js?v=1.5.2-28"></script>
-  <script type="text/javascript" src="assets/vendors/hijri.js?v=1.5.2-28"></script>
-  <script type="text/javascript" src="assets/js/translations.js?v=1.5.2-28"></script>
-  <script type="text/javascript" src="assets/js/app.js?v=1.5.2-28"></script>
+  <script type="text/javascript" src="prayer-data.js?v=1.6.0-29"></script>
+  <script type="text/javascript" src="assets/vendors/vue.min.js?v=1.6.0-29"></script>
+  <script type="text/javascript" src="assets/vendors/moment.min.js?v=1.6.0-29"></script>
+  <script type="text/javascript" src="assets/vendors/hijri.js?v=1.6.0-29"></script>
+  <script type="text/javascript" src="assets/js/translations.js?v=1.6.0-29"></script>
+  <script type="text/javascript" src="assets/js/app.js?v=1.6.0-29"></script>
   <script type="text/javascript">
 
 
