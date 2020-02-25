@@ -3,10 +3,9 @@
 <head>
   <meta charset="utf-8">
   <title>Prayer Widget</title>
-  <link rel="stylesheet" type="text/css" href="reboot.css?v=1.5.1-27">
-  <!-- <link rel="stylesheet" type="text/css" href="analog-clock.css?v=1.5.1-27"> -->
-  <link rel="stylesheet" type="text/css" href="app.css?v=1.5.1-27">
-  <link rel="stylesheet" type="text/css" href="theme-default.css?v=1.5.1-27">
+  <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=1.5.2-28">
+  <link rel="stylesheet" type="text/css" href="assets/css/app.css?v=1.5.2-28">
+  <link rel="stylesheet" type="text/css" href="assets/css/theme-default.css?v=1.5.2-28">
 </head>
 <body>
   <div id="app" :class="[{'is-active': currentPrayer, 'is-waiting': currentPrayerWaiting, 'is-before': currentPrayerBefore, 'is-after': currentPrayerAfter}, 'active-prayer-info-' + prayerInfo]">
@@ -58,7 +57,7 @@
     top: 0;
     ">
       <span style="opacity: 0.75;">
-        Version {{ '?v=1.5.1-27'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }}
+        Version {{ '?v=1.5.2-28'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }}
       </span>
       <span style="
 opacity: 0.9;
@@ -67,7 +66,7 @@ font-size: 1.5rem;
 padding: 0.25rem;
 border-radius: 50%;
 text-align: center;
-      ">{{ '?v=1.5.1-27'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span>
+      ">{{ '?v=1.5.2-28'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span>
     </div>
 
     <div id="splash" v-if="showSplash">
@@ -222,14 +221,12 @@ text-align: center;
     </div>
 
   </div>
-  <script type="text/javascript" src="translations.js?v=1.5.1-27"></script>
-  <script type="text/javascript" src="assets/vue.js?v=1.5.1-27"></script>
-  <script type="text/javascript" src="assets/moment.js?v=1.5.1-27"></script>
-  <!-- <script type="text/javascript" src="assets/moment-hijri.js"></script> -->
-  <script type="text/javascript" src="prayer-data-2020.js?v=1.5.1-27"></script>
-  <script type="text/javascript" src="hijri.js?v=1.5.1-27"></script>
-  <!-- <script type="text/javascript" src="analog-clock.js?v=1.5.1-27"></script> -->
-  <script type="text/javascript" src="app.js?v=1.5.1-27"></script>
+  <script type="text/javascript" src="prayer-data-2020.js?v=1.5.2-28"></script>
+  <script type="text/javascript" src="assets/js/translations.js?v=1.5.2-28"></script>
+  <script type="text/javascript" src="assets/vendors/vue.min.js?v=1.5.2-28"></script>
+  <script type="text/javascript" src="assets/vendors/moment.min.js?v=1.5.2-28"></script>
+  <script type="text/javascript" src="assets/js/hijri.js?v=1.5.2-28"></script>
+  <script type="text/javascript" src="assets/js/app.js?v=1.5.2-28"></script>
   <script type="text/javascript">
 
 
