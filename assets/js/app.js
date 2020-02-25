@@ -384,7 +384,9 @@ class App {
     window._theInterval = window.setInterval(()=> {
       this.nextTick();
     }, this.simulateTime ? this.simulateTime : 1000);
-    this.data.showSplash = false;
+    setTimeout(()=> {
+      this.data.showSplash = false;
+    }, 1000);
   }
   created() {
     if(window._theInterval){

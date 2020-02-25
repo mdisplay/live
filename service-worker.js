@@ -6,9 +6,9 @@ if (workbox) {
   console.log(`Boo! Workbox didn't load 😬`);
 }
 
-var appVersion = '1.6.0-29';
+var appVersion = '1.6.1-30';
 var dataVersion = '1';
-var vendorVersion = '1';
+var vendorVersion = '2';
 var bgVersion = '1';
 
 // Detailed logging is very useful during development
@@ -52,6 +52,14 @@ var precacheList = [
    revision: vendorVersion,
  },
  // /vendors
+  {
+   url: baseUrl + 'assets/images/icon.png',
+   revision: vendorVersion,
+  },
+  {
+   url: baseUrl + 'assets/images/favicon.png',
+   revision: vendorVersion,
+  },
  // /app
  {
    url: baseUrl + 'assets/js/translations.js',

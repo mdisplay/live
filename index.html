@@ -2,15 +2,25 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Prayer Widget</title>
-  <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=1.6.0-29">
-  <link rel="stylesheet" type="text/css" href="assets/css/app.css?v=1.6.0-29">
-  <link rel="stylesheet" type="text/css" href="assets/css/theme-default.css?v=1.6.0-29">
+  <title>MDisplay</title>
+  <link rel="shortcut icon" href="assets/images/favicon.png">
+  <link rel="icon" type="image/png" href="assets/images/favicon.png">
+  <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=1.6.1-30">
+  <link rel="stylesheet" type="text/css" href="assets/css/app.css?v=1.6.1-30">
+  <link rel="stylesheet" type="text/css" href="assets/css/theme-default.css?v=1.6.1-30">
 </head>
 <body>
   <div id="app" :class="[{'is-active': currentPrayer, 'is-waiting': currentPrayerWaiting, 'is-before': currentPrayerBefore, 'is-after': currentPrayerAfter}, 'active-prayer-info-' + prayerInfo]">
 
-    <div class="modal-wrapper" v-if="settingsMode">
+    <div id="splash" v-if="showSplash">
+      <div class="splash-content">
+        <!-- Loading... -->
+        <img src="assets/images/icon.png">
+      </div>
+    </div>
+    <div style="display: none;" v-show="true">
+
+    <div style="display: none;" v-show="true" class="modal-wrapper" v-if="settingsMode">
       <div class="modal-overlay" @click="closeSettings()"></div>
       <div class="modal-dialog">
         <div @click="closeSettings()" class="modal-close">Close</div>
@@ -46,7 +56,7 @@
       </div>
     </div>
 
-    <div @click="openSettings()" id="version-info" style="
+    <div  v-show="true" @click="openSettings()" id="version-info" style="
     position: fixed;
     font-size: 1rem;
     bottom: 6.5rem;
@@ -55,9 +65,10 @@
     top: 1rem;
     right: 0;
     top: 0;
+    display: none;
     ">
       <span style="opacity: 0.75;">
-        Version {{ '?v=1.6.0-29'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }}
+        Version {{ '?v=1.6.1-30'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }}
       </span>
       <span style="
 opacity: 0.9;
@@ -66,14 +77,9 @@ font-size: 1.5rem;
 padding: 0.25rem;
 border-radius: 50%;
 text-align: center;
-      ">{{ '?v=1.6.0-29'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span>
+      ">{{ '?v=1.6.1-30'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span>
     </div>
 
-    <div id="splash" v-if="showSplash">
-      <div class="splash-content">
-        Loading...
-      </div>
-    </div>
 
     <div style="visibility: hidden; position: fixed;">
       <img v-for="i in 11" :src="'backgrounds/' + i + '.jpg?v=' + bgVersion">
@@ -219,27 +225,30 @@ text-align: center;
         <!-- </transition> -->
       </div>
     </div>
+  </div>
 
   </div>
-  <script type="text/javascript" src="prayer-data.js?v=1.6.0-29"></script>
-  <script type="text/javascript" src="assets/vendors/vue.min.js?v=1.6.0-29"></script>
-  <script type="text/javascript" src="assets/vendors/moment.min.js?v=1.6.0-29"></script>
-  <script type="text/javascript" src="assets/vendors/hijri.js?v=1.6.0-29"></script>
-  <script type="text/javascript" src="assets/js/translations.js?v=1.6.0-29"></script>
-  <script type="text/javascript" src="assets/js/app.js?v=1.6.0-29"></script>
+  <script type="text/javascript" src="prayer-data.js?v=1.6.1-30"></script>
+  <script type="text/javascript" src="assets/vendors/vue.min.js?v=1.6.1-30"></script>
+  <script type="text/javascript" src="assets/vendors/moment.min.js?v=1.6.1-30"></script>
+  <script type="text/javascript" src="assets/vendors/hijri.js?v=1.6.1-30"></script>
+  <script type="text/javascript" src="assets/js/translations.js?v=1.6.1-30"></script>
+  <script type="text/javascript" src="assets/js/app.js?v=1.6.1-30"></script>
   <script type="text/javascript">
 
-
-    window.initialTime = 
-    undefined;
-    new Date((new Date()).getFullYear(), (new Date()).getMonth(), (new Date()).getDate(), 
-      // 16, 30, 40,
-      // 2, 20, 30,
-      12, 14, 56,
-    0);
-    // window.app.simulateTime = 10;
+    var isLocalhost = window.location.hostname == 'localhost';
 
 
+    if(isLocalhost) {
+      window.initialTime = 
+      undefined;
+      new Date((new Date()).getFullYear(), (new Date()).getMonth(), (new Date()).getDate(), 
+        // 16, 30, 40,
+        // 2, 20, 30,
+        12, 14, 56,
+      0);
+      // window.app.simulateTime = 10;
+    }
 
     if (location.hostname == '' || location.hostname == 'zetmel.com' || location.hostname == 'mdisplay.github.io') {
       window.initialTime = undefined;
@@ -281,7 +290,7 @@ text-align: center;
   </script>
   <script type="text/javascript">
     // Check that service workers are supported
-    if ('serviceWorker' in navigator) {
+    if (!isLocalhost && 'serviceWorker' in navigator) {
       // Use the window load event to keep the page load performant
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('service-worker.js');

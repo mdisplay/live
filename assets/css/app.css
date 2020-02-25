@@ -44,6 +44,8 @@ body {
   left: 0;
   z-index: 20;
   background: #000;
+  width: 100vw;
+  height: 100vh;
 }
 
 #splash .splash-content {
@@ -51,11 +53,15 @@ body {
   top: 50%;
   right: 0;
   left: 0;
-  margin-top: -1rem;
+  margin-top: -5rem;
   text-align: center;
-  height: 2rem;
+  height: 10rem;
   font-size: 2rem;
-  line-height: 2rem;
+  line-height: 10rem;
+}
+
+#splash .splash-content img {
+  height: 100%;
 }
 
 .prayer-info-container {
