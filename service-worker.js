@@ -69,6 +69,14 @@ var precacheList = [
    url: baseUrl + 'assets/js/app.js',
    revision: appVersion,
  },
+ {
+   url: baseUrl + 'assets/css/app.css',
+   revision: appVersion,
+ },
+ {
+   url: baseUrl + 'assets/css/theme-default.css',
+   revision: appVersion,
+ },
     // 'prayer-data-*.js',
     // 'assets/**/*.{css,js}',
 ];
