@@ -229,6 +229,7 @@ text-align: center;
 
   </div>
   <script type="text/javascript" src="prayer-data.js?v=1.6.1-30"></script>
+  <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=1.6.1-30"></script>
   <script type="text/javascript" src="assets/vendors/vue.min.js?v=1.6.1-30"></script>
   <script type="text/javascript" src="assets/vendors/moment.min.js?v=1.6.1-30"></script>
   <script type="text/javascript" src="assets/vendors/hijri.js?v=1.6.1-30"></script>
@@ -237,7 +238,8 @@ text-align: center;
   <script type="text/javascript">
 
     var isLocalhost = window.location.hostname == 'localhost';
-
+    var enableServiceWorker = !isLocalhost;
+    var enableServiceWorker = true;
 
     if(isLocalhost) {
       window.initialTime = 
@@ -290,12 +292,34 @@ text-align: center;
   </script>
   <script type="text/javascript">
     // Check that service workers are supported
-    if (!isLocalhost && 'serviceWorker' in navigator) {
-      // Use the window load event to keep the page load performant
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('service-worker.js');
-      });
-    }
+
+
+if ('serviceWorker' in navigator
+&& enableServiceWorker
+) {
+  if (window.workbox && window.workbox.Workbox) {
+    var wb = new window.workbox.Workbox('service-worker.js');
+   
+    wb.addEventListener('installed', event => {
+      if (event.isUpdate) {
+        // console.log('New content available! Reload the browser to update');
+        if(confirm('New update is available! Press OK to refresh')){
+          window.location.reload();
+        }
+      }
+      console.log('installed', event);
+    });
+
+    wb.register();
+
+    window.wb = wb;
+  } else {
+    // Use the window load event to keep the page load performant
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('service-worker.js');
+    });
+  }
+}
   </script>
 </body>
 </html>
