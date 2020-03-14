@@ -10,23 +10,34 @@
   <name>MDisplay Live</name>
 
   <description>
-      MDisplay Live
+      MDisplay Live App
   </description>
 
   <author href="https://mdisplay.github.io/live/" email="mdisplay@gmail.com">
       MDisplay
   </author>
 
+  <platform name="ios">
+    <!-- for Phonegap Build website to take -->
+    <icon height="180" platform="ios" src="res/icon/android/xxxhdpi.png" width="180" />
+  </platform>
+
 
   <platform name="android">
+
+    <!-- https://github.com/microsoft/cordova-plugin-code-push#phonegap-build -->
+    <preference name="android-build-tool" value="gradle" />
+
     <preference name="SplashMaintainAspectRatio" value="true"/>
     <preference name="SplashShowOnlyFirstTime" value="true"/>
+
     <icon density="ldpi" src="res/icon/android/ldpi.png"/>
     <icon density="mdpi" src="res/icon/android/mdpi.png"/>
     <icon density="hdpi" src="res/icon/android/hdpi.png"/>
     <icon density="xhdpi" src="res/icon/android/xhdpi.png"/>
     <icon density="xxhdpi" src="res/icon/android/xxhdpi.png"/>
     <icon density="xxxhdpi" src="res/icon/android/xxxhdpi.png"/>
+
     <!--  Portrait  -->
     <splash density="port-ldpi" src="res/screen/android/splash-port-ldpi.png"/>
     <splash density="port-mdpi" src="res/screen/android/splash-port-mdpi.png"/>
@@ -34,6 +45,7 @@
     <splash density="port-xhdpi" src="res/screen/android/splash-port-xhdpi.png"/>
     <splash density="port-xxhdpi" src="res/screen/android/splash-port-xxhdpi.png"/>
     <splash density="port-xxxhdpi" src="res/screen/android/splash-port-xxxhdpi.png"/>
+
     <!--  Landscape  -->
     <splash density="land-ldpi" src="res/screen/android/splash-land-ldpi.png"/>
     <splash density="land-mdpi" src="res/screen/android/splash-land-mdpi.png"/>
@@ -41,6 +53,7 @@
     <splash density="land-xhdpi" src="res/screen/android/splash-land-xhdpi.png"/>
     <splash density="land-xxhdpi" src="res/screen/android/splash-land-xxhdpi.png"/>
     <splash density="land-xxxhdpi" src="res/screen/android/splash-land-xxxhdpi.png"/>
+
   </platform>
 
 </widget>
