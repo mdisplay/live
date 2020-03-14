@@ -239,7 +239,7 @@ text-align: center;
 
     var isLocalhost = window.location.hostname == 'localhost';
     var enableServiceWorker = !isLocalhost;
-    var enableServiceWorker = true;
+    // var enableServiceWorker = true;
 
     if(isLocalhost) {
       window.initialTime = 
@@ -298,8 +298,9 @@ if ('serviceWorker' in navigator
 && enableServiceWorker
 && window.location.protocol != 'file:'
 ) {
+  var serviceWorkerFile = 'service-worker' + (isLocalhost ? '-local' : '') + '.js';
   if (window.workbox && window.workbox.Workbox) {
-    var wb = new window.workbox.Workbox('service-worker.js');
+    var wb = new window.workbox.Workbox(serviceWorkerFile);
    
     wb.addEventListener('installed', event => {
       if (event.isUpdate) {
@@ -317,7 +318,7 @@ if ('serviceWorker' in navigator
   } else {
     // Use the window load event to keep the page load performant
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('service-worker.js');
+      navigator.serviceWorker.register(serviceWorkerFile);
     });
   }
 }
