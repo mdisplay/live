@@ -324,5 +324,13 @@ if ('serviceWorker' in navigator
   }
 }
   </script>
+  <script type="text/javascript">
+    document.addEventListener("deviceready", function () {
+        codePush.sync();
+    });
+    document.addEventListener("resume", function () {
+        codePush.sync();
+    });
+  </script>
 </body>
 </html>
