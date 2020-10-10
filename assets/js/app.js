@@ -385,7 +385,10 @@ class App {
       this.nextTick();
     }, this.simulateTime ? this.simulateTime : 1000);
     setTimeout(()=> {
-      this.data.showSplash = false;
+      // this.data.showSplash = false;
+      setTimeout(() => {
+        window.location = '../app/www/index.html';
+      }, 2500);
     }, 1000);
   }
   created() {
