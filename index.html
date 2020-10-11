@@ -1,127 +1,200 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <title>MDisplay Live</title>
-  <link rel="shortcut icon" href="assets/images/favicon.png">
-  <link rel="icon" type="image/png" href="assets/images/favicon.png">
-  <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=1.7.1-34">
-  <link rel="stylesheet" type="text/css" href="assets/css/app.css?v=1.7.1-34">
-  <link rel="stylesheet" type="text/css" href="assets/css/theme-default.css?v=1.7.1-34">
-</head>
-<body>
-  <div id="app" :class="[{'is-active': currentPrayer, 'is-waiting': currentPrayerWaiting, 'is-before': currentPrayerBefore, 'is-after': currentPrayerAfter}, 'active-prayer-info-' + prayerInfo]">
-
-    <div id="splash" v-if="showSplash">
-      <div class="splash-content">
-        <!-- Loading... -->
-        <img src="assets/images/icon.png">
-        <div>
-          Application moved. Redirecting...
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>MDisplay Live</title>
+    <link rel="shortcut icon" href="assets/images/favicon.png" />
+    <link rel="icon" type="image/png" href="assets/images/favicon.png" />
+    <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=1.10.2-57" />
+    <link rel="stylesheet" type="text/css" href="assets/css/app.css?v=1.10.2-57" />
+    <link rel="stylesheet" type="text/css" href="assets/css/theme-default.css?v=1.10.2-57" />
+  </head>
+  <body>
+    <div
+      id="app"
+      :class="[{'is-active': currentPrayer, 'is-waiting': currentPrayerWaiting, 'is-before': currentPrayerBefore, 'is-after': currentPrayerAfter}, 'active-prayer-info-' + prayerInfo]"
+    >
+      <div id="splash" v-if="showSplash">
+        <div class="splash-content">
+          <!-- Loading... -->
+          <img src="assets/images/icon.png" />
         </div>
       </div>
-    </div>
-    <div style="display: none;" v-show="true">
-
-    <div style="display: none;" v-show="true" class="modal-wrapper" v-if="settingsMode">
-      <div class="modal-overlay" @click="closeSettings()"></div>
-      <div class="modal-dialog">
-        <div @click="closeSettings()" class="modal-close">Close</div>
-        <div class="modal-content">
-          <div class="configured-info">
-            <span class="configured" v-if="iqamahTimesConfigured">Configured</span>
-            <span class="not-configured" v-else>Not Configured</span>
-          </div>
-          <div class="times-config">
-            <div class="time-config" v-for="(iqamahTime, name) in iqamahTimes">
-              <span class="label">{{ name }}</span>
-              <!-- {{ name }}: {{ iqamahTime }} -->
-              <!-- <input type="checkbox" v-model="iqamahTime.absolute" @change="updateSettings()"> -->
-              <span class="toggle-absolute" :class="{'is-absolute': iqamahTime.absolute, 'is-not-absolute': !iqamahTime.absolute}" @click="toggleAbsolute(iqamahTime)">
-                <span class="at" v-if="iqamahTime.absolute">@</span>
-                <span class="plus" v-else>+</span>
-              </span>
-              <template v-if="iqamahTime.absolute">
-                <input class="time-input" type="number" v-model="iqamahTime.hours" @input="updateSettings()" @change="updateSettings()">
-                <span class="time-input-colon">:</span>
-              </template>
-              <input class="time-input" type="number" v-model="iqamahTime.minutes" @input="updateSettings()" @change="updateSettings()">
-              <span class="time-info">
-                <span v-if="iqamahTime.absolute">
-                  <span v-if="name == 'Subah'">AM</span>
-                  <span v-else>PM</span>
-                </span>
-                <span class="" v-else>minutes</span>
-              </span>
+      <div style="display: none;" v-show="true">
+        <div style="display: none;" v-show="true" class="modal-wrapper" v-if="settingsMode">
+          <div class="modal-overlay" @click="closeSettings()"></div>
+          <div class="modal-dialog">
+            <div @click="closeSettings()" class="modal-close">Close</div>
+            <div class="modal-content">
+              <div class="configured-info">
+                <span class="configured" v-if="iqamahTimesConfigured">Configured</span>
+                <span class="not-configured" v-else>Not Configured</span>
+              </div>
+              <div class="update-info">
+                <div class="kiosk-config">
+                  <!-- <button type="button" class="">
+                    Switch Launcher
+                    <template v-if="kioskMode.available">
+                      (Available, {{ kioskMode.enabled ? 'kiosk' : 'nokiosk' }} {{ kioskMode.isHome ? 'home' : 'nohome'
+                      }})
+                    </template>
+                    <template v-else>
+                      (Unavailable)
+                    </template>
+                  </button> -->
+                </div>
+                <div class="" v-if="appUdate.enabled">
+                  AUTO UPDATE: <button type="button" @click="checkForUpdates()">Check</button>
+                  <span class="error" v-if="appUdate.error">ERROR: {{ appUdate.error }}</span>
+                  <span class="checking" v-if="appUdate.checking">Checking...</span>
+                  <span class="updated" v-if="appUdate.updated"
+                    >Updated. Version {{ '?v=1.10.2-57'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1 ($2)') }}.</span
+                  >
+                  <span class="updating" v-if="appUdate.updating">Updating...</span>
+                </div>
+                <div class="" v-else>AUTO UPDATE: <button type="button" @click="checkForUpdates()">Check</button></div>
+              </div>
+              <div class="times-config">
+                <div class="time-config" v-for="(iqamahTime, name) in iqamahTimes">
+                  <span class="label">{{ name }}</span>
+                  <!-- {{ name }}: {{ iqamahTime }} -->
+                  <!-- <input type="checkbox" v-model="iqamahTime.absolute" @change="updateSettings()"> -->
+                  <span
+                    class="toggle-absolute"
+                    :class="{'is-absolute': iqamahTime.absolute, 'is-not-absolute': !iqamahTime.absolute}"
+                    @click="toggleAbsolute(iqamahTime)"
+                  >
+                    <span class="at" v-if="iqamahTime.absolute">@</span>
+                    <span class="plus" v-else>+</span>
+                  </span>
+                  <template v-if="iqamahTime.absolute">
+                    <input
+                      class="time-input"
+                      type="number"
+                      v-model="iqamahTime.hours"
+                      @input="updateSettings()"
+                      @change="updateSettings()"
+                    />
+                    <span class="time-input-colon">:</span>
+                  </template>
+                  <input
+                    class="time-input"
+                    type="number"
+                    v-model="iqamahTime.minutes"
+                    @input="updateSettings()"
+                    @change="updateSettings()"
+                  />
+                  <span class="time-info">
+                    <span v-if="iqamahTime.absolute">
+                      <span v-if="name == 'Subah'">AM</span>
+                      <span v-else>PM</span>
+                    </span>
+                    <span class="" v-else>minutes</span>
+                  </span>
+                </div>
+                <div class="time-config">
+                  <label for="time-origin-mode-device">
+                    <input
+                      id="time-origin-mode-device"
+                      type="radio"
+                      name="time-origin-mode"
+                      value="device"
+                      v-model="timeOriginMode"
+                      @change="updateSettings()"
+                    />
+                    Device Time
+                  </label>
+                  <label for="time-origin-mode-internet">
+                    <input
+                      id="time-origin-mode-internet"
+                      type="radio"
+                      name="time-origin-mode"
+                      value="internet"
+                      v-model="timeOriginMode"
+                      @change="updateSettings()"
+                    />
+                    Internet Time <small>(beta)</small>
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <div  v-show="true" @click="openSettings()" id="version-info" style="
-    position: fixed;
-    font-size: 1rem;
-    bottom: 6.5rem;
-    text-align: right;
-    right: 1rem;
-    top: 1rem;
-    right: 0;
-    top: 0;
-    display: none;
-    ">
-      <span style="opacity: 0.75;">
-        Version {{ '?v=1.7.1-34'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }}
-      </span>
-      <span style="
-opacity: 0.9;
-background: black;
-font-size: 1.5rem;
-padding: 0.25rem;
-border-radius: 50%;
-text-align: center;
-      ">{{ '?v=1.7.1-34'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span>
-    </div>
-
-
-    <div style="visibility: hidden; position: fixed;">
-      <img v-for="i in 11" :src="'backgrounds/' + i + '.jpg?v=' + bgVersion">
-    </div>
-
-    <div id="bgful" class="bgful-container" v-if="backgroundImage">
-      <div class="bgful-overlay"></div>
-      <div class="bgful-image">
-        <img :src="backgroundImage">
-      </div>
-    </div>
-
-    <div class="digital-clock">
-      <span class="time">
-        <span class="hours">{{ timeDisplayHours }}
-          <span class="date-display">
-            <span class="hijri-datex">{{ hijriDateDisplay }}</span>
-            <span class="datex">{{ dateDisplay }}</span>
-            <!-- <span style="font-size: 2.25rem; display: block; line-height: 3rem;">{{ dateDisplay }}</span> -->
-            <span class="weekday">{{ weekDayDisplay }}</span>
-            <!-- <span style="font-size: 2.75rem; display: block; line-height: 3rem; margin-top: 0.5rem; margin-bottom: 0.75rem;">{{ weekDayDisplay }}</span> -->
-            <!-- <span style="font-size: 2.5rem; display: block; line-height: 3rem;">ஜமா அத்துல் ஆகிர்</span> -->
-            <!-- <span class="hijri-datex">{{ hijriDateDisplay }}</span> -->
+        <div
+          v-show="true"
+          @click="openSettings()"
+          id="version-info"
+          style="
+            position: fixed;
+            font-size: 1rem;
+            bottom: 6.5rem;
+            text-align: right;
+            right: 1rem;
+            top: 1rem;
+            right: 0;
+            top: 0;
+            display: none;
+          "
+        >
+          <span style="opacity: 0.75;">
+            Version {{ '?v=1.10.2-57'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }}
           </span>
-        </span><span class="colon colon-main">{{ timeDisplayColon }}</span><span class="minutes">{{ timeDisplayMinutes }}
+          <span
+            style="
+              opacity: 0.9;
+              background: black;
+              font-size: 1.5rem;
+              padding: 0.25rem;
+              border-radius: 50%;
+              text-align: center;
+            "
+            >{{ '?v=1.10.2-57'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span
+          >
+        </div>
 
-          <span class="seconds-container">
-            <span class="seconds"><span class="colon">&nbsp;{{ timeDisplayColon }}</span>{{ timeDisplaySeconds }}</span>
-            <span class="am-pm">{{ timeDisplayAmPm }}</span>
+        <div style="visibility: hidden; position: fixed;">
+          <img v-for="i in 11" :src="'backgrounds/' + i + '.jpg?v=' + bgVersion" />
+        </div>
+
+        <div id="bgful" class="bgful-container" v-if="backgroundImage">
+          <div class="bgful-overlay"></div>
+          <div class="bgful-image">
+            <img :src="backgroundImage" />
+          </div>
+        </div>
+
+        <div class="digital-clock">
+          <span class="time">
+            <span class="hours"
+              >{{ timeDisplayHours }}
+              <span class="date-display">
+                <span class="hijri-datex">{{ hijriDateDisplay }}</span>
+                <span class="datex">{{ dateDisplay }}</span>
+                <!-- <span style="font-size: 2.25rem; display: block; line-height: 3rem;">{{ dateDisplay }}</span> -->
+                <span class="weekday">{{ weekDayDisplay }}</span>
+                <!-- <span style="font-size: 2.75rem; display: block; line-height: 3rem; margin-top: 0.5rem; margin-bottom: 0.75rem;">{{ weekDayDisplay }}</span> -->
+                <!-- <span style="font-size: 2.5rem; display: block; line-height: 3rem;">ஜமா அத்துல் ஆகிர்</span> -->
+                <!-- <span class="hijri-datex">{{ hijriDateDisplay }}</span> -->
+              </span> </span
+            ><span class="colon colon-main">{{ timeDisplayColon }}</span
+            ><span class="minutes"
+              >{{ timeDisplayMinutes }}
+
+              <span class="seconds-container">
+                <span class="seconds"
+                  ><span class="colon">&nbsp;{{ timeDisplayColon }}</span>{{ timeDisplaySeconds }}</span
+                >
+                <span class="am-pm">{{ timeDisplayAmPm }}</span>
+              </span>
+            </span>
           </span>
-
-        </span>
-      </span>
-<!--       <small class="seconds">{{ timeDisplaySeconds }}</small>
+          <!--       <small class="seconds">{{ timeDisplaySeconds }}</small>
       <small class="am-pm">{{ timeDisplayAmPm }}</small> -->
-    </div>
+        </div>
 
-<!--     <div class="next-prayer prayer-display">
+        <!--     <div class="next-prayer prayer-display">
       <span class="name"><span class="label">{{ translate('nextPrayer.label') }}:</span> {{ nextPrayer.nameDisplay }}</span>
       <span class="time">
         <span class="hours">{{ nextPrayer.timeHours }}</span><span class="colon">:</span><span class="minutes">{{ nextPrayer.timeMinutes }}</span>
@@ -133,58 +206,70 @@ text-align: center;
       <small class="iqamah-am-pm">{{ nextPrayer.iqamahTimeAmPm }}</small>
     </div> -->
 
-    <template v-for="display in [
+        <template
+          v-for="display in [
         {type: 'active', name: 'currentPrayer', prayer: currentPrayer},
         {type: 'next', name: 'nextPrayer', prayer: nextPrayer}
-      ]">
-      <div :class="[display.type + '-prayer', 'prayer-display']" v-if="display.prayer">
-        <span class="name"><span class="label">{{ translate(display.name + '.label') }}:</span> {{ display.prayer.nameDisplay }}</span>
-        <span class="time">
-          <span class="hours">{{ display.prayer.timeHours }}</span><span class="colon">:</span><span class="minutes">{{ display.prayer.timeMinutes }}</span>
-          <small class="am-pm">{{ display.prayer.timeAmPm }}</small>
-          <small class="label">{{ translate('prayer.label') }}</small>
-        </span>
-        <!-- <small class="am-pm">{{ display.prayer.timeAmPm }}</small> -->
-        <span class="iqamah-time">
-          <span class="hours">{{ display.prayer.iqamahTimeHours }}</span><span class="colon">:</span><span class="minutes">{{ display.prayer.iqamahTimeMinutes }}</span>
-          <small class="iqamah-am-pm">{{ display.prayer.iqamahTimeAmPm }}</small>
-          <small class="iqamah-label">{{ translate('prayer.iqamah-label') }}</small>
-        </span>
-        <!-- <small class="iqamah-am-pm">{{ display.prayer.iqamahTimeAmPm }}</small> -->
-      </div>
-    </template>
-<!--     <div class="active-prayer prayer-display" v-if="currentPrayer">
+      ]"
+        >
+          <div :class="[display.type + '-prayer', 'prayer-display']" v-if="display.prayer">
+            <span class="name"
+              ><span class="label">{{ translate(display.name + '.label') }}:</span> {{ display.prayer.nameDisplay
+              }}</span
+            >
+            <span class="time">
+              <span class="hours">{{ display.prayer.timeHours }}</span><span class="colon">:</span
+              ><span class="minutes">{{ display.prayer.timeMinutes }}</span>
+              <small class="am-pm">{{ display.prayer.timeAmPm }}</small>
+              <small class="label">{{ translate('prayer.label') }}</small>
+            </span>
+            <!-- <small class="am-pm">{{ display.prayer.timeAmPm }}</small> -->
+            <span class="iqamah-time">
+              <span class="hours">{{ display.prayer.iqamahTimeHours }}</span><span class="colon">:</span
+              ><span class="minutes">{{ display.prayer.iqamahTimeMinutes }}</span>
+              <small class="iqamah-am-pm">{{ display.prayer.iqamahTimeAmPm }}</small>
+              <small class="iqamah-label">{{ translate('prayer.iqamah-label') }}</small>
+            </span>
+            <!-- <small class="iqamah-am-pm">{{ display.prayer.iqamahTimeAmPm }}</small> -->
+          </div>
+        </template>
+        <!--     <div class="active-prayer prayer-display" v-if="currentPrayer">
       <div class="name"><span class="label">{{ translate('currentPrayer.label') }}:</span> {{ currentPrayer.nameDisplay }}</div>
       <div class="time">{{ currentPrayer.timeDisplay }}
         <small class="am-pm">{{ currentPrayer.timeAmPm }}</small>
       </div>
     </div> -->
-    <div class="active-timer" v-if="currentPrayer">
-      <div class="timer timer-is-before" v-if="currentPrayerBefore">
-        <div class="time">
-          <!-- {{ currentPrayerBefore }} -->
-          <span class="minutes">{{ currentPrayerBefore.minutes }}</span><span class="colon">{{ currentPrayerBefore.colon }}</span><span class="seconds">{{ currentPrayerBefore.seconds }}</span>
+        <div class="active-timer" v-if="currentPrayer">
+          <div class="timer timer-is-before" v-if="currentPrayerBefore">
+            <div class="time">
+              <!-- {{ currentPrayerBefore }} -->
+              <span class="minutes">{{ currentPrayerBefore.minutes }}</span
+              ><span class="colon">{{ currentPrayerBefore.colon }}</span
+              ><span class="seconds">{{ currentPrayerBefore.seconds }}</span>
+            </div>
+            <div class="description">{{ currentPrayerDescription }}</div>
+          </div>
+          <div class="timer timer-is-after" v-if="currentPrayerAfter">
+            <div class="time">
+              <!-- {{ currentPrayerAfter }} -->
+              <span class="minutes">{{ currentPrayerAfter.minutes }}</span
+              ><span class="colon">{{ currentPrayerAfter.colon }}</span
+              ><span class="seconds">{{ currentPrayerAfter.seconds }}</span>
+            </div>
+            <div class="description">{{ currentPrayerDescription }}</div>
+          </div>
+          <div class="timer timer-is-waiting" v-if="currentPrayerWaiting">
+            <div class="time">
+              <!-- {{ currentPrayerWaiting }} -->
+              <span class="minutes">{{ currentPrayerWaiting.minutes }}</span
+              ><span class="colon">{{ currentPrayerWaiting.colon }}</span
+              ><span class="seconds">{{ currentPrayerWaiting.seconds }}</span>
+            </div>
+            <div class="description">{{ currentPrayerDescription }}</div>
+          </div>
         </div>
-        <div class="description">{{ currentPrayerDescription }}</div>
-      </div>
-      <div class="timer timer-is-after" v-if="currentPrayerAfter">
-        <div class="time">
-          <!-- {{ currentPrayerAfter }} -->
-          <span class="minutes">{{ currentPrayerAfter.minutes }}</span><span class="colon">{{ currentPrayerAfter.colon }}</span><span class="seconds">{{ currentPrayerAfter.seconds }}</span>
-        </div>
-        <div class="description">{{ currentPrayerDescription }}</div>
-      </div>
-      <div class="timer timer-is-waiting" v-if="currentPrayerWaiting">
-        <div class="time">
-          <!-- {{ currentPrayerWaiting }} -->
-          <span class="minutes">{{ currentPrayerWaiting.minutes }}</span><span class="colon">{{ currentPrayerWaiting.colon }}</span><span class="seconds">{{ currentPrayerWaiting.seconds }}</span>
-        </div>
-        <div class="description">{{ currentPrayerDescription }}</div>
-      </div>
-    </div>
 
-
-<!--     <div id="analog-clock-container" class="analog-clock-container white-facex">
+        <!--     <div id="analog-clock-container" class="analog-clock-container white-facex">
       <section class="border-clock"></section>
       <section class="clock analog-clock">
         <ul class="list-unstyled">
@@ -214,126 +299,176 @@ text-align: center;
       </section>
     </div> -->
 
-    <div class="prayer-info-container">
-      <div class="prayer-info" v-for="prayer in prayers" :class="{'is-current': prayer === currentPrayer}">
-        <div class="prayer-name">{{ prayer.nameDisplay }}</div>
-        <!-- <transition name="fade" mode="out-in"> -->
-          <div class="prayer-time" xv-if="prayerInfo == 'athan'">
-            {{ prayer.timeDisplay }}
-            <span class="am-pm">{{ prayer.timeAmPm }}</span>
+        <div class="prayer-info-container">
+          <div class="prayer-info" v-for="prayer in prayers" :class="{'is-current': prayer === currentPrayer}">
+            <div class="prayer-name">{{ prayer.nameDisplay }}</div>
+            <!-- <transition name="fade" mode="out-in"> -->
+            <div class="prayer-time" xv-if="prayerInfo == 'athan'">
+              {{ prayer.timeDisplay }}
+              <span class="am-pm">{{ prayer.timeAmPm }}</span>
+            </div>
+            <div class="iqamah-time" xv-if="prayerInfo == 'iqamah'">
+              {{ prayer.iqamahTimeDisplay }}
+              <span class="am-pm">{{ prayer.iqamahTimeAmPm }}</span>
+            </div>
+            <!-- </transition> -->
           </div>
-          <div class="iqamah-time" xv-if="prayerInfo == 'iqamah'">
-            {{ prayer.iqamahTimeDisplay }}
-            <span class="am-pm">{{ prayer.iqamahTimeAmPm }}</span>
+        </div>
+
+        <div class="toast-container" v-if="toasts.length">
+          <div class="toast-item" v-for="toast in toasts">
+            <div class="toast-text">{{ toast.message }}</div>
           </div>
-        <!-- </transition> -->
+        </div>
+
       </div>
     </div>
-  </div>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="prayer-data.js?v=1.10.2-57"></script>
+    <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=1.10.2-57"></script>
+    <script type="text/javascript" src="assets/vendors/vue.min.js?v=1.10.2-57"></script>
+    <script type="text/javascript" src="assets/vendors/moment.min.js?v=1.10.2-57"></script>
+    <script type="text/javascript" src="assets/vendors/hijri.js?v=1.10.2-57"></script>
+    <script type="text/javascript" src="assets/js/translations.js?v=1.10.2-57"></script>
+    <script type="text/javascript" src="assets/js/app.js?v=1.10.2-57"></script>
+    <script type="text/javascript">
+      var isLocalhost = window.location.hostname == 'localhost';
+      var hasCordova = !!window.cordova;
+      var enableServiceWorker = !isLocalhost && !hasCordova;
+      var enableServiceWorker = false;
+    </script>
+    <script type="text/javascript">
+      if (hasCordova) {
+        window.askAndAutoUpdate = function () {
+          window.codePush.sync(null, { updateDialog: true, installMode: InstallMode.IMMEDIATE });
+        };
+        document.addEventListener('deviceready', function () {
+          AndroidFullScreen.immersiveMode(
+            function () {
+              //
+            },
+            function () {
+              //
+            }
+          );
+          // window.askAndAutoUpdate();
+          document.addEventListener(
+            'backbutton',
+            function (e) {
+              if (window.app && window.app.data.settingsMode) {
+                //
+              } else {
+              }
+              e.preventDefault();
+              return false;
+            },
+            false
+          );
+        });
+        // document.addEventListener('resume', function () {
+        //   window.askAndAutoUpdate();
+        // });
+      }
+    </script>
+    <script type="text/javascript">
+      var isLocalhost = window.location.hostname == 'localhost';
+      var enableServiceWorker = !isLocalhost && !window.cordova;
+      // var enableServiceWorker = false;
 
-  </div>
-  <script type="text/javascript" src="prayer-data.js?v=1.7.1-34"></script>
-  <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=1.7.1-34"></script>
-  <script type="text/javascript" src="assets/vendors/vue.min.js?v=1.7.1-34"></script>
-  <script type="text/javascript" src="assets/vendors/moment.min.js?v=1.7.1-34"></script>
-  <script type="text/javascript" src="assets/vendors/hijri.js?v=1.7.1-34"></script>
-  <script type="text/javascript" src="assets/js/translations.js?v=1.7.1-34"></script>
-  <script type="text/javascript" src="assets/js/app.js?v=1.7.1-34"></script>
-  <script type="text/javascript">
+      if (isLocalhost) {
+        window.initialTime =
+          // undefined;
+          new Date(
+            new Date().getFullYear(),
+            6, //new Date().getMonth(),
+            31, // new Date().getDate(),
+            // 16, 30, 40,
+            // 2, 20, 30,
+            12,
+            14,
+            56,
+            0
+          );
+        // window.app.simulateTime = 10;
 
-    var isLocalhost = window.location.hostname == 'localhost';
-    var enableServiceWorker = !isLocalhost;
-    // var enableServiceWorker = true;
+        // window.app.data.time = window.initialTime;
+        // setInterval(() => {
+        //   window.app.data.time.setDate(window.app.data.time.getDate() + 1);
+        // }, 500);
+        console.log('window.app.simulateTime', window.app.simulateTime);
+      }
 
-    if(isLocalhost) {
-      window.initialTime = 
-      undefined;
-      new Date((new Date()).getFullYear(), (new Date()).getMonth(), (new Date()).getDate(), 
-        // 16, 30, 40,
-        // 2, 20, 30,
-        12, 14, 56,
-      0);
-      // window.app.simulateTime = 10;
-    }
-
-    if (location.hostname == '' || location.hostname == 'zetmel.com' || location.hostname == 'mdisplay.github.io') {
-      window.initialTime = undefined;
-      window.app.simulateTime = undefined;
-    }
-    window.app.init(window.initialTime, function(){
-      new Vue({
-        el: '#app',
-        data: app.data,
-        computed: {
-
-        },
-        methods: {      
-          translate(text) {
-            return app.translate(text);
+      if (location.hostname == '' || location.hostname == 'zetmel.com' || location.hostname == 'mdisplay.github.io') {
+        window.initialTime = undefined;
+        window.app.simulateTime = undefined;
+      }
+      window.app.init(window.initialTime, function () {
+        new Vue({
+          el: '#app',
+          data: app.data,
+          computed: {},
+          methods: {
+            translate(text) {
+              return app.translate(text);
+            },
+            updateSettings() {
+              app.updateSettings();
+            },
+            closeSettings() {
+              app.closeSettings();
+            },
+            openSettings() {
+              app.openSettings();
+            },
+            checkForUpdates() {
+              app.checkForUpdates();
+            },
+            toggleAbsolute(iqamahTime) {
+              iqamahTime.absolute = !iqamahTime.absolute;
+              this.updateSettings();
+            },
           },
-          updateSettings() {
-            app.updateSettings();
+          created() {
+            app.created();
           },
-          closeSettings() {
-            app.closeSettings();
+          mounted() {
+            app.mounted();
           },
-          openSettings() {
-            app.openSettings();
-          },
-          toggleAbsolute(iqamahTime) {
-            iqamahTime.absolute = !iqamahTime.absolute;
-            this.updateSettings();
-          },
-        },
-        created() {
-          app.created();
-        },
-        mounted() {
-          app.mounted();
-        },
+        });
       });
-    });
-  </script>
-  <script type="text/javascript">
-    // Check that service workers are supported
+    </script>
+    <script type="text/javascript">
+      // Check that service workers are supported
+      if ('serviceWorker' in navigator && enableServiceWorker && window.location.protocol != 'file:') {
+        var serviceWorkerFile = 'service-worker' + (isLocalhost ? '-local' : '') + '.js';
+        if (window.workbox && window.workbox.Workbox) {
+          var wb = new window.workbox.Workbox(serviceWorkerFile);
 
+          wb.addEventListener('installed', (event) => {
+            if (event.isUpdate) {
+              // console.log('New content available! Reload the browser to update');
+              var notificationSeconds = 5000;
+              window.app.showToast('Application updated. Reloading...', notificationSeconds);
+              setTimeout(function(){
+                  window.location.reload();
+              }, notificationSeconds);
+              // if (confirm('New update is available! Press OK to refresh')) {
+              //   window.location.reload();
+              // }
+            }
+            console.log('installed', event);
+          });
 
-if ('serviceWorker' in navigator
-&& enableServiceWorker
-&& window.location.protocol != 'file:'
-) {
-  var serviceWorkerFile = 'service-worker' + (isLocalhost ? '-local' : '') + '.js';
-  if (window.workbox && window.workbox.Workbox) {
-    var wb = new window.workbox.Workbox(serviceWorkerFile);
-   
-    wb.addEventListener('installed', event => {
-      if (event.isUpdate) {
-        // console.log('New content available! Reload the browser to update');
-        if(confirm('New update is available! Press OK to refresh')){
-          window.location.reload();
+          wb.register();
+
+          window.wb = wb;
+        } else {
+          // Use the window load event to keep the page load performant
+          window.addEventListener('load', () => {
+            navigator.serviceWorker.register(serviceWorkerFile);
+          });
         }
       }
-      console.log('installed', event);
-    });
-
-    wb.register();
-
-    window.wb = wb;
-  } else {
-    // Use the window load event to keep the page load performant
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register(serviceWorkerFile);
-    });
-  }
-}
-  </script>
-  <script type="text/javascript">
-    document.addEventListener("deviceready", function () {
-        codePush.sync();
-    });
-    document.addEventListener("resume", function () {
-        codePush.sync();
-    });
-  </script>
-</body>
+    </script>
+  </body>
 </html>

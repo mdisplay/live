@@ -164,7 +164,8 @@ body {
 
 #app .modal-dialog {
   background: rgba(255, 255, 255, 0.95);
-  width: 500px;
+  /*width: 500px;*/
+  width: 36rem;
   height: calc(100vh - 6rem);
   position: absolute;
   top: 0;
@@ -179,6 +180,10 @@ body {
   text-transform: uppercase;
   color: rgba(0, 0, 0, 0.5);
   margin-bottom: 0.5rem;
+  margin-top: -1rem;
+  margin-right: -1rem;
+  margin-left: -1rem;
+  background: rgba(121, 180, 201, 0.3);
 }
 
 #app .times-config {
@@ -244,6 +249,10 @@ body {
 
 #app .configured-info {
   margin-bottom: 0.5rem;
+  font-size: 1rem;
+  position: absolute;
+  top: 0.5rem;
+  left: 1rem;
 }
 
 #app .configured-info .not-configured {
@@ -252,4 +261,14 @@ body {
 
 #app .configured-info .configured {
   color: #1eb624;
+}
+
+
+#app .update-info {
+  font-size: 1rem;
+  position: absolute;
+  /*top: 0.5rem;*/
+  right: 1rem;
+  bottom: 0.25rem;
+  text-align: right;
 }
