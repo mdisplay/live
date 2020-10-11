@@ -6,10 +6,10 @@ if (workbox) {
   console.log(`Boo! Workbox didn't load 😬`);
 }
 
-var appVersion = '1.10.3-58';
-var dataVersion = '4';
-var vendorVersion = '3';
-var bgVersion = '5';
+var appVersion = '1.10.5-60';
+var dataVersion = '5';
+var vendorVersion = '4';
+var bgVersion = '6';
 
 // Detailed logging is very useful during development
 workbox.setConfig({ debug: true });
@@ -18,7 +18,7 @@ workbox.setConfig({ debug: true });
 workbox.core.skipWaiting();
 workbox.core.clientsClaim();
 
-var baseUrl = '/app/www/';
+var baseUrl = '/live/';
 // var baseUrl = '/mdisplay/live/';
 
 function toUrl(url) {

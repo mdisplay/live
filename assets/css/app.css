@@ -191,10 +191,25 @@ body {
 }
 
 #app .time-config {
-  height: 4rem;
-  line-height: 3rem;
+  /* height: 4rem; */
+  height: 3.5rem;
+  line-height: 2.5rem;
+  font-size: 1.5rem;
   padding: 0.5rem;
 }
+
+#app .time-config .label,
+#app .time-config .time-input,
+#app .time-config .time-input-colon,
+#app .time-config .toggle-absolute,
+#app .time-config .time-info
+{
+  font-size: 2rem;
+  line-height: 2.5rem;
+  height: 2.5rem;
+  display: inline-block;
+}
+
 
 #app .time-config:nth-child(even) {
   background: #DADADA;
@@ -202,24 +217,28 @@ body {
 
 
 #app .time-config .label {
-  font-size: 2rem;
+  /* font-size: 2rem;
+  height: 2.5rem; */
   width: 7rem;
+  width: 7.75rem;
   display: inline-block;
+  /* height: 100%; */
 }
 
 
 #app .time-config .time-input {
   width: 20px;
   width: 4rem;
-  font-size: 2rem;
-  line-height: 2.5rem;
+  /* font-size: 2rem;
+  line-height: 2.5rem; */
   border: 2px solid #AAA;
   outline: 0;
   display: inline-block;
+  /* height: 100%; */
 }
 
 #app .time-config .time-input-colon {
-  font-size: 2rem;
+  /* font-size: 2rem; */
 }
 
 #app .time-config .time-input:focus {
@@ -228,8 +247,8 @@ body {
 }
 
 #app .time-config .toggle-absolute {
-  font-size: 2rem;
-  line-height: 2.5rem;
+  /* font-size: 2rem;
+  line-height: 2.5rem; */
   width: 3rem;
   text-align: center;
   display: inline-block;  
@@ -243,7 +262,7 @@ body {
 }
 
 #app .time-config .time-info {
-  font-size: 2rem;
+  /* font-size: 2rem; */
   margin-left: 0.5rem;
 }
 
@@ -272,3 +291,36 @@ body {
   bottom: 0.25rem;
   text-align: right;
 }
+
+/* #app .time-config {
+  padding: 0.25rem;
+  height: 3.5rem;
+  line-height: 3rem;
+} */
+
+/* #app .time-config {
+  padding: 0.5rem;
+  height: 3rem;
+  line-height: 2rem;
+}
+
+#app .time-config .label {
+  font-size: 1.5rem;
+}
+
+#app .time-config .time-input {
+  width: 4.5rem;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  height: 2rem;
+  padding: 0 0.25rem;
+}
+
+#app .time-config .toggle-absolute {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+#app .time-config .time-info {
+  font-size: 1.5rem;
+} */

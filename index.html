@@ -6,9 +6,9 @@
     <title>MDisplay Live</title>
     <link rel="shortcut icon" href="assets/images/favicon.png" />
     <link rel="icon" type="image/png" href="assets/images/favicon.png" />
-    <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=1.10.3-58" />
-    <link rel="stylesheet" type="text/css" href="assets/css/app.css?v=1.10.3-58" />
-    <link rel="stylesheet" type="text/css" href="assets/css/theme-default.css?v=1.10.3-58" />
+    <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=1.10.5-60" />
+    <link rel="stylesheet" type="text/css" href="assets/css/app.css?v=1.10.5-60" />
+    <link rel="stylesheet" type="text/css" href="assets/css/theme-default.css?v=1.10.5-60" />
   </head>
   <body>
     <div
@@ -21,8 +21,8 @@
           <img src="assets/images/icon.png" />
         </div>
       </div>
-      <div style="display: none;" v-show="true">
-        <div style="display: none;" v-show="true" class="modal-wrapper" v-if="settingsMode">
+      <div style="display: none" v-show="true">
+        <div style="display: none" v-show="true" class="modal-wrapper" v-if="settingsMode">
           <div class="modal-overlay" @click="closeSettings()"></div>
           <div class="modal-dialog">
             <div @click="closeSettings()" class="modal-close">Close</div>
@@ -49,7 +49,7 @@
                   <span class="error" v-if="appUdate.error">ERROR: {{ appUdate.error }}</span>
                   <span class="checking" v-if="appUdate.checking">Checking...</span>
                   <span class="updated" v-if="appUdate.updated"
-                    >Updated. Version {{ '?v=1.10.3-58'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1 ($2)') }}.</span
+                    >Updated. Version {{ '?v=1.10.5-60'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1 ($2)') }}.</span
                   >
                   <span class="updating" v-if="appUdate.updating">Updating...</span>
                 </div>
@@ -92,6 +92,15 @@
                     </span>
                     <span class="" v-else>minutes</span>
                   </span>
+                </div>
+                <div class="time-config">
+                  <label>Language</label>
+                  <select v-model="selectedLanguage" @change="languageChanged()">
+                    <option v-for="lang in languages" :value="lang.id">{{ lang.label }}</option>
+                    <!-- <option value="si">Sinhala</option>
+                    <option value="ta">Tamil</option>
+                    <option value="en">English</option> -->
+                  </select>
                 </div>
                 <div class="time-config">
                   <label for="time-origin-mode-device">
@@ -138,9 +147,7 @@
             display: none;
           "
         >
-          <span style="opacity: 0.75;">
-            Version {{ '?v=1.10.3-58'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }}
-          </span>
+          <span style="opacity: 0.75"> Version {{ '?v=1.10.5-60'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }} </span>
           <span
             style="
               opacity: 0.9;
@@ -150,11 +157,11 @@
               border-radius: 50%;
               text-align: center;
             "
-            >{{ '?v=1.10.3-58'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span
+            >{{ '?v=1.10.5-60'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span
           >
         </div>
 
-        <div style="visibility: hidden; position: fixed;">
+        <div style="visibility: hidden; position: fixed">
           <img v-for="i in 11" :src="'backgrounds/' + i + '.jpg?v=' + bgVersion" />
         </div>
 
@@ -214,9 +221,9 @@
         >
           <div :class="[display.type + '-prayer', 'prayer-display']" v-if="display.prayer">
             <span class="name"
-              ><span class="label">{{ translate(display.name + '.label') }}:</span> {{ display.prayer.nameDisplay
-              }}</span
-            >
+              ><span class="label">{{ translate(display.name + '.label') }}:</span>
+              {{ display.prayer.nameDisplay }}
+            </span>
             <span class="time">
               <span class="hours">{{ display.prayer.timeHours }}</span><span class="colon">:</span
               ><span class="minutes">{{ display.prayer.timeMinutes }}</span>
@@ -320,59 +327,18 @@
             <div class="toast-text">{{ toast.message }}</div>
           </div>
         </div>
-
       </div>
     </div>
-    <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="prayer-data.js?v=1.10.3-58"></script>
-    <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=1.10.3-58"></script>
-    <script type="text/javascript" src="assets/vendors/vue.min.js?v=1.10.3-58"></script>
-    <script type="text/javascript" src="assets/vendors/moment.min.js?v=1.10.3-58"></script>
-    <script type="text/javascript" src="assets/vendors/hijri.js?v=1.10.3-58"></script>
-    <script type="text/javascript" src="assets/js/translations.js?v=1.10.3-58"></script>
-    <script type="text/javascript" src="assets/js/app.js?v=1.10.3-58"></script>
+    <script type="text/javascript" src="prayer-data.js?v=1.10.5-60"></script>
+    <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=1.10.5-60"></script>
+    <script type="text/javascript" src="assets/vendors/vue.min.js?v=1.10.5-60"></script>
+    <script type="text/javascript" src="assets/vendors/moment.min.js?v=1.10.5-60"></script>
+    <script type="text/javascript" src="assets/vendors/hijri.js?v=1.10.5-60"></script>
+    <script type="text/javascript" src="assets/js/translations.js?v=1.10.5-60"></script>
+    <script type="text/javascript" src="assets/js/app.js?v=1.10.5-60"></script>
     <script type="text/javascript">
-      var isLocalhost = window.location.hostname == 'localhost';
-      var hasCordova = !!window.cordova;
-      var enableServiceWorker = !isLocalhost && !hasCordova;
-      var enableServiceWorker = false;
-    </script>
-    <script type="text/javascript">
-      if (hasCordova) {
-        window.askAndAutoUpdate = function () {
-          window.codePush.sync(null, { updateDialog: true, installMode: InstallMode.IMMEDIATE });
-        };
-        document.addEventListener('deviceready', function () {
-          AndroidFullScreen.immersiveMode(
-            function () {
-              //
-            },
-            function () {
-              //
-            }
-          );
-          // window.askAndAutoUpdate();
-          document.addEventListener(
-            'backbutton',
-            function (e) {
-              if (window.app && window.app.data.settingsMode) {
-                //
-              } else {
-              }
-              e.preventDefault();
-              return false;
-            },
-            false
-          );
-        });
-        // document.addEventListener('resume', function () {
-        //   window.askAndAutoUpdate();
-        // });
-      }
-    </script>
-    <script type="text/javascript">
-      var isLocalhost = window.location.hostname == 'localhost';
-      var enableServiceWorker = !isLocalhost && !window.cordova;
+      var isLocalhost = window.location.hostname == 'localhost' || localStorage.getItem('local-ip');
+      var enableServiceWorker = /* !isLocalhost && */ !window.cordova;
       // var enableServiceWorker = false;
 
       if (isLocalhost) {
@@ -384,17 +350,18 @@
             31, // new Date().getDate(),
             // 16, 30, 40,
             // 2, 20, 30,
-            12,
-            14,
+            8,
+            55,
             56,
             0
           );
-        // window.app.simulateTime = 10;
+        window.app.simulateTime = 100;
 
-        // window.app.data.time = window.initialTime;
-        // setInterval(() => {
-        //   window.app.data.time.setDate(window.app.data.time.getDate() + 1);
-        // }, 500);
+        window.app.data.time = window.initialTime;
+        setInterval(() => {
+          // window.app.data.time.setDate(window.app.data.time.getDate() + 1);
+          window.app.data.time.setMinutes(window.app.data.time.getMinutes() + 5);
+        }, 100);
         console.log('window.app.simulateTime', window.app.simulateTime);
       }
 
@@ -427,6 +394,9 @@
               iqamahTime.absolute = !iqamahTime.absolute;
               this.updateSettings();
             },
+            languageChanged() {
+              app.languageChanged();
+            },
           },
           created() {
             app.created();
@@ -447,10 +417,10 @@
           wb.addEventListener('installed', (event) => {
             if (event.isUpdate) {
               // console.log('New content available! Reload the browser to update');
-              var notificationSeconds = 5000;
+              var notificationSeconds = 3000;
               window.app.showToast('Application updated. Reloading...', notificationSeconds);
-              setTimeout(function(){
-                  window.location.reload();
+              setTimeout(function () {
+                window.location.reload();
               }, notificationSeconds);
               // if (confirm('New update is available! Press OK to refresh')) {
               //   window.location.reload();

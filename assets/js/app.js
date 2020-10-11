@@ -125,7 +125,7 @@ var padZero = (number) => {
 };
 
 class Toast {
-  constructor(message){
+  constructor(message) {
     this.message = message;
   }
 }
@@ -193,7 +193,7 @@ IqamahTime.fromRaw = function (raw) {
 
 class App {
   constructor() {
-    this.lang = 'ta';
+    this.lang = localStorage.getItem('mdisplay.lang') || 'ta';
     this.prayerData = [];
     for (let month in window.PRAYER_DATA) {
       if (window.PRAYER_DATA.hasOwnProperty(month)) {
@@ -214,6 +214,7 @@ class App {
         Asr: new IqamahTime(15),
         Magrib: new IqamahTime(10),
         Isha: new IqamahTime(15),
+        Jummah: new IqamahTime(45),
       },
       appUdate: {
         enabled: false,
@@ -230,9 +231,15 @@ class App {
           alert('Kiosk not available');
         },
       },
-      toasts: [
-      ],
+      toasts: [],
       timeOriginMode: 'device', // or 'internet'
+      isFriday: false,
+      selectedLanguage: this.lang,
+      languages: [
+        { id: 'si', label: 'Sinhala' },
+        { id: 'ta', label: 'Tamil' },
+        { id: 'en', label: 'English' },
+      ],
     };
     this.isInitial = true;
     this.beforeSeconds = 5 * 60;
@@ -242,6 +249,11 @@ class App {
     // this.afterSeconds = 1*60;
     this.afterSeconds = 2 * 60;
     this.data.bgVersion = '4';
+  }
+
+  languageChanged() {
+    localStorage.setItem('mdisplay.lang', this.data.selectedLanguage);
+    this.closeSettings();
   }
 
   checkForUpdates() {
@@ -360,11 +372,12 @@ class App {
   getIqamahTimes(prayerTimes, monthParam, dayParam) {
     const iqamahTimes = {};
     for (const name in this.data.iqamahTimes) {
+      const prayerName = name == 'Jummah' ? 'Luhar' : name;
       const iqamahTime = this.data.iqamahTimes[name];
       if (iqamahTime.absolute) {
         iqamahTimes[name] = this.getTime(monthParam, dayParam, iqamahTime.toTime() + (name == 'Subah' ? 'a' : 'p'));
       } else {
-        iqamahTimes[name] = new Date(prayerTimes[name].getTime() + parseInt(iqamahTime.minutes) * 60 * 1000);
+        iqamahTimes[name] = new Date(prayerTimes[prayerName].getTime() + parseInt(iqamahTime.minutes) * 60 * 1000);
       }
     }
     return iqamahTimes;
@@ -386,12 +399,25 @@ class App {
         dateParams = this.getDateParams(d);
       }
     }
+
+    const d = moment(this.data.time);
+    const dayOfWeek = parseInt(d.format('d'));
+    const day = translations[this.lang].days[dayOfWeek];
+    this.data.isFriday = dayOfWeek === 5;
+    const month = translations[this.lang].months[this.data.time.getMonth()];
+
     console.log('all the times', times);
     const iqamahTimes = this.getIqamahTimes(times, dateParams[1], dateParams[2]);
     this.todayPrayers = [
       new Prayer('Subah', times.Subah, iqamahTimes.Subah, this.lang),
       // new Prayer('Sunrise', times[1], 10, this.lang),
-      new Prayer('Luhar', times.Luhar, iqamahTimes.Luhar, this.lang),
+      // new Prayer('Luhar', times.Luhar, iqamahTimes.Luhar, this.lang),
+      new Prayer(
+        this.data.isFriday ? 'Jummah' : 'Luhar',
+        times.Luhar,
+        this.data.isFriday ? iqamahTimes.Jummah : iqamahTimes.Luhar,
+        this.lang
+      ),
       new Prayer('Asr', times.Asr, iqamahTimes.Asr, this.lang),
       new Prayer('Magrib', times.Magrib, iqamahTimes.Magrib, this.lang),
       new Prayer('Isha', times.Isha, iqamahTimes.Isha, this.lang),
@@ -420,9 +446,6 @@ class App {
     // this.data.nextPrayerNear = false;
     // this.data.currentIqamah = undefined;
     // this.data.currentIqamah
-    const d = moment(this.data.time);
-    const day = translations[this.lang].days[parseInt(d.format('d'))];
-    const month = translations[this.lang].months[this.data.time.getMonth()];
     // this.data.dateDisplay = d.format('ddd, DD MMM YYYY');
     this.data.weekDayDisplay = day;
     this.data.dateDisplay = padZero(this.data.time.getDate()) + ' ' + month + ' ' + this.data.time.getFullYear(); //day + ', ' +
@@ -610,13 +633,13 @@ class App {
       window.location.reload();
     }
   }
-  showToast(message, duration){
+  showToast(message, duration) {
     duration = duration || 3000;
     var toast = new Toast(message);
     this.data.toasts.push(toast);
     setTimeout(() => {
       var i = this.data.toasts.indexOf(toast);
-      if(i !== -1){
+      if (i !== -1) {
         this.data.toasts.splice(i, 1);
       }
     }, duration);
@@ -627,6 +650,9 @@ class App {
     this.updateTime();
     if (this.analogClock) {
       this.analogClock.init(document.getElementById('analog-clock-container'), this.initialTime);
+    }
+    if (this.data.timeOriginMode == 'internet' && this.simulateTime) {
+      alert('Warning: simulateTime feature is not compatible with internet time');
     }
     window._theInterval = window.setInterval(
       () => {
