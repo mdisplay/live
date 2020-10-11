@@ -6,10 +6,10 @@ if (workbox) {
   console.log(`Boo! Workbox didn't load 😬`);
 }
 
-var appVersion = '1.10.2-57';
-var dataVersion = '3';
-var vendorVersion = '2';
-var bgVersion = '4';
+var appVersion = '1.10.3-58';
+var dataVersion = '4';
+var vendorVersion = '3';
+var bgVersion = '5';
 
 // Detailed logging is very useful during development
 workbox.setConfig({ debug: true });
