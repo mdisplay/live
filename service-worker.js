@@ -7,7 +7,7 @@ if (workbox) {
 }
 
 var appVersion = '1.12.2-64';
-var dataVersion = '5';
+var dataVersion = '6';
 var vendorVersion = '5';
 var bgVersion = '7';
 

@@ -1,6 +1,7 @@
 /*
 Fixed typo March [19,2] => [19,20]
 Fixed Luhar AM issue (Oct 09 - Nov 27)
+Fixed Subah wrong time (Dec 08)
 */
 window.PRAYER_DATA = {
   January: [
@@ -111,7 +112,7 @@ window.PRAYER_DATA = {
   December: [
     { range: [1, 3], times: ['04:49a', '06:00a', '12:01p', '03:22p', '05:52p', '07:06p'] },
     { range: [4, 6], times: ['04:50a', '06:00a', '12:02p', '03:23p', '05:53p', '07:07p'] },
-    { range: [7, 9], times: ['04:41a', '06:00a', '12:04p', '03:24p', '05:54p', '07:08p'] },
+    { range: [7, 9], times: ['04:51a', '06:00a', '12:04p', '03:24p', '05:54p', '07:08p'] },
     { range: [10, 11], times: ['04:52a', '06:00a', '12:05p', '03:25p', '05:55p', '07:10p'] },
     { range: [12, 14], times: ['04:53a', '06:00a', '12:06p', '03:27p', '05:56p', '07:11p'] },
     { range: [15, 16], times: ['04:55a', '06:00a', '12:07p', '03:28p', '05:57p', '07:13p'] },
