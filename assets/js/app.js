@@ -245,6 +245,7 @@ class App {
       networkTimeInitialized: false,
       timeIsValid: true,
       timeFetchingMessage: undefined,
+      timeAdjustmentMinutes: 0,
     };
     this.isInitial = true;
     this.beforeSeconds = 5 * 60;
@@ -366,7 +367,16 @@ class App {
     }
     const hours = hoursAdd + parseInt(timeParts[0]);
     const minutes = parseInt(timeParts[1].replace('a', '').replace('p', ''));
-    return moment(yearParam + ' ' + (monthParam + 1) + ' ' + dayParam + ' ' + time + 'm', 'YYYY M D hh:mma').toDate();
+    const m = moment(yearParam + ' ' + (monthParam + 1) + ' ' + dayParam + ' ' + time + 'm', 'YYYY M D hh:mma');
+    if (!isNaN(this.data.timeAdjustmentMinutes) && this.data.timeAdjustmentMinutes != 0) {
+      const timeAdjustmentMinutes = parseInt(this.data.timeAdjustmentMinutes);
+      if (timeAdjustmentMinutes < 0) {
+        m.subtract(timeAdjustmentMinutes, 'minutes');
+      } else {
+        m.add(timeAdjustmentMinutes, 'minutes');
+      }
+    }
+    return m.toDate();
   }
   getTimes(yearParam, monthParam, dayParam) {
     const times = [];
@@ -730,7 +740,13 @@ class App {
     }
     this.data.iqamahTimesConfigured = !!iqamahTimesConfigured;
     if (settings) {
-      this.data.timeOriginMode = settings.timeOriginMode;
+      if (settings.timeOriginMode == 'device' || settings.timeOriginMode == 'network') {
+        this.data.timeOriginMode = settings.timeOriginMode;
+      }
+      const timeAdjustmentMinutes = parseInt(settings.timeAdjustmentMinutes);
+      if (!isNaN(timeAdjustmentMinutes)) {
+        this.data.timeAdjustmentMinutes = timeAdjustmentMinutes;
+      }
       // ...
     }
     callback();
@@ -743,6 +759,7 @@ class App {
     this.data.iqamahTimesConfigured = true;
     const settings = {
       timeOriginMode: this.data.timeOriginMode,
+      timeAdjustmentMinutes: this.data.timeAdjustmentMinutes,
     };
     localStorage.setItem('mdisplay.iqamahTimes', JSON.stringify(iqamahTimes));
     localStorage.setItem('mdisplay.iqamahTimesConfigured', 1);

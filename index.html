@@ -104,6 +104,21 @@
                   </span>
                 </div>
                 <div class="time-config">
+                  <label>Time Adjustment</label>
+                  <!-- <select>
+                    <option value="+">+</option>
+                    <option value="-">-</option>
+                  </select> -->
+                  <input
+                    class="time-input"
+                    type="number"
+                    v-model="timeAdjustmentMinutes"
+                    @input="updateSettings()"
+                    @change="updateSettings()"
+                  />
+                  <span>minutes</span>
+                </div>
+                <div class="time-config">
                   <label>Language</label>
                   <select v-model="selectedLanguage" @change="languageChanged()">
                     <option v-for="lang in languages" :value="lang.id">{{ lang.label }}</option>
