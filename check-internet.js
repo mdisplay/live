@@ -1,0 +1,1 @@
+checkInternet({ "result": "ok" });
