@@ -888,15 +888,57 @@ class App {
     let url =
       'http://api.openweathermap.org/data/2.5/onecall?lat=8.030097&lon=79.829091&exclude=hourly,daily,minutely&appid=434d671bede048ae31c56fce770b3149';
     if (useQurappTime) {
-      // url = 'https://www.qurapp.com/api/time';
       url = 'http://192.168.1.11/qurapp/qurapp/public/api/time';
       url = 'http://plaintext.qurapp.com/api/time'; // https won't work when time is invalid
+      url = 'https://www.qurapp.com/api/time';
     }
     const networkName = this.data.networkMode == 'internet' ? 'internet' : 'timeserver';
     // alert('will get from : ' + url);
 
     console.log('Internet time mode fetching from...', url);
     this.setFetchingStatus('Requesting time from ' + networkName + '...', 'init', true);
+
+    const useJsonp = true;
+
+    if (useQurappTime && useJsonp) {
+      $.ajax({
+        type: 'GET',
+        dataType: 'jsonp',
+        url: url + '?jsonp=currentTime',
+        jsonpCallback: 'currentTime',
+        contentType: 'application/json; charset=utf-8',
+        success: (response) => {
+          // console.log('Result received', response);
+          if (!(response /* && response.timestamp */)) {
+            console.log('Invalid response', response);
+            this.setFetchingStatus('INVALID response', 'error', false, 999);
+            return;
+          }
+          const timestamp = response.timestamp;
+          if (!timestamp) {
+            this.setFetchingStatus('MISSING timestamp from response', 'error', false, 999);
+            console.log('Invalid timestamp response', response);
+            return;
+          }
+          const timestampMillis = timestamp * 1000;
+          // alert('timestampMillis: ' + timestampMillis);
+          setTimeout(() => {
+            // show waiting feedback at least 1 second
+            this.forceTimeUpdate(new Date(timestampMillis + 1000));
+          }, 1000);
+          this.data.networkTimeInitialized = true;
+          console.log('network data: ', response);
+          this.setFetchingStatus('OK. Updated time from ' + networkName, 'success', false, 1);
+        },
+        error: (err) => {
+          console.log('err: ', err);
+          // alert('err: ' + err);
+          this.setFetchingStatus('FAILED to update time from ' + networkName + ' - ' + err, 'error', false, 999);
+        },
+      });
+      return;
+    }
+
     ajax.get(url).then(
       (response) => {
         // alert('response : ' + response);
