@@ -888,9 +888,9 @@ class App {
     let url =
       'http://api.openweathermap.org/data/2.5/onecall?lat=8.030097&lon=79.829091&exclude=hourly,daily,minutely&appid=434d671bede048ae31c56fce770b3149';
     if (useQurappTime) {
-      url = 'http://192.168.1.11/qurapp/qurapp/public/api/time';
       url = 'http://plaintext.qurapp.com/api/time'; // https won't work when time is invalid
-      // url = 'https://www.qurapp.com/api/time';
+      url = 'http://192.168.1.11/qurapp/qurapp/public/api/time';
+      url = 'https://www.qurapp.com/api/time';
     }
     const networkName = this.data.networkMode == 'internet' ? 'internet' : 'timeserver';
     // alert('will get from : ' + url);
@@ -905,8 +905,7 @@ class App {
         type: 'GET',
         dataType: 'jsonp',
         url: url + '',
-        jsonp: 'jsonp',
-        jsonpCallback: 'currentTime',
+        jsonp: 'callback',
         contentType: 'application/json; charset=utf-8',
         success: (response) => {
           // console.log('Result received', response);
