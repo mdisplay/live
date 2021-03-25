@@ -8,7 +8,7 @@ if (workbox) {
 
 var appVersion = '1.13.1-66';
 var dataVersion = '6';
-var vendorVersion = '5';
+var vendorVersion = '6';
 var bgVersion = '7';
 
 // Detailed logging is very useful during development
@@ -57,6 +57,10 @@ var precacheList = [
   },
   {
     url: toUrl('assets/vendors/workbox-window.prod.umd.js'),
+    revision: vendorVersion,
+  },
+  {
+    url: toUrl('assets/vendors/jquery-3.6.0.min.js'),
     revision: vendorVersion,
   },
   // /icons
