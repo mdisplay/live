@@ -234,6 +234,7 @@ class App {
       toasts: [],
       timeOriginMode: 'device', // or 'network'
       networkMode: 'internet', // or 'timeserver',
+      networkTimeApiUrl: 'http://192.168.1.1/api',
       isFriday: false,
       selectedLanguage: this.lang,
       languages: [
@@ -900,11 +901,25 @@ class App {
 
     const useJsonp = true;
 
-    if (useQurappTime && useJsonp) {
+    function parseDateTime(datetime) {
+      var parts = datetime.split(' ');
+      var dateParts = parts[0].split('-');
+      var timeParts = parts[1].split(':');
+      return new Date(
+        parseInt(dateParts[0]),
+        parseInt(dateParts[1]) - 1,
+        parseInt(dateParts[2]),
+        parseInt(timeParts[0]),
+        parseInt(timeParts[1]),
+        parseInt(timeParts[2])
+      );
+    }
+
+    if (/* useQurappTime && */ useJsonp) {
       $.ajax({
         type: 'GET',
         dataType: 'jsonp',
-        url: url + '',
+        url: this.data.networkTimeApiUrl + '',
         jsonp: 'callback',
         contentType: 'application/json; charset=utf-8',
         success: (response) => {
@@ -915,25 +930,35 @@ class App {
             return;
           }
           const timestamp = response.timestamp;
-          if (!timestamp) {
-            this.setFetchingStatus('MISSING timestamp from response', 'error', false, 999);
-            console.log('Invalid timestamp response', response);
+          const time = response.time;
+          if (!timestamp && !time) {
+            this.setFetchingStatus('MISSING timestamp or time from response', 'error', false, 999);
+            console.log('Invalid timestamp/time response', response);
             return;
           }
-          const timestampMillis = timestamp * 1000;
-          // alert('timestampMillis: ' + timestampMillis);
-          setTimeout(() => {
-            // show waiting feedback at least 1 second
-            this.forceTimeUpdate(new Date(timestampMillis + 1000));
-          }, 1000);
+          if (timestamp) {
+            const timestampMillis = timestamp * 1000;
+            // alert('timestampMillis: ' + timestampMillis);
+            setTimeout(() => {
+              // show waiting feedback at least 1 second
+              this.forceTimeUpdate(new Date(timestampMillis + 1000));
+            }, 1000);
+          } else {
+            setTimeout(() => {
+              this.forceTimeUpdate(parseDateTime(time));
+            }, 1000);
+          }
           this.data.networkTimeInitialized = true;
+          setTimeout(() => {
+            this.data.networkTimeInitialized = false;
+          }, 10 * 1000);
           console.log('network data: ', response);
-          this.setFetchingStatus('OK. Updated time from ' + networkName, 'success', false, 1);
+          this.setFetchingStatus('OK. Updated time from network', 'success', false, 1);
         },
         error: (err) => {
           console.log('err: ', err);
           // alert('err: ' + err);
-          this.setFetchingStatus('FAILED to update time from ' + networkName + ' - ' + err, 'error', false, 999);
+          this.setFetchingStatus('FAILED to update time from network' + ' - ' + err, 'error', false, 999);
         },
       });
       return;

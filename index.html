@@ -54,7 +54,7 @@
                     </template>
                   </button> -->
                 </div>
-                <div class="" v-if="appUdate.enabled">
+                <!-- <div class="" v-if="appUdate.enabled">
                   AUTO UPDATE: <button type="button" @click="checkForUpdates()">Check</button>
                   <span class="error" v-if="appUdate.error">ERROR: {{ appUdate.error }}</span>
                   <span class="checking" v-if="appUdate.checking">Checking...</span>
@@ -63,7 +63,7 @@
                   >
                   <span class="updating" v-if="appUdate.updating">Updating...</span>
                 </div>
-                <div class="" v-else>AUTO UPDATE: <button type="button" @click="checkForUpdates()">Check</button></div>
+                <div class="" v-else>AUTO UPDATE: <button type="button" @click="checkForUpdates()">Check</button></div> -->
               </div>
               <div class="times-config">
                 <div class="time-config" v-for="(iqamahTime, name) in iqamahTimes">
@@ -150,6 +150,9 @@
                     />
                     Network Time <small>(beta)</small>
                   </label>
+                  <div v-if="timeOriginMode == 'network'">
+                    <input type="url" v-model="networkTimeApiUrl" style="width: 100%; margin-bottom: 15px" />
+                  </div>
                 </div>
               </div>
             </div>
