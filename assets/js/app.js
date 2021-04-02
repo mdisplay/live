@@ -233,7 +233,7 @@ class App {
       },
       toasts: [],
       timeOriginMode: 'device', // or 'network'
-      networkMode: 'internet', // or 'timeserver',
+      networkMode: 'network', // or 'timeserver',
       networkTimeApiUrl: 'http://192.168.1.1/api',
       isFriday: false,
       selectedLanguage: this.lang,
@@ -885,21 +885,9 @@ class App {
       // console.log('Internet time mode already active');
       return;
     }
-    const useQurappTime = true;
-    let url =
-      'http://api.openweathermap.org/data/2.5/onecall?lat=8.030097&lon=79.829091&exclude=hourly,daily,minutely&appid=434d671bede048ae31c56fce770b3149';
-    if (useQurappTime) {
-      url = 'http://plaintext.qurapp.com/api/time'; // https won't work when time is invalid
-      url = 'http://192.168.1.11/qurapp/qurapp/public/api/time';
-      url = 'https://www.qurapp.com/api/time';
-    }
-    const networkName = this.data.networkMode == 'internet' ? 'internet' : 'timeserver';
-    // alert('will get from : ' + url);
 
-    console.log('Internet time mode fetching from...', url);
-    this.setFetchingStatus('Requesting time from ' + networkName + '...', 'init', true);
-
-    const useJsonp = true;
+    console.log('Internet time mode fetching from...', this.data.networkTimeApiUrl);
+    this.setFetchingStatus('Requesting time from network...', 'init', true);
 
     function parseDateTime(datetime) {
       var parts = datetime.split(' ');
@@ -915,85 +903,51 @@ class App {
       );
     }
 
-    if (/* useQurappTime && */ useJsonp) {
-      $.ajax({
-        type: 'GET',
-        dataType: 'jsonp',
-        url: this.data.networkTimeApiUrl + '',
-        jsonp: 'callback',
-        contentType: 'application/json; charset=utf-8',
-        success: (response) => {
-          // console.log('Result received', response);
-          if (!(response /* && response.timestamp */)) {
-            console.log('Invalid response', response);
-            this.setFetchingStatus('INVALID response', 'error', false, 999);
-            return;
-          }
-          const timestamp = response.timestamp;
-          const time = response.time;
-          if (!timestamp && !time) {
-            this.setFetchingStatus('MISSING timestamp or time from response', 'error', false, 999);
-            console.log('Invalid timestamp/time response', response);
-            return;
-          }
-          if (timestamp) {
-            const timestampMillis = timestamp * 1000;
-            // alert('timestampMillis: ' + timestampMillis);
-            setTimeout(() => {
-              // show waiting feedback at least 1 second
-              this.forceTimeUpdate(new Date(timestampMillis + 1000));
-            }, 1000);
-          } else {
-            setTimeout(() => {
-              this.forceTimeUpdate(parseDateTime(time));
-            }, 1000);
-          }
-          this.data.networkTimeInitialized = true;
-          setTimeout(() => {
-            this.data.networkTimeInitialized = false;
-          }, 10 * 1000);
-          console.log('network data: ', response);
-          this.setFetchingStatus('OK. Updated time from network', 'success', false, 1);
-        },
-        error: (err) => {
-          console.log('err: ', err);
-          // alert('err: ' + err);
-          this.setFetchingStatus('FAILED to update time from network' + ' - ' + err, 'error', false, 999);
-        },
-      });
-      return;
-    }
-
-    ajax.get(url).then(
-      (response) => {
-        // alert('response : ' + response);
-        if (!(response && response.data)) {
+    $.ajax({
+      type: 'GET',
+      dataType: 'jsonp',
+      url: this.data.networkTimeApiUrl + '',
+      jsonp: 'callback',
+      contentType: 'application/json; charset=utf-8',
+      success: (response) => {
+        // console.log('Result received', response);
+        if (!(response /* && response.timestamp */)) {
           console.log('Invalid response', response);
           this.setFetchingStatus('INVALID response', 'error', false, 999);
           return;
         }
-        const timestamp = useQurappTime ? response.data.timestamp : response.data.current && response.data.current.dt;
-        if (!timestamp) {
-          this.setFetchingStatus('MISSING timestamp from response', 'error', false, 999);
-          console.log('Invalid timestamp response', response.data, response);
+        const timestamp = response.timestamp;
+        const time = response.time;
+        if (!timestamp && !time) {
+          this.setFetchingStatus('MISSING timestamp or time from response', 'error', false, 999);
+          console.log('Invalid timestamp/time response', response);
           return;
         }
-        const timestampMillis = timestamp * 1000;
-        // alert('timestampMillis: ' + timestampMillis);
-        setTimeout(() => {
-          // show waiting feedback at least 1 second
-          this.forceTimeUpdate(new Date(timestampMillis + 1000));
-        }, 1000);
+        if (timestamp) {
+          const timestampMillis = timestamp * 1000;
+          // alert('timestampMillis: ' + timestampMillis);
+          setTimeout(() => {
+            // show waiting feedback at least 1 second
+            this.forceTimeUpdate(new Date(timestampMillis + 1000));
+          }, 1000);
+        } else {
+          setTimeout(() => {
+            this.forceTimeUpdate(parseDateTime(time));
+          }, 1000);
+        }
         this.data.networkTimeInitialized = true;
-        console.log('network data: ', response.data);
-        this.setFetchingStatus('OK. Updated time from ' + networkName, 'success', false, 1);
+        setTimeout(() => {
+          this.data.networkTimeInitialized = false;
+        }, 10 * 1000);
+        console.log('network data: ', response);
+        this.setFetchingStatus('OK. Updated time from network', 'success', false, 1);
       },
-      (err) => {
+      error: (err) => {
         console.log('err: ', err);
         // alert('err: ' + err);
-        this.setFetchingStatus('FAILED to update time from ' + networkName + ' - ' + err, 'error', false, 999);
-      }
-    );
+        this.setFetchingStatus('FAILED to update time from network - ' + err, 'error', false, 999);
+      },
+    });
   }
   init(initialTestTime, callback, analogClock) {
     this.initialTestTime = initialTestTime;
