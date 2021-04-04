@@ -14,11 +14,11 @@
     <title>MDisplay Live</title>
     <link rel="shortcut icon" href="assets/images/favicon.png" />
     <link rel="icon" type="image/png" href="assets/images/favicon.png" />
-    <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=1.14.1-69" />
-    <link rel="stylesheet" type="text/css" href="assets/css/app.css?v=1.14.1-69" />
-    <link rel="stylesheet" type="text/css" href="assets/css/analog-clock.css?v=1.14.1-69" />
-    <link rel="stylesheet" type="text/css" href="assets/css/theme-default.css?v=1.14.1-69" />
-    <link rel="stylesheet" type="text/css" href="assets/css/analog-clock-theme.css?v=1.14.1-69" />
+    <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=1.15.0-70" />
+    <link rel="stylesheet" type="text/css" href="assets/css/app.css?v=1.15.0-70" />
+    <link rel="stylesheet" type="text/css" href="assets/css/analog-clock.css?v=1.15.0-70" />
+    <link rel="stylesheet" type="text/css" href="assets/css/theme-default.css?v=1.15.0-70" />
+    <link rel="stylesheet" type="text/css" href="assets/css/analog-clock-theme.css?v=1.15.0-70" />
   </head>
   <body>
     <div
@@ -59,7 +59,7 @@
                   <span class="error" v-if="appUdate.error">ERROR: {{ appUdate.error }}</span>
                   <span class="checking" v-if="appUdate.checking">Checking...</span>
                   <span class="updated" v-if="appUdate.updated"
-                    >Updated. Version {{ '?v=1.14.1-69'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1 ($2)') }}.</span
+                    >Updated. Version {{ '?v=1.15.0-70'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1 ($2)') }}.</span
                   >
                   <span class="updating" v-if="appUdate.updating">Updating...</span>
                 </div>
@@ -175,7 +175,7 @@
             display: none;
           "
         >
-          <span style="opacity: 0.25"> Version {{ '?v=1.14.1-69'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }} </span>
+          <span style="opacity: 0.25"> Version {{ '?v=1.15.0-70'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }} </span>
           <span
             style="
               opacity: 0.75;
@@ -185,7 +185,7 @@
               border-radius: 50%;
               text-align: center;
             "
-            >{{ '?v=1.14.1-69'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span
+            >{{ '?v=1.15.0-70'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span
           >
         </div>
 
@@ -362,6 +362,10 @@
         <div class="invalid-time-container" v-if="!timeIsValid">
           <h3>Waiting for time update...</h3>
           <h2>from {{ timeOriginMode == 'network' ? 'network' : 'device' }}</h2>
+          <h3>
+            <small>Network Status: </small>
+            <strong>{{ network.status }}</strong>
+          </h3>
           <h1 :style="{color: networkTimeInitialized ? '#ff1919' : '#ff1919'}">
             <small>Device time:</small> {{ timeFormatted }}
           </h1>
@@ -375,16 +379,26 @@
         </div>
       </div>
     </div>
-    <script type="text/javascript" src="prayer-data.js?v=1.14.1-69"></script>
-    <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=1.14.1-69"></script>
-    <script type="text/javascript" src="assets/vendors/vue.min.js?v=1.14.1-69"></script>
-    <script type="text/javascript" src="assets/vendors/moment.min.js?v=1.14.1-69"></script>
-    <script type="text/javascript" src="assets/vendors/hijri.js?v=1.14.1-69"></script>
-    <script type="text/javascript" src="assets/vendors/jquery-3.6.0.min.js?v=1.14.1-69"></script>
-    <script type="text/javascript" src="assets/js/translations.js?v=1.14.1-69"></script>
-    <script type="text/javascript" src="assets/js/app.js?v=1.14.1-69"></script>
-    <script type="text/javascript" src="assets/js/analog-clock.js?v=1.14.1-69"></script>
+    <script type="text/javascript" src="prayer-data.js?v=1.15.0-70"></script>
+    <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=1.15.0-70"></script>
+    <script type="text/javascript" src="assets/vendors/vue.min.js?v=1.15.0-70"></script>
+    <script type="text/javascript" src="assets/vendors/moment.min.js?v=1.15.0-70"></script>
+    <script type="text/javascript" src="assets/vendors/hijri.js?v=1.15.0-70"></script>
+    <script type="text/javascript" src="assets/vendors/jquery-3.6.0.min.js?v=1.15.0-70"></script>
+    <script type="text/javascript" src="assets/js/translations.js?v=1.15.0-70"></script>
+    <script type="text/javascript" src="cdvfile://localhost/assets/www/cordova.js"></script>
+    <script type="text/javascript" src="assets/js/analog-clock.js?v=1.15.0-70"></script>
+    <script type="text/javascript" src="assets/js/app.js?v=1.15.0-70"></script>
     <script type="text/javascript">
+      var hasCordova = !!window.cordova;
+      if (hasCordova) {
+        document.addEventListener('deviceready', function () {
+          window.mdApp.deviceReady();
+        });
+      } else {
+        window.mdApp.deviceReady();
+        //   alert('Not intended to run in a non-cordova environment');
+      }
       var isLocalhost =
         window.location.hostname == 'localhost' ||
         window.location.hostname == '192.168.1.11' ||
@@ -410,63 +424,63 @@
             0
           );
 
-        window.app.simulateTime = 10;
+        window.mdApp.simulateTime = 10;
         // window.initialTestTime.setFullYear(1970);
 
-        // window.app.data.time = window.initialTestTime;
+        // window.mdApp.data.time = window.initialTestTime;
         // setInterval(() => {
-        //   // window.app.data.time.setDate(window.app.data.time.getDate() + 1);
-        //   window.app.data.time.setHours(window.app.data.time.getHours() + 12);
-        //   // window.app.data.time.setMinutes(window.app.data.time.getMinutes() + 1);
-        //   // window.app.data.time.setSeconds(59);
+        //   // window.mdApp.data.time.setDate(window.mdApp.data.time.getDate() + 1);
+        //   window.mdApp.data.time.setHours(window.mdApp.data.time.getHours() + 12);
+        //   // window.mdApp.data.time.setMinutes(window.mdApp.data.time.getMinutes() + 1);
+        //   // window.mdApp.data.time.setSeconds(59);
         // }, 500);
-        console.log('window.app.simulateTime', window.app.simulateTime);
+        console.log('window.mdApp.simulateTime', window.mdApp.simulateTime);
       }
 
       if (location.hostname == '' || location.hostname == 'zetmel.com' || location.hostname == 'mdisplay.github.io') {
         window.initialTestTime = undefined;
-        window.app.simulateTime = undefined;
+        window.mdApp.simulateTime = undefined;
       }
       // if (!window.initialTestTime) {
       //   window.initialTestTime = new Date();
       // }
       // window.initialTestTime.setFullYear(1970);
-      window.app.init(
+      window.mdApp.init(
         window.initialTestTime,
         function () {
           new Vue({
             el: '#app',
-            data: app.data,
+            data: window.mdApp.data,
             computed: {},
             methods: {
               translate(text) {
-                return app.translate(text);
+                return window.mdApp.translate(text);
               },
               updateSettings() {
-                app.updateSettings();
+                window.mdApp.updateSettings();
               },
               closeSettings() {
-                app.closeSettings();
+                window.mdApp.closeSettings();
               },
               openSettings() {
-                app.openSettings();
+                window.mdApp.openSettings();
               },
               checkForUpdates() {
-                app.checkForUpdates();
+                window.mdApp.checkForUpdates();
               },
               toggleAbsolute(iqamahTime) {
                 iqamahTime.absolute = !iqamahTime.absolute;
                 this.updateSettings();
               },
               languageChanged() {
-                app.languageChanged();
+                window.mdApp.languageChanged();
               },
             },
             created() {
-              app.created();
+              window.mdApp.created();
             },
             mounted() {
-              app.mounted();
+              window.mdApp.mounted();
             },
           });
         },
@@ -484,7 +498,7 @@
             if (event.isUpdate) {
               // console.log('New content available! Reload the browser to update');
               var notificationSeconds = 3000;
-              window.app.showToast('Application updated. Reloading...', notificationSeconds);
+              window.mdApp.showToast('Application updated. Reloading...', notificationSeconds);
               setTimeout(function () {
                 window.location.reload();
               }, notificationSeconds);

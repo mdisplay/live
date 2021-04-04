@@ -247,7 +247,11 @@ class App {
       timeIsValid: true,
       timeFetchingMessage: undefined,
       timeAdjustmentMinutes: 0,
+      network: {
+        status: 'Unknown',
+      },
     };
+    this.isDeviceReady = false;
     this.isInitial = true;
     this.beforeSeconds = 5 * 60;
     // this.beforeSeconds = 1*60;
@@ -261,6 +265,37 @@ class App {
   languageChanged() {
     localStorage.setItem('mdisplay.lang', this.data.selectedLanguage);
     this.closeSettings();
+  }
+
+  checkNetworkStatus() {
+    if (!this.isDeviceReady || typeof Connection === 'undefined') {
+      return;
+    }
+    var networkState = navigator.connection.type;
+
+    var states = {};
+    states[Connection.UNKNOWN] = 'Unknown Connection';
+    states[Connection.ETHERNET] = 'Ethernet Connection';
+    states[Connection.WIFI] = 'WiFi Connection';
+    states[Connection.CELL_2G] = 'Cell 2G Connection';
+    states[Connection.CELL_3G] = 'Cell 3G Connection';
+    states[Connection.CELL_4G] = 'Cell 4G Connection';
+    states[Connection.CELL] = 'Cell Generic Connection';
+    states[Connection.NONE] = 'No Network Connection';
+
+    this.data.network.status = states[networkState];
+    if (networkState == Connection.WIFI && typeof WifiWizard2 !== 'undefined') {
+      WifiWizard2.getConnectedSSID().then(
+        (ssid) => {
+          this.data.network.status = states[Connection.WIFI] + ' (' + ssid + ')';
+        },
+        (err) => {
+          this.data.network.status = states[Connection.WIFI] + ' (SSID: ' + err + ')';
+        }
+      );
+    }
+
+    // alert('Connection type: ' + states[networkState]);
   }
 
   checkForUpdates() {
@@ -340,10 +375,11 @@ class App {
     } else {
       this.data.time = new Date();
     }
-    this.data.timeIsValid = this.data.time.getFullYear() >= 2020;
+    const lastKnownYear = 2021;
+    this.data.timeIsValid = this.data.time.getFullYear() >= lastKnownYear;
     if (!this.initialTestTime && !this.data.timeIsValid) {
       const d = new Date();
-      if (d.getFullYear() >= 2020 /* && d.getSeconds() > 30 */) {
+      if (d.getFullYear() >= lastKnownYear /* && d.getSeconds() > 30 */) {
         // fallback mode
         this.data.time = d;
       }
@@ -949,6 +985,10 @@ class App {
       },
     });
   }
+  deviceReady() {
+    this.isDeviceReady = true;
+    this.checkNetworkStatus();
+  }
   init(initialTestTime, callback, analogClock) {
     this.initialTestTime = initialTestTime;
     this.analogClock = analogClock;
@@ -962,4 +1002,4 @@ class App {
   }
 }
 
-window.app = new App();
+window.mdApp = new App();

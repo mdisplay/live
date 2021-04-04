@@ -580,10 +580,10 @@
   z-index: 3333;
   position: fixed;
   width: 100%;
-  height: 4rem;
+  height: 14rem;
   left: 0;
   top: 50%;
-  margin-top: -2rem;
+  margin-top: -7rem;
 }
 
 .invalid-time-container h1,
