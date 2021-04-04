@@ -200,6 +200,11 @@ class App {
         this.prayerData.push(window.PRAYER_DATA[month]);
       }
     }
+    this.checkInternetJsonp = {
+      jsonpCallback: 'checkInternet',
+      url: 'https://mdisplay.github.io/live/check-internet.js',
+      // url: 'http://192.168.1.11/mdisplay/live/check-internet.js',
+    };
     this.data = {
       showSplash: true,
       // currentPrayerWaiting: false,
@@ -249,6 +254,9 @@ class App {
       timeAdjustmentMinutes: 0,
       network: {
         status: 'Unknown',
+        internetStatus: 'Unknown',
+        internetAvailable: undefined,
+        showInternetAvailability: false,
       },
     };
     this.isDeviceReady = false;
@@ -296,6 +304,61 @@ class App {
     }
 
     // alert('Connection type: ' + states[networkState]);
+  }
+
+  checkNetworkStatusUntilTimeIsValid() {
+    console.log('checkNetworkStatusUntilTimeIsValid');
+    this.checkNetworkStatus();
+    if (this.data.timeIsValid) {
+      return;
+    }
+    setTimeout(() => {
+      this.checkNetworkStatusUntilTimeIsValid();
+    }, 3000);
+  }
+
+  checkInternetAvailability(okCallback, retryCount, failCallback) {
+    retryCount = retryCount || 0;
+    this.checkNetworkStatus();
+    this.setFetchingStatus('Checking Internet Connection...', 'init', true);
+    const retry = (okCallback) => {
+      if (retryCount <= 0) {
+        failCallback();
+        return;
+      }
+      setTimeout(() => {
+        this.checkInternetAvailability(okCallback, retryCount - 1, failCallback);
+      }, 3000);
+    };
+    $.ajax({
+      type: 'GET',
+      dataType: 'jsonp',
+      url: this.checkInternetJsonp.url,
+      jsonpCallback: this.checkInternetJsonp.jsonpCallback,
+      contentType: 'application/json; charset=utf-8',
+      success: (response) => {
+        // console.log('Result received', response);
+        if (response && response.result == 'ok') {
+          this.setFetchingStatus('Internet Connection OK ', 'success', false, 999);
+          setTimeout(() => {
+            this.data.network.internetAvailable = true;
+            okCallback();
+            // this.data.network.checking = false;
+          }, 2000);
+          return;
+        }
+        this.data.network.internetAvailable = false;
+        this.setFetchingStatus('INVALID response', 'error', false, 999);
+        retry(okCallback);
+      },
+      error: (err) => {
+        // console.log('err: ', err);
+        // // alert('err: ' + err);
+        this.data.network.internetAvailable = false;
+        this.setFetchingStatus('Internet Connection FAILED', 'error', false, 999);
+        retry(okCallback);
+      },
+    });
   }
 
   checkForUpdates() {
@@ -381,8 +444,18 @@ class App {
       const d = new Date();
       if (d.getFullYear() >= lastKnownYear /* && d.getSeconds() > 30 */) {
         // fallback mode
-        this.data.time = d;
+        // this.data.time = d;
       }
+      // this.checkNetworkStatusUntilTimeIsValid();
+    }
+    if (!this.data.timeIsValid) {
+      // if (this.data.timeOriginMode != 'network' && this.data.network.internetAvailable === undefined) {
+      //   this.checkInternetAvailability(
+      //     () => {},
+      //     0,
+      //     () => {}
+      //   );
+      // }
     }
     this.data.timeFormatted = moment(this.data.time).format('DD MMM YYYY, h:mm:ss A');
     this.data.timeDisplay = moment(this.data.time).format('hh:mm');
@@ -624,6 +697,29 @@ class App {
     const changeBackgroundInMinutes = 1;
     if (this.data.time.getMinutes() % changeBackgroundInMinutes === 0 && this.data.time.getSeconds() === 0) {
       this.updateBackground();
+    }
+    const checkInternetInMinutes = 1;
+    // this.data.network.showInternetAvailability = this.data.time.getSeconds() % 10 < 5;
+
+    // if (this.data.time.getSeconds() % 2 === 1) {
+    this.data.network.showInternetAvailability = !this.data.network.showInternetAvailability;
+    // }
+    if (!(this.data.timeOriginMode == 'network' && this.data.networkTimeApiUrl == 'http://192.168.1.1/api')) {
+      if (this.data.time.getMinutes() % checkInternetInMinutes === 0 && this.data.time.getSeconds() === 0) {
+        this.checkInternetAvailability(
+          () => {},
+          10,
+          () => {
+            this.setFetchingStatus('No Internet', 'error', false, 999);
+          }
+        );
+      } else if (this.data.network.internetAvailable === undefined) {
+        this.checkInternetAvailability(
+          () => {},
+          0,
+          () => {}
+        );
+      }
     }
     if (this.data.time.getSeconds() % 2 === 0) {
       this.data.prayerInfo = this.data.prayerInfo === 'athan' ? 'iqamah' : 'athan';
@@ -973,6 +1069,7 @@ class App {
         }
         this.data.networkTimeInitialized = true;
         setTimeout(() => {
+          // possibility for time inaccuracy. Hence recheck in 10 seconds.
           this.data.networkTimeInitialized = false;
         }, 10 * 1000);
         console.log('network data: ', response);

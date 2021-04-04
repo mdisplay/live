@@ -14,11 +14,11 @@
     <title>MDisplay Live</title>
     <link rel="shortcut icon" href="assets/images/favicon.png" />
     <link rel="icon" type="image/png" href="assets/images/favicon.png" />
-    <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=1.15.0-70" />
-    <link rel="stylesheet" type="text/css" href="assets/css/app.css?v=1.15.0-70" />
-    <link rel="stylesheet" type="text/css" href="assets/css/analog-clock.css?v=1.15.0-70" />
-    <link rel="stylesheet" type="text/css" href="assets/css/theme-default.css?v=1.15.0-70" />
-    <link rel="stylesheet" type="text/css" href="assets/css/analog-clock-theme.css?v=1.15.0-70" />
+    <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=1.16.0-71" />
+    <link rel="stylesheet" type="text/css" href="assets/css/app.css?v=1.16.0-71" />
+    <link rel="stylesheet" type="text/css" href="assets/css/analog-clock.css?v=1.16.0-71" />
+    <link rel="stylesheet" type="text/css" href="assets/css/theme-default.css?v=1.16.0-71" />
+    <link rel="stylesheet" type="text/css" href="assets/css/analog-clock-theme.css?v=1.16.0-71" />
   </head>
   <body>
     <div
@@ -59,7 +59,7 @@
                   <span class="error" v-if="appUdate.error">ERROR: {{ appUdate.error }}</span>
                   <span class="checking" v-if="appUdate.checking">Checking...</span>
                   <span class="updated" v-if="appUdate.updated"
-                    >Updated. Version {{ '?v=1.15.0-70'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1 ($2)') }}.</span
+                    >Updated. Version {{ '?v=1.16.0-71'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1 ($2)') }}.</span
                   >
                   <span class="updating" v-if="appUdate.updating">Updating...</span>
                 </div>
@@ -175,20 +175,24 @@
             display: none;
           "
         >
-          <span style="opacity: 0.25"> Version {{ '?v=1.15.0-70'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }} </span>
-          <span
-            style="
-              opacity: 0.75;
-              background: black;
-              font-size: 1.5rem;
-              padding: 0.25rem;
-              border-radius: 50%;
-              text-align: center;
-            "
-            >{{ '?v=1.15.0-70'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span
-          >
+          <div v-if="network.showInternetAvailability && network.internetAvailable === false">
+            <span style="padding: 0.25rem; color: #ff0000; font-weight: bold; opacity: 0.75">No Internet</span>
+          </div>
+          <div v-else>
+            <span style="opacity: 0.25"> Version {{ '?v=1.16.0-71'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }} </span>
+            <span
+              style="
+                opacity: 0.75;
+                background: black;
+                font-size: 1.5rem;
+                padding: 0.25rem;
+                border-radius: 50%;
+                text-align: center;
+              "
+              >{{ '?v=1.16.0-71'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span
+            >
+          </div>
         </div>
-
         <div style="visibility: hidden; position: fixed">
           <img v-for="i in 13" :src="'backgrounds/' + i + '.jpg?v=' + bgVersion" />
         </div>
@@ -379,16 +383,16 @@
         </div>
       </div>
     </div>
-    <script type="text/javascript" src="prayer-data.js?v=1.15.0-70"></script>
-    <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=1.15.0-70"></script>
-    <script type="text/javascript" src="assets/vendors/vue.min.js?v=1.15.0-70"></script>
-    <script type="text/javascript" src="assets/vendors/moment.min.js?v=1.15.0-70"></script>
-    <script type="text/javascript" src="assets/vendors/hijri.js?v=1.15.0-70"></script>
-    <script type="text/javascript" src="assets/vendors/jquery-3.6.0.min.js?v=1.15.0-70"></script>
-    <script type="text/javascript" src="assets/js/translations.js?v=1.15.0-70"></script>
+    <script type="text/javascript" src="prayer-data.js?v=1.16.0-71"></script>
+    <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=1.16.0-71"></script>
+    <script type="text/javascript" src="assets/vendors/vue.min.js?v=1.16.0-71"></script>
+    <script type="text/javascript" src="assets/vendors/moment.min.js?v=1.16.0-71"></script>
+    <script type="text/javascript" src="assets/vendors/hijri.js?v=1.16.0-71"></script>
+    <script type="text/javascript" src="assets/vendors/jquery-3.6.0.min.js?v=1.16.0-71"></script>
+    <script type="text/javascript" src="assets/js/translations.js?v=1.16.0-71"></script>
     <script type="text/javascript" src="cdvfile://localhost/assets/www/cordova.js"></script>
-    <script type="text/javascript" src="assets/js/analog-clock.js?v=1.15.0-70"></script>
-    <script type="text/javascript" src="assets/js/app.js?v=1.15.0-70"></script>
+    <script type="text/javascript" src="assets/js/analog-clock.js?v=1.16.0-71"></script>
+    <script type="text/javascript" src="assets/js/app.js?v=1.16.0-71"></script>
     <script type="text/javascript">
       var hasCordova = !!window.cordova;
       if (hasCordova) {
