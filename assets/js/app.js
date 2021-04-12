@@ -205,6 +205,9 @@ class App {
       url: 'https://mdisplay.github.io/live/check-internet.js',
       // url: 'http://192.168.1.11/mdisplay/live/check-internet.js',
     };
+    var timeServerIp = '192.168.1.1';
+    var timeServerApi = 'http://' + timeServerIp + '/api';
+    this.timeServerApi = timeServerApi;
     this.data = {
       showSplash: true,
       // currentPrayerWaiting: false,
@@ -239,7 +242,7 @@ class App {
       toasts: [],
       timeOriginMode: 'device', // or 'network'
       networkMode: 'network', // or 'timeserver',
-      networkTimeApiUrl: 'http://192.168.1.1/api',
+      networkTimeApiUrl: timeServerApi,
       isFriday: false,
       selectedLanguage: this.lang,
       languages: [
@@ -319,7 +322,6 @@ class App {
 
   checkInternetAvailability(okCallback, retryCount, failCallback) {
     retryCount = retryCount || 0;
-    this.checkNetworkStatus();
     this.setFetchingStatus('Checking Internet Connection...', 'init', true);
     const retry = (okCallback) => {
       if (retryCount <= 0) {
@@ -456,6 +458,7 @@ class App {
       //     () => {}
       //   );
       // }
+      this.checkNetworkStatus();
     }
     this.data.timeFormatted = moment(this.data.time).format('DD MMM YYYY, h:mm:ss A');
     this.data.timeDisplay = moment(this.data.time).format('hh:mm');
@@ -699,13 +702,25 @@ class App {
       this.updateBackground();
     }
     const checkInternetInMinutes = 1;
+    let checkInternetNow = false;
+    if (this.data.time.getMinutes() % checkInternetInMinutes === 0 && this.data.time.getSeconds() === 0) {
+      checkInternetNow = true;
+    }
     // this.data.network.showInternetAvailability = this.data.time.getSeconds() % 10 < 5;
 
     // if (this.data.time.getSeconds() % 2 === 1) {
     this.data.network.showInternetAvailability = !this.data.network.showInternetAvailability;
     // }
-    if (!(this.data.timeOriginMode == 'network' && this.data.networkTimeApiUrl == 'http://192.168.1.1/api')) {
-      if (this.data.time.getMinutes() % checkInternetInMinutes === 0 && this.data.time.getSeconds() === 0) {
+    if (this.data.timeOriginMode == 'network' && this.data.networkTimeApiUrl == this.timeServerApi) {
+      if (checkInternetNow) {
+        if (typeof WifiWizard2 !== 'undefined') {
+          var bindAll = true;
+          var isHiddenSSID = false;
+          WifiWizard2.connect('MDisplay TimeServer', bindAll, '1234567890', 'WPA', isHiddenSSID);
+        }
+      }
+    } else {
+      if (checkInternetNow) {
         this.checkInternetAvailability(
           () => {},
           10,
@@ -1017,8 +1032,6 @@ class App {
       // console.log('Internet time mode already active');
       return;
     }
-
-    this.checkNetworkStatus();
 
     console.log('Internet time mode fetching from...', this.data.networkTimeApiUrl);
     this.setFetchingStatus('Requesting time from network...', 'init', true);
