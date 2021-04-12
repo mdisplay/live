@@ -1106,7 +1106,7 @@ class App {
     if (!this.isDeviceReady || this.data.timeIsValid || typeof WifiWizard2 !== 'undefined') {
       return;
     }
-    if (this.data.network.connecting !== undefined) {
+    if (!retryCount && this.data.network.connecting !== undefined) {
       return;
     }
     if (retryCount > 100) {
