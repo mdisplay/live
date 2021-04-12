@@ -1120,7 +1120,7 @@ class App {
     var bindAll = true;
     var isHiddenSSID = false;
     this.data.network.connecting = true;
-    this.data.network.status = 'Connecting to MDisplay Server...';
+    this.data.network.status = 'Connecting to MDisplay TimeServer...';
     WifiWizard2.connect('MDisplay TimeServer', bindAll, '1234567890', 'WPA', isHiddenSSID).then(
       (res) => {
         this.data.network.connecting = false;
