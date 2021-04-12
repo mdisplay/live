@@ -712,12 +712,10 @@ class App {
     this.data.network.showInternetAvailability = !this.data.network.showInternetAvailability;
     // }
     if (this.data.timeOriginMode == 'network' && this.data.networkTimeApiUrl == this.timeServerApi) {
-      if (checkInternetNow) {
-        if (typeof WifiWizard2 !== 'undefined') {
-          var bindAll = true;
-          var isHiddenSSID = false;
-          WifiWizard2.connect('MDisplay TimeServer', bindAll, '1234567890', 'WPA', isHiddenSSID);
-        }
+      if (checkInternetNow && !this.data.timeIsValid && typeof WifiWizard2 !== 'undefined') {
+        var bindAll = true;
+        var isHiddenSSID = false;
+        WifiWizard2.connect('MDisplay TimeServer', bindAll, '1234567890', 'WPA', isHiddenSSID);
       }
     } else {
       if (checkInternetNow) {
