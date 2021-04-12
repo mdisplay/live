@@ -463,7 +463,7 @@ class App {
       if (!(this.data.timeOriginMode == 'network' && this.data.networkTimeApiUrl == this.timeServerApi)) {
         this.checkNetworkStatus();
       } else {
-        if (this.data.network.connecting !== undefined) {
+        if (this.data.network.connecting === false) {
           this.checkNetworkStatus();
         }
       }
