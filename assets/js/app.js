@@ -1096,14 +1096,19 @@ class App {
     });
   }
 
-  tryConnectingToTimeServer() {
+  tryConnectingToTimeServer(retryCount) {
+    retryCount = retryCount || 0;
     if (!(this.data.timeOriginMode == 'network' && this.data.networkTimeApiUrl == this.timeServerApi)) {
       return;
     }
-    if (this.data.timeIsValid || typeof WifiWizard2 !== 'undefined') {
+    if (!this.isDeviceReady || this.data.timeIsValid || typeof WifiWizard2 !== 'undefined') {
       return;
     }
     if (this.data.network.connecting === true || this.data.network.connecting === false) {
+      return;
+    }
+    if (retryCount > 100) {
+      this.data.network.connecting = false;
       return;
     }
     var bindAll = true;
@@ -1118,7 +1123,7 @@ class App {
       (err) => {
         this.data.network.status = 'ERR MDisplay TimeServer - ' + err;
         setTimeout(() => {
-          this.tryConnectingToTimeServer();
+          this.tryConnectingToTimeServer(retryCount + 1);
         }, 1000);
       }
     );
