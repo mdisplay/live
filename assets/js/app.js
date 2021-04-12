@@ -298,7 +298,7 @@ class App {
           this.data.network.status = states[Connection.WIFI] + ' (' + ssid + ')';
         },
         (err) => {
-          this.data.network.status = states[Connection.WIFI] + ' (SSID: ' + err + ')';
+          this.data.network.status = states[Connection.WIFI] + ' (SSID err: ' + err + ')';
         }
       );
     }
@@ -1018,6 +1018,8 @@ class App {
       return;
     }
 
+    this.checkNetworkStatus();
+
     console.log('Internet time mode fetching from...', this.data.networkTimeApiUrl);
     this.setFetchingStatus('Requesting time from network...', 'init', true);
 
@@ -1064,7 +1066,9 @@ class App {
           }, 1000);
         } else {
           setTimeout(() => {
-            this.forceTimeUpdate(parseDateTime(time));
+            var newDate = parseDateTime(time);
+            newDate.setTime(newDate.getTime() + 1000);
+            this.forceTimeUpdate(newDate);
           }, 1000);
         }
         this.data.networkTimeInitialized = true;
