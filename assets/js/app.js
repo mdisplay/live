@@ -460,7 +460,9 @@ class App {
       //     () => {}
       //   );
       // }
-      this.checkNetworkStatus();
+      if (!(this.data.timeOriginMode == 'network' && this.data.networkTimeApiUrl == this.timeServerApi)) {
+        this.checkNetworkStatus();
+      }
     }
     this.data.timeFormatted = moment(this.data.time).format('DD MMM YYYY, h:mm:ss A');
     this.data.timeDisplay = moment(this.data.time).format('hh:mm');
@@ -1104,10 +1106,14 @@ class App {
     if (!this.isDeviceReady || this.data.timeIsValid || typeof WifiWizard2 !== 'undefined') {
       return;
     }
-    if (this.data.network.connecting === true || this.data.network.connecting === false) {
+    if (this.data.network.connecting !== undefined) {
       return;
     }
     if (retryCount > 100) {
+      this.data.network.connecting = false;
+      return;
+    }
+    if (this.data.network.status == 'WiFi Connection (MDisplay TimeServer)') {
       this.data.network.connecting = false;
       return;
     }
@@ -1119,6 +1125,7 @@ class App {
       (res) => {
         this.data.network.connecting = false;
         this.data.network.status = 'Connected to MDisplay TimeServer';
+        this.checkNetworkStatus();
       },
       (err) => {
         this.data.network.status = 'ERR MDisplay TimeServer - ' + err;
