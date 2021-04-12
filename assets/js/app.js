@@ -1095,6 +1095,7 @@ class App {
       },
     });
   }
+
   tryConnectingToTimeServer() {
     if (!(this.data.timeOriginMode == 'network' && this.data.networkTimeApiUrl == this.timeServerApi)) {
       return;
@@ -1122,6 +1123,7 @@ class App {
       }
     );
   }
+
   deviceReady() {
     this.isDeviceReady = true;
     this.checkNetworkStatus();
