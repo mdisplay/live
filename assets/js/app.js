@@ -1093,7 +1093,7 @@ class App {
       error: (err) => {
         console.log('err: ', err);
         // alert('err: ' + err);
-        this.setFetchingStatus('FAILED to update time from network - ' + err, 'error', false, 999);
+        this.setFetchingStatus('FAILED to update time from network', 'error', false, 999);
       },
     });
   }
@@ -1103,7 +1103,7 @@ class App {
     if (!(this.data.timeOriginMode == 'network' && this.data.networkTimeApiUrl == this.timeServerApi)) {
       return;
     }
-    if (!this.isDeviceReady || this.data.timeIsValid || typeof WifiWizard2 !== 'undefined') {
+    if (!this.isDeviceReady || this.data.timeIsValid || typeof WifiWizard2 === 'undefined') {
       return;
     }
     if (!retryCount && this.data.network.connecting !== undefined) {
