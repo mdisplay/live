@@ -462,6 +462,10 @@ class App {
       // }
       if (!(this.data.timeOriginMode == 'network' && this.data.networkTimeApiUrl == this.timeServerApi)) {
         this.checkNetworkStatus();
+      } else {
+        if (this.data.network.connecting !== undefined) {
+          this.checkNetworkStatus();
+        }
       }
     }
     this.data.timeFormatted = moment(this.data.time).format('DD MMM YYYY, h:mm:ss A');
