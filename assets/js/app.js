@@ -1113,10 +1113,6 @@ class App {
     if (!retryCount && this.data.network.connecting !== undefined) {
       return;
     }
-    if (retryCount > 100) {
-      this.data.network.connecting = false;
-      return;
-    }
     if (this.data.network.status == 'WiFi Connection (MDisplay TimeServer)') {
       this.data.network.connecting = false;
       return;
@@ -1124,7 +1120,7 @@ class App {
     var bindAll = true;
     var isHiddenSSID = false;
     this.data.network.connecting = true;
-    this.data.network.status = 'Connecting to MDisplay TimeServer...';
+    this.data.network.status = 'Connecting to MDisplay TimeServer (' + retryCount + ')...';
     WifiWizard2.connect('MDisplay TimeServer', bindAll, '1234567890', 'WPA', isHiddenSSID).then(
       (res) => {
         this.data.network.connecting = false;
