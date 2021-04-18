@@ -1,0 +1,63 @@
+/* CLOCK */
+.analog-clock-container {
+  position: relative; /* To Position the Three Hands. */
+
+  width: 37vw; /* For Responsive Design. Can't Zoom in. */
+  height: 37vw;
+  margin-top: 1.2vw;
+
+  background: url('./themes/default/clock-face.png') no-repeat;
+  background-size: 100%; /* To Fit the Background. */
+}
+
+/* HOURS' HAND */
+#analog-clock-hand-hours {
+  /* Using % units for Responsiveness. */
+  width: 9%;
+  height: 26%;
+
+  position: absolute;
+  top: 26.3%;
+  left: 45.65%;
+
+  transform-origin: 47.7% 88%; /* Adjusting the Axis of Rotation.*/
+
+  /* opacity: 0.9; */
+}
+
+/* MINUTES' HAND */
+#analog-clock-hand-minutes {
+  width: 8%;
+  height: 35%;
+
+  position: absolute;
+  top: 17.8%;
+  left: 44.65%;
+
+  transform-origin: 61.7% 90.7%;
+
+  /* opacity: 0.9; */
+}
+
+/* SECONDS' HAND */
+#analog-clock-hand-seconds {
+  width: 10%;
+  height: 50%;
+
+  position: absolute;
+  left: 43.2%;
+  top: 15.6%;
+
+  transform-origin: 65.3% 67.9%;
+
+  opacity: 0.97;
+}
+
+/* CENTER CIRCLE */
+.analog-clock-container .analog-clock-center-circle {
+  width: 7.1%;
+
+  position: absolute;
+  top: 46.5%;
+  left: 46.2%;
+}

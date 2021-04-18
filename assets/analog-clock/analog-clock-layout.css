@@ -1,0 +1,33 @@
+.analog-clock-container {
+  display: none;
+  position: absolute;
+  bottom: 0;
+  bottom: 1rem;
+  margin: 0;
+  padding: 0;
+  height: 75vh;
+  width: 75vh;
+  z-index: 9 !important;
+}
+
+.analog-clock-active .analog-clock-container {
+  display: block;
+}
+
+.analog-clock-active .digital-clock .date-display .hijri-datex {
+  margin-left: 3rem;
+}
+.analog-clock-active .digital-clock .date-display .datex {
+  margin-left: 6rem;
+}
+.analog-clock-active .digital-clock .date-display .weekday {
+  margin-left: 9rem;
+}
+
+.analog-clock-active .digital-clock .time .hours .h,
+.analog-clock-active .digital-clock .time .colon-main,
+.analog-clock-active .digital-clock .time .minutes .m,
+.analog-clock-active .digital-clock .time .seconds-container /* .seconds */ {
+  /* display: none; */
+  visibility: hidden;
+}
