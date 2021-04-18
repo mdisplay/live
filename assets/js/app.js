@@ -250,7 +250,7 @@ class App {
         { id: 'ta', label: 'Tamil' },
         { id: 'en', label: 'English' },
       ],
-      analogClockActive: true,
+      analogClockActive: false,
       analogClockTheme: 'default',
       networkTimeInitialized: false,
       timeIsValid: false,
@@ -898,6 +898,9 @@ class App {
       if (!isNaN(timeAdjustmentMinutes)) {
         this.data.timeAdjustmentMinutes = timeAdjustmentMinutes;
       }
+      if (settings.analogClockActive) {
+        this.data.analogClockActive = true;
+      }
       // ...
     }
     callback();
@@ -911,6 +914,7 @@ class App {
     const settings = {
       timeOriginMode: this.data.timeOriginMode,
       timeAdjustmentMinutes: this.data.timeAdjustmentMinutes,
+      analogClockActive: this.data.analogClockActive,
     };
     localStorage.setItem('mdisplay.iqamahTimes', JSON.stringify(iqamahTimes));
     localStorage.setItem('mdisplay.iqamahTimesConfigured', 1);
