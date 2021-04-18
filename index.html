@@ -148,7 +148,7 @@
                       v-model="timeOriginMode"
                       @change="updateSettings()"
                     />
-                    Network Time <small>(beta)</small>
+                    Network Time
                   </label>
                   <div v-if="timeOriginMode == 'network'">
                     <input type="url" v-model="networkTimeApiUrl" style="width: 100%; margin-bottom: 15px" />
