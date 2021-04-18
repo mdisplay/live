@@ -16,9 +16,9 @@
     <link rel="icon" type="image/png" href="assets/images/favicon.png" />
     <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=1.16.3-74" />
     <link rel="stylesheet" type="text/css" href="assets/css/app.css?v=1.16.3-74" />
-    <link rel="stylesheet" type="text/css" href="assets/css/analog-clock.css?v=1.16.3-74" />
+    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock.css?v=1.16.3-74" />
+    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock-layout.css?v=1.16.3-74" />
     <link rel="stylesheet" type="text/css" href="assets/css/theme-default.css?v=1.16.3-74" />
-    <link rel="stylesheet" type="text/css" href="assets/css/analog-clock-theme.css?v=1.16.3-74" />
   </head>
   <body>
     <div
@@ -317,34 +317,37 @@
           </div>
         </template>
 
-        <div id="analog-clock-container" class="analog-clock-container white-facex">
-          <section class="border-clock"></section>
-          <section class="clock analog-clock">
-            <ul class="list-unstyled">
-              <li><i>12</i></li>
-              <li><i>1</i></li>
-              <li><i>2</i></li>
-              <li><i>3</i></li>
-              <li><i>4</i></li>
-              <li><i>5</i></li>
-              <li><i>6</i></li>
-              <li><i>7</i></li>
-              <li><i>8</i></li>
-              <li><i>9</i></li>
-              <li><i>10</i></li>
-              <li><i>11</i></li>
-            </ul>
+        <div
+          class="analog-clock-container"
+          :style="{'background-image': 'url(assets/analog-clock/themes/' + analogClockTheme + '/clock-face.png)'}"
+        >
+          <!-- HOURS' HAND -->
+          <img
+            id="analog-clock-hand-hours"
+            :src="'assets/analog-clock/themes/' + analogClockTheme + '/clock-hand-hours.png'"
+            alt="HOURS HAND"
+          />
 
-            <h2>Live</h2>
-            <h3>MDisplay</h3>
+          <!-- MINUTES' HAND -->
+          <img
+            id="analog-clock-hand-minutes"
+            :src="'assets/analog-clock/themes/' + analogClockTheme + '/clock-hand-minutes.png'"
+            alt="MINUTES HAND"
+          />
 
-            <output class="date" style="display: none"></output>
+          <!-- SECONDS' HAND -->
+          <img
+            id="analog-clock-hand-seconds"
+            :src="'assets/analog-clock/themes/' + analogClockTheme + '/clock-hand-seconds.png'"
+            alt="SECONDS HAND"
+          />
 
-            <div class="minutes"></div>
-            <div class="hours"></div>
-            <div class="seconds"></div>
-            <div class="cercle"></div>
-          </section>
+          <!-- CENTER CIRCLE -->
+          <img
+            class="analog-clock-center-circle"
+            :src="'assets/analog-clock/themes/' + analogClockTheme + '/clock-center-circle.png'"
+            alt="CENTER CIRCLE"
+          />
         </div>
 
         <div class="prayer-info-container" v-if="timeIsValid">
@@ -391,7 +394,7 @@
     <script type="text/javascript" src="assets/vendors/jquery-3.6.0.min.js?v=1.16.3-74"></script>
     <script type="text/javascript" src="assets/js/translations.js?v=1.16.3-74"></script>
     <script type="text/javascript" src="cdvfile://localhost/assets/www/cordova.js"></script>
-    <script type="text/javascript" src="assets/js/analog-clock.js?v=1.16.3-74"></script>
+    <script type="text/javascript" src="assets/analog-clock/analog-clock.js?v=1.16.3-74"></script>
     <script type="text/javascript" src="assets/js/app.js?v=1.16.3-74"></script>
     <script type="text/javascript">
       var hasCordova = !!window.cordova;
