@@ -256,6 +256,8 @@ class App {
       timeIsValid: false,
       timeFetchingMessage: undefined,
       timeAdjustmentMinutes: 0,
+      timeServerSSID: localStorage.getItem('mdisplay.ssid') || 'NodeMCU TimeServer',
+      timeServerSSIDs: ['NodeMCU TimeServer', 'MDisplay TimeServer'],
       network: {
         status: 'Unknown',
         connecting: undefined,
@@ -277,6 +279,11 @@ class App {
 
   languageChanged() {
     localStorage.setItem('mdisplay.lang', this.data.selectedLanguage);
+    this.closeSettings();
+  }
+
+  ssidChanged() {
+    localStorage.setItem('mdisplay.ssid', this.data.timeServerSSID);
     this.closeSettings();
   }
 
@@ -1108,6 +1115,7 @@ class App {
   }
 
   tryConnectingToTimeServer(retryCount) {
+    var timeServerSSID = this.data.timeServerSSID;
     retryCount = retryCount || 0;
     if (!(this.data.timeOriginMode == 'network' && this.data.networkTimeApiUrl == this.timeServerApi)) {
       return;
@@ -1118,22 +1126,22 @@ class App {
     if (!retryCount && this.data.network.connecting !== undefined) {
       return;
     }
-    if (this.data.network.status == 'WiFi Connection (MDisplay TimeServer)') {
+    if (this.data.network.status == 'WiFi Connection (' + timeServerSSID + ')') {
       this.data.network.connecting = false;
       return;
     }
     var bindAll = true;
     var isHiddenSSID = false;
     this.data.network.connecting = true;
-    this.data.network.status = 'Connecting to MDisplay TimeServer (' + retryCount + ')...';
-    WifiWizard2.connect('MDisplay TimeServer', bindAll, '1234567890', 'WPA', isHiddenSSID).then(
+    this.data.network.status = 'Connecting to ' + timeServerSSID + ' (' + retryCount + ')...';
+    WifiWizard2.connect(timeServerSSID, bindAll, '1234567890', 'WPA', isHiddenSSID).then(
       (res) => {
         this.data.network.connecting = false;
-        this.data.network.status = 'Connected to MDisplay TimeServer';
+        this.data.network.status = 'Connected to ' + timeServerSSID;
         this.checkNetworkStatus();
       },
       (err) => {
-        this.data.network.status = 'ERR MDisplay TimeServer - ' + err;
+        this.data.network.status = 'ERR ' + timeServerSSID + ' - ' + err;
         setTimeout(() => {
           this.tryConnectingToTimeServer(retryCount + 1);
         }, 1000);
