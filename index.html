@@ -212,8 +212,8 @@
             >
           </div>
         </div>
-        <div style="visibility: hidden; position: fixed">
-          <img v-for="i in 13" :src="'backgrounds/' + i + '.jpg?v=' + bgVersion" />
+        <div style="visibility: hidden; position: fixed; top: -125%;">
+          <img v-for="i in 60" :src="'backgrounds/' + (i - 1) + '.jpg?v=' + bgVersion" />
         </div>
 
         <div id="bgful" class="bgful-container" v-if="backgroundImage">

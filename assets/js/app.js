@@ -634,9 +634,8 @@ class App {
     //   'https://images.unsplash.com/photo-1523821741446-edb2b68bb7a0?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max',
     // ];
     // return (this.data.backgroundImage = backgroundImages[0]);
-    const maxAvailableBackgrounds = 11;
     this.data.backgroundImage =
-      'backgrounds/' + this.getRandomNumber(1, maxAvailableBackgrounds) + '.jpg?v=' + this.data.bgVersion;
+      'backgrounds/' + this.data.time.getMinutes() + '.jpg?v=' + this.data.bgVersion;
   }
   commitCurrentPrayer() {
     if (!this.data.currentPrayer) {
