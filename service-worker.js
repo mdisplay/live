@@ -4,7 +4,7 @@ if (workbox) {
 } else {
   console.log(`Boo! Workbox didn't load 😬`);
 }
-var appVersion = '1.20.0-79';
+var appVersion = '1.20.1-80';
 var dataVersion = '6';
 var vendorVersion = '6';
 var bgVersion = '7';
