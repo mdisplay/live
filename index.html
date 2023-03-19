@@ -35,7 +35,7 @@
         <div style="display: none" v-show="true" class="modal-wrapper" v-if="settingsMode">
           <div class="modal-overlay" @click="closeSettings()"></div>
           <div class="modal-dialog">
-            <div @click="closeSettings()" class="modal-close">Close</div>
+            <div @click="closeSettings()" class="modal-close modal-close-top">Close</div>
             <div class="modal-content">
               <div class="configured-info">
                 <span class="configured" v-if="iqamahTimesConfigured">Configured</span>
@@ -65,115 +65,120 @@
                 </div>
                 <div class="" v-else>AUTO UPDATE: <button type="button" @click="checkForUpdates()">Check</button></div> -->
               </div>
-              <div class="times-config">
-                <div class="time-config" v-for="(iqamahTime, name) in iqamahTimes">
-                  <span class="label">{{ name }}</span>
-                  <!-- {{ name }}: {{ iqamahTime }} -->
-                  <!-- <input type="checkbox" v-model="iqamahTime.absolute" @change="updateSettings()"> -->
-                  <span
-                    class="toggle-absolute"
-                    :class="{'is-absolute': iqamahTime.absolute, 'is-not-absolute': !iqamahTime.absolute}"
-                    @click="toggleAbsolute(iqamahTime)"
-                  >
-                    <span class="at" v-if="iqamahTime.absolute">@</span>
-                    <span class="plus" v-else>+</span>
-                  </span>
-                  <template v-if="iqamahTime.absolute">
+              <div class="config-wrapper">
+                <div class="config-container times-config">
+                  <div class="config-item time-config" v-for="(iqamahTime, name) in iqamahTimes">
+                    <span class="label">{{ name }}</span>
+                    <!-- {{ name }}: {{ iqamahTime }} -->
+                    <!-- <input type="checkbox" v-model="iqamahTime.absolute" @change="updateSettings()"> -->
+                    <span
+                      class="toggle-absolute"
+                      :class="{'is-absolute': iqamahTime.absolute, 'is-not-absolute': !iqamahTime.absolute}"
+                      @click="toggleAbsolute(iqamahTime)"
+                    >
+                      <span class="at" v-if="iqamahTime.absolute">@</span>
+                      <span class="plus" v-else>+</span>
+                    </span>
+                    <template v-if="iqamahTime.absolute">
+                      <input
+                        class="time-input"
+                        type="number"
+                        v-model="iqamahTime.hours"
+                        @input="updateSettings()"
+                        @change="updateSettings()"
+                      />
+                      <span class="time-input-colon">:</span>
+                    </template>
                     <input
                       class="time-input"
                       type="number"
-                      v-model="iqamahTime.hours"
+                      v-model="iqamahTime.minutes"
                       @input="updateSettings()"
                       @change="updateSettings()"
                     />
-                    <span class="time-input-colon">:</span>
-                  </template>
-                  <input
-                    class="time-input"
-                    type="number"
-                    v-model="iqamahTime.minutes"
-                    @input="updateSettings()"
-                    @change="updateSettings()"
-                  />
-                  <span class="time-info">
-                    <span v-if="iqamahTime.absolute">
-                      <span v-if="name == 'Subah'">AM</span>
-                      <span v-else>PM</span>
+                    <span class="time-info">
+                      <span v-if="iqamahTime.absolute">
+                        <span v-if="name == 'Subah'">AM</span>
+                        <span v-else>PM</span>
+                      </span>
+                      <span class="" v-else>minutes</span>
                     </span>
-                    <span class="" v-else>minutes</span>
-                  </span>
+                  </div>
                 </div>
-                <div class="time-config">
-                  <label>Time Adjustment</label>
-                  <!-- <select>
-                    <option value="+">+</option>
-                    <option value="-">-</option>
-                  </select> -->
-                  <input
-                    class="time-input"
-                    type="number"
-                    v-model="timeAdjustmentMinutes"
-                    @input="updateSettings()"
-                    @change="updateSettings()"
-                  />
-                  <span>minutes</span>
-                </div>
-                <div class="time-config">
-                  <label>Language</label>
-                  <select v-model="selectedLanguage" @change="languageChanged()">
-                    <option v-for="lang in languages" :value="lang.id">{{ lang.label }}</option>
-                    <!-- <option value="si">Sinhala</option>
-                    <option value="ta">Tamil</option>
-                    <option value="en">English</option> -->
-                  </select>
-                </div>
-                <div class="time-config" style="height: auto">
-                  <label for="time-origin-mode-device">
+                <div class="config-container others-config">
+                  <div class="config-item other-config">
+                    <label>Time Adjustment</label>
+                    <!-- <select>
+                      <option value="+">+</option>
+                      <option value="-">-</option>
+                    </select> -->
                     <input
-                      id="time-origin-mode-device"
-                      type="radio"
-                      name="time-origin-mode"
-                      value="device"
-                      v-model="timeOriginMode"
+                      class="time-input"
+                      type="number"
+                      v-model="timeAdjustmentMinutes"
+                      @input="updateSettings()"
                       @change="updateSettings()"
                     />
-                    Device Time
-                  </label>
-                  <label for="time-origin-mode-network">
-                    <input
-                      id="time-origin-mode-network"
-                      type="radio"
-                      name="time-origin-mode"
-                      value="network"
-                      v-model="timeOriginMode"
-                      @change="updateSettings()"
-                    />
-                    Network Time
-                  </label>
-                  <div v-if="timeOriginMode == 'network'">
-                    <input type="url" v-model="networkTimeApiUrl" style="width: 100%; margin-bottom: 5px" />
-                    <label>SSID</label>
-                    <select v-model="timeServerSSID" @change="ssidChanged()">
-                      <option v-for="ssid in timeServerSSIDs" :value="ssid">{{ ssid }}</option>
+                    <span>minutes</span>
+                  </div>
+                  <div class="config-item other-config">
+                    <label>Language</label>
+                    <select v-model="selectedLanguage" @change="languageChanged()">
+                      <option v-for="lang in languages" :value="lang.id">{{ lang.label }}</option>
                       <!-- <option value="si">Sinhala</option>
                       <option value="ta">Tamil</option>
                       <option value="en">English</option> -->
                     </select>
                   </div>
-                </div>
-                <div class="time-config">
-                  <label for="analog-clock-active-check">
-                    <input
-                      id="analog-clock-active-check"
-                      type="checkbox"
-                      name="analog-clock-active-check"
-                      v-model="analogClockActive"
-                      @change="updateSettings()"
-                    />
-                    Analog Clock <small>(beta)</small>
-                  </label>
+                  <div class="config-item other-config" style="height: auto">
+                    <label for="time-origin-mode-device">
+                      <input
+                        id="time-origin-mode-device"
+                        type="radio"
+                        name="time-origin-mode"
+                        value="device"
+                        v-model="timeOriginMode"
+                        @change="updateSettings()"
+                      />
+                      Device Time
+                    </label>
+                    <label for="time-origin-mode-network">
+                      <input
+                        id="time-origin-mode-network"
+                        type="radio"
+                        name="time-origin-mode"
+                        value="network"
+                        v-model="timeOriginMode"
+                        @change="updateSettings()"
+                      />
+                      Network Time
+                    </label>
+                    <div v-if="timeOriginMode == 'network'">
+                      <input type="url" v-model="networkTimeApiUrl" style="width: 100%; margin-bottom: 5px" />
+                      <label>SSID</label>
+                      <select v-model="timeServerSSID" @change="ssidChanged()">
+                        <option v-for="ssid in timeServerSSIDs" :value="ssid">{{ ssid }}</option>
+                        <!-- <option value="si">Sinhala</option>
+                        <option value="ta">Tamil</option>
+                        <option value="en">English</option> -->
+                      </select>
+                    </div>
+                  </div>
+                  <div class="config-item other-config">
+                    <label for="analog-clock-active-check">
+                      <input
+                        id="analog-clock-active-check"
+                        type="checkbox"
+                        name="analog-clock-active-check"
+                        v-model="analogClockActive"
+                        @change="updateSettings()"
+                      />
+                      Analog Clock <small>(beta)</small>
+                    </label>
+                  </div>
                 </div>
               </div>
+              <div @click="closeSettings()" class="modal-close modal-close-bottom">Close</div>
             </div>
           </div>
         </div>

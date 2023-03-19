@@ -169,24 +169,51 @@ body {
   z-index: 2;
   padding: 1rem;
   overflow-y: auto;
+  width: 100%;
+  height: 100%;
 }
 
 #app .modal-close {
   font-size: 1.5rem;
   text-transform: uppercase;
   color: rgba(0, 0, 0, 0.5);
+  background: rgba(121, 180, 201, 0.3);
+}
+
+#app .modal-close-top {
   margin-bottom: 0.5rem;
   margin-top: -1rem;
   margin-right: -1rem;
   margin-left: -1rem;
-  background: rgba(121, 180, 201, 0.3);
+}
+
+#app .modal-close-bottom {
+  margin-top: 1rem;
+}
+
+#app .config-wrapper {
+
+}
+
+#app .config-wrapper:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+#app .config-container {
+  text-align: left;
+  width: 50%;
+  float: left;
+  border: 1px solid #555;
 }
 
 #app .times-config {
-  text-align: left;
+  width: calc(50% - 1rem);
+  margin-right: 1rem;
 }
 
-#app .time-config {
+#app .config-item {
   /* height: 4rem; */
   height: 3.5rem;
   line-height: 2.5rem;
@@ -194,22 +221,22 @@ body {
   padding: 0.5rem;
 }
 
-#app .time-config .label,
-#app .time-config .time-input,
-#app .time-config .time-input-colon,
-#app .time-config .toggle-absolute,
-#app .time-config .time-info {
+#app .config-item .label,
+#app .config-item .time-input,
+#app .config-item .time-input-colon,
+#app .config-item .toggle-absolute,
+#app .config-item .time-info {
   font-size: 2rem;
   line-height: 2.5rem;
   height: 2.5rem;
   display: inline-block;
 }
 
-#app .time-config:nth-child(even) {
+#app .config-item:nth-child(even) {
   background: #dadada;
 }
 
-#app .time-config .label {
+#app .config-item .label {
   /* font-size: 2rem;
   height: 2.5rem; */
   width: 7rem;
@@ -218,7 +245,7 @@ body {
   /* height: 100%; */
 }
 
-#app .time-config .time-input {
+#app .config-item .time-input {
   width: 20px;
   width: 4rem;
   /* font-size: 2rem;
@@ -229,16 +256,16 @@ body {
   /* height: 100%; */
 }
 
-#app .time-config .time-input-colon {
+#app .config-item .time-input-colon {
   /* font-size: 2rem; */
 }
 
-#app .time-config .time-input:focus {
+#app .config-item .time-input:focus {
   border-color: #0f6f9b;
   outline: 0;
 }
 
-#app .time-config .toggle-absolute {
+#app .config-item .toggle-absolute {
   /* font-size: 2rem;
   line-height: 2.5rem; */
   width: 3rem;
@@ -248,12 +275,12 @@ body {
   background: #518d0b;
 }
 
-#app .time-config .toggle-absolute.is-absolute {
+#app .config-item .toggle-absolute.is-absolute {
   font-size: 1.5rem;
   background: #555;
 }
 
-#app .time-config .time-info {
+#app .config-item .time-info {
   /* font-size: 2rem; */
   margin-left: 0.5rem;
 }
@@ -283,23 +310,23 @@ body {
   text-align: right;
 }
 
-/* #app .time-config {
+/* #app .config-item {
   padding: 0.25rem;
   height: 3.5rem;
   line-height: 3rem;
 } */
 
-/* #app .time-config {
+/* #app .config-item {
   padding: 0.5rem;
   height: 3rem;
   line-height: 2rem;
 }
 
-#app .time-config .label {
+#app .config-item .label {
   font-size: 1.5rem;
 }
 
-#app .time-config .time-input {
+#app .config-item .time-input {
   width: 4.5rem;
   font-size: 1.5rem;
   line-height: 2rem;
@@ -307,12 +334,12 @@ body {
   padding: 0 0.25rem;
 }
 
-#app .time-config .toggle-absolute {
+#app .config-item .toggle-absolute {
   font-size: 1.5rem;
   line-height: 2rem;
 }
 
-#app .time-config .time-info {
+#app .config-item .time-info {
   font-size: 1.5rem;
 } */
 
