@@ -376,10 +376,11 @@ function App() {
   }
   self.getTimes = function(yearParam, monthParam, dayParam) {
     const times = [];
-    for (let segment of self.prayerData[monthParam]) {
+    for(var i = 0; i < self.prayerData[monthParam].length; i++) {
+      var segment = self.prayerData[monthParam][i];
       if (segment.range[0] <= dayParam && segment.range[1] >= dayParam) {
-        // self.currentSegment = segment;
-        for (let time of segment.times) {
+        for(var j = 0; j < segment.times.length; j++) {
+          var time = segment.times[j];
           times.push(self.getTime(yearParam, monthParam, dayParam, time));
         }
         break;
@@ -621,7 +622,8 @@ function App() {
     if (nowTime >= nextTime + 1000) {
       console.log('coming next');
       let nextPrayer;
-      for (let prayer of self.todayPrayers) {
+      for (var i = 0; i < self.todayPrayers.length; i++) {
+        var prayer = self.todayPrayers[i];
         if (nowTime < prayer.time.getTime()) {
           nextPrayer = prayer;
           break;
