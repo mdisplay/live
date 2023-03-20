@@ -421,6 +421,10 @@
     <script type="text/javascript" src="assets/analog-clock/analog-clock.js?v=1.20.1-80"></script>
     <script type="text/javascript" src="assets/js/app.js?v=1.20.1-80"></script>
     <script type="text/javascript">
+      // WARNING: do not use ES6 syntax
+      // The code should only be authored in ES5
+      // to support older generation Android TV boxes
+      
       var hasCordova = !!window.cordova;
       if (hasCordova) {
         document.addEventListener('deviceready', function () {
@@ -430,31 +434,23 @@
         window.mdApp.deviceReady();
         //   alert('Not intended to run in a non-cordova environment');
       }
-      var isLocalhost =
-        window.location.hostname == 'localhost' ||
-        window.location.hostname == '192.168.1.11' ||
-        window.location.hostname == localStorage.getItem('local-ip');
-      var enableServiceWorker = /* !isLocalhost && */ !window.cordova;
+
+      var isLocalhost = window.location.hostname == 'localhost' || window.location.hostname == '192.168.1.11' || window.location.hostname == localStorage.getItem('local-ip');
+      var enableServiceWorker = /* !isLocalhost && */!window.cordova;
       // var enableServiceWorker = false;
 
       var isSimulating = true;
       var isSimulating = false;
-
       if (isLocalhost && isSimulating) {
         window.initialTestTime =
-          // undefined;
-          new Date(
-            new Date().getFullYear(),
-            6, //new Date().getMonth(),
-            31, // new Date().getDate(),
-            // 16, 30, 40,
-            // 2, 20, 30,
-            11,
-            58,
-            56,
-            0
-          );
-
+        // undefined;
+        new Date(new Date().getFullYear(), 6,
+        //new Date().getMonth(),
+        31,
+        // new Date().getDate(),
+        // 16, 30, 40,
+        // 2, 20, 30,
+        11, 58, 56, 0);
         window.mdApp.simulateTime = 10;
         // window.initialTestTime.setFullYear(1970);
 
@@ -467,7 +463,6 @@
         // }, 500);
         console.log('window.mdApp.simulateTime', window.mdApp.simulateTime);
       }
-
       if (location.hostname == '' || location.hostname == 'zetmel.com' || location.hostname == 'mdisplay.github.io') {
         window.initialTestTime = undefined;
         window.mdApp.simulateTime = undefined;
@@ -476,59 +471,53 @@
       //   window.initialTestTime = new Date();
       // }
       // window.initialTestTime.setFullYear(1970);
-      window.mdApp.init(
-        window.initialTestTime,
-        function () {
-          new Vue({
-            el: '#app',
-            data: window.mdApp.data,
-            computed: {},
-            methods: {
-              translate(text) {
-                return window.mdApp.translate(text);
-              },
-              updateSettings() {
-                window.mdApp.updateSettings();
-              },
-              closeSettings() {
-                window.mdApp.closeSettings();
-              },
-              openSettings() {
-                window.mdApp.openSettings();
-              },
-              checkForUpdates() {
-                window.mdApp.checkForUpdates();
-              },
-              toggleAbsolute(iqamahTime) {
-                iqamahTime.absolute = !iqamahTime.absolute;
-                this.updateSettings();
-              },
-              languageChanged() {
-                window.mdApp.languageChanged();
-              },
-              ssidChanged() {
-                window.mdApp.ssidChanged();
-              },
+      window.mdApp.init(window.initialTestTime, function () {
+        new Vue({
+          el: '#app',
+          data: window.mdApp.data,
+          computed: {},
+          methods: {
+            translate: function translate(text) {
+              return window.mdApp.translate(text);
             },
-            created() {
-              window.mdApp.created();
+            updateSettings: function updateSettings() {
+              window.mdApp.updateSettings();
             },
-            mounted() {
-              window.mdApp.mounted();
+            closeSettings: function closeSettings() {
+              window.mdApp.closeSettings();
             },
-          });
-        },
-        window.analogClock
-      );
-    </script>
-    <script type="text/javascript">
+            openSettings: function openSettings() {
+              window.mdApp.openSettings();
+            },
+            checkForUpdates: function checkForUpdates() {
+              window.mdApp.checkForUpdates();
+            },
+            toggleAbsolute: function toggleAbsolute(iqamahTime) {
+              iqamahTime.absolute = !iqamahTime.absolute;
+              this.updateSettings();
+            },
+            languageChanged: function languageChanged() {
+              window.mdApp.languageChanged();
+            },
+            ssidChanged: function ssidChanged() {
+              window.mdApp.ssidChanged();
+            }
+          },
+          created: function created() {
+            window.mdApp.created();
+          },
+          mounted: function mounted() {
+            window.mdApp.mounted();
+          }
+        });
+      }, window.analogClock);
+
       // Check that service workers are supported
       if ('serviceWorker' in navigator && enableServiceWorker && window.location.protocol != 'file:') {
         var serviceWorkerFile = 'service-worker' + (isLocalhost ? '-local' : '') + '.js';
         if (window.workbox && window.workbox.Workbox) {
           var wb = new window.workbox.Workbox(serviceWorkerFile);
-
-          wb.addEventListener('installed', (event) => {
+          wb.addEventListener('installed', function (event) {
             if (event.isUpdate) {
               // console.log('New content available! Reload the browser to update');
               var notificationSeconds = 3000;
@@ -540,15 +529,14 @@
               //   window.location.reload();
               // }
             }
+
             console.log('installed', event);
           });
-
           wb.register();
-
           window.wb = wb;
         } else {
           // Use the window load event to keep the page load performant
-          window.addEventListener('load', () => {
+          window.addEventListener('load', function () {
             navigator.serviceWorker.register(serviceWorkerFile);
           });
         }
