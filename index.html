@@ -121,14 +121,20 @@
                     />
                     <span>minutes</span>
                   </div>
-                  <div class="config-item other-config">
-                    <label>Language</label>
-                    <select v-model="selectedLanguage" @change="languageChanged()">
-                      <option v-for="lang in languages" :value="lang.id">{{ lang.label }}</option>
-                      <!-- <option value="si">Sinhala</option>
-                      <option value="ta">Tamil</option>
-                      <option value="en">English</option> -->
-                    </select>
+                  <div class="config-item other-config" style="height: auto">
+                    <div><small>Language</small></div>
+                    <label v-for="lang in languages" :for="'language-select-' + lang.id">
+                      <input
+                        :id="'language-select-' + lang.id"
+                        type="radio"
+                        name="language-select"
+                        :value="lang.id"
+                        v-model="selectedLanguage"
+                        @change="languageChanged()"
+                      />
+                      {{ lang.label }}
+                      &nbsp;
+                    </label>
                   </div>
                   <div class="config-item other-config" style="height: auto">
                     <label for="time-origin-mode-device">
@@ -155,13 +161,22 @@
                     </label>
                     <div v-if="timeOriginMode == 'network'">
                       <input type="url" v-model="networkTimeApiUrl" style="width: 100%; margin-bottom: 5px" />
-                      <label>SSID</label>
-                      <select v-model="timeServerSSID" @change="ssidChanged()">
-                        <option v-for="ssid in timeServerSSIDs" :value="ssid">{{ ssid }}</option>
-                        <!-- <option value="si">Sinhala</option>
-                        <option value="ta">Tamil</option>
-                        <option value="en">English</option> -->
-                      </select>
+
+                      <div>
+                        <div><small>SSID</small></div>
+                        <label v-for="(ssid, i) in timeServerSSIDs" :for="'time-server-ssid-' + i">
+                          <input
+                            :id="'time-server-ssid-' + i"
+                            type="radio"
+                            name="time-server-ssid"
+                            :value="ssid"
+                            v-model="timeServerSSID"
+                            @change="ssidChanged()"
+                          />
+                          {{ ssid }}
+                          &nbsp;
+                        </label>
+                      </div>
                     </div>
                   </div>
                   <div class="config-item other-config">
