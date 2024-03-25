@@ -115,6 +115,7 @@ function App() {
       { id: 'en', label: 'English' }
     ],
     analogClockActive: false,
+    alertEnabled: false,
     analogClockTheme: 'default',
     networkTimeInitialized: false,
     timeIsValid: false,
@@ -128,6 +129,12 @@ function App() {
       internetStatus: 'Unknown',
       internetAvailable: undefined,
       showInternetAvailability: false
+    }
+  };
+  self.computed = {
+    showAlert: function() {
+      var shouldShow = self.data.prayerInfo === 'iqamah';
+      return self.data.alertEnabled && shouldShow && !!self.data.currentPrayerWaiting;
     }
   };
   self.isDeviceReady = false;
@@ -745,6 +752,9 @@ function App() {
       if (settings.analogClockActive) {
         self.data.analogClockActive = true;
       }
+      if (settings.alertEnabled) {
+        self.data.alertEnabled = true;
+      }
       // ...
     }
 
@@ -759,7 +769,8 @@ function App() {
     var settings = {
       timeOriginMode: self.data.timeOriginMode,
       timeAdjustmentMinutes: self.data.timeAdjustmentMinutes,
-      analogClockActive: self.data.analogClockActive
+      analogClockActive: self.data.analogClockActive,
+      alertEnabled: self.data.alertEnabled,
     };
     localStorage.setItem('mdisplay.iqamahTimes', JSON.stringify(iqamahTimes));
     localStorage.setItem('mdisplay.iqamahTimesConfigured', 1);

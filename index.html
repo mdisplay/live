@@ -14,11 +14,11 @@
     <title>MDisplay Live</title>
     <link rel="shortcut icon" href="assets/images/favicon.png" />
     <link rel="icon" type="image/png" href="assets/images/favicon.png" />
-    <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=1.21.1-83" />
-    <link rel="stylesheet" type="text/css" href="assets/css/app.css?v=1.21.1-83" />
-    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock.css?v=1.21.1-83" />
-    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock-layout.css?v=1.21.1-83" />
-    <link rel="stylesheet" type="text/css" href="assets/css/theme-default.css?v=1.21.1-83" />
+    <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=1.22.0-84" />
+    <link rel="stylesheet" type="text/css" href="assets/css/app.css?v=1.22.0-84" />
+    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock.css?v=1.22.0-84" />
+    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock-layout.css?v=1.22.0-84" />
+    <link rel="stylesheet" type="text/css" href="assets/css/theme-default.css?v=1.22.0-84" />
   </head>
   <body>
     <div
@@ -59,7 +59,7 @@
                   <span class="error" v-if="appUdate.error">ERROR: {{ appUdate.error }}</span>
                   <span class="checking" v-if="appUdate.checking">Checking...</span>
                   <span class="updated" v-if="appUdate.updated"
-                    >Updated. Version {{ '?v=1.21.1-83'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1 ($2)') }}.</span
+                    >Updated. Version {{ '?v=1.22.0-84'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1 ($2)') }}.</span
                   >
                   <span class="updating" v-if="appUdate.updating">Updating...</span>
                 </div>
@@ -191,6 +191,18 @@
                       Analog Clock <small>(beta)</small>
                     </label>
                   </div>
+                  <div class="config-item other-config">
+                    <label for="alert-icon-active-check">
+                      <input
+                        id="alert-icon-active-check"
+                        type="checkbox"
+                        name="alert-icon-active-check"
+                        v-model="alertEnabled"
+                        @change="updateSettings()"
+                      />
+                      Alert Icons <small>(beta)</small>
+                    </label>
+                  </div>
                 </div>
               </div>
               <div @click="closeSettings()" class="modal-close modal-close-bottom">Close</div>
@@ -218,7 +230,7 @@
             <span style="padding: 0.25rem; color: #ff0000; font-weight: bold; opacity: 0.75">No Internet</span>
           </div>
           <div v-else>
-            <span style="opacity: 0.25"> Version {{ '?v=1.21.1-83'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }} </span>
+            <span style="opacity: 0.25"> Version {{ '?v=1.22.0-84'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }} </span>
             <span
               style="
                 opacity: 0.75;
@@ -228,7 +240,7 @@
                 border-radius: 50%;
                 text-align: center;
               "
-              >{{ '?v=1.21.1-83'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span
+              >{{ '?v=1.22.0-84'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span
             >
           </div>
         </div>
@@ -248,18 +260,23 @@
             <span class="hours"
               ><span class="h">{{ timeDisplayHours }}</span>
               <span class="date-display">
-                <span class="hijri-datex">{{ hijriDateDisplay }}</span>
-                <span class="datex">{{ dateDisplay }}</span>
-                <!-- <span style="font-size: 2.25rem; display: block; line-height: 3rem;">{{ dateDisplay }}</span> -->
-                <span class="weekday">{{ weekDayDisplay }}</span>
-                <!-- <span style="font-size: 2.75rem; display: block; line-height: 3rem; margin-top: 0.5rem; margin-bottom: 0.75rem;">{{ weekDayDisplay }}</span> -->
-                <!-- <span style="font-size: 2.5rem; display: block; line-height: 3rem;">ஜமா அத்துல் ஆகிர்</span> -->
-                <!-- <span class="hijri-datex">{{ hijriDateDisplay }}</span> -->
-                <img
-                  v-if="false"
-                  style="position: absolute; top: 5rem; right: 5rem; height: 50px; width: 50px"
-                  :src="'assets/images/moon/' + hijriDate.day + '.png'"
-                />
+                <span v-if="showAlert" class="alert-container">
+                  <img src="assets/images/alert.png">
+                </span>
+                <span :style="{opacity: showAlert ? '0.5' : '1'}">
+                  <span class="hijri-datex">{{ hijriDateDisplay }}</span>
+                  <span class="datex">{{ dateDisplay }}</span>
+                  <!-- <span style="font-size: 2.25rem; display: block; line-height: 3rem;">{{ dateDisplay }}</span> -->
+                  <span class="weekday">{{ weekDayDisplay }}</span>
+                  <!-- <span style="font-size: 2.75rem; display: block; line-height: 3rem; margin-top: 0.5rem; margin-bottom: 0.75rem;">{{ weekDayDisplay }}</span> -->
+                  <!-- <span style="font-size: 2.5rem; display: block; line-height: 3rem;">ஜமா அத்துல் ஆகிர்</span> -->
+                  <!-- <span class="hijri-datex">{{ hijriDateDisplay }}</span> -->
+                  <img
+                    v-if="false"
+                    style="position: absolute; top: 5rem; right: 5rem; height: 50px; width: 50px"
+                    :src="'assets/images/moon/' + hijriDate.day + '.png'"
+                  />
+                </span>
               </span> </span
             ><span class="colon colon-main">{{ timeDisplayColon }}</span
             ><span class="minutes"
@@ -425,16 +442,16 @@
         </div>
       </div>
     </div>
-    <script type="text/javascript" src="prayer-data.js?v=1.21.1-83"></script>
-    <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=1.21.1-83"></script>
-    <script type="text/javascript" src="assets/vendors/vue.min.js?v=1.21.1-83"></script>
-    <script type="text/javascript" src="assets/vendors/moment.min.js?v=1.21.1-83"></script>
-    <script type="text/javascript" src="assets/vendors/hijri.js?v=1.21.1-83"></script>
-    <script type="text/javascript" src="assets/vendors/jquery-3.6.0.min.js?v=1.21.1-83"></script>
-    <script type="text/javascript" src="assets/js/translations.js?v=1.21.1-83"></script>
+    <script type="text/javascript" src="prayer-data.js?v=1.22.0-84"></script>
+    <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=1.22.0-84"></script>
+    <script type="text/javascript" src="assets/vendors/vue.min.js?v=1.22.0-84"></script>
+    <script type="text/javascript" src="assets/vendors/moment.min.js?v=1.22.0-84"></script>
+    <script type="text/javascript" src="assets/vendors/hijri.js?v=1.22.0-84"></script>
+    <script type="text/javascript" src="assets/vendors/jquery-3.6.0.min.js?v=1.22.0-84"></script>
+    <script type="text/javascript" src="assets/js/translations.js?v=1.22.0-84"></script>
     <script type="text/javascript" src="cdvfile://localhost/assets/www/cordova.js"></script>
-    <script type="text/javascript" src="assets/analog-clock/analog-clock.js?v=1.21.1-83"></script>
-    <script type="text/javascript" src="assets/js/app.js?v=1.21.1-83"></script>
+    <script type="text/javascript" src="assets/analog-clock/analog-clock.js?v=1.22.0-84"></script>
+    <script type="text/javascript" src="assets/js/app.js?v=1.22.0-84"></script>
     <script type="text/javascript">
       // WARNING: do not use ES6 syntax
       // The code should only be authored in ES5
@@ -465,8 +482,8 @@
         // new Date().getDate(),
         // 16, 30, 40,
         // 2, 20, 30,
-        11, 58, 56, 0);
-        window.mdApp.simulateTime = 10;
+        12, 19, 56, 0);
+        // window.mdApp.simulateTime = 10;
         // window.initialTestTime.setFullYear(1970);
 
         // window.mdApp.data.time = window.initialTestTime;
@@ -490,7 +507,7 @@
         new Vue({
           el: '#app',
           data: window.mdApp.data,
-          computed: {},
+          computed: window.mdApp.computed,
           methods: {
             translate: function translate(text) {
               return window.mdApp.translate(text);

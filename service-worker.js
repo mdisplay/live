@@ -4,10 +4,11 @@ if (workbox) {
 } else {
   console.log(`Boo! Workbox didn't load 😬`);
 }
-var appVersion = '1.21.1-83';
+var baseUrl = '/';
+var appVersion = '1.22.0-84';
 var dataVersion = '6';
-var vendorVersion = '6';
-var bgVersion = '7';
+var vendorVersion = '8';
+var bgVersion = '8';
 
 // Detailed logging is very useful during development
 workbox.setConfig({
@@ -17,7 +18,6 @@ workbox.setConfig({
 // Updating SW lifecycle to update the app after user triggered refresh
 workbox.core.skipWaiting();
 workbox.core.clientsClaim();
-var baseUrl = '/live/';
 // var baseUrl = '/mdisplay/live/';
 
 function toUrl(url) {
@@ -60,6 +60,9 @@ var precacheList = [{
 }, {
   url: toUrl('assets/images/favicon.png'),
   revision: vendorVersion
+}, {
+  url: toUrl('assets/images/alert.png'),
+  revision: vendorVersion
 },
 // /app
 {
@@ -69,19 +72,19 @@ var precacheList = [{
   url: toUrl('assets/js/app.js'),
   revision: appVersion
 }, {
-  url: toUrl('assets/js/analog-clock.js'),
+  url: toUrl('assets/analog-clock/analog-clock.js'),
   revision: appVersion
 }, {
   url: toUrl('assets/css/app.css'),
   revision: appVersion
 }, {
-  url: toUrl('assets/css/analog-clock.css'),
+  url: toUrl('assets/analog-clock/analog-clock.css'),
   revision: appVersion
 }, {
   url: toUrl('assets/css/theme-default.css'),
   revision: appVersion
 }, {
-  url: toUrl('assets/css/analog-clock-theme.css'),
+  url: toUrl('assets/analog-clock/analog-clock-layout.css'),
   revision: appVersion
 }
 // 'prayer-data-*.js',
@@ -89,13 +92,27 @@ var precacheList = [{
 ];
 
 var backgroundsList = [];
-for (var i = 1; i <= 11; i++) {
+for (var i = 0; i <= 59; i++) {
   backgroundsList.push({
     url: toUrl('backgrounds/' + i + '.jpg'),
     revision: bgVersion
   });
 }
 precacheList = precacheList.concat(backgroundsList);
+
+var analogClockThemes = ['default'];
+var analogClockThemeFileNames = ['clock-face.png', 'clock-hand-hours.png', 'clock-hand-minutes.png', 'clock-hand-seconds.png', 'clock-center-circle.png'];
+
+var analogClockThemeFiles = [];
+for(var i = 0; i < analogClockThemes.length; i++){
+  for(var j = 0; j < analogClockThemeFileNames.length; j++) {
+    analogClockThemeFiles.push({
+      url: toUrl('assets/analog-clock/themes/' + analogClockThemes[i] + '/' + analogClockThemeFileNames[j]),
+      revision: vendorVersion
+    });
+  }
+}
+precacheList = precacheList.concat(analogClockThemeFiles);
 
 // precache all the site files
 workbox.precaching.precacheAndRoute(precacheList, {
