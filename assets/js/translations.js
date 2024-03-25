@@ -55,7 +55,7 @@ window.translations = {
   en: {
     'currentPrayer.label': 'Now',
     'nextPrayer.label': 'Next',
-    'prayer.label': 'Athan',
+    'prayer.label': 'Adhan',
     'prayer.iqamah-label': 'Iqamath',
     'Subah': 'Subah',
     'Sunrise': 'Sunrise',
@@ -64,7 +64,7 @@ window.translations = {
     'Asr': 'Asr',
     'Magrib': 'Magrib',
     'Isha': 'Isha',
-    'days': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Sataurday'],
+    'days': ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
     'months': [
       'January',
       'February',
