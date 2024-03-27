@@ -114,9 +114,17 @@ function App() {
       { id: 'ta', label: 'Tamil' },
       { id: 'en', label: 'English' }
     ],
+    clockThemes: [
+      {id: 'digitalDefault', label: 'Classic Digital'},
+      {id: 'digitalModern', label: 'Modern Digital'},
+      {id: 'analogDefault', label: 'Classic Analog'},
+      {id: 'analogModern', label: 'Modern Analog'},
+    ],
     analogClockActive: false,
     alertEnabled: false,
     analogClockTheme: 'default',
+    digitalClockTheme: 'default',
+    activeClockTheme: 'digitalDefault',
     networkTimeInitialized: false,
     timeIsValid: false,
     timeFetchingMessage: undefined,
@@ -134,7 +142,7 @@ function App() {
   self.computed = {
     showAlert: function() {
       var shouldShow = self.data.prayerInfo === 'iqamah';
-      return self.data.alertEnabled && shouldShow && !!self.data.currentPrayerWaiting;
+      return self.data.alertEnabled && shouldShow && (self.data.currentPrayerWaiting || self.data.currentPrayerAfter);
     }
   };
   self.isDeviceReady = false;
@@ -668,7 +676,7 @@ function App() {
       }
     }
     if (self.analogClock && self.data.analogClockActive) {
-      self.analogClock.nextTick();
+      self.analogClock.nextTick(self.data.time);
     }
     self.commitCurrentPrayer();
   };
@@ -755,6 +763,28 @@ function App() {
       if (settings.alertEnabled) {
         self.data.alertEnabled = true;
       }
+      if(typeof settings.activeClockTheme === 'string') {
+        self.data.activeClockTheme = settings.activeClockTheme;
+        switch (settings.activeClockTheme) {
+          case 'digitalModern':
+            self.data.analogClockActive = false;
+            self.data.digitalClockTheme = 'modern';
+            break;
+          case 'analogDefault':
+            self.data.analogClockActive = true;
+            self.data.analogClockTheme = 'default';
+            break;
+          case 'analogModern':
+            self.data.analogClockActive = true;
+            self.data.analogClockTheme = 'modern';
+            break;
+          default:
+            // invalid or digitalDefault
+            self.data.analogClockActive = false;
+            self.data.digitalClockTheme = 'default';
+            break;
+        }
+      }
       // ...
     }
 
@@ -770,6 +800,7 @@ function App() {
       timeOriginMode: self.data.timeOriginMode,
       timeAdjustmentMinutes: self.data.timeAdjustmentMinutes,
       analogClockActive: self.data.analogClockActive,
+      activeClockTheme: self.data.activeClockTheme,
       alertEnabled: self.data.alertEnabled,
     };
     localStorage.setItem('mdisplay.iqamahTimes', JSON.stringify(iqamahTimes));

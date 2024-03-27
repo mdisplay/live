@@ -23,7 +23,7 @@
   <body>
     <div
       id="app"
-      :class="[{'analog-clock-active': analogClockActive, 'is-active': currentPrayer, 'is-waiting': currentPrayerWaiting, 'is-before': currentPrayerBefore, 'is-after': currentPrayerAfter}, 'active-prayer-info-' + prayerInfo]"
+      :class="[{'analog-clock-active': analogClockActive, 'is-active': currentPrayer, 'is-waiting': currentPrayerWaiting, 'is-before': currentPrayerBefore, 'is-after': currentPrayerAfter}, 'active-prayer-info-' + prayerInfo, 'analog-clock-theme-' + analogClockTheme, 'digital-clock-theme-' + digitalClockTheme]"
     >
       <div id="splash" v-if="showSplash">
         <div class="splash-content">
@@ -179,16 +179,19 @@
                       </div>
                     </div>
                   </div>
-                  <div class="config-item other-config">
-                    <label for="analog-clock-active-check">
+                  <div class="config-item other-config" style="height: auto;">
+                    <div><small>Clock Theme</small></div>
+                    <label v-for="clockTheme in clockThemes" :for="'clock-theme-select-' + clockTheme.id">
                       <input
-                        id="analog-clock-active-check"
-                        type="checkbox"
-                        name="analog-clock-active-check"
-                        v-model="analogClockActive"
+                        :id="'clock-theme-select-' + clockTheme.id"
+                        type="radio"
+                        name="clock-theme-select"
+                        :value="clockTheme.id"
+                        v-model="activeClockTheme"
                         @change="updateSettings()"
                       />
-                      Analog Clock <small>(beta)</small>
+                      {{ clockTheme.label }}
+                      &nbsp;
                     </label>
                   </div>
                   <div class="config-item other-config">
@@ -200,7 +203,7 @@
                         v-model="alertEnabled"
                         @change="updateSettings()"
                       />
-                      Alert Icons <small>(beta)</small>
+                      Mobile Silent Alert <small>(beta)</small>
                     </label>
                   </div>
                 </div>
@@ -260,10 +263,10 @@
             <span class="hours"
               ><span class="h">{{ timeDisplayHours }}</span>
               <span class="date-display">
-                <span v-if="showAlert" class="alert-container">
+                <span class="alert-container" :style="{opacity: showAlert ? '1' : '0'}">
                   <img src="assets/images/alert.png">
                 </span>
-                <span :style="{opacity: showAlert ? '0.5' : '1'}">
+                <span :style="{opacity: showAlert ? '0.95' : '1'}">
                   <span class="hijri-datex">{{ hijriDateDisplay }}</span>
                   <span class="datex">{{ dateDisplay }}</span>
                   <!-- <span style="font-size: 2.25rem; display: block; line-height: 3rem;">{{ dateDisplay }}</span> -->
@@ -375,8 +378,10 @@
 
         <div
           class="analog-clock-container"
-          :style="{'background-image': 'url(assets/analog-clock/themes/' + analogClockTheme + '/clock-face.png)'}"
+          :xstyle="{'background-image': 'url(assets/analog-clock/themes/' + analogClockTheme + '/clock-face.png)'}"
         >
+          <img class="analog-clock-bg" :src="'assets/analog-clock/themes/' + analogClockTheme + '/clock-face.png'"></span>
+          <span class="analog-clock-overalay"></span>
           <!-- HOURS' HAND -->
           <img
             id="analog-clock-hand-hours"
@@ -482,8 +487,8 @@
         // new Date().getDate(),
         // 16, 30, 40,
         // 2, 20, 30,
-        12, 19, 56, 0);
-        // window.mdApp.simulateTime = 10;
+        12, 30, 45, 0);
+        // window.mdApp.simulateTime = 20;
         // window.initialTestTime.setFullYear(1970);
 
         // window.mdApp.data.time = window.initialTestTime;

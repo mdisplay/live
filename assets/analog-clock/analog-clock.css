@@ -6,8 +6,16 @@
   height: 37vw;
   margin-top: 1.2vw;
 
-  background: url('./themes/default/clock-face.png') no-repeat;
+  /* background: url('./themes/default/clock-face.png') no-repeat; */
   background-size: 100%; /* To Fit the Background. */
+}
+
+.analog-clock-container .analog-clock-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 /* HOURS' HAND */

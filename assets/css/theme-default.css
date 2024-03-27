@@ -170,11 +170,6 @@
   /*font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";*/
 }
 
-.digital-clock .time .hours,
-.digital-clock .time .minutes {
-  opacity: 0.9;
-}
-
 .digital-clock .time .hours {
   position: fixed;
   top: 0;
@@ -604,4 +599,98 @@
 }
 .invalid-time-container h3 {
   font-size: 1.25rem;
+}
+
+.prayer-display .time,
+.prayer-display .am-pm,
+.prayer-info-container .prayer-time {
+  color: #7eff74;
+  /* color: cyan; */
+}
+
+.active-prayer-info-athan .prayer-info.is-current/* .prayer-time*/ {
+  background: #7eff74;
+  /* background: cyan; */
+}
+
+.prayer-display .iqamah-time,
+.prayer-display .iqamah-am-pm,
+.prayer-info-container .iqamah-time {
+  color: #ffeb3b;
+  /* color: magenta; */
+}
+
+.active-prayer-info-iqamah .prayer-info.is-current/* .iqamah-time*/ {
+  background: #ffeb3b;
+  /* background: magenta; */
+}
+
+.light-mode {
+  color: #000;
+}
+
+.light-mode #bgful .bgful-overlay {
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.light-mode .prayer-display .time,
+.light-mode .prayer-display .am-pm,
+.light-mode .prayer-info-container .prayer-time
+{
+  color: #3cb371;
+}
+
+.light-mode .prayer-display .iqamah-time,
+.light-mode .prayer-display .iqamah-am-pm,
+.light-mode .prayer-info-container .iqamah-time
+ {
+  color: #8a7100;
+}
+
+.light-mode .active-timer .time {
+  color: #db0000;
+}
+
+.light-mode .prayer-info-container .prayer-name {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.light-mode .prayer-info-container .prayer-info:nth-child(even) {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.analog-clock-theme-modern .analog-clock-container .analog-clock-overalay {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(100, 100, 100, 0.3);
+}
+
+.analog-clock-theme-modern .analog-clock-container .analog-clock-bg {
+  opacity: 0.75;
+}
+
+.analog-clock-theme-modern #analog-clock-hand-seconds {
+  transition: transform 1000ms linear;
+}
+
+.digital-clock .time .date-display,
+.digital-clock .time .seconds-container {
+  opacity: 0.9;
+}
+
+.digital-clock .time .hours .h, .digital-clock .time .colon-main, .digital-clock .time .minutes .m {
+  color: #FFF;
+  opacity: 1;
+}
+
+.digital-clock-theme-modern .digital-clock .time .hours .h,
+.digital-clock-theme-modern .digital-clock .time .colon-main,
+.digital-clock-theme-modern .digital-clock .time .minutes .m {
+  color: #00aaff;
+  opacity: 1;
 }
