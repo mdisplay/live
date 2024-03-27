@@ -4,8 +4,8 @@ if (workbox) {
 } else {
   console.log(`Boo! Workbox didn't load 😬`);
 }
-var baseUrl = '/';
-var appVersion = '1.22.0-84';
+var baseUrl = '/live/';
+var appVersion = '1.23.0-85';
 var dataVersion = '6';
 var vendorVersion = '8';
 var bgVersion = '8';
@@ -100,7 +100,7 @@ for (var i = 0; i <= 59; i++) {
 }
 precacheList = precacheList.concat(backgroundsList);
 
-var analogClockThemes = ['default'];
+var analogClockThemes = ['default', 'modern'];
 var analogClockThemeFileNames = ['clock-face.png', 'clock-hand-hours.png', 'clock-hand-minutes.png', 'clock-hand-seconds.png', 'clock-center-circle.png'];
 
 var analogClockThemeFiles = [];
