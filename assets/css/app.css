@@ -229,6 +229,10 @@ body {
   margin-right: 1rem;
 }
 
+#app .others-config {
+  float: right;
+}
+
 #app .config-item {
   /* height: 4rem; */
   height: 3.5rem;

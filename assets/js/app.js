@@ -121,10 +121,10 @@ function App() {
       {id: 'analogModern', label: 'Modern Analog'},
     ],
     analogClockActive: false,
-    alertEnabled: false,
+    alertEnabled: true,
     analogClockTheme: 'default',
-    digitalClockTheme: 'default',
-    activeClockTheme: 'digitalDefault',
+    digitalClockTheme: 'modern',
+    activeClockTheme: 'digitalModern',
     networkTimeInitialized: false,
     timeIsValid: false,
     timeFetchingMessage: undefined,
@@ -137,7 +137,10 @@ function App() {
       internetStatus: 'Unknown',
       internetAvailable: undefined,
       showInternetAvailability: false
-    }
+    },
+    lastKnownTime: undefined,
+    timeOverrideEnabled: false,
+    timeOverridden: false,
   };
   self.computed = {
     showAlert: function() {
@@ -153,6 +156,7 @@ function App() {
   // self.afterSeconds = 1;
   // self.afterSeconds = 1*60;
   self.afterSeconds = 2 * 60;
+  self.pauseSeconds = 15;
   self.data.bgVersion = '7';
 
   // METHODS begin
@@ -306,14 +310,30 @@ function App() {
   };
   self.updateTime = function () {
     if (!self.data.time) {
-      self.data.time = self.initialTestTime ? self.initialTestTime : new Date();
+      if(self.initialTestTime) {
+        self.data.time = self.initialTestTime;
+        self.data.timeOverridden = true;
+      } else if (self.data.timeOverrideEnabled && self.data.lastKnownTime) {
+        self.data.time = moment(self.data.lastKnownTime, moment.HTML5_FMT.DATETIME_LOCAL_SECONDS).toDate();
+        self.data.timeOverridden = true;
+        var newDate = new Date();
+        if (self.data.time.getTime() < newDate.getTime()) {
+          // if the device time is updated, use it instead
+          self.data.time = newDate;
+          self.data.timeOverridden = false;
+        }
+        self.data.timeOverrideEnabled = false;
+        self.writeStorage(); // make sure override is disabled in next page load
+      }  else {
+        self.data.time = new Date();
+      }
       self.data.time.setTime(self.data.time.getTime() - 1000);
       // if (self.data.timeOriginMode == 'network') {
       //   self.data.time.setFullYear(1970);
       // }
     }
 
-    if (self.initialTestTime || self.data.timeOriginMode == 'network') {
+    if (self.data.timeOverridden || self.data.timeOriginMode == 'network') {
       self.data.time = new Date(self.data.time.getTime() + 1000);
     } else {
       self.data.time = new Date();
@@ -345,13 +365,14 @@ function App() {
         }
       }
     }
-    self.data.timeFormatted = moment(self.data.time).format('DD MMM YYYY, h:mm:ss A');
-    self.data.timeDisplay = moment(self.data.time).format('hh:mm');
-    self.data.timeDisplayHours = moment(self.data.time).format('hh');
-    self.data.timeDisplayMinutes = moment(self.data.time).format('mm');
-    self.data.timeDisplaySeconds = moment(self.data.time).format('ss');
+    var m = moment(self.data.time);
+    self.data.timeFormatted = m.format('DD MMM YYYY, h:mm:ss A');
+    self.data.timeDisplay = m.format('hh:mm');
+    self.data.timeDisplayHours = m.format('hh');
+    self.data.timeDisplayMinutes = m.format('mm');
+    self.data.timeDisplaySeconds = m.format('ss');
     self.data.timeDisplayColon = self.data.timeDisplayColon == ':' ? '' : ':';
-    self.data.timeDisplayAmPm = moment(self.data.time).format('A');
+    self.data.timeDisplayAmPm = m.format('A');
     self.updateInternetTime();
   };
   self.getDateParams = function (date) {
@@ -410,7 +431,7 @@ function App() {
     return iqamahTimes;
   };
   self.showNextDayPrayers = function () {
-    self.data.prayers = self.nextDayPrayers;
+    self.data.prayers = self.nextDayPrayers.concat([]);
   };
   self.onDayUpdate = function () {
     var dateParams = self.getDateParams(self.data.time);
@@ -525,7 +546,7 @@ function App() {
         // self.data.currentPrayerAfter = true;
         var duration = moment.duration(nowTime - iqamahTime, 'milliseconds');
         // self.data.currentPrayerAfter = padZero(duration.minutes()) + ':' + padZero(duration.seconds());
-        var pause = nowTime - iqamahTime < 15 * 1000;
+        var pause = nowTime - iqamahTime < self.pauseSeconds * 1000;
         pause = true;
         self.data.currentPrayerAfter = {
           minutes: pause ? '00' : padZero(duration.minutes()),
@@ -534,6 +555,9 @@ function App() {
         };
         self.data.currentPrayerWaiting = false;
       } else {
+        if(self.data.currentPrayer && self.data.currentPrayer.name === 'Isha'){
+          self.showNextDayPrayers();
+        }
         self.data.currentPrayer = undefined;
         self.data.currentPrayerBefore = false;
         self.data.currentPrayerAfter = false;
@@ -543,7 +567,7 @@ function App() {
       self.data.currentPrayer = currentPrayer;
       self.data.currentPrayerBefore = false;
       self.data.currentPrayerAfter = false;
-      if (nowTime - currentPrayer.time.getTime() < 15 * 1000) {
+      if (nowTime - currentPrayer.time.getTime() < self.pauseSeconds * 1000) {
         self.data.currentPrayerWaiting = false;
         self.data.currentPrayerBefore = {
           minutes: '00', // padZero(duration.minutes()),
@@ -583,6 +607,12 @@ function App() {
     if (self.data.time.getMinutes() % checkInternetInMinutes === 0 && self.data.time.getSeconds() === 0) {
       checkInternetNow = true;
     }
+    // every 10 seconds
+    if (!self.data.settingsMode && self.data.time.getSeconds()%10 === 0) {
+      // self.data.lastKnownTime = moment(self.data.time).format(moment.HTML5_FMT.DATETIME_LOCAL_SECONDS);
+      // localStorage.setItem('mdisplay.lastKnownTime', self.data.lastKnownTime);
+    }
+
     // self.data.network.showInternetAvailability = self.data.time.getSeconds() % 10 < 5;
 
     // if (self.data.time.getSeconds() % 2 === 1) {
@@ -621,7 +651,7 @@ function App() {
           // return self.nextTick();
         }
         nextPrayer = self.nextDayPrayers[0];
-        self.showNextDayPrayers();
+        // self.showNextDayPrayers();
       }
       console.log('recalculate next prayer!', nextPrayer);
       self.data.nextPrayer = nextPrayer;
@@ -763,6 +793,10 @@ function App() {
       if (settings.alertEnabled) {
         self.data.alertEnabled = true;
       }
+      if (settings.timeOverrideEnabled) {
+        self.data.timeOverrideEnabled = true;
+      }
+      self.data.lastKnownTime = localStorage.getItem('mdisplay.lastKnownTime');
       if(typeof settings.activeClockTheme === 'string') {
         self.data.activeClockTheme = settings.activeClockTheme;
         switch (settings.activeClockTheme) {
@@ -802,10 +836,12 @@ function App() {
       analogClockActive: self.data.analogClockActive,
       activeClockTheme: self.data.activeClockTheme,
       alertEnabled: self.data.alertEnabled,
+      timeOverrideEnabled: self.data.timeOverrideEnabled,
     };
     localStorage.setItem('mdisplay.iqamahTimes', JSON.stringify(iqamahTimes));
     localStorage.setItem('mdisplay.iqamahTimesConfigured', 1);
     localStorage.setItem('mdisplay.settings', JSON.stringify(settings));
+    localStorage.setItem('mdisplay.lastKnownTime', self.data.lastKnownTime);
     if (callback) {
       callback();
     }

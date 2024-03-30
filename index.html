@@ -14,11 +14,11 @@
     <title>MDisplay Live</title>
     <link rel="shortcut icon" href="assets/images/favicon.png" />
     <link rel="icon" type="image/png" href="assets/images/favicon.png" />
-    <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=1.23.0-85" />
-    <link rel="stylesheet" type="text/css" href="assets/css/app.css?v=1.23.0-85" />
-    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock.css?v=1.23.0-85" />
-    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock-layout.css?v=1.23.0-85" />
-    <link rel="stylesheet" type="text/css" href="assets/css/theme-default.css?v=1.23.0-85" />
+    <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=1.23.1-86" />
+    <link rel="stylesheet" type="text/css" href="assets/css/app.css?v=1.23.1-86" />
+    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock.css?v=1.23.1-86" />
+    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock-layout.css?v=1.23.1-86" />
+    <link rel="stylesheet" type="text/css" href="assets/css/theme-default.css?v=1.23.1-86" />
   </head>
   <body>
     <div
@@ -59,52 +59,16 @@
                   <span class="error" v-if="appUdate.error">ERROR: {{ appUdate.error }}</span>
                   <span class="checking" v-if="appUdate.checking">Checking...</span>
                   <span class="updated" v-if="appUdate.updated"
-                    >Updated. Version {{ '?v=1.23.0-85'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1 ($2)') }}.</span
+                    >Updated. Version {{ '?v=1.23.1-86'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1 ($2)') }}.</span
                   >
                   <span class="updating" v-if="appUdate.updating">Updating...</span>
                 </div>
                 <div class="" v-else>AUTO UPDATE: <button type="button" @click="checkForUpdates()">Check</button></div> -->
               </div>
               <div class="config-wrapper">
-                <div class="config-container times-config">
-                  <div class="config-item time-config" v-for="(iqamahTime, name) in iqamahTimes">
-                    <span class="label">{{ name }}</span>
-                    <!-- {{ name }}: {{ iqamahTime }} -->
-                    <!-- <input type="checkbox" v-model="iqamahTime.absolute" @change="updateSettings()"> -->
-                    <span
-                      class="toggle-absolute"
-                      :class="{'is-absolute': iqamahTime.absolute, 'is-not-absolute': !iqamahTime.absolute}"
-                      @click="toggleAbsolute(iqamahTime)"
-                    >
-                      <span class="at" v-if="iqamahTime.absolute">@</span>
-                      <span class="plus" v-else>+</span>
-                    </span>
-                    <template v-if="iqamahTime.absolute">
-                      <input
-                        class="time-input"
-                        type="number"
-                        v-model="iqamahTime.hours"
-                        @input="updateSettings()"
-                        @change="updateSettings()"
-                      />
-                      <span class="time-input-colon">:</span>
-                    </template>
-                    <input
-                      class="time-input"
-                      type="number"
-                      v-model="iqamahTime.minutes"
-                      @input="updateSettings()"
-                      @change="updateSettings()"
-                    />
-                    <span class="time-info">
-                      <span v-if="iqamahTime.absolute">
-                        <span v-if="name == 'Subah'">AM</span>
-                        <span v-else>PM</span>
-                      </span>
-                      <span class="" v-else>minutes</span>
-                    </span>
-                  </div>
-                </div>
+
+
+
                 <div class="config-container others-config">
                   <div class="config-item other-config">
                     <label>Time Adjustment</label>
@@ -203,10 +167,78 @@
                         v-model="alertEnabled"
                         @change="updateSettings()"
                       />
-                      Mobile Silent Alert <small>(beta)</small>
+                      Mobile Silent Alert
                     </label>
                   </div>
                 </div>
+
+                <div class="config-container times-config">
+                  <!-- <div>
+                    <small>Iqamah Times</small>
+                  </div> -->
+                  <div class="config-item time-config" v-for="(iqamahTime, name) in iqamahTimes">
+                    <span class="label">{{ name }}</span>
+                    <!-- {{ name }}: {{ iqamahTime }} -->
+                    <!-- <input type="checkbox" v-model="iqamahTime.absolute" @change="updateSettings()"> -->
+                    <span
+                      class="toggle-absolute"
+                      :class="{'is-absolute': iqamahTime.absolute, 'is-not-absolute': !iqamahTime.absolute}"
+                      @click="toggleAbsolute(iqamahTime)"
+                    >
+                      <span class="at" v-if="iqamahTime.absolute">@</span>
+                      <span class="plus" v-else>+</span>
+                    </span>
+                    <template v-if="iqamahTime.absolute">
+                      <input
+                        class="time-input"
+                        type="number"
+                        v-model="iqamahTime.hours"
+                        @input="updateSettings()"
+                        @change="updateSettings()"
+                      />
+                      <span class="time-input-colon">:</span>
+                    </template>
+                    <input
+                      class="time-input"
+                      type="number"
+                      v-model="iqamahTime.minutes"
+                      @input="updateSettings()"
+                      @change="updateSettings()"
+                    />
+                    <span class="time-info">
+                      <span v-if="iqamahTime.absolute">
+                        <span v-if="name == 'Subah'">AM</span>
+                        <span v-else>PM</span>
+                      </span>
+                      <span class="" v-else>minutes</span>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="config-container times-config" style="margin-top: 0.5rem;">
+                  <div class="config-item other-config" style="height: auto;">
+                    <label for="time-override-active-check">
+                      <input
+                        id="time-override-active-check"
+                        type="checkbox"
+                        name="time-override-active-check"
+                        v-model="timeOverrideEnabled"
+                        @change="updateSettings()"
+                      />
+                      Time Override <small>(beta)</small>
+                    </label>
+                    <a href="#" @click="lastKnownTime = undefined; timeOverrideEnabled = false; updateSettings();">Reset</a>
+                    <input
+                      id="time-override-input"
+                      type="datetime-local"
+                      name="time-override-input"
+                      v-model="lastKnownTime"
+                      step="1"
+                      @change="updateSettings()"
+                    />
+                  </div>
+                </div>
+
               </div>
               <div @click="closeSettings()" class="modal-close modal-close-bottom">Close</div>
             </div>
@@ -233,7 +265,7 @@
             <span style="padding: 0.25rem; color: #ff0000; font-weight: bold; opacity: 0.75">No Internet</span>
           </div>
           <div v-else>
-            <span style="opacity: 0.25"> Version {{ '?v=1.23.0-85'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }} </span>
+            <span style="opacity: 0.25"> Version {{ '?v=1.23.1-86'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }} </span>
             <span
               style="
                 opacity: 0.75;
@@ -243,7 +275,7 @@
                 border-radius: 50%;
                 text-align: center;
               "
-              >{{ '?v=1.23.0-85'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span
+              >{{ '?v=1.23.1-86'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span
             >
           </div>
         </div>
@@ -447,16 +479,16 @@
         </div>
       </div>
     </div>
-    <script type="text/javascript" src="prayer-data.js?v=1.23.0-85"></script>
-    <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=1.23.0-85"></script>
-    <script type="text/javascript" src="assets/vendors/vue.min.js?v=1.23.0-85"></script>
-    <script type="text/javascript" src="assets/vendors/moment.min.js?v=1.23.0-85"></script>
-    <script type="text/javascript" src="assets/vendors/hijri.js?v=1.23.0-85"></script>
-    <script type="text/javascript" src="assets/vendors/jquery-3.6.0.min.js?v=1.23.0-85"></script>
-    <script type="text/javascript" src="assets/js/translations.js?v=1.23.0-85"></script>
+    <script type="text/javascript" src="prayer-data.js?v=1.23.1-86"></script>
+    <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=1.23.1-86"></script>
+    <script type="text/javascript" src="assets/vendors/vue.min.js?v=1.23.1-86"></script>
+    <script type="text/javascript" src="assets/vendors/moment.min.js?v=1.23.1-86"></script>
+    <script type="text/javascript" src="assets/vendors/hijri.js?v=1.23.1-86"></script>
+    <script type="text/javascript" src="assets/vendors/jquery-3.6.0.min.js?v=1.23.1-86"></script>
+    <script type="text/javascript" src="assets/js/translations.js?v=1.23.1-86"></script>
     <script type="text/javascript" src="cdvfile://localhost/assets/www/cordova.js"></script>
-    <script type="text/javascript" src="assets/analog-clock/analog-clock.js?v=1.23.0-85"></script>
-    <script type="text/javascript" src="assets/js/app.js?v=1.23.0-85"></script>
+    <script type="text/javascript" src="assets/analog-clock/analog-clock.js?v=1.23.1-86"></script>
+    <script type="text/javascript" src="assets/js/app.js?v=1.23.1-86"></script>
     <script type="text/javascript">
       // WARNING: do not use ES6 syntax
       // The code should only be authored in ES5
