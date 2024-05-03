@@ -38,6 +38,11 @@
             <div @click="closeSettings()" class="modal-close modal-close-top">Close</div>
             <div class="modal-content">
               <div class="configured-info">
+                <span>
+                  Version {{ '?v=1.23.1-86'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }}
+                  (v.{{ '?v=1.23.1-86'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }})
+                </span>
+
                 <span class="configured" v-if="iqamahTimesConfigured">Configured</span>
                 <span class="not-configured" v-else>Not Configured</span>
               </div>
@@ -70,6 +75,21 @@
 
 
                 <div class="config-container others-config">
+                  <div class="config-item other-config" style="height: auto">
+                    <div><small>Prayer Times Data</small></div>
+                    <label v-for="pData in prayerDataList" :for="'prayer-data-select-' + pData.id">
+                      <input
+                        :id="'prayer-data-select-' + pData.id"
+                        type="radio"
+                        name="prayer-data-select"
+                        :value="pData.id"
+                        v-model="selectedPrayerDataId"
+                        @change="languageChanged()"
+                      />
+                      {{ pData.label }}
+                      &nbsp;
+                    </label>
+                  </div>
                   <div class="config-item other-config">
                     <label>Time Adjustment</label>
                     <!-- <select>
@@ -159,6 +179,18 @@
                     </label>
                   </div>
                   <div class="config-item other-config">
+                    <label for="time24-format-check">
+                      <input
+                        id="time24-format-check"
+                        type="checkbox"
+                        name="time24-format-check"
+                        v-model="time24Format"
+                        @change="updateSettings()"
+                      />
+                      24 Hours time format (beta)
+                    </label>
+                  </div>
+                  <div class="config-item other-config">
                     <label for="alert-icon-active-check">
                       <input
                         id="alert-icon-active-check"
@@ -169,6 +201,13 @@
                       />
                       Mobile Silent Alert
                     </label>
+                  </div>
+                  <div class="config-item other-config" style="height: auto;">
+                    <template v-if="iqamahTimesConfigured">
+                      <a href="#" @click="backupSettings()"><small>Backup Settings</small></a>
+                      &nbsp; &middot; &nbsp;
+                    </template>
+                    <a  href="#"><small>Restore Settings</small></a>
                   </div>
                 </div>
 
@@ -259,13 +298,26 @@
             right: 0;
             top: 0;
             display: none;
+            z-index: 11;
           "
         >
           <div v-if="network.showInternetAvailability && network.internetAvailable === false">
             <span style="padding: 0.25rem; color: #ff0000; font-weight: bold; opacity: 0.75">No Internet</span>
           </div>
           <div v-else>
-            <span style="opacity: 0.25"> Version {{ '?v=1.23.1-86'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }} </span>
+            <!-- <span style="opacity: 0.25"> Version {{ '?v=1.23.1-86'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }} </span> -->
+
+            <span style="opacity: 0.5">
+              <svg style="height: 1em; color: #FFF; fill: #FFF;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                <path d="M352 320c88.4 0 160-71.6 160-160c0-15.3-2.2-30.1-6.2-44.2c-3.1-10.8-16.4-13.2-24.3-5.3l-76.8 76.8c-3 3-7.1 4.7-11.3 4.7H336c-8.8 0-16-7.2-16-16V118.6c0-4.2 1.7-8.3 4.7-11.3l76.8-76.8c7.9-7.9 5.4-21.2-5.3-24.3C382.1 2.2 367.3 0 352 0C263.6 0 192 71.6 192 160c0 19.1 3.4 37.5 9.5 54.5L19.9 396.1C7.2 408.8 0 426.1 0 444.1C0 481.6 30.4 512 67.9 512c18 0 35.3-7.2 48-19.9L297.5 310.5c17 6.2 35.4 9.5 54.5 9.5zM80 408a24 24 0 1 1 0 48 24 24 0 1 1 0-48z"/>
+              </svg>
+                Settings
+            </span>
+            <svg style="display: none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+              <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+              <path d="M487.4 315.7l-42.6-24.6c4.3-23.2 4.3-47 0-70.2l42.6-24.6c4.9-2.8 7.1-8.6 5.5-14-11.1-35.6-30-67.8-54.7-94.6-3.8-4.1-10-5.1-14.8-2.3L380.8 110c-17.9-15.4-38.5-27.3-60.8-35.1V25.8c0-5.6-3.9-10.5-9.4-11.7-36.7-8.2-74.3-7.8-109.2 0-5.5 1.2-9.4 6.1-9.4 11.7V75c-22.2 7.9-42.8 19.8-60.8 35.1L88.7 85.5c-4.9-2.8-11-1.9-14.8 2.3-24.7 26.7-43.6 58.9-54.7 94.6-1.7 5.4 .6 11.2 5.5 14L67.3 221c-4.3 23.2-4.3 47 0 70.2l-42.6 24.6c-4.9 2.8-7.1 8.6-5.5 14 11.1 35.6 30 67.8 54.7 94.6 3.8 4.1 10 5.1 14.8 2.3l42.6-24.6c17.9 15.4 38.5 27.3 60.8 35.1v49.2c0 5.6 3.9 10.5 9.4 11.7 36.7 8.2 74.3 7.8 109.2 0 5.5-1.2 9.4-6.1 9.4-11.7v-49.2c22.2-7.9 42.8-19.8 60.8-35.1l42.6 24.6c4.9 2.8 11 1.9 14.8-2.3 24.7-26.7 43.6-58.9 54.7-94.6 1.5-5.5-.7-11.3-5.6-14.1zM256 336c-44.1 0-80-35.9-80-80s35.9-80 80-80 80 35.9 80 80-35.9 80-80 80z"/>
+            </svg>
             <span
               style="
                 opacity: 0.75;
@@ -275,7 +327,7 @@
                 border-radius: 50%;
                 text-align: center;
               "
-              >{{ '?v=1.23.1-86'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span
+              >v.{{ '?v=1.23.1-86'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span
             >
           </div>
         </div>
@@ -353,14 +405,14 @@
                 ><span class="label">{{ translate(display.name + '.label') }}:</span>
                 {{ display.prayer.nameDisplay }}
               </span>
-              <span class="time">
+              <span class="time" :class="{'is-sunrise': display.prayer.name == 'Sunrise'}">
                 <span class="hours">{{ display.prayer.timeHours }}</span><span class="colon">:</span
                 ><span class="minutes">{{ display.prayer.timeMinutes }}</span>
                 <small class="am-pm">{{ display.prayer.timeAmPm }}</small>
-                <small class="label">{{ translate('prayer.label') }}</small>
+                <small class="label" v-if="display.prayer.name != 'Sunrise'">{{ translate('prayer.label') }}</small>
               </span>
               <!-- <small class="am-pm">{{ display.prayer.timeAmPm }}</small> -->
-              <span class="iqamah-time">
+              <span class="iqamah-time" v-if="display.prayer.name != 'Sunrise'">
                 <span class="hours">{{ display.prayer.iqamahTimeHours }}</span><span class="colon">:</span
                 ><span class="minutes">{{ display.prayer.iqamahTimeMinutes }}</span>
                 <small class="iqamah-am-pm">{{ display.prayer.iqamahTimeAmPm }}</small>
@@ -444,7 +496,7 @@
         </div>
 
         <div class="prayer-info-container" v-if="timeIsValid">
-          <div class="prayer-info" v-for="prayer in prayers" :class="{'is-current': prayer === currentPrayer}">
+          <div class="prayer-info" v-for="prayer in prayersListDisplay" :class="{'is-current': prayer === currentPrayer, 'is-sunrise': prayer.name == 'Subah' && showSunriseNow}">
             <div class="prayer-name">{{ prayer.nameDisplay }}</div>
             <!-- <transition name="fade" mode="out-in"> -->
             <div class="prayer-time" xv-if="prayerInfo == 'athan'">
@@ -452,9 +504,14 @@
               <span class="am-pm">{{ prayer.timeAmPm }}</span>
             </div>
             <div class="iqamah-time" xv-if="prayerInfo == 'iqamah'">
-              {{ prayer.iqamahTimeDisplay }}
+              <span v-if="prayer.name == 'Subah' && showSunriseNow">
+                {{ prayers[1].timeDisplay }}
+              </span>
+              <template v-else>
+                {{ prayer.iqamahTimeDisplay }}
               <span class="am-pm">{{ prayer.iqamahTimeAmPm }}</span>
-            </div>
+              </template>
+          </div>
             <!-- </transition> -->
           </div>
         </div>
@@ -570,6 +627,9 @@
             },
             ssidChanged: function ssidChanged() {
               window.mdApp.ssidChanged();
+            },
+            backupSettings: function backupSettings() {
+              window.mdApp.backupSettings();
             }
           },
           created: function created() {

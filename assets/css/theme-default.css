@@ -608,6 +608,12 @@
   /* color: cyan; */
 }
 
+.prayer-display .time.is-sunrise,
+.prayer-display .is-sunrise .am-pm {
+  color: #FF8F00;
+  /* color: cyan; */
+}
+
 .active-prayer-info-athan .prayer-info.is-current/* .prayer-time*/ {
   background: #7eff74;
   /* background: cyan; */
@@ -620,8 +626,18 @@
   /* color: magenta; */
 }
 
+.prayer-info-container .is-sunrise .iqamah-time {
+  color: #FF8F00;
+  /* color: magenta; */
+}
+
 .active-prayer-info-iqamah .prayer-info.is-current/* .iqamah-time*/ {
   background: #ffeb3b;
+  /* background: magenta; */
+}
+
+.active-prayer-info-iqamah .prayer-info.is-current.is-sunrise/* .iqamah-time*/ {
+  background: #FF8F00;
   /* background: magenta; */
 }
 

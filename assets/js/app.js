@@ -13,7 +13,7 @@ function Toast(message) {
   var self = this;
   self.message = message;
 }
-function Prayer(name, time, iqamahTime, lang) {
+function Prayer(name, time, iqamahTime, lang, time24Format) {
   var self = this;
   self.name = name;
   self.nameDisplay = translations[lang][self.name];
@@ -22,15 +22,15 @@ function Prayer(name, time, iqamahTime, lang) {
   // self.iqamah = 100;
   self.iqamahTime = iqamahTime; //new Date(self.time.getTime() + self.iqamah * 60 * 1000);
   var d = moment(self.time);
-  self.timeDisplay = d.format('hh:mm');
-  self.timeAmPm = d.format('A');
-  self.timeHours = d.format('hh');
+  self.timeDisplay = d.format(time24Format ? 'HH:mm' : 'hh:mm');
+  self.timeAmPm = time24Format ? '' : d.format('A');
+  self.timeHours = d.format(time24Format ? 'HH' : 'hh');
   self.timeMinutes = d.format('mm');
   var id = moment(self.iqamahTime);
-  self.iqamahTimeDisplay = id.format('hh:mm');
-  self.iqamahTimeHours = id.format('hh');
+  self.iqamahTimeDisplay = id.format(time24Format ? 'HH:mm' : 'hh:mm');
+  self.iqamahTimeHours = id.format(time24Format ? 'HH' : 'hh');
   self.iqamahTimeMinutes = id.format('mm');
-  self.iqamahTimeAmPm = id.format('A');
+  self.iqamahTimeAmPm = time24Format ? '' : id.format('A');
 }
 function IqamahTime(minutes, hours, absolute) {
   var self = this;
@@ -54,11 +54,14 @@ IqamahTime.fromRaw = function (raw) {
 };
 function App() {
   var self = this;
+  self.sunriseSupport = !!localStorage.getItem('mdisplay.dev.sunriseSupport');
   self.lang = localStorage.getItem('mdisplay.lang') || 'ta';
+  self.prayerDataId = localStorage.getItem('mdisplay.prayerDataId') || 'Puttalam';
   self.prayerData = [];
-  for (var month in window.PRAYER_DATA) {
-    if (window.PRAYER_DATA.hasOwnProperty(month)) {
-      self.prayerData.push(window.PRAYER_DATA[month]);
+  var prayerData = window.PRAYER_DATA[self.prayerDataId];
+  for (var month in prayerData) {
+    if (prayerData.hasOwnProperty(month)) {
+      self.prayerData.push(prayerData[month]);
     }
   }
   self.checkInternetJsonp = {
@@ -109,16 +112,21 @@ function App() {
     networkTimeApiUrl: timeServerApi,
     isFriday: false,
     selectedLanguage: self.lang,
+    selectedPrayerDataId: self.prayerDataId,
     languages: [
       { id: 'si', label: 'Sinhala' },
       { id: 'ta', label: 'Tamil' },
       { id: 'en', label: 'English' }
     ],
+    prayerDataList: [
+      { id: 'Colombo', label: 'Sri Lanka Standard Time (beta)' },
+      { id: 'Puttalam', label: 'Puttalam Grand Masjid Time' },
+    ],
     clockThemes: [
-      {id: 'digitalDefault', label: 'Classic Digital'},
-      {id: 'digitalModern', label: 'Modern Digital'},
-      {id: 'analogDefault', label: 'Classic Analog'},
-      {id: 'analogModern', label: 'Modern Analog'},
+      {id: 'digitalDefault', label: 'Classic'},
+      {id: 'digitalModern', label: 'Modern'},
+      // {id: 'analogDefault', label: 'Classic Analog'},
+      // {id: 'analogModern', label: 'Modern Analog'},
     ],
     analogClockActive: false,
     alertEnabled: true,
@@ -141,12 +149,19 @@ function App() {
     lastKnownTime: undefined,
     timeOverrideEnabled: false,
     timeOverridden: false,
+    time24Format: false,
+    showSunriseNow: false,
   };
   self.computed = {
     showAlert: function() {
       var shouldShow = self.data.prayerInfo === 'iqamah';
       return self.data.alertEnabled && shouldShow && (self.data.currentPrayerWaiting || self.data.currentPrayerAfter);
-    }
+    },
+    prayersListDisplay: function() {
+      return self.data.prayers.filter(function(prayer) {
+        return prayer.name != 'Sunrise';
+      });
+    },
   };
   self.isDeviceReady = false;
   self.isInitial = true;
@@ -163,6 +178,7 @@ function App() {
 
   self.languageChanged = function () {
     localStorage.setItem('mdisplay.lang', self.data.selectedLanguage);
+    localStorage.setItem('mdisplay.prayerDataId', self.data.selectedPrayerDataId);
     self.closeSettings();
   };
   self.ssidChanged = function () {
@@ -366,13 +382,14 @@ function App() {
       }
     }
     var m = moment(self.data.time);
-    self.data.timeFormatted = m.format('DD MMM YYYY, h:mm:ss A');
-    self.data.timeDisplay = m.format('hh:mm');
-    self.data.timeDisplayHours = m.format('hh');
+    var time24Format = self.data.time24Format;
+    self.data.timeFormatted = m.format('DD MMM YYYY, ' + (time24Format ? 'HH:mm:ss' : 'h:mm:ss A'));
+    self.data.timeDisplay = m.format(time24Format ? 'HH:mm' : 'hh:mm');
+    self.data.timeDisplayHours = m.format(time24Format ? 'HH' : 'hh');
     self.data.timeDisplayMinutes = m.format('mm');
     self.data.timeDisplaySeconds = m.format('ss');
     self.data.timeDisplayColon = self.data.timeDisplayColon == ':' ? '' : ':';
-    self.data.timeDisplayAmPm = m.format('A');
+    self.data.timeDisplayAmPm = time24Format ? '' : m.format('A');
     self.updateInternetTime();
   };
   self.getDateParams = function (date) {
@@ -386,7 +403,9 @@ function App() {
     }
     var hours = hoursAdd + parseInt(timeParts[0]);
     var minutes = parseInt(timeParts[1].replace('a', '').replace('p', ''));
-    var m = moment(yearParam + ' ' + (monthParam + 1) + ' ' + dayParam + ' ' + time + 'm', 'YYYY M D hh:mma');
+    console.log(time);
+    // var m = moment(yearParam + ' ' + (monthParam + 1) + ' ' + dayParam + ' ' + time + 'm', 'YYYY M D hh:mma');
+    var m = moment(yearParam + ' ' + (monthParam + 1) + ' ' + dayParam + ' ' + time, 'YYYY M D HH:mm');
     if (!isNaN(self.data.timeAdjustmentMinutes) && self.data.timeAdjustmentMinutes != 0) {
       var timeAdjustmentMinutes = parseInt(self.data.timeAdjustmentMinutes);
       m.add(timeAdjustmentMinutes, 'minutes'); // when timeAdjustmentMinutes is < 0, it's substracted automatically
@@ -411,6 +430,7 @@ function App() {
     }
     return {
       Subah: times[0],
+      Sunrise: times[1],
       Luhar: times[2],
       Asr: times[3],
       Magrib: times[4],
@@ -423,7 +443,7 @@ function App() {
       var prayerName = name == 'Jummah' ? 'Luhar' : name;
       var iqamahTime = self.data.iqamahTimes[name];
       if (iqamahTime.absolute) {
-        iqamahTimes[name] = self.getTime(monthParam, dayParam, iqamahTime.toTime() + (name == 'Subah' ? 'a' : 'p'));
+        iqamahTimes[name] = self.getTime(prayerTimes[prayerName].getFullYear(), monthParam, dayParam, iqamahTime.toTime() + (name == 'Subah' ? 'a' : 'p'));
       } else {
         iqamahTimes[name] = new Date(prayerTimes[prayerName].getTime() + parseInt(iqamahTime.minutes) * 60 * 1000);
       }
@@ -456,20 +476,26 @@ function App() {
     var month = translations[self.lang].months[self.data.time.getMonth()];
     console.log('all the times', times);
     var iqamahTimes = self.getIqamahTimes(times, dateParams[1], dateParams[2]);
+    var time24Format = self.data.time24Format;
     self.todayPrayers = [
-      new Prayer('Subah', times.Subah, iqamahTimes.Subah, self.lang),
+      new Prayer('Subah', times.Subah, iqamahTimes.Subah, self.lang, time24Format),
       // new Prayer('Sunrise', times[1], 10, self.lang),
       // new Prayer('Luhar', times.Luhar, iqamahTimes.Luhar, self.lang),
+      new Prayer('Sunrise', times.Sunrise, iqamahTimes.Subah /* should be less than sunrise time (no iqamah) */, self.lang, time24Format),
       new Prayer(
         self.data.isFriday ? 'Jummah' : 'Luhar',
         times.Luhar,
         self.data.isFriday ? iqamahTimes.Jummah : iqamahTimes.Luhar,
-        self.lang
+        self.lang,
+        time24Format
       ),
-      new Prayer('Asr', times.Asr, iqamahTimes.Asr, self.lang),
-      new Prayer('Magrib', times.Magrib, iqamahTimes.Magrib, self.lang),
-      new Prayer('Isha', times.Isha, iqamahTimes.Isha, self.lang)
+      new Prayer('Asr', times.Asr, iqamahTimes.Asr, self.lang, time24Format),
+      new Prayer('Magrib', times.Magrib, iqamahTimes.Magrib, self.lang, time24Format),
+      new Prayer('Isha', times.Isha, iqamahTimes.Isha, self.lang, time24Format)
     ];
+    if (!self.sunriseSupport) {
+      self.todayPrayers.splice(1, 1);
+    }
     self.data.prayers = self.todayPrayers;
     var tomorrowParams = self.getDateParams(new Date(self.data.time.getTime() + 24 * 60 * 60 * 1000));
     var tomorrowTimes = self.getTimes(tomorrowParams[0], tomorrowParams[1], tomorrowParams[2]);
@@ -478,12 +504,16 @@ function App() {
     }
     var tomorrowIqamahTimes = self.getIqamahTimes(tomorrowTimes, tomorrowParams[1], tomorrowParams[2]);
     self.nextDayPrayers = [
-      new Prayer('Subah', tomorrowTimes.Subah, tomorrowIqamahTimes.Subah, self.lang),
-      new Prayer('Luhar', tomorrowTimes.Luhar, tomorrowIqamahTimes.Luhar, self.lang),
-      new Prayer('Asr', tomorrowTimes.Asr, tomorrowIqamahTimes.Asr, self.lang),
-      new Prayer('Magrib', tomorrowTimes.Magrib, tomorrowIqamahTimes.Magrib, self.lang),
-      new Prayer('Isha', tomorrowTimes.Isha, tomorrowIqamahTimes.Isha, self.lang)
+      new Prayer('Subah', tomorrowTimes.Subah, tomorrowIqamahTimes.Subah, self.lang, time24Format),
+      new Prayer('Sunrise', tomorrowTimes.Sunrise, tomorrowIqamahTimes.Subah, self.lang, time24Format),
+      new Prayer('Luhar', tomorrowTimes.Luhar, tomorrowIqamahTimes.Luhar, self.lang, time24Format),
+      new Prayer('Asr', tomorrowTimes.Asr, tomorrowIqamahTimes.Asr, self.lang, time24Format),
+      new Prayer('Magrib', tomorrowTimes.Magrib, tomorrowIqamahTimes.Magrib, self.lang, time24Format),
+      new Prayer('Isha', tomorrowTimes.Isha, tomorrowIqamahTimes.Isha, self.lang, time24Format)
     ];
+    if (!self.sunriseSupport) {
+      self.nextDayPrayers.splice(1, 1);
+    }
     // self.data.nextPrayer = self.data.prayers[0];
     self.data.currentPrayer = undefined;
     self.data.currentPrayerBefore = false;
@@ -555,7 +585,7 @@ function App() {
         };
         self.data.currentPrayerWaiting = false;
       } else {
-        if(self.data.currentPrayer && self.data.currentPrayer.name === 'Isha'){
+        if(currentPrayer.name === 'Isha'){
           self.showNextDayPrayers();
         }
         self.data.currentPrayer = undefined;
@@ -630,7 +660,12 @@ function App() {
       }
     }
     if (self.data.time.getSeconds() % 2 === 0) {
+      if (self.data.prayerInfo === 'iqamah') {
+      }
       self.data.prayerInfo = self.data.prayerInfo === 'athan' ? 'iqamah' : 'athan';
+    }
+    if (self.data.time.getSeconds() % 4 === 1) {
+      self.data.showSunriseNow = self.sunriseSupport && !self.data.showSunriseNow;
     }
     var nowTime = self.data.time.getTime();
     var nextTime = self.data.nextPrayer ? self.data.nextPrayer.time.getTime() : 0;
@@ -788,10 +823,13 @@ function App() {
         self.data.timeAdjustmentMinutes = timeAdjustmentMinutes;
       }
       if (settings.analogClockActive) {
-        self.data.analogClockActive = true;
+        // self.data.analogClockActive = true;
       }
-      if (settings.alertEnabled) {
-        self.data.alertEnabled = true;
+      if (settings.alertEnabled === false) {
+        self.data.alertEnabled = false;
+      }
+      if (settings.time24Format) {
+        self.data.time24Format = true;
       }
       if (settings.timeOverrideEnabled) {
         self.data.timeOverrideEnabled = true;
@@ -800,22 +838,22 @@ function App() {
       if(typeof settings.activeClockTheme === 'string') {
         self.data.activeClockTheme = settings.activeClockTheme;
         switch (settings.activeClockTheme) {
-          case 'digitalModern':
-            self.data.analogClockActive = false;
-            self.data.digitalClockTheme = 'modern';
-            break;
-          case 'analogDefault':
-            self.data.analogClockActive = true;
-            self.data.analogClockTheme = 'default';
-            break;
-          case 'analogModern':
-            self.data.analogClockActive = true;
-            self.data.analogClockTheme = 'modern';
-            break;
-          default:
-            // invalid or digitalDefault
+          case 'digitalDefault':
             self.data.analogClockActive = false;
             self.data.digitalClockTheme = 'default';
+            break;
+          // case 'analogDefault':
+          //   self.data.analogClockActive = true;
+          //   self.data.analogClockTheme = 'default';
+          //   break;
+          // case 'analogModern':
+          //   self.data.analogClockActive = true;
+          //   self.data.analogClockTheme = 'modern';
+          //   break;
+          default:
+            // invalid or digitalModern
+            self.data.analogClockActive = false;
+            self.data.digitalClockTheme = 'modern';
             break;
         }
       }
@@ -836,6 +874,7 @@ function App() {
       analogClockActive: self.data.analogClockActive,
       activeClockTheme: self.data.activeClockTheme,
       alertEnabled: self.data.alertEnabled,
+      time24Format: self.data.time24Format,
       timeOverrideEnabled: self.data.timeOverrideEnabled,
     };
     localStorage.setItem('mdisplay.iqamahTimes', JSON.stringify(iqamahTimes));
@@ -849,6 +888,16 @@ function App() {
   self.updateSettings = function () {
     self.writeStorage();
     self.shouldReload = true;
+  };
+  self.backupSettings = function () {
+    var backupData = {
+      'mdisplay.lang': self.data.selectedLanguage,
+      'mdisplay.prayerDataId': self.data.selectedPrayerDataId,
+      'mdisplay.iqamahTimes': localStorage.getItem('mdisplay.iqamahTimes'),
+      'mdisplay.settings': localStorage.getItem('mdisplay.settings'),
+      'mdisplay.backupTime': self.data.time.getTime(),
+    };
+    console.log('backupSettings', JSON.stringify(backupData));
   };
   self.initShortcuts = function () {
     var KEY_CODES = {

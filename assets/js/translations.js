@@ -5,7 +5,7 @@ window.translations = {
     'prayer.label': 'அதான்',
     'prayer.iqamah-label': 'இகாமத்',
     'Subah': 'சுபஹ்',
-    'Sunrise': 'சூரியோதயம்',
+    'Sunrise': 'உதயம்',
     'Luhar': 'ளுஹர்',
     'Jummah': 'ஜும்ஆ',
     'Asr': 'அஸர்',
