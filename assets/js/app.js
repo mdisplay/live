@@ -56,6 +56,9 @@ function App() {
   var self = this;
   self.sunriseSupport = !!localStorage.getItem('mdisplay.dev.sunriseSupport');
   self.lang = localStorage.getItem('mdisplay.lang') || 'ta';
+  if (!localStorage.getItem('mdisplay.prayerDataId')) {
+    localStorage.setItem('mdisplay.prayerDataId', 'Puttalam'); // @TODO: remove in next version
+  }
   self.prayerDataId = localStorage.getItem('mdisplay.prayerDataId') || 'Puttalam';
   self.prayerData = [];
   var prayerData = window.PRAYER_DATA[self.prayerDataId];
