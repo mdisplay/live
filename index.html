@@ -77,18 +77,14 @@
                 <div class="config-container others-config">
                   <div class="config-item other-config" style="height: auto">
                     <div><small>Prayer Times Data</small></div>
-                    <label v-for="pData in prayerDataList" :for="'prayer-data-select-' + pData.id">
-                      <input
+                    <select style="width: 100%; display: block;"
+                      v-model="selectedPrayerDataId"
+                      @change="languageChanged()">
+                      <option
                         :id="'prayer-data-select-' + pData.id"
-                        type="radio"
-                        name="prayer-data-select"
                         :value="pData.id"
-                        v-model="selectedPrayerDataId"
-                        @change="languageChanged()"
-                      />
-                      {{ pData.label }}
-                      &nbsp;
-                    </label>
+                        v-for="pData in prayerDataList">{{ pData.label }}</option>
+                    </select>
                   </div>
                   <div class="config-item other-config">
                     <label>Time Adjustment</label>

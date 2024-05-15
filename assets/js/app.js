@@ -60,13 +60,6 @@ function App() {
     localStorage.setItem('mdisplay.prayerDataId', 'Puttalam'); // @TODO: remove in next version
   }
   self.prayerDataId = localStorage.getItem('mdisplay.prayerDataId') || 'Puttalam';
-  self.prayerData = [];
-  var prayerData = window.PRAYER_DATA[self.prayerDataId];
-  for (var month in prayerData) {
-    if (prayerData.hasOwnProperty(month)) {
-      self.prayerData.push(prayerData[month]);
-    }
-  }
   self.checkInternetJsonp = {
     jsonpCallback: 'checkInternet',
     url: 'https://mdisplay.github.io/live/check-internet.js'
@@ -124,12 +117,14 @@ function App() {
     prayerDataList: [
       { id: 'Colombo', label: 'Sri Lanka Standard Time (beta)' },
       { id: 'Puttalam', label: 'Puttalam Grand Masjid Time' },
+      { id: 'Mannar', label: 'Mannar' },
+      { id: 'Eastern', label: 'Estern Time', parent: 'Colombo', timeAdjustmentMinutes: -6 },
     ],
     clockThemes: [
-      {id: 'digitalDefault', label: 'Classic'},
-      {id: 'digitalModern', label: 'Modern'},
-      // {id: 'analogDefault', label: 'Classic Analog'},
-      // {id: 'analogModern', label: 'Modern Analog'},
+      {id: 'digitalDefault', label: 'Classic Digital'},
+      {id: 'digitalModern', label: 'Modern Digital'},
+      {id: 'analogDefault', label: 'Classic Analog'},
+      {id: 'analogModern', label: 'Modern Analog'},
     ],
     analogClockActive: false,
     alertEnabled: true,
@@ -166,6 +161,22 @@ function App() {
       });
     },
   };
+  self.selectedPrayerDataDetails = self.data.prayerDataList.filter(function(pData) {
+    return pData.id == self.prayerDataId;
+  })[0] || self.prayerDataList[0];
+
+  self.prayerData = [];
+  var prayerData = window.PRAYER_DATA[(self.selectedPrayerDataDetails && self.selectedPrayerDataDetails.parent) || self.prayerDataId];
+  if (!prayerData) {
+    alert('Invalid Prayer Data. Falling back to default');
+    prayerData = window.PRAYER_DATA['Colombo'];
+  }
+  for (var month in prayerData) {
+    if (prayerData.hasOwnProperty(month)) {
+      self.prayerData.push(prayerData[month]);
+    }
+  }
+
   self.isDeviceReady = false;
   self.isInitial = true;
   self.beforeSeconds = 5 * 60;
@@ -409,8 +420,12 @@ function App() {
     console.log(time);
     // var m = moment(yearParam + ' ' + (monthParam + 1) + ' ' + dayParam + ' ' + time + 'm', 'YYYY M D hh:mma');
     var m = moment(yearParam + ' ' + (monthParam + 1) + ' ' + dayParam + ' ' + time, 'YYYY M D HH:mm');
-    if (!isNaN(self.data.timeAdjustmentMinutes) && self.data.timeAdjustmentMinutes != 0) {
-      var timeAdjustmentMinutes = parseInt(self.data.timeAdjustmentMinutes);
+    if (self.selectedPrayerDataDetails && self.selectedPrayerDataDetails.timeAdjustmentMinutes) {
+      m.add(self.selectedPrayerDataDetails.timeAdjustmentMinutes, 'minutes');
+    }
+    var timeAdjustmentMinutes = self.data.timeAdjustmentMinutes;
+    if (!isNaN(timeAdjustmentMinutes) && timeAdjustmentMinutes != 0) {
+      timeAdjustmentMinutes = parseInt(timeAdjustmentMinutes);
       m.add(timeAdjustmentMinutes, 'minutes'); // when timeAdjustmentMinutes is < 0, it's substracted automatically
     }
 
@@ -826,7 +841,7 @@ function App() {
         self.data.timeAdjustmentMinutes = timeAdjustmentMinutes;
       }
       if (settings.analogClockActive) {
-        // self.data.analogClockActive = true;
+        self.data.analogClockActive = true;
       }
       if (settings.alertEnabled === false) {
         self.data.alertEnabled = false;
@@ -845,14 +860,14 @@ function App() {
             self.data.analogClockActive = false;
             self.data.digitalClockTheme = 'default';
             break;
-          // case 'analogDefault':
-          //   self.data.analogClockActive = true;
-          //   self.data.analogClockTheme = 'default';
-          //   break;
-          // case 'analogModern':
-          //   self.data.analogClockActive = true;
-          //   self.data.analogClockTheme = 'modern';
-          //   break;
+          case 'analogDefault':
+            self.data.analogClockActive = true;
+            self.data.analogClockTheme = 'default';
+            break;
+          case 'analogModern':
+            self.data.analogClockActive = true;
+            self.data.analogClockTheme = 'modern';
+            break;
           default:
             // invalid or digitalModern
             self.data.analogClockActive = false;
