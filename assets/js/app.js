@@ -153,7 +153,24 @@ function App() {
   self.computed = {
     showAlert: function() {
       var shouldShow = self.data.prayerInfo === 'iqamah';
-      return self.data.alertEnabled && shouldShow && (self.data.currentPrayerWaiting || self.data.currentPrayerAfter);
+      if(!shouldShow) {
+        return false;
+      }
+      return self.data.alertEnabled && (self.data.currentPrayerWaiting || self.data.currentPrayerAfter);
+    },
+    currentlyShowingAlert: function() {
+      var shouldShow = self.data.prayerInfo === 'iqamah';
+      var totalAlerts = 2;
+      if (!window._mdCurrentAlert) {
+        window._mdCurrentAlert = 0;
+      }
+      if (shouldShow) {
+        window._mdCurrentAlert += 1;
+        if(window._mdCurrentAlert > totalAlerts) {
+          window._mdCurrentAlert = 1;
+        }
+      }
+      return window._mdCurrentAlert;
     },
     prayersListDisplay: function() {
       return self.data.prayers.filter(function(prayer) {

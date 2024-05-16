@@ -344,7 +344,7 @@
               ><span class="h">{{ timeDisplayHours }}</span>
               <span class="date-display">
                 <span class="alert-container" :style="{opacity: showAlert ? '1' : '0'}">
-                  <img src="assets/images/alert.png">
+                  <img :src="'assets/images/alert' + currentlyShowingAlert + '.png'">
                 </span>
                 <span :style="{opacity: showAlert ? '0.95' : '1'}">
                   <span class="hijri-datex">{{ hijriDateDisplay }}</span>
