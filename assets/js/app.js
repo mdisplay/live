@@ -118,7 +118,7 @@ function App() {
       { id: 'Colombo', label: 'Sri Lanka Standard Time (beta)' },
       { id: 'Puttalam', label: 'Puttalam Grand Masjid Time' },
       { id: 'Mannar', label: 'Mannar' },
-      { id: 'Eastern', label: 'Estern Time', parent: 'Colombo', timeAdjustmentMinutes: -6 },
+      { id: 'Eastern', label: 'Eastern Time', parent: 'Colombo', timeAdjustmentMinutes: -6 },
     ],
     clockThemes: [
       {id: 'digitalDefault', label: 'Classic Digital'},
