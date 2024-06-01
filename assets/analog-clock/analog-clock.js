@@ -1,34 +1,34 @@
 function rotateHands(time) {
-  let date = time || new Date();
+  var date = time || new Date();
 
-  let h = date.getHours();
-  let m = date.getMinutes();
-  let s = date.getSeconds();
+  var h = date.getHours();
+  var m = date.getMinutes();
+  var s = date.getSeconds();
 
-  let hoursRotation = 30 * h + m / 2 + s / 120;
-  let minutesRotation = 6 * m + s / 10;
-  let secondsRotation = 6 * s;
+  var hoursRotation = 30 * h + m / 2 + s / 120;
+  var minutesRotation = 6 * m + s / 10;
+  var secondsRotation = 6 * s;
 
   var hours = document.getElementById('analog-clock-hand-hours');
   var minutes = document.getElementById('analog-clock-hand-minutes');
   var seconds = document.getElementById('analog-clock-hand-seconds');
 
-  hours.style.transform = `rotate(${hoursRotation}deg)`;
-  minutes.style.transform = `rotate(${minutesRotation}deg)`;
+  hours.style.transform = 'rotate(' + hoursRotation + 'deg)';
+  minutes.style.transform = 'rotate(' + minutesRotation + 'deg)';
   if(secondsRotation === 0) {
     // prevent inverse roatation on 12'o clock position
     // when continuous transition is enabled
     secondsRotation = 360;
-    let oldTransition = seconds.style.transition;
+    var oldTransition = seconds.style.transition;
     setTimeout(function() {
       seconds.style.transition = 'none';
-      seconds.style.transform = `rotate(${0}deg)`;
+      seconds.style.transform = 'rotate(0deg)';
       setTimeout(function() {
         seconds.style.transition = oldTransition;
       }, 50);
     }, 900);
   }
-  seconds.style.transform = `rotate(${secondsRotation}deg)`;
+  seconds.style.transform = 'rotate(' + secondsRotation + 'deg)';
 }
 
 // rotateHands();
