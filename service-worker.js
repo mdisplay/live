@@ -5,9 +5,9 @@ if (workbox) {
   console.log(`Boo! Workbox didn't load 😬`);
 }
 var baseUrl = '/live/';
-var appVersion = '2.1.2-92';
+var appVersion = '2.2.0-93';
 var dataVersion = '7';
-var vendorVersion = '9';
+var vendorVersion = '10';
 var bgVersion = '8';
 
 // Detailed logging is very useful during development
@@ -64,7 +64,7 @@ var precacheList = [{
   url: toUrl('assets/images/alert1.png'),
   revision: vendorVersion
 }, {
-  url: toUrl('assets/images/alert2.png'),
+  url: toUrl('assets/images/alert2.gif'),
   revision: vendorVersion
 },
 // /app

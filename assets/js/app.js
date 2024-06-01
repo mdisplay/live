@@ -115,10 +115,10 @@ function App() {
       { id: 'en', label: 'English' }
     ],
     prayerDataList: [
-      { id: 'Colombo', label: 'Sri Lanka Standard Time (beta)' },
-      { id: 'Puttalam', label: 'Puttalam Grand Masjid Time' },
+      { id: 'Colombo', label: 'Sri Lanka Standard' },
+      { id: 'Puttalam', label: 'Puttalam Grand Masjid' },
       { id: 'Mannar', label: 'Mannar' },
-      { id: 'Eastern', label: 'Eastern Time', parent: 'Colombo', timeAdjustmentMinutes: -6 },
+      { id: 'Eastern', label: 'Eastern', parent: 'Colombo', timeAdjustmentMinutes: -6 },
     ],
     clockThemes: [
       {id: 'digitalDefault', label: 'Classic Digital'},
@@ -149,6 +149,11 @@ function App() {
     timeOverridden: false,
     time24Format: false,
     showSunriseNow: false,
+    expanded: {
+      prayerTimesData: false,
+      clockThemes: false,
+      languages: false,
+    },
   };
   self.computed = {
     showAlert: function() {
@@ -160,17 +165,20 @@ function App() {
     },
     currentlyShowingAlert: function() {
       var shouldShow = self.data.prayerInfo === 'iqamah';
-      var totalAlerts = 2;
+      var alerts = [
+        'alert1.png',
+        'alert2.gif'
+      ];
       if (!window._mdCurrentAlert) {
         window._mdCurrentAlert = 0;
       }
       if (shouldShow) {
         window._mdCurrentAlert += 1;
-        if(window._mdCurrentAlert > totalAlerts) {
+        if(window._mdCurrentAlert > alerts.length) {
           window._mdCurrentAlert = 1;
         }
       }
-      return window._mdCurrentAlert;
+      return alerts[window._mdCurrentAlert - 1] || alerts[0];
     },
     prayersListDisplay: function() {
       return self.data.prayers.filter(function(prayer) {
@@ -1136,6 +1144,12 @@ function App() {
         self.tryConnectingToTimeServer(retryCount + 1);
       }, 1000);
     });
+  };
+  self.getSelected = function(options, selectedId) {
+    var selected = options.find(function(option) {
+      return option.id == selectedId;
+    });
+    return selected ? selected.label : 'Not Selected';
   };
   self.deviceReady = function () {
     self.isDeviceReady = true;
