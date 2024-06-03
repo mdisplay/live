@@ -94,7 +94,7 @@
                         name="prayer-data-select"
                         :value="pData.id"
                         v-model="selectedPrayerDataId"
-                        @change="languageChanged()"
+                        @change="updateSettings()"
                       />
                       {{ pData.label }}
                       &nbsp;
@@ -135,7 +135,7 @@
                         name="language-select"
                         :value="lang.id"
                         v-model="selectedLanguage"
-                        @change="languageChanged()"
+                        @change="updateSettings()"
                       />
                       {{ lang.label }}
                       &nbsp;
@@ -221,6 +221,18 @@
                         @change="updateSettings()"
                       />
                       24 Hours time format (beta)
+                    </label>
+                  </div>
+                  <div class="config-item other-config">
+                    <label for="sunrise-support-check">
+                      <input
+                        id="sunrise-support-check"
+                        type="checkbox"
+                        name="sunrise-support-check"
+                        v-model="sunriseSupport"
+                        @change="updateSettings()"
+                      />
+                      Sunrise Support (beta)
                     </label>
                   </div>
                   <div class="config-item other-config">
@@ -542,7 +554,7 @@
               </span>
               <template v-else>
                 {{ prayer.iqamahTimeDisplay }}
-              <span class="am-pm">{{ prayer.iqamahTimeAmPm }}</span>
+                <span class="am-pm">{{ prayer.iqamahTimeAmPm }}</span>
               </template>
           </div>
             <!-- </transition> -->

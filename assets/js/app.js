@@ -54,7 +54,7 @@ IqamahTime.fromRaw = function (raw) {
 };
 function App() {
   var self = this;
-  self.sunriseSupport = !!localStorage.getItem('mdisplay.dev.sunriseSupport');
+  self.sunriseSupport = !!localStorage.getItem('mdisplay.sunriseSupport');
   if(!localStorage.getItem('mdisplay.lang')) {
     // temp: @TODO: remove in next version
     localStorage.setItem('mdisplay.lang', 'ta');
@@ -152,6 +152,7 @@ function App() {
     timeOverrideEnabled: false,
     timeOverridden: false,
     time24Format: false,
+    sunriseSupport: self.sunriseSupport,
     showSunriseNow: false,
     expanded: {
       prayerTimesData: false,
@@ -221,7 +222,6 @@ function App() {
 
   self.languageChanged = function () {
     localStorage.setItem('mdisplay.lang', self.data.selectedLanguage);
-    localStorage.setItem('mdisplay.prayerDataId', self.data.selectedPrayerDataId);
     self.closeSettings();
   };
   self.ssidChanged = function () {
@@ -707,12 +707,10 @@ function App() {
       }
     }
     if (self.data.time.getSeconds() % 2 === 0) {
-      if (self.data.prayerInfo === 'iqamah') {
-      }
       self.data.prayerInfo = self.data.prayerInfo === 'athan' ? 'iqamah' : 'athan';
-    }
-    if (self.data.time.getSeconds() % 4 === 1) {
-      self.data.showSunriseNow = self.sunriseSupport && !self.data.showSunriseNow;
+      if (self.data.prayerInfo === 'iqamah') {
+        self.data.showSunriseNow = self.sunriseSupport && !self.data.showSunriseNow;
+      }
     }
     var nowTime = self.data.time.getTime();
     var nextTime = self.data.nextPrayer ? self.data.nextPrayer.time.getTime() : 0;
@@ -931,6 +929,12 @@ function App() {
     localStorage.setItem('mdisplay.iqamahTimesConfigured', 1);
     localStorage.setItem('mdisplay.settings', JSON.stringify(settings));
     localStorage.setItem('mdisplay.lastKnownTime', self.data.lastKnownTime || '');
+
+
+    localStorage.setItem('mdisplay.lang', self.data.selectedLanguage);
+    localStorage.setItem('mdisplay.prayerDataId', self.data.selectedPrayerDataId);
+    localStorage.setItem('mdisplay.sunriseSupport', self.data.sunriseSupport ? 1 : '');
+
     if (callback) {
       callback();
     }
