@@ -55,6 +55,10 @@ IqamahTime.fromRaw = function (raw) {
 function App() {
   var self = this;
   self.sunriseSupport = !!localStorage.getItem('mdisplay.dev.sunriseSupport');
+  if(!localStorage.getItem('mdisplay.lang')) {
+    // temp: @TODO: remove in next version
+    localStorage.setItem('mdisplay.lang', 'ta');
+  }
   self.lang = localStorage.getItem('mdisplay.lang') || 'ta';
   if (!localStorage.getItem('mdisplay.prayerDataId')) {
     localStorage.setItem('mdisplay.prayerDataId', 'Puttalam'); // @TODO: remove in next version
@@ -878,6 +882,9 @@ function App() {
         self.data.timeOverrideEnabled = true;
       }
       self.data.lastKnownTime = localStorage.getItem('mdisplay.lastKnownTime');
+      if(self.data.lastKnownTime === 'undefined') {
+        self.data.lastKnownTime = undefined;
+      }
       if(typeof settings.activeClockTheme === 'string') {
         self.data.activeClockTheme = settings.activeClockTheme;
         switch (settings.activeClockTheme) {
@@ -923,7 +930,7 @@ function App() {
     localStorage.setItem('mdisplay.iqamahTimes', JSON.stringify(iqamahTimes));
     localStorage.setItem('mdisplay.iqamahTimesConfigured', 1);
     localStorage.setItem('mdisplay.settings', JSON.stringify(settings));
-    localStorage.setItem('mdisplay.lastKnownTime', self.data.lastKnownTime);
+    localStorage.setItem('mdisplay.lastKnownTime', self.data.lastKnownTime || '');
     if (callback) {
       callback();
     }
@@ -1146,9 +1153,9 @@ function App() {
     });
   };
   self.getSelected = function(options, selectedId) {
-    var selected = options.find(function(option) {
+    var selected = options.filter(function(option) {
       return option.id == selectedId;
-    });
+    })[0];
     return selected ? selected.label : 'Not Selected';
   };
   self.deviceReady = function () {

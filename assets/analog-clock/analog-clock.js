@@ -15,19 +15,6 @@ function rotateHands(time) {
 
   hours.style.transform = 'rotate(' + hoursRotation + 'deg)';
   minutes.style.transform = 'rotate(' + minutesRotation + 'deg)';
-  if(secondsRotation === 0) {
-    // prevent inverse roatation on 12'o clock position
-    // when continuous transition is enabled
-    secondsRotation = 360;
-    var oldTransition = seconds.style.transition;
-    setTimeout(function() {
-      seconds.style.transition = 'none';
-      seconds.style.transform = 'rotate(0deg)';
-      setTimeout(function() {
-        seconds.style.transition = oldTransition;
-      }, 50);
-    }, 900);
-  }
   seconds.style.transform = 'rotate(' + secondsRotation + 'deg)';
 }
 

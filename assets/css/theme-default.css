@@ -690,10 +690,6 @@
   opacity: 0.75;
 }
 
-.analog-clock-theme-modern #analog-clock-hand-seconds {
-  transition: transform 1000ms linear;
-}
-
 .digital-clock .time .date-display,
 .digital-clock .time .seconds-container {
   opacity: 0.9;
