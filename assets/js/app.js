@@ -123,7 +123,7 @@ function App() {
       { id: 'Puttalam', label: 'Puttalam Grand Masjid' },
       { id: 'Mannar', label: 'Mannar' },
       { id: 'Eastern', label: 'Eastern', parent: 'Colombo', timeAdjustmentMinutes: -6 },
-      { id: 'Central', label: 'Central Time' },
+      { id: 'Central', label: 'Central (Kandy, Akurana) - beta' },
     ],
     clockThemes: [
       {id: 'digitalDefault', label: 'Classic Digital'},
