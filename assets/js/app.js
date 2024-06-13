@@ -54,16 +54,9 @@ IqamahTime.fromRaw = function (raw) {
 };
 function App() {
   var self = this;
-  self.sunriseSupport = !!localStorage.getItem('mdisplay.sunriseSupport');
-  if(!localStorage.getItem('mdisplay.lang')) {
-    // temp: @TODO: remove in next version
-    localStorage.setItem('mdisplay.lang', 'ta');
-  }
-  self.lang = localStorage.getItem('mdisplay.lang') || 'ta';
-  if (!localStorage.getItem('mdisplay.prayerDataId')) {
-    localStorage.setItem('mdisplay.prayerDataId', 'Puttalam'); // @TODO: remove in next version
-  }
-  self.prayerDataId = localStorage.getItem('mdisplay.prayerDataId') || 'Puttalam';
+  self.sunriseSupport = localStorage.getItem('mdisplay.sunriseSupport') !== '0';
+  self.lang = localStorage.getItem('mdisplay.lang') || 'en';
+  self.prayerDataId = localStorage.getItem('mdisplay.prayerDataId') || 'Colombo';
   self.checkInternetJsonp = {
     jsonpCallback: 'checkInternet',
     url: 'https://mdisplay.github.io/live/check-internet.js'
@@ -934,7 +927,7 @@ function App() {
 
     localStorage.setItem('mdisplay.lang', self.data.selectedLanguage);
     localStorage.setItem('mdisplay.prayerDataId', self.data.selectedPrayerDataId);
-    localStorage.setItem('mdisplay.sunriseSupport', self.data.sunriseSupport ? 1 : '');
+    localStorage.setItem('mdisplay.sunriseSupport', self.data.sunriseSupport ? 1 : 0);
 
     if (callback) {
       callback();
