@@ -461,7 +461,7 @@
                 <span class="hours">{{ display.prayer.iqamahTimeHours }}</span><span class="colon">:</span
                 ><span class="minutes">{{ display.prayer.iqamahTimeMinutes }}</span>
                 <small class="iqamah-am-pm">{{ display.prayer.iqamahTimeAmPm }}</small>
-                <small class="iqamah-label">{{ translate('prayer.iqamah-label') }}</small>
+                <small class="iqamah-label" v-if="display.prayer.name != 'Jummah'">{{ translate('prayer.iqamah-label') }}</small>
               </span>
               <!-- <small class="iqamah-am-pm">{{ display.prayer.iqamahTimeAmPm }}</small> -->
             </div>

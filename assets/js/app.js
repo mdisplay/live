@@ -2,6 +2,46 @@
 // The code should only be authored in ES5
 // to support older generation Android TV boxes
 
+function jsonp(url, callbackName, timeout = 7500) {
+  var head = document.querySelector('head');
+  // jsonpID += 1;
+
+  return new Promise(function (resolve, reject) {
+    var script = document.createElement('script');
+
+    script.src = encodeURI(`${url}?callback=${callbackName}&_=${(new Date()).getTime()}`);
+    script.async = true;
+
+    var timeoutId = window.setTimeout(() => {
+      cleanUp();
+
+      return reject(new Error('Timeout'));
+    }, timeout);
+
+    window[callbackName] = data => {
+      cleanUp();
+
+      return resolve(data);
+    };
+
+    script.addEventListener('error', error => {
+      cleanUp();
+
+      return reject(error);
+    });
+
+    function cleanUp() {
+      window[callbackName] = undefined;
+      head.removeChild(script);
+      window.clearTimeout(timeoutId);
+      script = null;
+    }
+
+
+    head.appendChild(script);
+  });
+}
+
 var padZero = function padZero(number) {
   number = parseInt(number);
   if (number < 10) {
@@ -271,6 +311,30 @@ function App() {
         self.checkInternetAvailability(okCallback, retryCount - 1, failCallback);
       }, 3000);
     };
+    if(false) {
+      jsonp(self.checkInternetJsonp.url, self.checkInternetJsonp.jsonpCallback)
+      .then(function(response) {
+        // console.log('Result received', response);
+        if (response && response.result == 'ok') {
+          self.setFetchingStatus('Internet Connection OK ', 'success', false, 999);
+          setTimeout(function () {
+            self.data.network.internetAvailable = true;
+            okCallback();
+            // self.data.network.checking = false;
+          }, 2000);
+          return;
+        }
+        self.data.network.internetAvailable = false;
+        self.setFetchingStatus('INVALID response', 'error', false, 999);
+        retry(okCallback);
+      })
+      .catch(function(error){
+        self.data.network.internetAvailable = false;
+        self.setFetchingStatus('Internet Connection FAILED', 'error', false, 999);
+        retry(okCallback);
+      })
+      return;
+    }
     $.ajax({
       type: 'GET',
       dataType: 'jsonp',
@@ -577,7 +641,7 @@ function App() {
     );
     // self.data.hijriDateDisplay = d.format('iDD ___ iYYYY').replace('___', translations.ta.months[hijriMonth - 1]);
     // self.data.hijriDateDisplay = padZero(hijriDate.getDate()) + ' ' + translations.ta.months[hijriDate.getMonth()] + ' ' + hijriDate.getFullYear();
-    self.data.hijriDateDisplay = padZero(hijriDate.day) + ' ' + translations[self.lang].hijriMonths[hijriDate.month - 1] + ' ' + hijriDate.year;
+    self.data.hijriDateDisplay = /* padZero(hijriDate.day) + ' ' + */ translations[self.lang].hijriMonths[hijriDate.month - 1] + ' ' + hijriDate.year;
     // self.data.hijriDateDisplay = hijriDate.toFormat('dd mm YYYY');
 
     self.data.hijriDate = hijriDate;
