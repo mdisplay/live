@@ -21,20 +21,20 @@ function rotateHands(time) {
 // rotateHands();
 // setInterval(rotateHands, 1000); // Call rotateHands() after every second.
 
-var AnalogClock = function() {
+var AnalogClock = function () {
   var self = this;
   self.isInitalized = false;
 
-  self.nextTick = function(time) {
+  self.nextTick = function (time) {
     if (!self.isInitalized) {
       return;
     }
     rotateHands(time);
-  }
+  };
 
-  self.init = function(el, time) {
+  self.init = function (el, time) {
     self.isInitalized = true;
-  }
-}
+  };
+};
 
 window.analogClock = new AnalogClock();

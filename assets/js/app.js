@@ -45,7 +45,7 @@ function IqamahTime(minutes, hours, absolute) {
     return {
       hours: self.hours,
       minutes: self.minutes,
-      absolute: self.absolute
+      absolute: self.absolute,
     };
   };
 }
@@ -59,7 +59,7 @@ function App() {
   self.prayerDataId = localStorage.getItem('mdisplay.prayerDataId') || 'Colombo';
   self.checkInternetJsonp = {
     jsonpCallback: 'checkInternet',
-    url: 'https://mdisplay.github.io/live/check-internet.js'
+    url: 'https://mdisplay.github.io/live/check-internet.js',
     // url: 'http://192.168.1.11/mdisplay/live/check-internet.js',
   };
 
@@ -80,14 +80,14 @@ function App() {
       Asr: new IqamahTime(15),
       Magrib: new IqamahTime(10),
       Isha: new IqamahTime(15),
-      Jummah: new IqamahTime(45)
+      Jummah: new IqamahTime(45),
     },
     appUdate: {
       enabled: false,
       checking: false,
       updated: false,
       updating: false,
-      error: false
+      error: false,
     },
     kioskMode: {
       available: false,
@@ -95,7 +95,7 @@ function App() {
       isHome: false,
       switchLauncher: function switchLauncher() {
         alert('Kiosk not available');
-      }
+      },
     },
     toasts: [],
     timeOriginMode: 'device',
@@ -109,7 +109,7 @@ function App() {
     languages: [
       { id: 'si', label: 'Sinhala' },
       { id: 'ta', label: 'Tamil' },
-      { id: 'en', label: 'English' }
+      { id: 'en', label: 'English' },
     ],
     prayerDataList: [
       { id: 'Colombo', label: 'Sri Lanka Standard' },
@@ -119,10 +119,10 @@ function App() {
       { id: 'Central', label: 'Central (Kandy, Akurana) - beta' },
     ],
     clockThemes: [
-      {id: 'digitalDefault', label: 'Classic Digital'},
-      {id: 'digitalModern', label: 'Modern Digital'},
-      {id: 'analogDefault', label: 'Classic Analog'},
-      {id: 'analogModern', label: 'Modern Analog'},
+      { id: 'digitalDefault', label: 'Classic Digital' },
+      { id: 'digitalModern', label: 'Modern Digital' },
+      { id: 'analogDefault', label: 'Classic Analog' },
+      { id: 'analogModern', label: 'Modern Analog' },
     ],
     analogClockActive: false,
     alertEnabled: true,
@@ -140,7 +140,7 @@ function App() {
       connecting: undefined,
       internetStatus: 'Unknown',
       internetAvailable: undefined,
-      showInternetAvailability: false
+      showInternetAvailability: false,
     },
     lastKnownTime: undefined,
     timeOverrideEnabled: false,
@@ -155,42 +155,41 @@ function App() {
     },
   };
   self.computed = {
-    showAlert: function() {
+    showAlert: function () {
       var shouldShow = self.data.prayerInfo === 'iqamah';
-      if(!shouldShow) {
+      if (!shouldShow) {
         return false;
       }
       return self.data.alertEnabled && (self.data.currentPrayerWaiting || self.data.currentPrayerAfter);
     },
-    currentlyShowingAlert: function() {
+    currentlyShowingAlert: function () {
       var shouldShow = self.data.prayerInfo === 'iqamah';
-      var alerts = [
-        'alert1.png',
-        'alert2.gif'
-      ];
+      var alerts = ['alert1.png', 'alert2.gif'];
       if (!window._mdCurrentAlert) {
         window._mdCurrentAlert = 0;
       }
       if (shouldShow) {
         window._mdCurrentAlert += 1;
-        if(window._mdCurrentAlert > alerts.length) {
+        if (window._mdCurrentAlert > alerts.length) {
           window._mdCurrentAlert = 1;
         }
       }
       return alerts[window._mdCurrentAlert - 1] || alerts[0];
     },
-    prayersListDisplay: function() {
-      return self.data.prayers.filter(function(prayer) {
+    prayersListDisplay: function () {
+      return self.data.prayers.filter(function (prayer) {
         return prayer.name != 'Sunrise';
       });
     },
   };
-  self.selectedPrayerDataDetails = self.data.prayerDataList.filter(function(pData) {
-    return pData.id == self.prayerDataId;
-  })[0] || self.prayerDataList[0];
+  self.selectedPrayerDataDetails =
+    self.data.prayerDataList.filter(function (pData) {
+      return pData.id == self.prayerDataId;
+    })[0] || self.prayerDataList[0];
 
   self.prayerData = [];
-  var prayerData = window.PRAYER_DATA[(self.selectedPrayerDataDetails && self.selectedPrayerDataDetails.parent) || self.prayerDataId];
+  var prayerData =
+    window.PRAYER_DATA[(self.selectedPrayerDataDetails && self.selectedPrayerDataDetails.parent) || self.prayerDataId];
   if (!prayerData) {
     alert('Invalid Prayer Data. Falling back to default');
     prayerData = window.PRAYER_DATA['Colombo'];
@@ -239,11 +238,14 @@ function App() {
     self.data.network.status = states[networkState];
     if (networkState == Connection.WIFI && typeof WifiWizard2 !== 'undefined') {
       self.data.network.status = 'Checking WiFi SSID...';
-      WifiWizard2.getConnectedSSID().then(function (ssid) {
-        self.data.network.status = states[Connection.WIFI] + ' (' + ssid + ')';
-      }, function (err) {
-        self.data.network.status = states[Connection.WIFI] + ' (SSID err: ' + err + ')';
-      });
+      WifiWizard2.getConnectedSSID().then(
+        function (ssid) {
+          self.data.network.status = states[Connection.WIFI] + ' (' + ssid + ')';
+        },
+        function (err) {
+          self.data.network.status = states[Connection.WIFI] + ' (SSID err: ' + err + ')';
+        }
+      );
     }
 
     // alert('Connection type: ' + states[networkState]);
@@ -299,7 +301,7 @@ function App() {
         self.data.network.internetAvailable = false;
         self.setFetchingStatus('Internet Connection FAILED', 'error', false, 999);
         retry(okCallback);
-      }
+      },
     });
   };
   self.checkForUpdates = function () {
@@ -316,26 +318,29 @@ function App() {
     self.data.appUdate.checking = true;
     self.data.appUdate.updated = false;
     self.data.appUdate.updating = false;
-    window.codePush.checkForUpdate(function (update) {
-      self.data.appUdate.error = false;
-      self.data.appUdate.checking = false;
-      self.data.appUdate.updating = false;
-      self.data.appUdate.updated = false;
-      if (!update) {
-        // alert("The app is up to date.");
-        self.data.appUdate.updated = true;
-      } else {
-        self.data.appUdate.updating = true;
-        window.askAndAutoUpdate();
-        // alert("An update is available! Should we download it?");
-        // window.codePush.restartApplication();
+    window.codePush.checkForUpdate(
+      function (update) {
+        self.data.appUdate.error = false;
+        self.data.appUdate.checking = false;
+        self.data.appUdate.updating = false;
+        self.data.appUdate.updated = false;
+        if (!update) {
+          // alert("The app is up to date.");
+          self.data.appUdate.updated = true;
+        } else {
+          self.data.appUdate.updating = true;
+          window.askAndAutoUpdate();
+          // alert("An update is available! Should we download it?");
+          // window.codePush.restartApplication();
+        }
+      },
+      function (error) {
+        self.data.appUdate.checking = false;
+        self.data.appUdate.updating = false;
+        self.data.appUdate.updated = false;
+        self.data.appUdate.error = error;
       }
-    }, function (error) {
-      self.data.appUdate.checking = false;
-      self.data.appUdate.updating = false;
-      self.data.appUdate.updated = false;
-      self.data.appUdate.error = error;
-    });
+    );
   };
   self.checkForKioskMode = function () {
     if (window.Kiosk === undefined) {
@@ -364,7 +369,7 @@ function App() {
   };
   self.updateTime = function () {
     if (!self.data.time) {
-      if(self.initialTestTime) {
+      if (self.initialTestTime) {
         self.data.time = self.initialTestTime;
         self.data.timeOverridden = true;
       } else if (self.data.timeOverrideEnabled && self.data.lastKnownTime) {
@@ -378,7 +383,7 @@ function App() {
         }
         self.data.timeOverrideEnabled = false;
         self.writeStorage(); // make sure override is disabled in next page load
-      }  else {
+      } else {
         self.data.time = new Date();
       }
       self.data.time.setTime(self.data.time.getTime() - 1000);
@@ -476,7 +481,7 @@ function App() {
       Luhar: times[2],
       Asr: times[3],
       Magrib: times[4],
-      Isha: times[5]
+      Isha: times[5],
     };
   };
   self.getIqamahTimes = function (prayerTimes, monthParam, dayParam) {
@@ -485,7 +490,12 @@ function App() {
       var prayerName = name == 'Jummah' ? 'Luhar' : name;
       var iqamahTime = self.data.iqamahTimes[name];
       if (iqamahTime.absolute) {
-        iqamahTimes[name] = self.getTime(prayerTimes[prayerName].getFullYear(), monthParam, dayParam, iqamahTime.toTime() + (name == 'Subah' ? 'a' : 'p'));
+        iqamahTimes[name] = self.getTime(
+          prayerTimes[prayerName].getFullYear(),
+          monthParam,
+          dayParam,
+          iqamahTime.toTime() + (name == 'Subah' ? 'a' : 'p')
+        );
       } else {
         iqamahTimes[name] = new Date(prayerTimes[prayerName].getTime() + parseInt(iqamahTime.minutes) * 60 * 1000);
       }
@@ -523,7 +533,13 @@ function App() {
       new Prayer('Subah', times.Subah, iqamahTimes.Subah, self.lang, time24Format),
       // new Prayer('Sunrise', times[1], 10, self.lang),
       // new Prayer('Luhar', times.Luhar, iqamahTimes.Luhar, self.lang),
-      new Prayer('Sunrise', times.Sunrise, iqamahTimes.Subah /* should be less than sunrise time (no iqamah) */, self.lang, time24Format),
+      new Prayer(
+        'Sunrise',
+        times.Sunrise,
+        iqamahTimes.Subah /* should be less than sunrise time (no iqamah) */,
+        self.lang,
+        time24Format
+      ),
       new Prayer(
         self.data.isFriday ? 'Jummah' : 'Luhar',
         times.Luhar,
@@ -533,7 +549,7 @@ function App() {
       ),
       new Prayer('Asr', times.Asr, iqamahTimes.Asr, self.lang, time24Format),
       new Prayer('Magrib', times.Magrib, iqamahTimes.Magrib, self.lang, time24Format),
-      new Prayer('Isha', times.Isha, iqamahTimes.Isha, self.lang, time24Format)
+      new Prayer('Isha', times.Isha, iqamahTimes.Isha, self.lang, time24Format),
     ];
     if (!self.sunriseSupport) {
       self.todayPrayers.splice(1, 1);
@@ -551,7 +567,7 @@ function App() {
       new Prayer('Luhar', tomorrowTimes.Luhar, tomorrowIqamahTimes.Luhar, self.lang, time24Format),
       new Prayer('Asr', tomorrowTimes.Asr, tomorrowIqamahTimes.Asr, self.lang, time24Format),
       new Prayer('Magrib', tomorrowTimes.Magrib, tomorrowIqamahTimes.Magrib, self.lang, time24Format),
-      new Prayer('Isha', tomorrowTimes.Isha, tomorrowIqamahTimes.Isha, self.lang, time24Format)
+      new Prayer('Isha', tomorrowTimes.Isha, tomorrowIqamahTimes.Isha, self.lang, time24Format),
     ];
     if (!self.sunriseSupport) {
       self.nextDayPrayers.splice(1, 1);
@@ -578,7 +594,10 @@ function App() {
     );
     // self.data.hijriDateDisplay = d.format('iDD ___ iYYYY').replace('___', translations.ta.months[hijriMonth - 1]);
     // self.data.hijriDateDisplay = padZero(hijriDate.getDate()) + ' ' + translations.ta.months[hijriDate.getMonth()] + ' ' + hijriDate.getFullYear();
-    self.data.hijriDateDisplay = /* padZero(hijriDate.day) + ' ' + */ translations[self.lang].hijriMonths[hijriDate.month - 1] + ' ' + hijriDate.year;
+    self.data.hijriDateDisplay =
+      /* padZero(hijriDate.day) + ' ' + */ translations[self.lang].hijriMonths[hijriDate.month - 1] +
+      ' ' +
+      hijriDate.year;
     // self.data.hijriDateDisplay = hijriDate.toFormat('dd mm YYYY');
 
     self.data.hijriDate = hijriDate;
@@ -623,11 +642,11 @@ function App() {
         self.data.currentPrayerAfter = {
           minutes: pause ? '00' : padZero(duration.minutes()),
           colon: self.data.currentPrayerAfter && self.data.currentPrayerAfter.colon == ':' ? ':' : ':',
-          seconds: pause ? '00' : padZero(duration.seconds())
+          seconds: pause ? '00' : padZero(duration.seconds()),
         };
         self.data.currentPrayerWaiting = false;
       } else {
-        if(currentPrayer.name === 'Isha'){
+        if (currentPrayer.name === 'Isha') {
           self.showNextDayPrayers();
         }
         self.data.currentPrayer = undefined;
@@ -644,7 +663,7 @@ function App() {
         self.data.currentPrayerBefore = {
           minutes: '00', // padZero(duration.minutes()),
           colon: self.data.currentPrayerBefore && self.data.currentPrayerBefore.colon == ':' ? ':' : ':',
-          seconds: '00' // padZero(duration.seconds()),
+          seconds: '00', // padZero(duration.seconds()),
         };
 
         return;
@@ -653,7 +672,7 @@ function App() {
       self.data.currentPrayerWaiting = {
         minutes: padZero(_duration.minutes()),
         colon: self.data.currentPrayerWaiting && self.data.currentPrayerWaiting.colon == ':' ? '' : ':',
-        seconds: padZero(_duration.seconds())
+        seconds: padZero(_duration.seconds()),
       };
     }
   };
@@ -680,7 +699,7 @@ function App() {
       checkInternetNow = true;
     }
     // every 10 seconds
-    if (!self.data.settingsMode && self.data.time.getSeconds()%10 === 0) {
+    if (!self.data.settingsMode && self.data.time.getSeconds() % 10 === 0) {
       // self.data.lastKnownTime = moment(self.data.time).format(moment.HTML5_FMT.DATETIME_LOCAL_SECONDS);
       // localStorage.setItem('mdisplay.lastKnownTime', self.data.lastKnownTime);
     }
@@ -694,11 +713,19 @@ function App() {
       self.tryConnectingToTimeServer();
     } else {
       if (checkInternetNow) {
-        self.checkInternetAvailability(function () {}, 10, function () {
-          self.setFetchingStatus('No Internet', 'error', false, 999);
-        });
+        self.checkInternetAvailability(
+          function () {},
+          10,
+          function () {
+            self.setFetchingStatus('No Internet', 'error', false, 999);
+          }
+        );
       } else if (self.data.network.internetAvailable === undefined) {
-        self.checkInternetAvailability(function () {}, 0, function () {});
+        self.checkInternetAvailability(
+          function () {},
+          0,
+          function () {}
+        );
       }
     }
     if (self.data.time.getSeconds() % 2 === 0) {
@@ -739,7 +766,7 @@ function App() {
       self.data.currentPrayerBefore = {
         minutes: '00', // padZero(duration.minutes()),
         colon: self.data.currentPrayerBefore && self.data.currentPrayerBefore.colon == ':' ? ':' : ':',
-        seconds: '00' // padZero(duration.seconds()),
+        seconds: '00', // padZero(duration.seconds()),
       };
     } else if (nextTime - nowTime < self.beforeSeconds * 1000) {
       self.data.currentPrayer = self.data.nextPrayer;
@@ -747,7 +774,7 @@ function App() {
       self.data.currentPrayerBefore = {
         minutes: padZero(duration.minutes()),
         colon: self.data.currentPrayerBefore && self.data.currentPrayerBefore.colon == ':' ? '' : ':',
-        seconds: padZero(duration.seconds())
+        seconds: padZero(duration.seconds()),
       };
       self.data.currentPrayerAfter = false;
       self.data.currentPrayerWaiting = false;
@@ -825,9 +852,12 @@ function App() {
     if (self.data.timeOriginMode == 'network' && self.simulateTime) {
       alert('Warning: simulateTime feature is not compatible with network time');
     }
-    window._theInterval = window.setInterval(function () {
-      self.nextTick();
-    }, self.simulateTime ? self.simulateTime : 1000);
+    window._theInterval = window.setInterval(
+      function () {
+        self.nextTick();
+      },
+      self.simulateTime ? self.simulateTime : 1000
+    );
     setTimeout(function () {
       self.data.showSplash = false;
     }, 1000);
@@ -875,10 +905,10 @@ function App() {
         self.data.timeOverrideEnabled = true;
       }
       self.data.lastKnownTime = localStorage.getItem('mdisplay.lastKnownTime');
-      if(self.data.lastKnownTime === 'undefined') {
+      if (self.data.lastKnownTime === 'undefined') {
         self.data.lastKnownTime = undefined;
       }
-      if(typeof settings.activeClockTheme === 'string') {
+      if (typeof settings.activeClockTheme === 'string') {
         self.data.activeClockTheme = settings.activeClockTheme;
         switch (settings.activeClockTheme) {
           case 'digitalDefault':
@@ -925,7 +955,6 @@ function App() {
     localStorage.setItem('mdisplay.settings', JSON.stringify(settings));
     localStorage.setItem('mdisplay.lastKnownTime', self.data.lastKnownTime || '');
 
-
     localStorage.setItem('mdisplay.lang', self.data.selectedLanguage);
     localStorage.setItem('mdisplay.prayerDataId', self.data.selectedPrayerDataId);
     localStorage.setItem('mdisplay.sunriseSupport', self.data.sunriseSupport ? 1 : 0);
@@ -954,7 +983,7 @@ function App() {
       ARROW_LEFT: 37,
       ARROW_UP: 38,
       ARROW_RIGHT: 39,
-      ARROW_DOWN: 40
+      ARROW_DOWN: 40,
     };
     var body = document.querySelector('body');
     body.onkeydown = function (event) {
@@ -1032,14 +1061,17 @@ function App() {
     var colors = {
       init: '#ffff20',
       error: '#ff1919',
-      success: '#49ff50'
+      success: '#49ff50',
     };
-    setTimeout(function () {
-      self.data.timeFetchingMessage = {
-        color: colors[mode],
-        text: message
-      };
-    }, timeout ? 500 : 0);
+    setTimeout(
+      function () {
+        self.data.timeFetchingMessage = {
+          color: colors[mode],
+          text: message,
+        };
+      },
+      timeout ? 500 : 0
+    );
     setTimeout(function () {
       self.fetchingInternetTime = status;
     }, timeout || 0);
@@ -1117,7 +1149,7 @@ function App() {
         console.log('err: ', err);
         // alert('err: ' + err);
         self.setFetchingStatus('FAILED to update time from network', 'error', false, 999);
-      }
+      },
     });
   };
   self.tryConnectingToTimeServer = function (retryCount) {
@@ -1140,19 +1172,22 @@ function App() {
     var isHiddenSSID = false;
     self.data.network.connecting = true;
     self.data.network.status = 'Connecting to ' + timeServerSSID + ' (' + retryCount + ')...';
-    WifiWizard2.connect(timeServerSSID, bindAll, '1234567890', 'WPA', isHiddenSSID).then(function (res) {
-      self.data.network.connecting = false;
-      self.data.network.status = 'Connected to ' + timeServerSSID;
-      self.checkNetworkStatus();
-    }, function (err) {
-      self.data.network.status = 'ERR ' + timeServerSSID + ' - ' + err;
-      setTimeout(function () {
-        self.tryConnectingToTimeServer(retryCount + 1);
-      }, 1000);
-    });
+    WifiWizard2.connect(timeServerSSID, bindAll, '1234567890', 'WPA', isHiddenSSID).then(
+      function (res) {
+        self.data.network.connecting = false;
+        self.data.network.status = 'Connected to ' + timeServerSSID;
+        self.checkNetworkStatus();
+      },
+      function (err) {
+        self.data.network.status = 'ERR ' + timeServerSSID + ' - ' + err;
+        setTimeout(function () {
+          self.tryConnectingToTimeServer(retryCount + 1);
+        }, 1000);
+      }
+    );
   };
-  self.getSelected = function(options, selectedId) {
-    var selected = options.filter(function(option) {
+  self.getSelected = function (options, selectedId) {
+    var selected = options.filter(function (option) {
       return option.id == selectedId;
     })[0];
     return selected ? selected.label : 'Not Selected';
