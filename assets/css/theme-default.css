@@ -706,3 +706,101 @@
   color: #00aaff;
   opacity: 1;
 }
+
+@media (orientation: portrait) {
+  .digital-clock .time .hours,
+    .digital-clock .time .colon-main,
+    .digital-clock .time .minutes {
+      top: 0;
+      left: 0;
+      font-size: 20rem;
+      line-height: 25rem;
+      bottom: auto;
+      height: 25rem;
+      margin: 0;
+      top: 10rem;
+    }
+    .digital-clock .time .hours,
+    .digital-clock .time .minutes {
+      width: 25rem;
+    }
+    .digital-clock .time .colon-main {
+      transform: none;
+      left: 22rem;
+      width: 10rem;
+    }
+    .digital-clock .time .minutes {
+      left: 30rem;
+    }
+
+    .digital-clock .date-display {
+      left: 2rem;
+      top: -6rem;
+    }
+
+    /*  */
+
+    .digital-clock .time .seconds-container {
+      right: 0;
+      text-align: right;
+      position: absolute;
+      left: auto;
+      top: 20.5rem;
+      right: 2rem;
+    }
+    .digital-clock .time .seconds-container .seconds,
+    .digital-clock .time .seconds-container .am-pm {
+      font-size: 5rem;
+      line-height: 6rem;
+      height: 6rem;
+      display: block;
+      position: absolute;
+      left: auto;
+      top: 0;
+      right: 0;
+      bottom: auto;
+    }
+    .digital-clock .time .seconds-container .seconds {
+    }
+    .digital-clock .time .seconds-container .seconds .colon {
+    }
+    .digital-clock .time .seconds-container .am-pm {
+      top: 4rem;
+      font-size: 2.5rem;
+      opacity: 0.5;
+    }
+
+
+    .prayer-display .iqamah-time, .prayer-display .time {
+      font-size: 12rem;
+    }
+    .prayer-display .time {
+      bottom: 13rem;
+    }
+    .prayer-display .iqamah-time {
+      bottom: 2rem;
+    }
+    .active-timer .time {
+      font-size: 12rem;
+    }
+    .is-before .active-timer {
+      bottom: 2rem;
+    }
+    .is-waiting .active-timer, .is-after .active-timer {
+      bottom: 13rem;
+    }
+    .prayer-display .name {
+      bottom: 20.5rem;
+    }
+    .alert-container {
+      top: 30rem;
+      left: 15rem;
+    }
+
+    #version-info {
+      font-size: 2.5rem !important;
+    }
+    #version-info .version-text {
+      font-size: 3rem !important;
+    }
+}
