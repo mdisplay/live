@@ -381,7 +381,7 @@ function App() {
           self.data.time = newDate;
           self.data.timeOverridden = false;
         }
-        // self.data.timeOverrideEnabled = false;
+        self.data.timeOverrideEnabled = false;
         self.writeStorage(); // make sure override is disabled in next page load
       } else {
         self.data.time = new Date();
