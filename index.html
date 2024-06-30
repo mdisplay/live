@@ -32,6 +32,9 @@
         </div>
       </div>
       <div style="display: none" v-show="true">
+
+      <div id="active-overlay"></div>
+
         <div style="display: none" v-show="true" class="modal-wrapper" v-if="settingsMode">
           <div class="modal-overlay" @click="closeSettings()"></div>
           <div class="modal-dialog">
@@ -336,16 +339,17 @@
           style="
             position: fixed;
             font-size: 1rem;
-            bottom: 6.5rem;
             text-align: right;
             right: 1rem;
             top: 1rem;
             right: 0;
             top: 0;
+            height: 3rem;
             display: none;
-            z-index: 11;
+            z-index: 511;
           "
         >
+          <div class="version-active-overlay"></div>
           <div v-if="network.showInternetAvailability && network.internetAvailable === false">
             <span style="padding: 0.25rem; color: #ff0000; font-weight: bold; opacity: 0.75">No Internet</span>
           </div>
