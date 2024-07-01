@@ -153,6 +153,7 @@ function App() {
       clockThemes: false,
       languages: false,
     },
+    focusActiveTimer: false,
   };
   self.computed = {
     showAlert: function () {
@@ -901,6 +902,9 @@ function App() {
       if (settings.time24Format) {
         self.data.time24Format = true;
       }
+      if (settings.focusActiveTimer) {
+        self.data.focusActiveTimer = true;
+      }
       if (settings.timeOverrideEnabled) {
         self.data.timeOverrideEnabled = true;
       }
@@ -947,6 +951,7 @@ function App() {
       analogClockActive: self.data.analogClockActive,
       activeClockTheme: self.data.activeClockTheme,
       alertEnabled: self.data.alertEnabled,
+      focusActiveTimer: self.data.focusActiveTimer,
       time24Format: self.data.time24Format,
       timeOverrideEnabled: self.data.timeOverrideEnabled,
     };

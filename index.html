@@ -14,16 +14,16 @@
     <title>MDisplay Live</title>
     <link rel="shortcut icon" href="assets/images/favicon.png" />
     <link rel="icon" type="image/png" href="assets/images/favicon.png" />
-    <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=2.4.5-99.5" />
-    <link rel="stylesheet" type="text/css" href="assets/css/app.css?v=2.4.5-99.5" />
-    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock.css?v=2.4.5-99.5" />
-    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock-layout.css?v=2.4.5-99.5" />
-    <link rel="stylesheet" type="text/css" href="assets/css/theme-default.css?v=2.4.5-99.5" />
+    <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=2.4.6-99.6" />
+    <link rel="stylesheet" type="text/css" href="assets/css/app.css?v=2.4.6-99.6" />
+    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock.css?v=2.4.6-99.6" />
+    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock-layout.css?v=2.4.6-99.6" />
+    <link rel="stylesheet" type="text/css" href="assets/css/theme-default.css?v=2.4.6-99.6" />
   </head>
   <body>
     <div
       id="app"
-      :class="[{'analog-clock-active': analogClockActive, 'is-active': currentPrayer, 'is-waiting': currentPrayerWaiting, 'is-before': currentPrayerBefore, 'is-after': currentPrayerAfter}, 'active-prayer-info-' + prayerInfo, 'analog-clock-theme-' + analogClockTheme, 'digital-clock-theme-' + digitalClockTheme]"
+      :class="[{'analog-clock-active': analogClockActive, 'is-active': currentPrayer, 'is-waiting': currentPrayerWaiting, 'is-before': currentPrayerBefore, 'is-after': currentPrayerAfter, 'focus-active-timer': currentPrayer && focusActiveTimer}, 'active-prayer-info-' + prayerInfo, 'analog-clock-theme-' + analogClockTheme, 'digital-clock-theme-' + digitalClockTheme]"
     >
       <div id="splash" v-if="showSplash">
         <div class="splash-content">
@@ -42,8 +42,8 @@
             <div class="modal-content">
               <div class="configured-info">
                 <span>
-                  Version {{ '?v=2.4.5-99.5'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }}
-                  (v.{{ '?v=2.4.5-99.5'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }})
+                  Version {{ '?v=2.4.6-99.6'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }}
+                  (v.{{ '?v=2.4.6-99.6'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }})
                 </span>
 
                 <span class="configured" v-if="iqamahTimesConfigured">Configured</span>
@@ -67,7 +67,7 @@
                   <span class="error" v-if="appUdate.error">ERROR: {{ appUdate.error }}</span>
                   <span class="checking" v-if="appUdate.checking">Checking...</span>
                   <span class="updated" v-if="appUdate.updated"
-                    >Updated. Version {{ '?v=2.4.5-99.5'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1 ($2)') }}.</span
+                    >Updated. Version {{ '?v=2.4.6-99.6'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1 ($2)') }}.</span
                   >
                   <span class="updating" v-if="appUdate.updating">Updating...</span>
                 </div>
@@ -250,6 +250,18 @@
                       Warning and Reminder icons
                     </label>
                   </div>
+                  <div class="config-item other-config">
+                    <label for="focus-active-timer-check">
+                      <input
+                        id="focus-active-timer-check"
+                        type="checkbox"
+                        name="focus-active-timer-check"
+                        v-model="focusActiveTimer"
+                        @change="updateSettings()"
+                      />
+                      Focus Countdown Timer (beta)
+                    </label>
+                  </div>
                   <div class="config-item other-config" style="height: auto;">
                     <template v-if="iqamahTimesConfigured">
                       <a href="#" @click="backupSettings()"><small>Backup Settings</small></a>
@@ -354,7 +366,7 @@
             <span style="padding: 0.25rem; color: #ff0000; font-weight: bold; opacity: 0.75">No Internet</span>
           </div>
           <div v-else>
-            <!-- <span style="opacity: 0.25"> Version {{ '?v=2.4.5-99.5'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }} </span> -->
+            <!-- <span style="opacity: 0.25"> Version {{ '?v=2.4.6-99.6'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }} </span> -->
 
             <span style="opacity: 0.5">
               <svg style="height: 1em; color: #FFF; fill: #FFF;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -377,7 +389,7 @@
                 border-radius: 50%;
                 text-align: center;
               "
-              >v.{{ '?v=2.4.5-99.5'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span
+              >v.{{ '?v=2.4.6-99.6'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span
             >
           </div>
         </div>
@@ -391,15 +403,14 @@
             <img :src="backgroundImage" />
           </div>
         </div>
-
+        <div class="alert-container" :style="{opacity: showAlert ? '1' : '0'}">
+          <img :src="'assets/images/' + currentlyShowingAlert">
+        </div>
         <div class="digital-clock" v-if="timeIsValid">
           <span class="time">
             <span class="hours"
               ><span class="h">{{ timeDisplayHours }}</span>
               <span class="date-display">
-                <span class="alert-container" :style="{opacity: showAlert ? '1' : '0'}">
-                  <img :src="'assets/images/' + currentlyShowingAlert">
-                </span>
                 <span :style="{opacity: showAlert ? '0.95' : '1'}">
                   <span class="hijri-datex">{{ hijriDateDisplay }}</span>
                   <span class="datex">{{ dateDisplay }}</span>
@@ -586,21 +597,21 @@
         </div>
       </div>
     </div>
-    <script type="text/javascript" src="prayer-data.js?v=2.4.5-99.5"></script>
-    <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=2.4.5-99.5"></script>
-    <script type="text/javascript" src="assets/vendors/vue.min.js?v=2.4.5-99.5"></script>
-    <script type="text/javascript" src="assets/vendors/moment.min.js?v=2.4.5-99.5"></script>
-    <script type="text/javascript" src="assets/vendors/hijri.js?v=2.4.5-99.5"></script>
-    <script type="text/javascript" src="assets/vendors/jquery-3.6.0.min.js?v=2.4.5-99.5"></script>
-    <script type="text/javascript" src="assets/js/translations.js?v=2.4.5-99.5"></script>
+    <script type="text/javascript" src="prayer-data.js?v=2.4.6-99.6"></script>
+    <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=2.4.6-99.6"></script>
+    <script type="text/javascript" src="assets/vendors/vue.min.js?v=2.4.6-99.6"></script>
+    <script type="text/javascript" src="assets/vendors/moment.min.js?v=2.4.6-99.6"></script>
+    <script type="text/javascript" src="assets/vendors/hijri.js?v=2.4.6-99.6"></script>
+    <script type="text/javascript" src="assets/vendors/jquery-3.6.0.min.js?v=2.4.6-99.6"></script>
+    <script type="text/javascript" src="assets/js/translations.js?v=2.4.6-99.6"></script>
     <script type="text/javascript" src="cdvfile://localhost/assets/www/cordova.js"></script>
-    <script type="text/javascript" src="assets/analog-clock/analog-clock.js?v=2.4.5-99.5"></script>
-    <script type="text/javascript" src="assets/js/app.js?v=2.4.5-99.5"></script>
+    <script type="text/javascript" src="assets/analog-clock/analog-clock.js?v=2.4.6-99.6"></script>
+    <script type="text/javascript" src="assets/js/app.js?v=2.4.6-99.6"></script>
     <script type="text/javascript">
       // WARNING: do not use ES6 syntax
       // The code should only be authored in ES5
       // to support older generation Android TV boxes
-      
+
       var hasCordova = !!window.cordova;
       if (hasCordova) {
         document.addEventListener('deviceready', function () {

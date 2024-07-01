@@ -792,9 +792,14 @@
     .prayer-display .name {
       bottom: 20.5rem;
     }
-    .alert-container {
+    #app .alert-container {
       top: 30rem;
       left: 15rem;
+    }
+
+    #app.analog-clock-active .alert-container {
+      top: 20rem;
+      left: 35rem;
     }
 
     #version-info {
@@ -802,6 +807,20 @@
     }
     #version-info .version-text {
       font-size: 3rem !important;
+    }
+
+    .analog-clock-active .analog-clock-container {
+      width: 30rem;
+      height: 30rem;
+      top: 10rem;
+      bottom: auto;
+      left: 1rem;
+    }
+
+    .analog-clock-active .digital-clock .date-display {
+      left: 24rem;
+      top: 2rem;
+      bottom: auto;
     }
 }
 
@@ -848,8 +867,11 @@
   .is-active .digital-clock .time .colon-main {
     font-size: 9rem;
     line-height: 10rem;
-    left: 4rem;
-    top: 11rem;
+    left: 3rem;
+    top: 6rem;
+    height: 10rem;
+    width: 10rem;
+    margin: 0;
   }
 
   .is-active .digital-clock .time .minutes {
@@ -927,23 +949,37 @@
     width: 12rem;
     top: 4.5rem;
   }
-  .is-active-timer-highlight .prayer-info-container,
-  .is-active-timer-highlight #version-info,
-  .is-active-timer-highlight .digital-clock .colon-main,
-  .is-active-timer-highlight .digital-clock .hours .h,
-  .is-active-timer-highlight .digital-clock .date-display .hijri-datex,
-  .is-active-timer-highlight .digital-clock .date-display .datex,
-  .is-active-timer-highlight .digital-clock .date-display .weekday,
-  .is-active-timer-highlight .digital-clock .minutes,
-  .is-active-timer-highlight .digital-clock .colon-main {
+
+  .is-active .analog-clock-container {
+    height: 20rem;
+    width: 20rem;
+    top: 0;
+    bottom: auto;
+  }
+
+  .is-active.analog-clock-active .digital-clock .date-display .hijri-datex {
+    margin-left: 5.25rem;
+  }
+  .is-active.analog-clock-active .digital-clock .date-display .datex {
+    margin-left: 7.25rem;
+  }
+  .is-active.analog-clock-active .digital-clock .date-display .weekday {
+    margin-left: 9.5rem;
+  }
+
+
+  .focus-active-timer .prayer-info-container,
+  .focus-active-timer #version-info,
+  .focus-active-timer .digital-clock,
+  .focus-active-timer .analog-clock-container {
     opacity: 0.25 !important;
   }
 
-  .is-active-timer-highlight .alert-container {
-    left: -7rem;
-    top: 2rem;
+  .focus-active-timer .alert-container {
+    left: 0.5rem !important;
+    top: 0.5rem !important;
   }
-  .is-active-timer-highlight .alert-container img {
+  .focus-active-timer .alert-container img {
     /* opacity: 1; */
   }
 }

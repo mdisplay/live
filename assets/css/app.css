@@ -67,19 +67,19 @@ body {
   height: 100%;
 }
 
-.alert-container {
+#app .alert-container {
   position: absolute;
   width: 30vw;
   height: 30vw;
-  left: 0vw;
-  top: 0vw;
+  left: 10rem;
+  top: 0;
   transition: all 300ms;
+  z-index: 15;
 }
 
-.alert-container img {
+#app .alert-container img {
   width: 100%;
   height: 100%;
-  opacity: 0.9;
   float: left;
 }
 
@@ -152,6 +152,7 @@ body {
   object-fit: cover;
   -webkit-filter: blur(10px);
   filter: blur(10px);
+  object-fit: fill;
 }
 
 #app .modal-wrapper {
