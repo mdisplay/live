@@ -282,7 +282,7 @@
   height: 9rem;
   line-height: 9rem;
 
-  color: #ff5959;
+  color: #fc7878;
 }
 
 .active-timer .description {
@@ -827,9 +827,10 @@
 /* //////////////////////////////////////// */
 
 @media (orientation: landscape) {
-  .is-active .prayer-display .iqamah-time, .is-active .prayer-display .time,
-  .is-active .active-timer .time
-  {
+
+  .focus-active-timer .prayer-display .iqamah-time,
+  .focus-active-timer .prayer-display .time,
+  .focus-active-timer .active-timer .time {
     font-size: 12.5rem;
     line-height: 13rem;
     height: 13rem;
@@ -840,31 +841,30 @@
     z-index: 501 !important;
   }
 
-  .is-active .prayer-display .time {
+  .focus-active-timer .prayer-display .time {
     bottom: 12rem;
     bottom: 30vh;
   }
 
-  .is-active .prayer-display .iqamah-time {
+  .focus-active-timer .prayer-display .iqamah-time {
     bottom: 0.5rem;
   }
 
-  .is-active .active-timer .time {
+  .focus-active-timer .active-timer .time {}
 
-  }
-
-  .is-active.is-waiting .active-timer, .is-active.is-after .active-timer {
+  .focus-active-timer.is-waiting .active-timer,
+  .focus-active-timer.is-after .active-timer {
     bottom: 12rem;
     bottom: 30vh;
   }
 
 
-  .is-active .digital-clock .time .hours {
+  .focus-active-timer .digital-clock .time .hours {
     font-size: 9rem;
     line-height: 10rem;
   }
 
-  .is-active .digital-clock .time .colon-main {
+  .focus-active-timer .digital-clock .time .colon-main {
     font-size: 9rem;
     line-height: 10rem;
     left: 3rem;
@@ -874,40 +874,41 @@
     margin: 0;
   }
 
-  .is-active .digital-clock .time .minutes {
+  .focus-active-timer .digital-clock .time .minutes {
     font-size: 9rem;
     line-height: 10rem;
     bottom: auto;
     top: 12rem;
   }
 
-  .is-active .digital-clock .time .seconds-container {
+  .focus-active-timer .digital-clock .time .seconds-container {
     bottom: auto;
     top: 9rem;
     right: auto;
     left: 15rem;
   }
 
-  .is-active .digital-clock .seconds {
+  .focus-active-timer .digital-clock .seconds {
     font-size: 2.5rem;
   }
 
-  .is-active .digital-clock .am-pm {
+  .focus-active-timer .digital-clock .am-pm {
     font-size: 1.25rem;
     bottom: 3.25rem;
   }
 
-  .is-active .prayer-display .name {
+  .focus-active-timer .prayer-display .name {
     bottom: calc(50vh + 0.5rem);
     font-size: 2rem;
     z-index: 501 !important;
   }
 
-  .is-active .prayer-display .name .label {
+  .focus-active-timer .prayer-display .name .label {
     font-size: 1.25rem;
   }
 
-  .is-active #active-overlay, .is-active .version-active-overlay {
+  .focus-active-timer #active-overlay,
+  .focus-active-timer .version-active-overlay {
     position: fixed;
     top: 0;
     right: 0;
@@ -918,52 +919,57 @@
     display: none;
   }
 
-  .is-active .active-timer {
+  .focus-active-timer .active-timer {
     z-index: 501 !important;
   }
 
-  .is-active .version-active-overlay {
+  .focus-active-timer .version-active-overlay {
     position: absolute;
     z-index: 512;
   }
-  .is-active .digital-clock .date-display .hijri-datex {
+
+  .focus-active-timer .digital-clock .date-display .hijri-datex {
     font-size: 1rem;
     line-height: 1rem;
     ;
   }
-  .is-active .digital-clock .date-display .datex {
+
+  .focus-active-timer .digital-clock .date-display .datex {
     font-size: 1.5rem;
     line-height: 1.5rem;
     ;
   }
-  .is-active .digital-clock .date-display .weekday {
+
+  .focus-active-timer .digital-clock .date-display .weekday {
     font-size: 1.8rem;
     line-height: 1.8rem;
 
   }
 
-  .is-active .prayer-display .iqamah-time .iqamah-label,
-  .is-active .prayer-display .time .label {
+  .focus-active-timer .prayer-display .iqamah-time .iqamah-label,
+  .focus-active-timer .prayer-display .time .label {
     font-size: 2.5rem;
     left: -12.5rem;
     width: 12rem;
     top: 4.5rem;
   }
 
-  .is-active .analog-clock-container {
+  .focus-active-timer .analog-clock-container {
     height: 20rem;
     width: 20rem;
     top: 0;
     bottom: auto;
   }
 
-  .is-active.analog-clock-active .digital-clock .date-display .hijri-datex {
+  .focus-active-timer.analog-clock-active .digital-clock .date-display .hijri-datex {
     margin-left: 5.25rem;
   }
-  .is-active.analog-clock-active .digital-clock .date-display .datex {
+
+  .focus-active-timer.analog-clock-active .digital-clock .date-display .datex {
     margin-left: 7.25rem;
   }
-  .is-active.analog-clock-active .digital-clock .date-display .weekday {
+
+  .focus-active-timer.analog-clock-active .digital-clock .date-display .weekday {
     margin-left: 9.5rem;
   }
 
@@ -972,14 +978,16 @@
   .focus-active-timer #version-info,
   .focus-active-timer .digital-clock,
   .focus-active-timer .analog-clock-container {
-    opacity: 0.25 !important;
+    opacity: 0.5 !important;
   }
 
   .focus-active-timer .alert-container {
     left: 0.5rem !important;
     top: 0.5rem !important;
+    z-index: 15 !important;
   }
+
   .focus-active-timer .alert-container img {
-    /* opacity: 1; */
+    opacity: 1 !important;
   }
 }

@@ -127,8 +127,8 @@ function App() {
     analogClockActive: false,
     alertEnabled: true,
     analogClockTheme: 'default',
-    digitalClockTheme: 'modern',
-    activeClockTheme: 'digitalModern',
+    digitalClockTheme: 'default',
+    activeClockTheme: 'digitalDefault',
     networkTimeInitialized: false,
     timeIsValid: false,
     timeFetchingMessage: undefined,
@@ -912,12 +912,12 @@ function App() {
       if (self.data.lastKnownTime === 'undefined') {
         self.data.lastKnownTime = undefined;
       }
-      if (typeof settings.activeClockTheme === 'string') {
-        self.data.activeClockTheme = settings.activeClockTheme;
-        switch (settings.activeClockTheme) {
-          case 'digitalDefault':
+      if (typeof settings.activeClockTheme2 === 'string') {
+        self.data.activeClockTheme = settings.activeClockTheme2;
+        switch (settings.activeClockTheme2) {
+          case 'digitalModern':
             self.data.analogClockActive = false;
-            self.data.digitalClockTheme = 'default';
+            self.data.digitalClockTheme = 'modern';
             break;
           case 'analogDefault':
             self.data.analogClockActive = true;
@@ -928,9 +928,9 @@ function App() {
             self.data.analogClockTheme = 'modern';
             break;
           default:
-            // invalid or digitalModern
+            // invalid or digitalDefault
             self.data.analogClockActive = false;
-            self.data.digitalClockTheme = 'modern';
+            self.data.digitalClockTheme = 'default';
             break;
         }
       }
@@ -949,7 +949,8 @@ function App() {
       timeOriginMode: self.data.timeOriginMode,
       timeAdjustmentMinutes: self.data.timeAdjustmentMinutes,
       analogClockActive: self.data.analogClockActive,
-      activeClockTheme: self.data.activeClockTheme,
+      activeClockTheme: 'digitalDefault', // reset to default for possible later usage
+      activeClockTheme2: self.data.activeClockTheme,
       alertEnabled: self.data.alertEnabled,
       focusActiveTimer: self.data.focusActiveTimer,
       time24Format: self.data.time24Format,
