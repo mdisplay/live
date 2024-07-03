@@ -976,18 +976,23 @@
 
   .focus-active-timer .prayer-info-container,
   .focus-active-timer #version-info,
-  .focus-active-timer .digital-clock,
-  .focus-active-timer .analog-clock-container {
+  .focus-active-timer .digital-clock .date-display  {
     opacity: 0.5 !important;
   }
 
   .focus-active-timer .alert-container {
     left: 0.5rem !important;
+    left: 10rem !important;
     top: 0.5rem !important;
     z-index: 15 !important;
   }
 
   .focus-active-timer .alert-container img {
     opacity: 1 !important;
+  }
+
+  .is-showing-alert.focus-active-timer .digital-clock .seconds-container,
+  .is-showing-alert.focus-active-timer .analog-clock-container {
+        opacity: 0.5 !important;
   }
 }

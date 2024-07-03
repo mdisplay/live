@@ -398,11 +398,11 @@ function App() {
     } else {
       self.data.time = new Date();
     }
-    var lastKnownYear = 2021;
-    self.data.timeIsValid = self.data.time.getFullYear() >= lastKnownYear;
+    var lastKnownDate = new Date(2024, 6, 3, 19, 50);
+    self.data.timeIsValid = self.data.time.getTime() >= lastKnownDate.getTime();
     if (!self.initialTestTime && !self.data.timeIsValid) {
       var d = new Date();
-      if (d.getFullYear() >= lastKnownYear /* && d.getSeconds() > 30 */) {
+      if (d.getFullYear() >= lastKnownDate.getFullYear() /* && d.getSeconds() > 30 */) {
         // fallback mode
         // self.data.time = d;
       }
