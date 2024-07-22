@@ -399,7 +399,7 @@ function App() {
     } else {
       self.data.time = new Date();
     }
-    var lastKnownDate = new Date(2024, 6, 22, 14, 50);
+    var lastKnownDate = new Date(2024, 6, 23, 0, 0);
     self.data.timeIsValid = self.data.time.getTime() >= lastKnownDate.getTime();
     if (!self.initialTestTime && !self.data.timeIsValid) {
       var d = new Date();
@@ -1001,18 +1001,31 @@ function App() {
     }) {
       backupData[key] = localStorage.getItem(key);
     }
-    console.log('backupSettings', JSON.stringify(JSON.stringify(backupData)), backupData);
 
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(
-      new Blob([JSON.stringify(backupData, null, 2)], {
-        type: 'text/plain',
-      })
-    );
-    a.setAttribute('download', 'mdisplay.backup-' + moment().format('YYYY-MM-DD HH mm ss') + '.txt');
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    var fileName = 'mdisplay.backup-' + moment().format('YYYY-MM-DD HH mm ss') + '.txt';
+    var fileContent = JSON.stringify(backupData, null, 2);
+
+    console.log('backupSettings', JSON.stringify(fileContent), backupData);
+
+    if(cordova && cordova.plugins && cordova.plugins.saveDialog) {
+      var blob = new Blob([fileContent], {type: "text/plain"});
+      cordova.plugins.saveDialog.saveFile(blob, fileName).then(function(uri) {
+        console.log("The file has been successfully saved to", uri);
+      }).catch(function(reason) {
+        console.log(reason);
+      });
+    } else {
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(
+        new Blob([fileContent], {
+          type: 'text/plain',
+        })
+      );
+      a.setAttribute('download', fileName);
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
   };
 
   self.restoreSettings = function (backupDataString) {
@@ -1162,8 +1175,9 @@ function App() {
       // console.log('Internet time mode already active');
       return;
     }
-    var apiUrl = self.data.timeOriginMode == 'auto' ? internetTimeApi : self.data.networkTimeApiUrl;
-    console.log('Internet time mode fetching from...', apiUrl);
+    if(self.data.timeOriginMode == 'auto' && window.cordova && !self.isDeviceReady) {
+      return;
+    }
     self.setFetchingStatus('Requesting time from network...', 'init', true);
     function parseDateTime(datetime) {
       var parts = datetime.split(' ');
@@ -1178,6 +1192,32 @@ function App() {
         parseInt(timeParts[2])
       );
     }
+    if(self.data.timeOriginMode == 'auto' && cordova && cordova.plugins && cordova.plugins.sntp) {
+      console.log('time mode auto: using NTP server pool.ntp.org');
+      cordova.plugins.sntp.setServer("pool.ntp.org", 10000);
+      cordova.plugins.sntp.getTime(function(time) {
+        console.log("The actual amount of milliseconds since epoch is: ", time, new Date(time.time));
+        var timestampMillis = time.time;
+        if (timestampMillis) {
+          setTimeout(function () {
+            // show waiting feedback at least 1 second
+            self.forceTimeUpdate(new Date(timestampMillis + 1000));
+          }, 1000);
+        }
+        self.data.networkTimeInitialized = true;
+        setTimeout(function () {
+          // possibility for time inaccuracy. Hence recheck in 1 hour.
+          self.data.networkTimeInitialized = false;
+        }, 1 * 60 * 60 * 1000);
+        self.setFetchingStatus('OK. Updated time from NTP server', 'success', false, 1);
+      }, function(errorMessage) {
+          console.log("I haz error: " + errorMessage);
+          self.setFetchingStatus('FAILED to update time from NTP server', 'error', false, 999);
+      });
+      return;
+    }
+    var apiUrl = self.data.timeOriginMode == 'auto' ? internetTimeApi : self.data.networkTimeApiUrl;
+    console.log('Internet time mode fetching from...', apiUrl);
     var beforeMillis = (new Date()).getTime();
     $.ajax({
       type: 'GET',
@@ -1199,7 +1239,7 @@ function App() {
           var afterMillis = (new Date()).getTime();
           var millisDiff = afterMillis - beforeMillis;
           if(response.utc_datetime) {
-            var millis = moment(response.utc_datetime)/* .add(1, 'hour') */.toDate().getTime();
+            var millis = moment(response.utc_datetime).toDate().getTime();
             console.log('bef', new Date(millis));
             millis += millisDiff;
             timestamp = millis/1000;

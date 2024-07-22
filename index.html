@@ -42,8 +42,8 @@
             <div class="modal-content">
               <div class="configured-info">
                 <span>
-                  Version {{ '?v=2.5.3-99.12'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }}
-                  (v.{{ '?v=2.5.3-99.12'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }})
+                  Version {{ '?v=2.5.3-99.12'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+\.\d+)/, '$1') }}
+                  (v.{{ '?v=2.5.3-99.12'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+\.\d+)/, '$2') }})
                 </span>
 
                 <span class="configured" v-if="iqamahTimesConfigured">Configured</span>
@@ -284,7 +284,6 @@
                       <input
                         id="restore-settings-file-input"
                         type="file"
-                        accept=".txt, .json"
                         @change="onRestoreFileChange($event)"
                       />
                      </div>
@@ -408,7 +407,7 @@
                 border-radius: 50%;
                 text-align: center;
               "
-              >v.{{ '?v=2.5.3-99.12'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$2') }}</span
+              >v.{{ '?v=2.5.3-99.12'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+\.\d+)/, '$2') }}</span
             >
           </div>
         </div>
