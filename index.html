@@ -146,6 +146,18 @@
                     </div>
                   </div>
                   <div class="config-item other-config" style="height: auto">
+                    <div><small>Time Mode:</small></div>
+                    <label for="time-origin-mode-device">
+                      <input
+                        id="time-origin-mode-auto"
+                        type="radio"
+                        name="time-origin-mode"
+                        value="auto"
+                        v-model="timeOriginMode"
+                        @change="updateSettings()"
+                      />
+                      Auto
+                    </label>
                     <label for="time-origin-mode-device">
                       <input
                         id="time-origin-mode-device"
@@ -155,7 +167,7 @@
                         v-model="timeOriginMode"
                         @change="updateSettings()"
                       />
-                      Device Time
+                      Device
                     </label>
                     <label for="time-origin-mode-network">
                       <input
@@ -166,7 +178,7 @@
                         v-model="timeOriginMode"
                         @change="updateSettings()"
                       />
-                      Network Time
+                      Network
                     </label>
                     <div v-if="timeOriginMode == 'network'">
                       <input type="url" v-model="networkTimeApiUrl" style="width: 100%; margin-bottom: 5px" />
@@ -263,11 +275,19 @@
                     </label>
                   </div>
                   <div class="config-item other-config" style="height: auto;">
-                    <template v-if="iqamahTimesConfigured">
+                    <div v-if="iqamahTimesConfigured">
                       <a href="#" @click="backupSettings()"><small>Backup Settings</small></a>
                       &nbsp; &middot; &nbsp;
-                    </template>
-                    <a  href="#"><small>Restore Settings</small></a>
+                    </div>
+                    <div>
+                      <small>Restore Settings</small>
+                      <input
+                        id="restore-settings-file-input"
+                        type="file"
+                        accept=".txt, .json"
+                        @change="onRestoreFileChange($event)"
+                      />
+                     </div>
                   </div>
                 </div>
 
@@ -306,7 +326,7 @@
                     />
                     <span class="time-info">
                       <span v-if="iqamahTime.absolute">
-                        <small>24h time</small>
+                        <small>(24h)</small>
                       </span>
                       <span class="" v-else>minutes</span>
                     </span>
@@ -581,7 +601,8 @@
 
         <div class="invalid-time-container" v-if="!timeIsValid">
           <h3>Waiting for time update...</h3>
-          <h2>from {{ timeOriginMode == 'network' ? 'network' : 'device' }}</h2>
+          <h2 v-if="timeOriginMode == 'auto'">from app</h2>
+          <h2 v-else>from {{ timeOriginMode == 'network' ? 'network' : 'device' }}</h2>
           <h3>
             <small>Network Status: </small>
             <strong>{{ network.status }}</strong>
@@ -696,7 +717,10 @@
             },
             getSelected: function(options, selectedId) {
               return window.mdApp.getSelected(options, selectedId);
-            }
+            },
+            onRestoreFileChange: function(event) {
+              return window.mdApp.onRestoreFileChange(event);
+            },
           },
           created: function created() {
             window.mdApp.created();

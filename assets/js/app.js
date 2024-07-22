@@ -65,6 +65,7 @@ function App() {
 
   var timeServerIp = '192.168.1.1';
   var timeServerApi = 'http://' + timeServerIp + '/api';
+  var internetTimeApi = 'https://api.allorigins.win/raw?url=http%3A%2F%2Fworldtimeapi.org%2Fapi%2Ftimezone%2Futc&_=_timestamp_';
   self.timeServerApi = timeServerApi;
   self.data = {
     showSplash: true,
@@ -98,7 +99,7 @@ function App() {
       },
     },
     toasts: [],
-    timeOriginMode: 'device',
+    timeOriginMode: 'auto',
     // or 'network'
     networkMode: 'network',
     // or 'timeserver',
@@ -393,12 +394,12 @@ function App() {
       // }
     }
 
-    if (self.data.timeOverridden || self.data.timeOriginMode == 'network') {
+    if (self.data.timeOverridden || self.data.timeOriginMode == 'auto' || self.data.timeOriginMode == 'network') {
       self.data.time = new Date(self.data.time.getTime() + 1000);
     } else {
       self.data.time = new Date();
     }
-    var lastKnownDate = new Date(2024, 6, 3, 19, 50);
+    var lastKnownDate = new Date(2024, 6, 22, 14, 50);
     self.data.timeIsValid = self.data.time.getTime() >= lastKnownDate.getTime();
     if (!self.initialTestTime && !self.data.timeIsValid) {
       var d = new Date();
@@ -826,6 +827,7 @@ function App() {
     self.checkForKioskMode();
   };
   self.closeSettings = function () {
+    self.updateSettings();
     self.data.settingsMode = false;
     var reloadOnSettings = true;
     if (reloadOnSettings || self.shouldReload) {
@@ -850,7 +852,7 @@ function App() {
     if (self.analogClock && self.data.analogClockActive) {
       self.analogClock.init(document.getElementById('analog-clock-container'), self.initialTestTime);
     }
-    if (self.data.timeOriginMode == 'network' && self.simulateTime) {
+    if ((self.data.timeOriginMode == 'auto' || self.data.timeOriginMode == 'network') && self.simulateTime) {
       alert('Warning: simulateTime feature is not compatible with network time');
     }
     window._theInterval = window.setInterval(
@@ -862,6 +864,7 @@ function App() {
     setTimeout(function () {
       self.data.showSplash = false;
     }, 1000);
+    self.updateSettings(); // @TODO: remove in next version: this is to persist timeOriginMode: auto
   };
   self.created = function () {
     if (window._theInterval) {
@@ -886,8 +889,11 @@ function App() {
     }
     self.data.iqamahTimesConfigured = !!iqamahTimesConfigured;
     if (settings) {
-      if (settings.timeOriginMode == 'device' || settings.timeOriginMode == 'network') {
+      if (settings.timeOriginMode == 'auto' || settings.timeOriginMode == 'device' || settings.timeOriginMode == 'network') {
         self.data.timeOriginMode = settings.timeOriginMode;
+      }
+      if(settings.networkTimeApiUrl) {
+        self.data.networkTimeApiUrl = settings.networkTimeApiUrl;
       }
       var timeAdjustmentMinutes = parseInt(settings.timeAdjustmentMinutes);
       if (!isNaN(timeAdjustmentMinutes)) {
@@ -946,7 +952,7 @@ function App() {
     }
     self.data.iqamahTimesConfigured = true;
     var settings = {
-      timeOriginMode: self.data.timeOriginMode,
+      timeOriginMode: 'auto',//self.data.timeOriginMode, // @TODO: remove hard-coded value
       timeAdjustmentMinutes: self.data.timeAdjustmentMinutes,
       analogClockActive: self.data.analogClockActive,
       activeClockTheme: 'digitalDefault', // reset to default for possible later usage
@@ -955,6 +961,7 @@ function App() {
       focusActiveTimer: self.data.focusActiveTimer,
       time24Format: self.data.time24Format,
       timeOverrideEnabled: self.data.timeOverrideEnabled,
+      networkTimeApiUrl: self.data.networkTimeApiUrl,
     };
     localStorage.setItem('mdisplay.iqamahTimes', JSON.stringify(iqamahTimes));
     localStorage.setItem('mdisplay.iqamahTimesConfigured', 1);
@@ -974,14 +981,75 @@ function App() {
     self.shouldReload = true;
   };
   self.backupSettings = function () {
+    self.writeStorage();
+
     var backupData = {
-      'mdisplay.lang': self.data.selectedLanguage,
-      'mdisplay.prayerDataId': self.data.selectedPrayerDataId,
-      'mdisplay.iqamahTimes': localStorage.getItem('mdisplay.iqamahTimes'),
-      'mdisplay.settings': localStorage.getItem('mdisplay.settings'),
+      'mdisplay.ssid': localStorage.getItem('mdisplay.ssid') || 'NodeMCU TimeServer',
       'mdisplay.backupTime': self.data.time.getTime(),
+      'mdisplay.backupVersion': 1,
     };
-    console.log('backupSettings', JSON.stringify(backupData));
+
+    for (var key in {
+      'mdisplay.iqamahTimes': true,
+      'mdisplay.iqamahTimesConfigured': true,
+      'mdisplay.settings': true,
+      'mdisplay.lastKnownTime': true,
+
+      'mdisplay.lang': true,
+      'mdisplay.prayerDataId': true,
+      'mdisplay.sunriseSupport': true,
+    }) {
+      backupData[key] = localStorage.getItem(key);
+    }
+    console.log('backupSettings', JSON.stringify(JSON.stringify(backupData)), backupData);
+
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(
+      new Blob([JSON.stringify(backupData, null, 2)], {
+        type: 'text/plain',
+      })
+    );
+    a.setAttribute('download', 'mdisplay.backup-' + moment().format('YYYY-MM-DD HH mm ss') + '.txt');
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
+  self.restoreSettings = function (backupDataString) {
+    var backupData;
+    try {
+      backupData = JSON.parse(backupDataString);
+    } catch (e) {
+      backupData = {};
+      console.error('Invalid restoration data', e);
+      alert('Invalid restoration data: ' + e);
+    }
+    for (key in backupData) {
+      if (key == 'mdisplay.backupVersion') {
+        continue;
+      }
+      localStorage.setItem(key, backupData[key]);
+    }
+    window.location.reload();
+  };
+  self.onRestoreFileChange = function (event) {
+    var file = document.getElementById('restore-settings-file-input');
+    console.log('onRestoreFileChange', event);
+    event.preventDefault();
+    // If there's no file, do nothing
+    if (!file.value.length) return;
+    // Create a new FileReader() object
+    var reader = new FileReader();
+    // Setup the callback event to run when the file is read
+    reader.onload = function (event) {
+      self.restoreSettings(event.target.result);
+      var str = event.target.result;
+      var json = JSON.parse(str);
+      console.log('string', str);
+      console.log('json', json);
+    };
+    // Read the file
+    reader.readAsText(file.files[0]);
   };
   self.initShortcuts = function () {
     var KEY_CODES = {
@@ -1036,31 +1104,31 @@ function App() {
         self.lastSelectedRow = lastSelectedRow;
         self.lastSelectedCol = lastSelectedCol;
       }
-      if (keyCode == KEY_CODES.ARROW_LEFT || keyCode == KEY_CODES.ARROW_RIGHT) {
-        event.preventDefault();
-        var _lastSelectedRow = self.lastSelectedRow || 1;
-        var _lastSelectedCol = self.lastSelectedCol || 0;
-        if (_lastSelectedRow < 1) {
-          _lastSelectedRow = rows.length;
-        }
-        if (_lastSelectedRow > rows.length) {
-          _lastSelectedRow = 1;
-        }
-        var _row = rows[_lastSelectedRow - 1];
-        var _cols = _row.querySelectorAll('input');
-        _lastSelectedCol += keyCode == KEY_CODES.ARROW_LEFT ? -1 : 1;
-        if (_lastSelectedCol < 1) {
-          _lastSelectedCol = _cols.length;
-        }
-        if (_lastSelectedCol > _cols.length) {
-          _lastSelectedCol = 1;
-        }
-        var _col = _cols[_lastSelectedCol - 1];
-        console.log('SHOULD FOCUS: ', _col.value, _col);
-        _col.focus();
-        self.lastSelectedRow = _lastSelectedRow;
-        self.lastSelectedCol = _lastSelectedCol;
-      }
+      // if (keyCode == KEY_CODES.ARROW_LEFT || keyCode == KEY_CODES.ARROW_RIGHT) {
+      //   event.preventDefault();
+      //   var _lastSelectedRow = self.lastSelectedRow || 1;
+      //   var _lastSelectedCol = self.lastSelectedCol || 0;
+      //   if (_lastSelectedRow < 1) {
+      //     _lastSelectedRow = rows.length;
+      //   }
+      //   if (_lastSelectedRow > rows.length) {
+      //     _lastSelectedRow = 1;
+      //   }
+      //   var _row = rows[_lastSelectedRow - 1];
+      //   var _cols = _row.querySelectorAll('input');
+      //   _lastSelectedCol += keyCode == KEY_CODES.ARROW_LEFT ? -1 : 1;
+      //   if (_lastSelectedCol < 1) {
+      //     _lastSelectedCol = _cols.length;
+      //   }
+      //   if (_lastSelectedCol > _cols.length) {
+      //     _lastSelectedCol = 1;
+      //   }
+      //   var _col = _cols[_lastSelectedCol - 1];
+      //   console.log('SHOULD FOCUS: ', _col.value, _col);
+      //   _col.focus();
+      //   self.lastSelectedRow = _lastSelectedRow;
+      //   self.lastSelectedCol = _lastSelectedCol;
+      // }
     };
   };
   self.setFetchingStatus = function (message, mode, status, timeout) {
@@ -1086,7 +1154,7 @@ function App() {
     if (self.fetchingInternetTime) {
       return;
     }
-    if (self.data.timeOriginMode != 'network') {
+    if (!(self.data.timeOriginMode == 'auto' || self.data.timeOriginMode == 'network')) {
       // console.log('Internet time mode disabled');
       return;
     }
@@ -1094,7 +1162,8 @@ function App() {
       // console.log('Internet time mode already active');
       return;
     }
-    console.log('Internet time mode fetching from...', self.data.networkTimeApiUrl);
+    var apiUrl = self.data.timeOriginMode == 'auto' ? internetTimeApi : self.data.networkTimeApiUrl;
+    console.log('Internet time mode fetching from...', apiUrl);
     self.setFetchingStatus('Requesting time from network...', 'init', true);
     function parseDateTime(datetime) {
       var parts = datetime.split(' ');
@@ -1109,11 +1178,13 @@ function App() {
         parseInt(timeParts[2])
       );
     }
+    var beforeMillis = (new Date()).getTime();
     $.ajax({
       type: 'GET',
-      dataType: 'jsonp',
-      url: self.data.networkTimeApiUrl + '',
-      jsonp: 'callback',
+      dataType: 'json',
+      url: apiUrl.replace('_timestamp_', (new Date()).getTime()) + '',
+      crossDomain: true,
+      // jsonp: 'callback',
       contentType: 'application/json; charset=utf-8',
       success: function success(response) {
         // console.log('Result received', response);
@@ -1125,9 +1196,19 @@ function App() {
         var timestamp = response.timestamp;
         var time = response.time;
         if (!timestamp && !time) {
-          self.setFetchingStatus('MISSING timestamp or time from response', 'error', false, 999);
-          console.log('Invalid timestamp/time response', response);
-          return;
+          var afterMillis = (new Date()).getTime();
+          var millisDiff = afterMillis - beforeMillis;
+          if(response.utc_datetime) {
+            var millis = moment(response.utc_datetime)/* .add(1, 'hour') */.toDate().getTime();
+            console.log('bef', new Date(millis));
+            millis += millisDiff;
+            timestamp = millis/1000;
+            console.log('af', new Date(millis));
+          } else {
+            self.setFetchingStatus('MISSING timestamp or time from response', 'error', false, 999);
+            console.log('Invalid timestamp/time response', response);
+            return;
+          }
         }
         if (timestamp) {
           var timestampMillis = timestamp * 1000;
@@ -1145,9 +1226,9 @@ function App() {
         }
         self.data.networkTimeInitialized = true;
         setTimeout(function () {
-          // possibility for time inaccuracy. Hence recheck in 10 seconds.
+          // possibility for time inaccuracy. Hence recheck in 15 minutes.
           self.data.networkTimeInitialized = false;
-        }, 10 * 1000);
+        }, 15 * 60 * 1000);
         console.log('network data: ', response);
         self.setFetchingStatus('OK. Updated time from network', 'success', false, 1);
       },
