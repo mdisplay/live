@@ -890,7 +890,7 @@ function App() {
     self.data.iqamahTimesConfigured = !!iqamahTimesConfigured;
     if (settings) {
       if (settings.timeOriginMode == 'auto' || settings.timeOriginMode == 'device' || settings.timeOriginMode == 'network') {
-        self.data.timeOriginMode = settings.timeOriginMode;
+        self.data.timeOriginMode = 'auto'; // settings.timeOriginMode; // @TODO: remove in next version: hard coded value
       }
       if(settings.networkTimeApiUrl) {
         self.data.networkTimeApiUrl = settings.networkTimeApiUrl;
