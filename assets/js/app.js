@@ -1007,9 +1007,9 @@ function App() {
 
     console.log('backupSettings', JSON.stringify(fileContent), backupData);
 
-    if(cordova && cordova.plugins && cordova.plugins.saveDialog) {
+    if(window.cordova && window.cordova.plugins && window.cordova.plugins.saveDialog) {
       var blob = new Blob([fileContent], {type: "text/plain"});
-      cordova.plugins.saveDialog.saveFile(blob, fileName).then(function(uri) {
+      window.cordova.plugins.saveDialog.saveFile(blob, fileName).then(function(uri) {
         console.log("The file has been successfully saved to", uri);
       }).catch(function(reason) {
         console.log(reason);
@@ -1192,10 +1192,10 @@ function App() {
         parseInt(timeParts[2])
       );
     }
-    if(self.data.timeOriginMode == 'auto' && cordova && cordova.plugins && cordova.plugins.sntp) {
+    if(self.data.timeOriginMode == 'auto' && window.cordova && window.cordova.plugins && window.cordova.plugins.sntp) {
       console.log('time mode auto: using NTP server pool.ntp.org');
-      cordova.plugins.sntp.setServer("pool.ntp.org", 10000);
-      cordova.plugins.sntp.getTime(function(time) {
+      window.cordova.plugins.sntp.setServer("pool.ntp.org", 10000);
+      window.cordova.plugins.sntp.getTime(function(time) {
         console.log("The actual amount of milliseconds since epoch is: ", time, new Date(time.time));
         var timestampMillis = time.time;
         if (timestampMillis) {
