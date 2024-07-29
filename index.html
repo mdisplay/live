@@ -294,6 +294,18 @@
                   <!-- <div>
                     <small>Iqamah Times</small>
                   </div> -->
+                  <div class="config-item time-config" style="height: auto;">
+                    <span>
+                    NOTE: Click on the
+                    <span class="toggle-absolute is-not-absolute">
+                      <span class="plus">+</span>
+                    </span>
+                    <span class="toggle-absolute is-absolute">
+                      <span class="at">@</span>
+                    </span>
+                    buttons to use either adjacent or absolute time
+                    </span>
+                  </div>
                   <div class="config-item time-config" v-for="(iqamahTime, name) in iqamahTimes">
                     <span class="label">{{ name }}</span>
                     <!-- {{ name }}: {{ iqamahTime }} -->
@@ -607,7 +619,8 @@
             <strong>{{ network.status }}</strong>
           </h3>
           <h1 :style="{color: networkTimeInitialized ? '#ff1919' : '#ff1919'}">
-            <small>Device time:</small> {{ timeFormatted }}
+            <small>Device time:</small> {{ getDeviceTimeFormatted() }} <br>
+            <small>App time:</small> {{ timeFormatted }} <br>
           </h1>
           <h3 v-if="timeFetchingMessage" :style="{color: timeFetchingMessage.color}">{{ timeFetchingMessage.text }}</h3>
         </div>
@@ -718,6 +731,9 @@
             },
             onRestoreFileChange: function(event) {
               return window.mdApp.onRestoreFileChange(event);
+            },
+            getDeviceTimeFormatted: function() {
+              return window.mdApp.getDeviceTimeFormatted();
             },
           },
           created: function created() {

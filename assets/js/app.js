@@ -215,6 +215,11 @@ function App() {
 
   // METHODS begin
 
+  self.getDeviceTimeFormatted = function() {
+    var m = moment();
+    var time24Format = self.data.time24Format;
+    return m.format('DD MMM YYYY, ' + (time24Format ? 'HH:mm:ss' : 'h:mm:ss A'));
+  };
   self.languageChanged = function () {
     localStorage.setItem('mdisplay.lang', self.data.selectedLanguage);
     self.closeSettings();
@@ -399,7 +404,7 @@ function App() {
     } else {
       self.data.time = new Date();
     }
-    var lastKnownDate = new Date(2024, 6, 23, 0, 0);
+    var lastKnownDate = new Date(2024, 6, 29, 10, 10);
     self.data.timeIsValid = self.data.time.getTime() >= lastKnownDate.getTime();
     if (!self.initialTestTime && !self.data.timeIsValid) {
       var d = new Date();
@@ -1206,13 +1211,14 @@ function App() {
         }
         self.data.networkTimeInitialized = true;
         setTimeout(function () {
-          // possibility for time inaccuracy. Hence recheck in 1 hour.
+          // possibility for time inaccuracy. Hence recheck in 5 minutes.
           self.data.networkTimeInitialized = false;
-        }, 1 * 60 * 60 * 1000);
+        }, 5 * 60 * 1000);
         self.setFetchingStatus('OK. Updated time from NTP server', 'success', false, 1);
       }, function(errorMessage) {
           console.log("I haz error: " + errorMessage);
           self.setFetchingStatus('FAILED to update time from NTP server', 'error', false, 999);
+          self.data.networkTimeInitialized = false;
       });
       return;
     }
@@ -1221,7 +1227,7 @@ function App() {
     var beforeMillis = (new Date()).getTime();
     $.ajax({
       type: 'GET',
-      dataType: 'json',
+      dataType: self.data.timeOriginMode == 'auto' ? 'json' : 'jsonp',
       url: apiUrl.replace('_timestamp_', (new Date()).getTime()) + '',
       crossDomain: true,
       // jsonp: 'callback',
@@ -1231,9 +1237,11 @@ function App() {
         if (!response /* && response.timestamp */) {
           console.log('Invalid response', response);
           self.setFetchingStatus('INVALID response', 'error', false, 999);
+          self.data.networkTimeInitialized = false;
           return;
         }
         var timestamp = response.timestamp;
+        var timestampMillis;
         var time = response.time;
         if (!timestamp && !time) {
           var afterMillis = (new Date()).getTime();
@@ -1242,16 +1250,19 @@ function App() {
             var millis = moment(response.utc_datetime).toDate().getTime();
             console.log('bef', new Date(millis));
             millis += millisDiff;
-            timestamp = millis/1000;
+            timestampMillis = millis;
             console.log('af', new Date(millis));
           } else {
             self.setFetchingStatus('MISSING timestamp or time from response', 'error', false, 999);
             console.log('Invalid timestamp/time response', response);
+            self.data.networkTimeInitialized = false;
             return;
           }
         }
-        if (timestamp) {
-          var timestampMillis = timestamp * 1000;
+        if(!timestampMillis && timestamp) {
+          timestampMillis = timestampMillis || timestamp * 1000;
+        }
+        if (timestampMillis) {
           // alert('timestampMillis: ' + timestampMillis);
           setTimeout(function () {
             // show waiting feedback at least 1 second
@@ -1266,9 +1277,9 @@ function App() {
         }
         self.data.networkTimeInitialized = true;
         setTimeout(function () {
-          // possibility for time inaccuracy. Hence recheck in 15 minutes.
+          // possibility for time inaccuracy. Hence recheck in 5 minutes.
           self.data.networkTimeInitialized = false;
-        }, 15 * 60 * 1000);
+        }, 5 * 60 * 1000);
         console.log('network data: ', response);
         self.setFetchingStatus('OK. Updated time from network', 'success', false, 1);
       },
@@ -1276,6 +1287,7 @@ function App() {
         console.log('err: ', err);
         // alert('err: ' + err);
         self.setFetchingStatus('FAILED to update time from network', 'error', false, 999);
+        self.data.networkTimeInitialized = false;
       },
     });
   };
