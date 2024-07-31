@@ -60,7 +60,7 @@ function App() {
   self.checkInternetJsonp = {
     jsonpCallback: 'checkInternet',
     url: 'https://mdisplay.github.io/live/check-internet.js',
-    // url: 'http://192.168.1.11/mdisplay/live/check-internet.js',
+    // url: ' http://192.168.1.10:3000/check-internet.js'
   };
 
   var timeServerIp = '192.168.1.1';
@@ -68,6 +68,11 @@ function App() {
   var internetTimeApi = 'https://api.allorigins.win/raw?url=http%3A%2F%2Fworldtimeapi.org%2Fapi%2Ftimezone%2Futc&_=_timestamp_';
   self.timeServerApi = timeServerApi;
   self.data = {
+    appVersion: {
+      fullVersion: '?v=0.0.0-000',
+      versionString: '0.0.0',
+      versionNumber: 0,
+    },
     showSplash: true,
     // currentPrayerWaiting: false,
     // time: new Date(),
@@ -293,6 +298,16 @@ function App() {
           self.setFetchingStatus('Internet Connection OK ', 'success', false, 999);
           setTimeout(function () {
             self.data.network.internetAvailable = true;
+            if(response.v) {
+              var newVersion = self.parseVersion(response.v);
+              if (newVersion && newVersion.versionNumber > self.data.appVersion.versionNumber) {
+                var notificationSeconds = 3000;
+                self.showToast('Application updated. Reloading...', notificationSeconds);
+                setTimeout(function () {
+                  window.location.reload();
+                }, notificationSeconds);
+              }
+            }
             okCallback();
             // self.data.network.checking = false;
           }, 2000);
@@ -404,7 +419,7 @@ function App() {
     } else {
       self.data.time = new Date();
     }
-    var lastKnownDate = new Date(2024, 6, 29, 10, 10);
+    var lastKnownDate = new Date(2024, 6, 31, 20, 10);
     self.data.timeIsValid = self.data.time.getTime() >= lastKnownDate.getTime();
     if (!self.initialTestTime && !self.data.timeIsValid) {
       var d = new Date();
@@ -1169,7 +1184,7 @@ function App() {
     }, timeout || 0);
   };
   self.updateInternetTime = function () {
-    if (self.fetchingInternetTime) {
+    if (self.fetchingInternetTime || self.data.timeOverridden) {
       return;
     }
     if (!(self.data.timeOriginMode == 'auto' || self.data.timeOriginMode == 'network')) {
@@ -1345,6 +1360,15 @@ function App() {
       }
       self.initShortcuts();
     });
+  };
+  self.parseVersion = function(fullVersion) {
+    fullVersion = fullVersion.replace('?v=', '');
+    var regex = /(\d+\.\d+\.\d+)-(\d+)/;
+    return {
+      fullVersion: fullVersion,
+      versionString: fullVersion.replace(regex, '$1'),
+      versionNumber: parseInt(fullVersion.replace(regex, '$2'), 10),
+    };
   };
 }
 window.mdApp = new App();
