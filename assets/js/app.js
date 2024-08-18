@@ -273,6 +273,45 @@ function App() {
       self.checkNetworkStatusUntilTimeIsValid();
     }, 3000);
   };
+
+  self.appExpired = function() {
+    if(!(window.cordova && window.location.protocol == 'file:')) {
+      var notificationSeconds = 3000;
+      self.showToast('Application updated. Reloading...', notificationSeconds);
+      setTimeout(function () {
+        window.location.reload();
+      }, notificationSeconds);
+      return;
+    }
+    resolveLocalFileSystemURL(cordova.file.dataDirectory, function (dataDir) {
+      dataDir.getDirectory('app', {
+        create: false,
+        exclusive: false
+      }, function (dirEntry) {
+        console.log('yes dir');
+        dirEntry.getDirectory('live-master', {
+          create: false
+        }, function (dirEntry) {
+            console.log('yes zippy');
+            dirEntry.getFile('_expired', {
+            create: true
+          }, function (entry) {
+            console.log('_expired file created!');
+            window.history.go(-1);
+          }, function (err) {
+              console.error('Could not create _expired file');
+          });
+        }, function (err) {
+          console.error('Could not get zipDirectory: live-master');
+        });
+      }, function (err) {
+        console.error('Could not get/create directory: app');
+      });
+    }, function (err) {
+      console.error('Could not resolve data directory for: app');
+    });
+  }
+
   self.checkInternetAvailability = function (okCallback, retryCount, failCallback) {
     retryCount = retryCount || 0;
     self.setFetchingStatus('Checking Internet Connection...', 'init', true);
@@ -301,11 +340,7 @@ function App() {
             if(response.v) {
               var newVersion = self.parseVersion(response.v);
               if (newVersion && newVersion.versionNumber > self.data.appVersion.versionNumber) {
-                var notificationSeconds = 3000;
-                self.showToast('Application updated. Reloading...', notificationSeconds);
-                setTimeout(function () {
-                  window.location.reload();
-                }, notificationSeconds);
+                self.appExpired();
               }
             }
             okCallback();
