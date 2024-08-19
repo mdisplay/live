@@ -67,6 +67,8 @@ function App() {
   var timeServerApi = 'http://' + timeServerIp + '/api';
   var internetTimeApi = 'https://api.allorigins.win/raw?url=http%3A%2F%2Fworldtimeapi.org%2Fapi%2Ftimezone%2Futc&_=_timestamp_';
   self.timeServerApi = timeServerApi;
+  self.retryWifiCount = 0;
+  self.retryLastMillis = 0;
   self.data = {
     appVersion: {
       fullVersion: '?v=0.0.0-000',
@@ -237,11 +239,10 @@ function App() {
     localStorage.setItem('mdisplay.ssid', self.data.timeServerSSID);
     self.closeSettings();
   };
-  self.checkNetworkStatus = function () {
+  self.checkNetworkStatus = function (isInitial) {
     if (!self.isDeviceReady || typeof Connection === 'undefined') {
       return;
     }
-    self.data.showRememberWifiSetting = true;
     var networkState = navigator.connection.type;
     var states = {};
     states[Connection.UNKNOWN] = 'Unknown Connection';
@@ -252,18 +253,38 @@ function App() {
     states[Connection.CELL_4G] = 'Cell 4G Connection';
     states[Connection.CELL] = 'Cell Generic Connection';
     states[Connection.NONE] = 'No Network Connection';
-    self.data.network.status = states[networkState];
-    if (networkState == Connection.WIFI && typeof WifiWizard2 !== 'undefined') {
-      self.data.network.status = 'Checking WiFi SSID...';
-      WifiWizard2.getConnectedSSID().then(
-        function (ssid) {
-          self.data.network.status = states[Connection.WIFI] + ' (' + ssid + ')';
-          self.data.connectedWifiSSID = ssid;
-        },
-        function (err) {
-          self.data.network.status = states[Connection.WIFI] + ' (SSID err: ' + err + ')';
+    if (!self.data.network.connecting) {
+      // self.data.network.status = states[networkState];
+    }
+    if (typeof WifiWizard2 === 'undefined') {
+      return;
+    }
+    self.data.showRememberWifiSetting = true;
+    if (networkState == Connection.WIFI) {
+      if (!self.data.network.connecting) {
+        self.data.network.status = 'Checking WiFi SSID...';
+        WifiWizard2.getConnectedSSID().then(
+          function (ssid) {
+            self.data.network.status = states[Connection.WIFI] + ' (' + ssid + ')';
+            self.data.connectedWifiSSID = ssid;
+            self.data.network.connecting = undefined;
+          },
+          function (err) {
+            self.data.network.status = states[Connection.WIFI] + ' (SSID err: ' + err + ')';
+            self.data.network.connecting = undefined;
+          }
+        );
+      }
+    } else {
+      if (self.data.rememberWifi) {
+        var currentMillis = (new Date()).getTime();
+        var retryAfter = 30 * 1000; // 30 seconds
+        if(currentMillis > self.retryLastMillis + retryAfter) {
+          self.retryLastMillis = currentMillis;
+          self.retryWifiCount += 1;
+          self.tryConnectingToWiFiSSID(self.data.rememberedWifiSSID, self.retryWifiCount);
         }
-      );
+      }
     }
 
     // alert('Connection type: ' + states[networkState]);
@@ -778,9 +799,9 @@ function App() {
     if (self.data.timeOriginMode == 'network' && self.data.networkTimeApiUrl == self.timeServerApi) {
       self.tryConnectingToTimeServer();
     } else {
-      if (self.data.rememberWifi) {
-        self.tryConnectingToWiFiSSID(self.data.rememberedWifiSSID);
-      }
+      // if (self.data.rememberWifi) {
+      //   self.tryConnectingToWiFiSSID(self.data.rememberedWifiSSID);
+      // }
       if (checkInternetNow) {
         self.checkInternetAvailability(
           function () {},
@@ -1416,22 +1437,26 @@ function App() {
     var bindAll = true;
     var isHiddenSSID = false;
     self.data.network.connecting = true;
-    self.data.network.status = 'Connecting to ' + wifiSSID + ' (' + retryCount + ')...';
-    // WifiWizard2.connect(wifiSSID, bindAll, '', 'WPA', isHiddenSSID).then(
-    // WifiWizard2.enable(ssid, bindAll, waitForConnection)
-    WifiWizard2.enable(wifiSSID, bindAll, true).then(
-      function (res) {
-        self.data.network.connecting = false;
-        self.data.network.status = 'Connected to ' + wifiSSID;
-        self.checkNetworkStatus();
-      },
-      function (err) {
-        self.data.network.status = 'ERR ' + wifiSSID + ' - ' + err;
-        setTimeout(function () {
-          self.tryConnectingToWiFiSSID(wifiSSID, retryCount + 1);
-        }, 1000);
-      }
-    );
+    self.data.network.status = 'Connecting to: ' + wifiSSID + ' (' + retryCount + ')...';
+    setTimeout(function() {
+      WifiWizard2.connect(wifiSSID, bindAll, undefined, 'WPA', isHiddenSSID).then(
+      // WifiWizard2.enable(ssid, bindAll, waitForConnection)
+      // WifiWizard2.connect(timeServerSSID, bindAll, '1234567890', 'WPA', isHiddenSSID).then(
+      // WifiWizard2.enable(wifiSSID, bindAll, true).then(
+        function (res) {
+          self.data.network.connecting = undefined;
+          self.data.network.status = 'Connected to: ' +  wifiSSID;
+          // self.checkNetworkStatus();
+        },
+        function (err) {
+          self.data.network.status = 'ERR ' + wifiSSID + ' - ' + err;
+          self.data.network.connecting = undefined;
+          // setTimeout(function () {
+          //   self.tryConnectingToWiFiSSID(wifiSSID, retryCount + 1);
+          // }, 1000);
+        }
+      );
+    }, 1000);
   };
   self.getSelected = function (options, selectedId) {
     var selected = options.filter(function (option) {
