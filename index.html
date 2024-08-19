@@ -14,11 +14,11 @@
     <title>MDisplay Live</title>
     <link rel="shortcut icon" href="assets/images/favicon.png" />
     <link rel="icon" type="image/png" href="assets/images/favicon.png" />
-    <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=2.7.0-115" />
-    <link rel="stylesheet" type="text/css" href="assets/css/app.css?v=2.7.0-115" />
-    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock.css?v=2.7.0-115" />
-    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock-layout.css?v=2.7.0-115" />
-    <link rel="stylesheet" type="text/css" href="assets/css/theme-default.css?v=2.7.0-115" />
+    <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=2.8.0-116" />
+    <link rel="stylesheet" type="text/css" href="assets/css/app.css?v=2.8.0-116" />
+    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock.css?v=2.8.0-116" />
+    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock-layout.css?v=2.8.0-116" />
+    <link rel="stylesheet" type="text/css" href="assets/css/theme-default.css?v=2.8.0-116" />
   </head>
   <body>
     <div
@@ -67,7 +67,7 @@
                   <span class="error" v-if="appUdate.error">ERROR: {{ appUdate.error }}</span>
                   <span class="checking" v-if="appUdate.checking">Checking...</span>
                   <span class="updated" v-if="appUdate.updated"
-                    >Updated. Version {{ '?v=2.7.0-115'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1 ($2)') }}.</span
+                    >Updated. Version {{ '?v=2.8.0-116'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1 ($2)') }}.</span
                   >
                   <span class="updating" v-if="appUdate.updating">Updating...</span>
                 </div>
@@ -412,7 +412,7 @@
             <span style="padding: 0.25rem; color: #ff0000; font-weight: bold; opacity: 0.75">No Internet</span>
           </div>
           <div v-else>
-            <!-- <span style="opacity: 0.25"> Version {{ '?v=2.7.0-115'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }} </span> -->
+            <!-- <span style="opacity: 0.25"> Version {{ '?v=2.8.0-116'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }} </span> -->
 
             <span style="opacity: 0.5">
               <svg style="height: 1em; color: #FFF; fill: #FFF;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -648,22 +648,22 @@
         </div>
       </div>
     </div>
-    <script type="text/javascript" src="prayer-data.js?v=2.7.0-115"></script>
-    <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=2.7.0-115"></script>
-    <script type="text/javascript" src="assets/vendors/vue.min.js?v=2.7.0-115"></script>
-    <script type="text/javascript" src="assets/vendors/moment.min.js?v=2.7.0-115"></script>
-    <script type="text/javascript" src="assets/vendors/hijri.js?v=2.7.0-115"></script>
-    <script type="text/javascript" src="assets/vendors/jquery-3.6.0.min.js?v=2.7.0-115"></script>
-    <script type="text/javascript" src="assets/js/translations.js?v=2.7.0-115"></script>
+    <script type="text/javascript" src="prayer-data.js?v=2.8.0-116"></script>
+    <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=2.8.0-116"></script>
+    <script type="text/javascript" src="assets/vendors/vue.min.js?v=2.8.0-116"></script>
+    <script type="text/javascript" src="assets/vendors/moment.min.js?v=2.8.0-116"></script>
+    <script type="text/javascript" src="assets/vendors/hijri.js?v=2.8.0-116"></script>
+    <script type="text/javascript" src="assets/vendors/jquery-3.6.0.min.js?v=2.8.0-116"></script>
+    <script type="text/javascript" src="assets/js/translations.js?v=2.8.0-116"></script>
     <script type="text/javascript" src="cdvfile://localhost/assets/www/cordova.js"></script>
-    <script type="text/javascript" src="assets/analog-clock/analog-clock.js?v=2.7.0-115"></script>
-    <script type="text/javascript" src="assets/js/app.js?v=2.7.0-115"></script>
+    <script type="text/javascript" src="assets/analog-clock/analog-clock.js?v=2.8.0-116"></script>
+    <script type="text/javascript" src="assets/js/app.js?v=2.8.0-116"></script>
     <script type="text/javascript">
       // WARNING: do not use ES6 syntax
       // The code should only be authored in ES5
       // to support older generation Android TV boxes
 
-      var fullVersion = '?v=2.7.0-115';
+      var fullVersion = '?v=2.8.0-116';
       window.mdApp.data.appVersion = window.mdApp.parseVersion(fullVersion);
 
       var hasCordova = !!window.cordova;
