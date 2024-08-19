@@ -200,6 +200,20 @@
                       </div>
                     </div>
                   </div>
+                  <div class="config-item other-config" style="height: auto;" v-if="showRememberWifiSetting">
+                    <div><small>[beta] Remember Wifi: ({{ rememberedWifiSSID }})</small></div>
+                    <div v-if="!connectedWifiSSID">WiFi Not Connected</div>
+                    <label v-else for="remember-wifi-check">
+                      <input
+                        id="remember-wifi-check"
+                        type="checkbox"
+                        name="remember-wifi-check"
+                        v-model="rememberWifi"
+                        @change="updateSettings()"
+                      />
+                      {{connectedWifiSSID}}
+                    </label>
+                  </div>
                   <div class="config-item other-config" style="height: auto;">
                     <div>
                       <small>Clock Theme</small>
