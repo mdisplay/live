@@ -1,1 +1,1 @@
-checkInternet({ "result": "ok", "v": "?v=2.8.1-117" });
+checkInternet({ "result": "ok", "v": "?v=2.8.2-118" });
