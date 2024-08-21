@@ -69,6 +69,7 @@ function App() {
   self.timeServerApi = timeServerApi;
   self.retryWifiCount = 0;
   self.retryLastMillis = 0;
+  self.useDeviceTimeOnly = false;
   self.data = {
     appVersion: {
       fullVersion: '?v=0.0.0-000',
@@ -141,7 +142,7 @@ function App() {
     timeIsValid: false,
     timeFetchingMessage: undefined,
     timeAdjustmentMinutes: 0,
-    timeServerSSID: localStorage.getItem('mdisplay.ssid') || 'NodeMCU TimeServer',
+    timeServerSSID: localStorage.getItem('mdisplay.ssid') || 'MDisplay TimeServer',
     timeServerSSIDs: ['NodeMCU TimeServer', 'MDisplay TimeServer'],
     network: {
       status: 'Unknown',
@@ -166,6 +167,9 @@ function App() {
     rememberWifi: false,
     connectedWifiSSID: undefined,
     rememberedWifiSSID: '~',
+    isCordovaReady: false,
+    isDownloadsListOpen: false,
+    downloadedFiles: [],
   };
   self.computed = {
     showAlert: function () {
@@ -479,12 +483,12 @@ function App() {
       // }
     }
 
-    if (self.data.timeOverridden || self.data.timeOriginMode == 'auto' || self.data.timeOriginMode == 'network') {
+    if (!self.useDeviceTimeOnly && (self.data.timeOverridden || self.data.timeOriginMode == 'auto' || self.data.timeOriginMode == 'network')) {
       self.data.time = new Date(self.data.time.getTime() + 1000);
     } else {
       self.data.time = new Date();
     }
-    var lastKnownDate = new Date(2024, 6, 31, 20, 10);
+    var lastKnownDate = new Date(2024, 7, 20, 0, 0);
     self.data.timeIsValid = self.data.time.getTime() >= lastKnownDate.getTime();
     if (!self.initialTestTime && !self.data.timeIsValid) {
       var d = new Date();
@@ -493,6 +497,18 @@ function App() {
         // self.data.time = d;
       }
       // self.checkNetworkStatusUntilTimeIsValid();
+    }
+
+    if(!self.useDeviceTimeOnly) {
+      var curr = new Date();
+      var isDeviceTimeValid = (curr).getTime() >= lastKnownDate.getTime();
+      if(isDeviceTimeValid) {
+        self.showToast('isDeviceTimeValid: ' + isDeviceTimeValid, 1000);
+        self.useDeviceTimeOnly = true; // should not persist to timeOriginMode. So using a temp prop to use in current page load
+        // self.data.timeOriginMode = 'device';
+        self.data.time = curr;
+        self.data.timeIsValid = true;
+      }
     }
 
     if (!self.data.timeIsValid) {
@@ -520,7 +536,9 @@ function App() {
     self.data.timeDisplaySeconds = m.format('ss');
     self.data.timeDisplayColon = self.data.timeDisplayColon == ':' ? '' : ':';
     self.data.timeDisplayAmPm = time24Format ? '' : m.format('A');
-    self.updateInternetTime();
+    if (!self.useDeviceTimeOnly) {
+      self.updateInternetTime();
+    }
   };
   self.getDateParams = function (date) {
     return [date.getFullYear(), date.getMonth(), date.getDate()];
@@ -952,7 +970,6 @@ function App() {
     setTimeout(function () {
       self.data.showSplash = false;
     }, 1000);
-    self.updateSettings(); // @TODO: remove in next version: this is to persist timeOriginMode: auto
   };
   self.created = function () {
     if (window._theInterval) {
@@ -1086,7 +1103,7 @@ function App() {
     self.writeStorage();
 
     var backupData = {
-      'mdisplay.ssid': localStorage.getItem('mdisplay.ssid') || 'NodeMCU TimeServer',
+      'mdisplay.ssid': localStorage.getItem('mdisplay.ssid') || 'MDisplay TimeServer',
       'mdisplay.backupTime': self.data.time.getTime(),
       'mdisplay.backupVersion': 1,
     };
@@ -1104,7 +1121,7 @@ function App() {
       backupData[key] = localStorage.getItem(key);
     }
 
-    var fileName = 'mdisplay.backup-' + moment().format('YYYY-MM-DD HH mm ss') + '.txt';
+    var fileName = 'mdisplay.backup-' + moment(self.data.time).format('YYYY-MM-DD HH mm ss') + '.txt';
     var fileContent = JSON.stringify(backupData, null, 2);
 
     console.log('backupSettings', JSON.stringify(fileContent), backupData);
@@ -1116,6 +1133,32 @@ function App() {
       }).catch(function(reason) {
         console.log(reason);
       });
+    } else if(window.cordova) {
+      var errorCallback = function (e) {
+        console.log('Error: ' + e);
+        alert('FAILED to save file: ' + e);
+      };
+
+      window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory, function (fileSystem) {
+        fileSystem.getDirectory('Download', { create: true, exclusive: false }, function (directory) {
+          //You need to put the name you would like to use for the file here.
+          directory.getFile(fileName, { create: true, exclusive: false },
+            function (fileEntry) {
+              fileEntry.createWriter(function (writer) {
+                writer.onwriteend = function () {
+                  console.log('File written to downloads');
+                  alert('Backup file saved to downloads');
+                };
+                writer.seek(0);
+                writer.write(
+                  new Blob([fileContent], {
+                    type: 'text/plain',
+                  })
+                ); //You need to put the file, blob or base64 representation here.
+            }, errorCallback);
+            }, errorCallback);
+          }, errorCallback);
+      }, errorCallback);
     } else {
       var a = document.createElement('a');
       a.href = URL.createObjectURL(
@@ -1146,6 +1189,54 @@ function App() {
       localStorage.setItem(key, backupData[key]);
     }
     window.location.reload();
+  };
+  self.onRestoreFileClick = function(dFile) {
+    var errorHandler = function(err) {
+      alert('Failed to restore file' + err);
+    }
+    window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory, function (dirEntry) {
+      dirEntry.getDirectory('Download', { create: false }, function (downloadDirEntry) {
+        downloadDirEntry.getFile(dFile.name, {
+          create: false
+        }, function (entry) {
+          entry.file(function (file) {
+              var reader = new FileReader();
+              reader.onloadend = function() {
+                console.log("Successful file read: " + this.result);
+                // alert(this.result);
+                self.restoreSettings(this.result);
+              };
+              reader.readAsText(file);
+          }, errorHandler);
+        }, errorHandler);
+      }, errorHandler);
+    }, errorHandler);
+
+  };
+  self.onRestoreSettingsClick = function() {
+    self.data.isDownloadsListOpen = true;
+    var errorHandler = function(err) {
+      alert('Failed to read downloads directory' + err);
+    }
+    self.data.downloadedFiles = [];
+
+    window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory, function (dirEntry) {
+      dirEntry.getDirectory('Download', { create: false }, function (downloadDirEntry) {
+          var directoryReader = downloadDirEntry.createReader();
+          directoryReader.readEntries(function (entries) {
+              var fileList = [];
+              entries.forEach(function (entry) {
+                  if (entry.isFile) {
+                    fileList.push({
+                      name: entry.name,
+                      // fileEntry: entry
+                    });
+                  }
+              });
+              self.data.downloadedFiles = fileList;
+          }, errorHandler);
+      }, errorHandler);
+    }, errorHandler);
   };
   self.onRestoreFileChange = function (event) {
     var file = document.getElementById('restore-settings-file-input');
@@ -1466,6 +1557,9 @@ function App() {
   };
   self.deviceReady = function () {
     self.isDeviceReady = true;
+    if (window.cordova) {
+      self.data.isCordovaReady = true;
+    }
     self.checkNetworkStatus();
   };
   self.init = function (initialTestTime, callback, analogClock) {

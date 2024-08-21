@@ -75,9 +75,18 @@
               </div>
               <div class="config-wrapper">
 
+                <div class="config-container downloads-list others-config" style="width: 100%; float: none;" v-if="isDownloadsListOpen">
+                  <a href="#" @click="isDownloadsListOpen = false;">&lt; Cancel</a>
+                  <br>
+                  Downloads
+                  <div style="padding-left: 10px;">
+                    <div v-for="dFile in downloadedFiles">
+                      &middot;&gt; <a href="#" @click="onRestoreFileClick(dFile)">{{dFile.name}}</a>
+                    </div>
+                  </div>
+                </div>
 
-
-                <div class="config-container others-config">
+                <div class="config-container others-config" v-if="!isDownloadsListOpen">
                   <div class="config-item other-config" style="height: auto">
                     <div>
                       <small>Prayer Times Data</small>
@@ -145,9 +154,9 @@
                     </label>
                     </div>
                   </div>
-                  <div class="config-item other-config" style="height: auto">
+                  <div class="config-item other-config" style="height: auto" v-if="false">
                     <div><small>Time Mode:</small></div>
-                    <label for="time-origin-mode-device">
+                    <label for="time-origin-mode-auto">
                       <input
                         id="time-origin-mode-auto"
                         type="radio"
@@ -156,7 +165,7 @@
                         v-model="timeOriginMode"
                         @change="updateSettings()"
                       />
-                      Auto
+                      Auto (NTP first)
                     </label>
                     <label for="time-origin-mode-device">
                       <input
@@ -167,9 +176,9 @@
                         v-model="timeOriginMode"
                         @change="updateSettings()"
                       />
-                      Device
+                      Device Only
                     </label>
-                    <label for="time-origin-mode-network">
+                    <label for="time-origin-mode-network" v-if="false">
                       <input
                         id="time-origin-mode-network"
                         type="radio"
@@ -180,7 +189,7 @@
                       />
                       Network
                     </label>
-                    <div v-if="timeOriginMode == 'network'">
+                    <div v-if="false && timeOriginMode == 'network'">
                       <input type="url" v-model="networkTimeApiUrl" style="width: 100%; margin-bottom: 5px" />
 
                       <div>
@@ -261,7 +270,7 @@
                         v-model="sunriseSupport"
                         @change="updateSettings()"
                       />
-                      Sunrise Support (beta)
+                      Sunrise Support
                     </label>
                   </div>
                   <div class="config-item other-config">
@@ -292,19 +301,23 @@
                     <div v-if="iqamahTimesConfigured">
                       <a href="#" @click="backupSettings()"><small>Backup Settings</small></a>
                       &nbsp; &middot; &nbsp;
+                      <template v-if="isCordovaReady">
+                        <a href="#" @click="onRestoreSettingsClick()"><small>Restore Settings</small></a>
+                      </template>
                     </div>
-                    <div>
+                    <div v-if="!isCordovaReady">
                       <small>Restore Settings</small>
                       <input
                         id="restore-settings-file-input"
                         type="file"
+                        accept="text/plain"
                         @change="onRestoreFileChange($event)"
                       />
                      </div>
                   </div>
                 </div>
 
-                <div class="config-container times-config">
+                <div class="config-container times-config" v-if="!isDownloadsListOpen">
                   <!-- <div>
                     <small>Iqamah Times</small>
                   </div> -->
@@ -358,7 +371,7 @@
                   </div>
                 </div>
 
-                <div class="config-container times-config" style="margin-top: 0.5rem;">
+                <div class="config-container times-config" v-if="!isDownloadsListOpen" style="margin-top: 0.5rem;">
                   <div class="config-item other-config" style="height: auto;">
                     <label for="time-override-active-check">
                       <input
@@ -753,6 +766,12 @@
             },
             getDeviceTimeFormatted: function() {
               return window.mdApp.getDeviceTimeFormatted();
+            },
+            onRestoreSettingsClick: function() {
+              return window.mdApp.onRestoreSettingsClick();
+            },
+            onRestoreFileClick: function(dFile) {
+              return window.mdApp.onRestoreFileClick(dFile);
             },
           },
           created: function created() {
