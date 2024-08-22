@@ -298,9 +298,11 @@
                     </label>
                   </div>
                   <div class="config-item other-config" style="height: auto;">
-                    <div v-if="iqamahTimesConfigured">
-                      <a href="#" @click="backupSettings()"><small>Backup Settings</small></a>
-                      &nbsp; &middot; &nbsp;
+                    <div>
+                      <template v-if="iqamahTimesConfigured">
+                        <a href="#" @click="backupSettings()"><small>Backup Settings</small></a>
+                        &nbsp; &middot; &nbsp;
+                      </template>
                       <template v-if="isCordovaReady">
                         <a href="#" @click="onRestoreSettingsClick()"><small>Restore Settings</small></a>
                       </template>
