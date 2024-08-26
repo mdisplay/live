@@ -60,7 +60,7 @@ function App() {
   self.checkInternetJsonp = {
     jsonpCallback: 'checkInternet',
     url: 'https://mdisplay.github.io/live/check-internet.js',
-    // url: ' http://192.168.1.10:3000/check-internet.js'
+    // url: ' http://192.168.1.10:3000/live/check-internet.js'
   };
 
   var timeServerIp = '192.168.1.1';
@@ -70,6 +70,15 @@ function App() {
   self.retryWifiCount = 0;
   self.retryLastMillis = 0;
   self.useDeviceTimeOnly = false;
+
+  var mdLauncher_SETTINGS_STORAGE_KEY = 'mdisplay-launcher.settings2';
+  self.launcherSettings = undefined;
+  if (window.location.protocol == 'file:') {
+    try {
+      self.launcherSettings = JSON.parse(localStorage.getItem(mdLauncher_SETTINGS_STORAGE_KEY));
+    } catch(e) {}
+  }
+
   self.data = {
     appVersion: {
       fullVersion: '?v=0.0.0-000',
@@ -148,7 +157,7 @@ function App() {
       status: 'Unknown',
       connecting: undefined,
       internetStatus: 'Unknown',
-      internetAvailable: undefined,
+      internetAvailable: true,
       showInternetAvailability: false,
     },
     lastKnownTime: undefined,
@@ -165,6 +174,7 @@ function App() {
     focusActiveTimer: false,
     showRememberWifiSetting: false,
     rememberWifi: false,
+    disconnectWifi: false,
     connectedWifiSSID: undefined,
     rememberedWifiSSID: '~',
     isCordovaReady: false,
@@ -375,6 +385,8 @@ function App() {
               var newVersion = self.parseVersion(response.v);
               if (newVersion && newVersion.versionNumber > self.data.appVersion.versionNumber) {
                 self.appExpired();
+              } else {
+                self.noUpdateAvailable = true;
               }
             }
             okCallback();
@@ -499,7 +511,7 @@ function App() {
       // self.checkNetworkStatusUntilTimeIsValid();
     }
 
-    if(!self.useDeviceTimeOnly) {
+    if(!self.useDeviceTimeOnly && !self.data.timeOverridden) {
       var curr = new Date();
       var isDeviceTimeValid = (curr).getTime() >= lastKnownDate.getTime();
       if(isDeviceTimeValid) {
@@ -525,6 +537,26 @@ function App() {
         if (self.data.network.connecting === false) {
           self.checkNetworkStatus();
         }
+      }
+    } else {
+      // time is valid
+      if (
+        self.useDeviceTimeOnly &&
+        self.data.disconnectWifi &&
+        self.launcherSettings && self.launcherSettings.zipFirst && !self.launcherSettings.zipCheckInternet &&
+        self.data.rememberWifi && self.data.rememberedWifiSSID &&
+        !self.wifiDisabled && self.noUpdateAvailable && self.isDeviceReady && self.data.timeIsValid && typeof WifiWizard2 !== 'undefined'
+      ) {
+        self.wifiDisabled = true;
+        console.log('Disabling wifi in 10 seconds...');
+        self.showToast('Disconnecting WiFi in 10 seconds...', 3000);
+        setTimeout(function() {
+          WifiWizard2.setWifiEnabled(false);
+          // WifiWizard2.disconnect();
+          console.log('Wifi Disabled');
+          self.showToast('WiFi Disconnected', 3000);
+          // self.data.time.setSeconds(58);
+        }, 10 * 1000);
       }
     }
     var m = moment(self.data.time);
@@ -800,7 +832,7 @@ function App() {
     }
     var checkInternetInMinutes = 1;
     var checkInternetNow = false;
-    if (self.data.time.getMinutes() % checkInternetInMinutes === 0 && self.data.time.getSeconds() === 0) {
+    if (!self.wifiDisabled && self.data.time.getMinutes() % checkInternetInMinutes === 0 && self.data.time.getSeconds() === 0) {
       checkInternetNow = true;
     }
     // every 10 seconds
@@ -812,7 +844,7 @@ function App() {
     // self.data.network.showInternetAvailability = self.data.time.getSeconds() % 10 < 5;
 
     // if (self.data.time.getSeconds() % 2 === 1) {
-    self.data.network.showInternetAvailability = !self.data.network.showInternetAvailability;
+    self.data.network.showInternetAvailability = !self.wifiDisabled && !self.data.network.showInternetAvailability;
     // }
     if (self.data.timeOriginMode == 'network' && self.data.networkTimeApiUrl == self.timeServerApi) {
       self.tryConnectingToTimeServer();
@@ -1013,14 +1045,17 @@ function App() {
       if (settings.time24Format) {
         self.data.time24Format = true;
       }
-      if (settings.focusActiveTimer) {
-        self.data.focusActiveTimer = true;
-      }
+      // if (settings.focusActiveTimer) {
+      //   self.data.focusActiveTimer = true;
+      // }
       if (settings.timeOverrideEnabled) {
         self.data.timeOverrideEnabled = true;
       }
       if (settings.rememberWifi) {
         self.data.rememberWifi = true;
+      }
+      if (settings.disconnectWifi) {
+        self.data.disconnectWifi = true;
       }
       if (settings.rememberedWifiSSID) {
         self.data.rememberedWifiSSID = settings.rememberedWifiSSID;
@@ -1030,26 +1065,26 @@ function App() {
         self.data.lastKnownTime = undefined;
       }
       if (typeof settings.activeClockTheme2 === 'string') {
-        self.data.activeClockTheme = settings.activeClockTheme2;
-        switch (settings.activeClockTheme2) {
-          case 'digitalModern':
-            self.data.analogClockActive = false;
-            self.data.digitalClockTheme = 'modern';
-            break;
-          case 'analogDefault':
-            self.data.analogClockActive = true;
-            self.data.analogClockTheme = 'default';
-            break;
-          case 'analogModern':
-            self.data.analogClockActive = true;
-            self.data.analogClockTheme = 'modern';
-            break;
-          default:
-            // invalid or digitalDefault
-            self.data.analogClockActive = false;
-            self.data.digitalClockTheme = 'default';
-            break;
-        }
+        // self.data.activeClockTheme = settings.activeClockTheme2;
+        // switch (settings.activeClockTheme2) {
+        //   case 'digitalModern':
+        //     self.data.analogClockActive = false;
+        //     self.data.digitalClockTheme = 'modern';
+        //     break;
+        //   case 'analogDefault':
+        //     self.data.analogClockActive = true;
+        //     self.data.analogClockTheme = 'default';
+        //     break;
+        //   case 'analogModern':
+        //     self.data.analogClockActive = true;
+        //     self.data.analogClockTheme = 'modern';
+        //     break;
+        //   default:
+        //     // invalid or digitalDefault
+        //     self.data.analogClockActive = false;
+        //     self.data.digitalClockTheme = 'default';
+        //     break;
+        // }
       }
       // ...
     }
@@ -1074,6 +1109,7 @@ function App() {
       timeOverrideEnabled: self.data.timeOverrideEnabled,
       networkTimeApiUrl: self.data.networkTimeApiUrl,
       rememberWifi: self.data.rememberWifi,
+      disconnectWifi: self.data.disconnectWifi,
       rememberedWifiSSID: self.data.rememberedWifiSSID,
     };
     if (!self.data.rememberWifi) {

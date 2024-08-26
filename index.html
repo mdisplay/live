@@ -14,11 +14,11 @@
     <title>MDisplay Live</title>
     <link rel="shortcut icon" href="assets/images/favicon.png" />
     <link rel="icon" type="image/png" href="assets/images/favicon.png" />
-    <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=2.8.3-119" />
-    <link rel="stylesheet" type="text/css" href="assets/css/app.css?v=2.8.3-119" />
-    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock.css?v=2.8.3-119" />
-    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock-layout.css?v=2.8.3-119" />
-    <link rel="stylesheet" type="text/css" href="assets/css/theme-default.css?v=2.8.3-119" />
+    <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=2.8.4-120" />
+    <link rel="stylesheet" type="text/css" href="assets/css/app.css?v=2.8.4-120" />
+    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock.css?v=2.8.4-120" />
+    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock-layout.css?v=2.8.4-120" />
+    <link rel="stylesheet" type="text/css" href="assets/css/theme-default.css?v=2.8.4-120" />
   </head>
   <body>
     <div
@@ -67,7 +67,7 @@
                   <span class="error" v-if="appUdate.error">ERROR: {{ appUdate.error }}</span>
                   <span class="checking" v-if="appUdate.checking">Checking...</span>
                   <span class="updated" v-if="appUdate.updated"
-                    >Updated. Version {{ '?v=2.8.3-119'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1 ($2)') }}.</span
+                    >Updated. Version {{ '?v=2.8.4-120'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1 ($2)') }}.</span
                   >
                   <span class="updating" v-if="appUdate.updating">Updating...</span>
                 </div>
@@ -222,6 +222,16 @@
                       />
                       {{connectedWifiSSID}}
                     </label>
+                    <label for="disconnect-wifi-check" v-if="rememberWifi">
+                      <input
+                        id="disconnect-wifi-check"
+                        type="checkbox"
+                        name="disconnect-wifi-check"
+                        v-model="disconnectWifi"
+                        @change="updateSettings()"
+                      />
+                      <small>Disconnect after time sync (apk 1.9.0+)</small>
+                    </label>
                   </div>
                   <div class="config-item other-config" style="height: auto;">
                     <div>
@@ -258,7 +268,7 @@
                         v-model="time24Format"
                         @change="updateSettings()"
                       />
-                      24 Hours time format (beta)
+                      <small>[beta]</small> 24 Hours time format
                     </label>
                   </div>
                   <div class="config-item other-config">
@@ -294,7 +304,7 @@
                         v-model="focusActiveTimer"
                         @change="updateSettings()"
                       />
-                      Focus Countdown Timer (beta)
+                      <small>[beta]</small> Focus Countdown Timer
                     </label>
                   </div>
                   <div class="config-item other-config" style="height: auto;">
@@ -383,7 +393,7 @@
                         v-model="timeOverrideEnabled"
                         @change="updateSettings()"
                       />
-                      Time Override <small>(beta)</small>
+                      <small>[beta]</small> Time Override
                     </label>
                     <a href="#" @click="lastKnownTime = undefined; timeOverrideEnabled = false; updateSettings();">Reset</a>
                     <input
@@ -427,17 +437,15 @@
             <span style="padding: 0.25rem; color: #ff0000; font-weight: bold; opacity: 0.75">No Internet</span>
           </div>
           <div v-else>
-            <!-- <span style="opacity: 0.25"> Version {{ '?v=2.8.3-119'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }} </span> -->
+            <!-- <span style="opacity: 0.25"> Version {{ '?v=2.8.4-120'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }} </span> -->
 
             <span style="opacity: 0.5">
               <svg style="height: 1em; color: #FFF; fill: #FFF;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
                 <path d="M352 320c88.4 0 160-71.6 160-160c0-15.3-2.2-30.1-6.2-44.2c-3.1-10.8-16.4-13.2-24.3-5.3l-76.8 76.8c-3 3-7.1 4.7-11.3 4.7H336c-8.8 0-16-7.2-16-16V118.6c0-4.2 1.7-8.3 4.7-11.3l76.8-76.8c7.9-7.9 5.4-21.2-5.3-24.3C382.1 2.2 367.3 0 352 0C263.6 0 192 71.6 192 160c0 19.1 3.4 37.5 9.5 54.5L19.9 396.1C7.2 408.8 0 426.1 0 444.1C0 481.6 30.4 512 67.9 512c18 0 35.3-7.2 48-19.9L297.5 310.5c17 6.2 35.4 9.5 54.5 9.5zM80 408a24 24 0 1 1 0 48 24 24 0 1 1 0-48z"/>
               </svg>
                 Settings
             </span>
             <svg style="display: none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-              <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
               <path d="M487.4 315.7l-42.6-24.6c4.3-23.2 4.3-47 0-70.2l42.6-24.6c4.9-2.8 7.1-8.6 5.5-14-11.1-35.6-30-67.8-54.7-94.6-3.8-4.1-10-5.1-14.8-2.3L380.8 110c-17.9-15.4-38.5-27.3-60.8-35.1V25.8c0-5.6-3.9-10.5-9.4-11.7-36.7-8.2-74.3-7.8-109.2 0-5.5 1.2-9.4 6.1-9.4 11.7V75c-22.2 7.9-42.8 19.8-60.8 35.1L88.7 85.5c-4.9-2.8-11-1.9-14.8 2.3-24.7 26.7-43.6 58.9-54.7 94.6-1.7 5.4 .6 11.2 5.5 14L67.3 221c-4.3 23.2-4.3 47 0 70.2l-42.6 24.6c-4.9 2.8-7.1 8.6-5.5 14 11.1 35.6 30 67.8 54.7 94.6 3.8 4.1 10 5.1 14.8 2.3l42.6-24.6c17.9 15.4 38.5 27.3 60.8 35.1v49.2c0 5.6 3.9 10.5 9.4 11.7 36.7 8.2 74.3 7.8 109.2 0 5.5-1.2 9.4-6.1 9.4-11.7v-49.2c22.2-7.9 42.8-19.8 60.8-35.1l42.6 24.6c4.9 2.8 11 1.9 14.8-2.3 24.7-26.7 43.6-58.9 54.7-94.6 1.5-5.5-.7-11.3-5.6-14.1zM256 336c-44.1 0-80-35.9-80-80s35.9-80 80-80 80 35.9 80 80-35.9 80-80 80z"/>
             </svg>
             <span
@@ -663,22 +671,22 @@
         </div>
       </div>
     </div>
-    <script type="text/javascript" src="prayer-data.js?v=2.8.3-119"></script>
-    <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=2.8.3-119"></script>
-    <script type="text/javascript" src="assets/vendors/vue.min.js?v=2.8.3-119"></script>
-    <script type="text/javascript" src="assets/vendors/moment.min.js?v=2.8.3-119"></script>
-    <script type="text/javascript" src="assets/vendors/hijri.js?v=2.8.3-119"></script>
-    <script type="text/javascript" src="assets/vendors/jquery-3.6.0.min.js?v=2.8.3-119"></script>
-    <script type="text/javascript" src="assets/js/translations.js?v=2.8.3-119"></script>
+    <script type="text/javascript" src="prayer-data.js?v=2.8.4-120"></script>
+    <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=2.8.4-120"></script>
+    <script type="text/javascript" src="assets/vendors/vue.min.js?v=2.8.4-120"></script>
+    <script type="text/javascript" src="assets/vendors/moment.min.js?v=2.8.4-120"></script>
+    <script type="text/javascript" src="assets/vendors/hijri.js?v=2.8.4-120"></script>
+    <script type="text/javascript" src="assets/vendors/jquery-3.6.0.min.js?v=2.8.4-120"></script>
+    <script type="text/javascript" src="assets/js/translations.js?v=2.8.4-120"></script>
     <script type="text/javascript" src="cdvfile://localhost/assets/www/cordova.js"></script>
-    <script type="text/javascript" src="assets/analog-clock/analog-clock.js?v=2.8.3-119"></script>
-    <script type="text/javascript" src="assets/js/app.js?v=2.8.3-119"></script>
+    <script type="text/javascript" src="assets/analog-clock/analog-clock.js?v=2.8.4-120"></script>
+    <script type="text/javascript" src="assets/js/app.js?v=2.8.4-120"></script>
     <script type="text/javascript">
       // WARNING: do not use ES6 syntax
       // The code should only be authored in ES5
       // to support older generation Android TV boxes
 
-      var fullVersion = '?v=2.8.3-119';
+      var fullVersion = '?v=2.8.4-120';
       window.mdApp.data.appVersion = window.mdApp.parseVersion(fullVersion);
 
       var hasCordova = !!window.cordova;
@@ -699,14 +707,14 @@
       if (isLocalhost && isSimulating) {
         window.initialTestTime =
         // undefined;
-        new Date(new Date().getFullYear(), 6,
+        new Date(new Date().getFullYear(), 7,
         //new Date().getMonth(),
         31,
         // new Date().getDate(),
         // 16, 30, 40,
         // 2, 20, 30,
         12, 30, 45, 0);
-        // window.mdApp.simulateTime = 20;
+        window.mdApp.simulateTime = 20;
         // window.initialTestTime.setFullYear(1970);
 
         // window.mdApp.data.time = window.initialTestTime;
