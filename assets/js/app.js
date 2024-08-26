@@ -1054,8 +1054,8 @@ function App() {
       if (settings.rememberWifi) {
         self.data.rememberWifi = true;
       }
-      if (settings.disconnectWifi) {
-        self.data.disconnectWifi = true;
+      if (settings.disconnectWifi === false) {
+        self.data.disconnectWifi = false;
       }
       if (settings.rememberedWifiSSID) {
         self.data.rememberedWifiSSID = settings.rememberedWifiSSID;
