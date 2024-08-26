@@ -174,7 +174,7 @@ function App() {
     focusActiveTimer: false,
     showRememberWifiSetting: false,
     rememberWifi: false,
-    disconnectWifi: false,
+    disconnectWifi: true,
     connectedWifiSSID: undefined,
     rememberedWifiSSID: '~',
     isCordovaReady: false,
