@@ -500,7 +500,7 @@ function App() {
     } else {
       self.data.time = new Date();
     }
-    var lastKnownDate = new Date(2024, 7, 20, 0, 0);
+    var lastKnownDate = new Date(2024, 8, 12, 21, 15);
     self.data.timeIsValid = self.data.time.getTime() >= lastKnownDate.getTime();
     if (!self.initialTestTime && !self.data.timeIsValid) {
       var d = new Date();
@@ -568,9 +568,7 @@ function App() {
     self.data.timeDisplaySeconds = m.format('ss');
     self.data.timeDisplayColon = self.data.timeDisplayColon == ':' ? '' : ':';
     self.data.timeDisplayAmPm = time24Format ? '' : m.format('A');
-    if (!self.useDeviceTimeOnly) {
-      self.updateInternetTime();
-    }
+    self.updateInternetTime();
   };
   self.getDateParams = function (date) {
     return [date.getFullYear(), date.getMonth(), date.getDate()];
@@ -1393,7 +1391,7 @@ function App() {
     }, timeout || 0);
   };
   self.updateInternetTime = function () {
-    if (self.fetchingInternetTime || self.data.timeOverridden) {
+    if (self.useDeviceTimeOnly || self.fetchingInternetTime || self.data.timeOverridden) {
       return;
     }
     if (!(self.data.timeOriginMode == 'auto' || self.data.timeOriginMode == 'network')) {
@@ -1421,7 +1419,8 @@ function App() {
         parseInt(timeParts[2])
       );
     }
-    if(self.data.timeOriginMode == 'auto' && window.cordova && window.cordova.plugins && window.cordova.plugins.sntp) {
+    var useSNTP = false; // do not use SNTP because of excessive data usage(doubted) @TODO: confirm
+    if(useSNTP && self.data.timeOriginMode == 'auto' && window.cordova && window.cordova.plugins && window.cordova.plugins.sntp) {
       console.log('time mode auto: using NTP server pool.ntp.org');
       window.cordova.plugins.sntp.setServer("pool.ntp.org", 10000);
       window.cordova.plugins.sntp.getTime(function(time) {
@@ -1501,9 +1500,9 @@ function App() {
         }
         self.data.networkTimeInitialized = true;
         setTimeout(function () {
-          // possibility for time inaccuracy. Hence recheck in 5 minutes.
+          // possibility for time inaccuracy. Hence recheck in 15 minutes.
           self.data.networkTimeInitialized = false;
-        }, 5 * 60 * 1000);
+        }, 10 * 60 * 1000);
         console.log('network data: ', response);
         self.setFetchingStatus('OK. Updated time from network', 'success', false, 1);
       },
