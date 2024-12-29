@@ -464,6 +464,7 @@
         </div>
         <div style="visibility: hidden; position: fixed; top: -125%;">
           <img v-for="i in 60" :src="'backgrounds/' + (i - 1) + '.jpg?v=' + bgVersion" />
+          <img v-for="image in alertImages" :src="'assets/images/' + image" />
         </div>
 
         <div id="bgful" class="bgful-container" v-if="backgroundImage">

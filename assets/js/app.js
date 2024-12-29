@@ -180,6 +180,7 @@ function App() {
     isCordovaReady: false,
     isDownloadsListOpen: false,
     downloadedFiles: [],
+    alertImages: ['alert1.png', 'alert2.gif'],
   };
   self.computed = {
     showAlert: function () {
@@ -191,7 +192,7 @@ function App() {
     },
     currentlyShowingAlert: function () {
       var shouldShow = self.data.prayerInfo === 'iqamah';
-      var alerts = ['alert1.png', 'alert2.gif'];
+      var alerts = self.data.alertImages;
       if (!window._mdCurrentAlert) {
         window._mdCurrentAlert = 0;
       }
