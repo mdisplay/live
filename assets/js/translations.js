@@ -51,6 +51,7 @@ window.translations = {
     'currentPrayerAfter': 'தொழுகை',
     // currentPrayerAfter: 'இகாமத் முடிந்தது',
     // currentPrayerAfter: 'இகாமத் முடிந்து',
+    'Tarawih': 'தராவீஹ்',
   },
   en: {
     'currentPrayer.label': 'Now',
@@ -96,6 +97,7 @@ window.translations = {
     'currentPrayerBefore': 'for Adhan',
     'currentPrayerWaiting': 'for Iqamath',
     'currentPrayerAfter': 'passed Iqamath',
+    'Tarawih': 'Tarawih',
   },
   si: {
     'currentPrayer.label': 'දැන්',
@@ -141,5 +143,6 @@ window.translations = {
     'currentPrayerBefore': 'for Adhan',
     'currentPrayerWaiting': 'for Iqamath',
     'currentPrayerAfter': 'passed Iqamath',
+    'Tarawih': 'Tarawih',
   },
 };

@@ -99,6 +99,7 @@ function App() {
       Magrib: new IqamahTime(10),
       Isha: new IqamahTime(15),
       Jummah: new IqamahTime(45),
+      Tarawih: new IqamahTime(45),
     },
     appUdate: {
       enabled: false,
@@ -165,6 +166,7 @@ function App() {
     timeOverridden: false,
     time24Format: false,
     sunriseSupport: self.sunriseSupport,
+    tarawihEnabled: false,
     showSunriseNow: false,
     expanded: {
       prayerTimesData: false,
@@ -181,6 +183,7 @@ function App() {
     isDownloadsListOpen: false,
     downloadedFiles: [],
     alertImages: ['alert1.png', 'alert2.gif'],
+    showSunriseLabel: false,
   };
   self.computed = {
     showAlert: function () {
@@ -206,7 +209,7 @@ function App() {
     },
     prayersListDisplay: function () {
       return self.data.prayers.filter(function (prayer) {
-        return prayer.name != 'Sunrise';
+        return prayer.name != 'Sunrise' && prayer.name != 'Tarawih';
       });
     },
   };
@@ -618,6 +621,7 @@ function App() {
       Asr: times[3],
       Magrib: times[4],
       Isha: times[5],
+      Tarawih: new Date(times[5].getTime() + 1),
     };
   };
   self.getIqamahTimes = function (prayerTimes, monthParam, dayParam) {
@@ -630,7 +634,7 @@ function App() {
           prayerTimes[prayerName].getFullYear(),
           monthParam,
           dayParam,
-          iqamahTime.toTime() + (name == 'Subah' ? 'a' : 'p')
+          iqamahTime.toTime()
         );
       } else {
         iqamahTimes[name] = new Date(prayerTimes[prayerName].getTime() + parseInt(iqamahTime.minutes) * 60 * 1000);
@@ -664,6 +668,7 @@ function App() {
     var month = translations[self.lang].months[self.data.time.getMonth()];
     console.log('all the times', times);
     var iqamahTimes = self.getIqamahTimes(times, dateParams[1], dateParams[2]);
+    times.Tarawih = new Date(iqamahTimes.Tarawih.getTime() - (self.beforeSeconds * 1000));
     var time24Format = self.data.time24Format;
     self.todayPrayers = [
       new Prayer('Subah', times.Subah, iqamahTimes.Subah, self.lang, time24Format),
@@ -686,9 +691,19 @@ function App() {
       new Prayer('Asr', times.Asr, iqamahTimes.Asr, self.lang, time24Format),
       new Prayer('Magrib', times.Magrib, iqamahTimes.Magrib, self.lang, time24Format),
       new Prayer('Isha', times.Isha, iqamahTimes.Isha, self.lang, time24Format),
+      new Prayer(
+        'Tarawih',
+        times.Tarawih,
+        iqamahTimes.Tarawih,
+        self.lang,
+        time24Format
+      ),
     ];
     if (!self.sunriseSupport) {
       self.todayPrayers.splice(1, 1);
+    }
+    if(!self.data.tarawihEnabled) {
+      self.todayPrayers.splice(self.todayPrayers.length - 1, 1);
     }
     self.data.prayers = self.todayPrayers;
     var tomorrowParams = self.getDateParams(new Date(self.data.time.getTime() + 24 * 60 * 60 * 1000));
@@ -704,9 +719,13 @@ function App() {
       new Prayer('Asr', tomorrowTimes.Asr, tomorrowIqamahTimes.Asr, self.lang, time24Format),
       new Prayer('Magrib', tomorrowTimes.Magrib, tomorrowIqamahTimes.Magrib, self.lang, time24Format),
       new Prayer('Isha', tomorrowTimes.Isha, tomorrowIqamahTimes.Isha, self.lang, time24Format),
+      new Prayer('Tarawih', tomorrowTimes.Isha, tomorrowIqamahTimes.Isha, self.lang, time24Format),
     ];
     if (!self.sunriseSupport) {
       self.nextDayPrayers.splice(1, 1);
+    }
+    if(!self.data.tarawihEnabled) {
+      self.nextDayPrayers.splice(self.nextDayPrayers.length - 1, 1);
     }
     // self.data.nextPrayer = self.data.prayers[0];
     self.data.currentPrayer = undefined;
@@ -871,6 +890,12 @@ function App() {
       self.data.prayerInfo = self.data.prayerInfo === 'athan' ? 'iqamah' : 'athan';
       if (self.data.prayerInfo === 'iqamah') {
         self.data.showSunriseNow = self.sunriseSupport && !self.data.showSunriseNow;
+        self.data.showSunriseLabel = self.data.showSunriseNow;
+        setTimeout(function() {
+          if(self.data.showSunriseLabel) {
+            self.data.showSunriseLabel = false;
+          }
+        }, 2000);
       }
     }
     var nowTime = self.data.time.getTime();
@@ -882,7 +907,9 @@ function App() {
       for (var i = 0; i < self.todayPrayers.length; i++) {
         var prayer = self.todayPrayers[i];
         if (nowTime < prayer.time.getTime()) {
-          nextPrayer = prayer;
+          // if (prayer.name !== 'Tarawih') {
+            nextPrayer = prayer;
+          // }
           break;
         }
       }
@@ -908,8 +935,10 @@ function App() {
         seconds: '00', // padZero(duration.seconds()),
       };
     } else if (nextTime - nowTime < self.beforeSeconds * 1000) {
+      console.log('cond2');
       self.data.currentPrayer = self.data.nextPrayer;
       var duration = moment.duration(nextTime - nowTime, 'milliseconds');
+      if(self.data.nextPrayer.name != 'Tarawih') {
       self.data.currentPrayerBefore = {
         minutes: padZero(duration.minutes()),
         colon: self.data.currentPrayerBefore && self.data.currentPrayerBefore.colon == ':' ? '' : ':',
@@ -917,7 +946,9 @@ function App() {
       };
       self.data.currentPrayerAfter = false;
       self.data.currentPrayerWaiting = false;
+      }
     } else {
+      console.log('cond3');
       if (self.data.currentPrayer) {
         self.checkCurrentPrayer(self.data.currentPrayer);
       } else {
@@ -990,7 +1021,7 @@ function App() {
       self.analogClock.init(document.getElementById('analog-clock-container'), self.initialTestTime);
     }
     if ((self.data.timeOriginMode == 'auto' || self.data.timeOriginMode == 'network') && self.simulateTime) {
-      alert('Warning: simulateTime feature is not compatible with network time');
+      console.warn('Warning: simulateTime feature is not compatible with network time');
     }
     window._theInterval = window.setInterval(
       function () {
@@ -1040,6 +1071,9 @@ function App() {
       }
       if (settings.alertEnabled === false) {
         self.data.alertEnabled = false;
+      }
+      if (settings.tarawihEnabled) {
+        self.data.tarawihEnabled = true;
       }
       if (settings.time24Format) {
         self.data.time24Format = true;
@@ -1110,6 +1144,7 @@ function App() {
       rememberWifi: self.data.rememberWifi,
       disconnectWifi: self.data.disconnectWifi,
       rememberedWifiSSID: self.data.rememberedWifiSSID,
+      tarawihEnabled: self.data.tarawihEnabled,
     };
     if (!self.data.rememberWifi) {
       settings.rememberedWifiSSID = undefined;
