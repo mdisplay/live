@@ -154,7 +154,7 @@
                     </label>
                     </div>
                   </div>
-                  <div class="config-item other-config" style="height: auto" v-if="false">
+                  <div class="config-item other-config" style="height: auto" v-if="true || false">
                     <div><small>Time Mode:</small></div>
                     <label for="time-origin-mode-auto">
                       <input
@@ -178,7 +178,7 @@
                       />
                       Device Only
                     </label>
-                    <label for="time-origin-mode-network" v-if="false">
+                    <label for="time-origin-mode-network">
                       <input
                         id="time-origin-mode-network"
                         type="radio"
@@ -189,7 +189,7 @@
                       />
                       Network
                     </label>
-                    <div v-if="false && timeOriginMode == 'network'">
+                    <div v-if="timeOriginMode == 'network'">
                       <input type="url" v-model="networkTimeApiUrl" style="width: 100%; margin-bottom: 5px" />
 
                       <div>

@@ -1056,7 +1056,7 @@ function App() {
     }
     self.data.iqamahTimesConfigured = !!iqamahTimesConfigured;
     if (settings) {
-      if (settings.timeOriginMode == 'auto' || settings.timeOriginMode == 'device' || settings.timeOriginMode == 'network') {
+      if (settings.timeOriginMode == 'auto' || settings.timeOriginMode == 'device') {
         self.data.timeOriginMode = 'auto'; // settings.timeOriginMode; // @TODO: remove in next version: hard coded value
       }
       if(settings.networkTimeApiUrl) {
@@ -1074,6 +1074,12 @@ function App() {
       }
       if (settings.tarawihEnabled) {
         self.data.tarawihEnabled = true;
+      }
+      if (!self.data.tarawihEnabled && self.data.iqamahTimes.Tarawih) {
+        self.data.tarawihEnabled = true;
+        self.data.iqamahTimes.Tarawih.absolute = true;
+        self.data.iqamahTimes.Tarawih.hours = '21';
+        self.data.iqamahTimes.Tarawih.minutes = '30';
       }
       if (settings.time24Format) {
         self.data.time24Format = true;
@@ -1131,7 +1137,7 @@ function App() {
     }
     self.data.iqamahTimesConfigured = true;
     var settings = {
-      timeOriginMode: 'auto',//self.data.timeOriginMode, // @TODO: remove hard-coded value
+      timeOriginMode: self.data.timeOriginMode,
       timeAdjustmentMinutes: self.data.timeAdjustmentMinutes,
       analogClockActive: self.data.analogClockActive,
       activeClockTheme: 'digitalDefault', // reset to default for possible later usage
