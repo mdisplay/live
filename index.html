@@ -155,40 +155,30 @@
                     </div>
                   </div>
                   <div class="config-item other-config" style="height: auto" v-if="true || false">
-                    <div><small>Time Mode:</small></div>
-                    <label for="time-origin-mode-auto">
-                      <input
-                        id="time-origin-mode-auto"
-                        type="radio"
-                        name="time-origin-mode"
-                        value="auto"
-                        v-model="timeOriginMode"
-                        @change="updateSettings()"
-                      />
-                      Auto (NTP first)
-                    </label>
-                    <label for="time-origin-mode-device">
-                      <input
-                        id="time-origin-mode-device"
-                        type="radio"
-                        name="time-origin-mode"
-                        value="device"
-                        v-model="timeOriginMode"
-                        @change="updateSettings()"
-                      />
-                      Device Only
-                    </label>
-                    <label for="time-origin-mode-network">
-                      <input
-                        id="time-origin-mode-network"
-                        type="radio"
-                        name="time-origin-mode"
-                        value="network"
-                        v-model="timeOriginMode"
-                        @change="updateSettings()"
-                      />
-                      Network
-                    </label>
+                    <div><small>Time Mode:</small>
+                      <small>
+                        >
+                        <a href="#" @click="expanded.timeOriginModes = !expanded.timeOriginModes;">
+                          <span v-if="expanded.timeOriginModes">dismiss</span>
+                          <span v-else>{{ getSelected(timeOriginModes, timeOriginMode) }}</span>
+                        </a>
+                      </small>
+                    </div>
+                    <section v-if="expanded.timeOriginModes">
+
+                      <label v-for="mode in timeOriginModes" :for="'timeOriginMode-select-' + mode.id" style="display: block;">
+                        <input
+                          :id="'timeOriginMode-select-' + mode.id"
+                          type="radio"
+                          name="timeOriginMode-select"
+                          :value="mode.id"
+                          v-model="timeOriginMode"
+                          @change="expanded.timeOriginModes = mode.id == 'network' ? true : false; updateSettings()"
+                        />
+                        {{ mode.label }}
+                        &nbsp;
+                      </label>
+
                     <div v-if="timeOriginMode == 'network'">
                       <input type="url" v-model="networkTimeApiUrl" style="width: 100%; margin-bottom: 5px" />
 
@@ -208,6 +198,7 @@
                         </label>
                       </div>
                     </div>
+                    </section>
                   </div>
                   <div class="config-item other-config" style="height: auto;" v-if="showRememberWifiSetting">
                     <div><small>[beta] Remember Wifi: ({{ rememberedWifiSSID }})</small></div>
@@ -345,7 +336,7 @@
                     buttons to use either adjacent or absolute time
                     </span>
                   </div>
-                  <div class="config-item time-config" v-for="(iqamahTime, name) in iqamahTimes">
+                  <div class="config-item time-config config-time-input" v-for="(iqamahTime, name) in iqamahTimes">
                     <label v-if="name == 'Tarawih'" for="tarawih-enabled-check" class="label">
                       <input
                         id="tarawih-enabled-check"
@@ -548,19 +539,29 @@
           >
             <div :class="[display.type + '-prayer', 'prayer-display']" v-if="display.prayer">
               <span class="name"
-                ><span class="label">{{ currentPrayer && currentPrayer.name == 'Tarawih' && !(currentPrayerWaiting || currentPrayerAfter) ? translate('nextPrayer.label') : translate(display.name + '.label') }}:</span>
-                {{ display.prayer.nameDisplay }}
+                ><span class="label">
+                  <span v-if="display.type == 'next' && showTarawihNext">&nbsp;</span>
+                  <span v-else>{{ currentPrayer && currentPrayer.name == 'Tarawih' && !(currentPrayerWaiting || currentPrayerAfter) ? translate('nextPrayer.label') : translate(display.name + '.label') }}:</span>
+                </span>
+                <span v-if="display.type == 'next' && showTarawihNext">{{ translate('Tarawih') }}</span>
+                <span v-else>{{ display.prayer.nameDisplay }}</span>                
               </span>
-              <span v-if="display.prayer.name != 'Tarawih'" class="time" :class="{'is-sunrise': display.prayer.name == 'Sunrise'}">
+              <span v-if="!(display.type == 'next' && showTarawihNext) && display.prayer.name != 'Tarawih'" class="time" :class="{'is-sunrise': display.prayer.name == 'Sunrise'}">
                 <span class="hours">{{ display.prayer.timeHours }}</span><span class="colon">:</span
                 ><span class="minutes">{{ display.prayer.timeMinutes }}</span>
                 <small class="am-pm">{{ display.prayer.timeAmPm }}</small>
                 <small class="label" v-if="display.prayer.name != 'Sunrise'">{{ translate('prayer.label') }}</small>
               </span>
               <!-- <small class="am-pm">{{ display.prayer.timeAmPm }}</small> -->
-              <span class="iqamah-time" v-if="display.prayer.name != 'Sunrise'" :style="display.prayer.name == 'Tarawih' ? [{'display': 'block'}, currentPrayerWaiting || currentPrayerAfter ? {} : {bottom:  '8.5rem'}] : {}">
-                <span class="hours">{{ display.prayer.iqamahTimeHours }}</span><span class="colon">:</span
-                ><span class="minutes">{{ display.prayer.iqamahTimeMinutes }}</span>
+              <span class="iqamah-time" v-if="display.prayer.name != 'Sunrise'" :style="display.prayer.name == 'Tarawih' || (display.type == 'next' && showTarawihNext) ? [{'display': 'block'}, currentPrayerWaiting || currentPrayerAfter ? {} : {bottom:  '8.5rem'}] : {}">
+                <span class="hours">
+                  <span v-if="display.type == 'next' && showTarawihNext">{{ prayers[6].iqamahTimeHours }}</span>
+                  <span v-else>{{ display.prayer.iqamahTimeHours }}</span>
+                </span><span class="colon">:</span
+                ><span class="minutes">
+                  <span v-if="display.type == 'next' && showTarawihNext">{{ prayers[6].iqamahTimeMinutes }}</span>
+                  <span v-else>{{ display.prayer.iqamahTimeMinutes }}</span>
+                </span>
                 <small class="iqamah-am-pm">{{ display.prayer.iqamahTimeAmPm }}</small>
                 <small class="iqamah-label" v-if="display.prayer.name != 'Jummah'">{{ translate('prayer.iqamah-label') }}</small>
               </span>
@@ -642,8 +643,9 @@
         </div>
 
         <div class="prayer-info-container" v-if="timeIsValid">
-          <div class="prayer-info" v-for="prayer in prayersListDisplay" :class="{'is-current': prayer === currentPrayer, 'is-sunrise': prayer.name == 'Subah' && showSunriseNow}">
-            <div v-if="prayer.name == 'Subah' && showSunriseLabel" class="prayer-name" style="background-color: #7b4c12;">{{ translate('Sunrise') }}</div>
+          <div class="prayer-info" v-for="prayer in prayersListDisplay" :class="{'is-current': prayer === currentPrayer, 'is-sunrise': (prayer.name == 'Subah' && showSunriseNow) || tarawihEnabled && prayers[6] && prayer.name == 'Isha' && showSunriseNow}">
+            <div v-if="tarawihEnabled && prayers[6] && prayer.name == 'Isha' && showSunriseLabel" class="prayer-name" style="background-color: #7b4c12; color: #FFF;">{{ translate('Tarawih') }}</div>
+              <div v-else-if="prayer.name == 'Subah' && showSunriseLabel" class="prayer-name" style="background-color: #7b4c12; color: #FFF;">{{ translate('Sunrise') }}</div>
             <div v-else class="prayer-name">{{ prayer.nameDisplay }}</div>
             <!-- <transition name="fade" mode="out-in"> -->
             <div class="prayer-time" xv-if="prayerInfo == 'athan'">
@@ -651,14 +653,17 @@
               <span class="am-pm">{{ prayer.timeAmPm }}</span>
             </div>
             <div class="iqamah-time" xv-if="prayerInfo == 'iqamah'">
-              <span v-if="prayer.name == 'Subah' && showSunriseNow">
+              <span v-if="tarawihEnabled && prayers[6] && prayer.name == 'Isha' && showSunriseNow">
+                {{ prayers[6].iqamahTimeDisplay }}
+              </span>
+              <span v-else-if="prayer.name == 'Subah' && showSunriseNow">
                 {{ prayers[1].timeDisplay }}
               </span>
               <template v-else>
                 {{ prayer.iqamahTimeDisplay }}
                 <span class="am-pm">{{ prayer.iqamahTimeAmPm }}</span>
               </template>
-          </div>
+            </div>
             <!-- </transition> -->
           </div>
         </div>
@@ -721,14 +726,14 @@
       if (isLocalhost && isSimulating) {
         window.initialTestTime =
         // undefined;
-        new Date(new Date().getFullYear(), 7,
+        new Date(new Date().getFullYear() + 1, 7,
         //new Date().getMonth(),
         31,
         // new Date().getDate(),
         // 16, 30, 40,
         // 2, 20, 30,
-        12, 30, 45, 0);
-        window.mdApp.simulateTime = 20;
+        19, 13, 45, 0);
+        window.mdApp.simulateTime = 100;
         // window.initialTestTime.setFullYear(1970);
 
         // window.mdApp.data.time = window.initialTestTime;

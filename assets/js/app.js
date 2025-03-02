@@ -143,6 +143,11 @@ function App() {
       { id: 'analogDefault', label: 'Classic Analog' },
       { id: 'analogModern', label: 'Modern Analog' },
     ],
+    timeOriginModes: [
+      { id: 'auto', label: 'Auto (NTP first)' },
+      { id: 'device', label: 'Device Only' },
+      { id: 'network', label: 'Network (HTTP jsonp)' },
+    ],
     analogClockActive: false,
     alertEnabled: true,
     analogClockTheme: 'default',
@@ -172,6 +177,7 @@ function App() {
       prayerTimesData: false,
       clockThemes: false,
       languages: false,
+      timeOriginModes: false,
     },
     focusActiveTimer: false,
     showRememberWifiSetting: false,
@@ -211,6 +217,10 @@ function App() {
       return self.data.prayers.filter(function (prayer) {
         return prayer.name != 'Sunrise' && prayer.name != 'Tarawih';
       });
+    },
+    showTarawihNext: function () {
+      return self.data.nextPrayer && self.data.nextPrayer.name == 'Isha' && self.data.tarawihEnabled && self.data.prayers[6] 
+      && (self.data.showSunriseNow);
     },
   };
   self.selectedPrayerDataDetails =
@@ -255,7 +265,8 @@ function App() {
   };
   self.ssidChanged = function () {
     localStorage.setItem('mdisplay.ssid', self.data.timeServerSSID);
-    self.closeSettings();
+    self.updateSettings();
+    // self.closeSettings();
   };
   self.checkNetworkStatus = function (isInitial) {
     if (!self.isDeviceReady || typeof Connection === 'undefined') {
@@ -935,7 +946,6 @@ function App() {
         seconds: '00', // padZero(duration.seconds()),
       };
     } else if (nextTime - nowTime < self.beforeSeconds * 1000) {
-      console.log('cond2');
       self.data.currentPrayer = self.data.nextPrayer;
       var duration = moment.duration(nextTime - nowTime, 'milliseconds');
       if(self.data.nextPrayer.name != 'Tarawih') {
@@ -948,7 +958,6 @@ function App() {
       self.data.currentPrayerWaiting = false;
       }
     } else {
-      console.log('cond3');
       if (self.data.currentPrayer) {
         self.checkCurrentPrayer(self.data.currentPrayer);
       } else {
@@ -1056,6 +1065,7 @@ function App() {
     }
     self.data.iqamahTimesConfigured = !!iqamahTimesConfigured;
     if (settings) {
+      self.data.timeOriginMode = settings.timeOriginMode;
       if (settings.timeOriginMode == 'auto' || settings.timeOriginMode == 'device') {
         self.data.timeOriginMode = 'auto'; // settings.timeOriginMode; // @TODO: remove in next version: hard coded value
       }
@@ -1341,14 +1351,42 @@ function App() {
       ARROW_RIGHT: 39,
       ARROW_DOWN: 40,
     };
+    var KEY_CODES_STR = {
+      ENTER: 'Enter',
+      ARROW_LEFT: 'ArrowLeft',
+      ARROW_UP: 'ArrowUp',
+      ARROW_RIGHT: 'ArrowRight',
+      ARROW_DOWN: 'ArrowDown',
+    }
     var body = document.querySelector('body');
     body.onkeydown = function (event) {
+      var pressed = {
+        enter: false,
+        arrowLeft: false,
+        arrowUp: false,
+        arrowRight: false,
+        arrowDown: false
+      };
       if (!event.metaKey) {
         // e.preventDefault();
       }
-      var keyCode = event.keyCode;
+      if(event.keyCode) {
+        var code = event.keyCode;
+        pressed.enter = code == KEY_CODES.ENTER;
+        pressed.arrowLeft = code == KEY_CODES.ARROW_LEFT;
+        pressed.arrowUp = code == KEY_CODES.ARROW_UP;
+        pressed.arrowRight = code == KEY_CODES.ARROW_RIGHT;
+        pressed.arrowDown = code == KEY_CODES.ARROW_DOWN;
+      } else {
+        var code = event.code;
+        pressed.enter = code == KEY_CODES_STR.ENTER;
+        pressed.arrowLeft = code == KEY_CODES_STR.ARROW_LEFT;
+        pressed.arrowUp = code == KEY_CODES_STR.ARROW_UP;
+        pressed.arrowRight = code == KEY_CODES_STR.ARROW_RIGHT;
+        pressed.arrowDown = code == KEY_CODES_STR.ARROW_DOWN;
+      }
       // alert('keyCode: ' + keyCode);
-      if (keyCode == KEY_CODES.ENTER) {
+      if (pressed.enter) {
         event.preventDefault();
         if (self.data.settingsMode) {
           self.closeSettings();
@@ -1360,12 +1398,12 @@ function App() {
       if (!self.data.settingsMode) {
         return;
       }
-      var rows = document.querySelectorAll('.times-config .time-config');
-      if (keyCode == KEY_CODES.ARROW_DOWN || keyCode == KEY_CODES.ARROW_UP) {
+      var rows = document.querySelectorAll('.times-config .config-time-input');
+      if (pressed.arrowDown || pressed.arrowUp) {
         event.preventDefault();
         var lastSelectedRow = self.lastSelectedRow || 0;
         var lastSelectedCol = self.lastSelectedCol || 1;
-        lastSelectedRow += keyCode == KEY_CODES.ARROW_UP ? -1 : 1;
+        lastSelectedRow += pressed.arrowUp ? -1 : 1;
         if (lastSelectedRow < 1) {
           lastSelectedRow = rows.length;
         }
