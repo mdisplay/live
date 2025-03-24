@@ -28,7 +28,20 @@
       <div id="splash" v-if="showSplash">
         <div class="splash-content">
           <!-- Loading... -->
-          <img src="assets/images/icon.png" />
+          <img style="margin-top: -2.5rem;" src="assets/images/icon.png" />
+          <div style="line-height: 3rem; margin-top: 1rem;">
+            MDisplay: <span style="color: #7eff74; background-color: #7eff74; color: #000; font-weight: bold; padding: 0.25rem 0.5rem; border-radius: 6px;">FREE</span> app for Prayer Time Display
+            <br>
+            <small>Click 
+              &nbsp;<span style="opacity: 0.75; border: 1px solid #EEE; padding: 0.25rem 0.5rem; border-radius: 6px;">
+                <svg style="height: 1em; color: #FFF; fill: #FFF;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                  <path d="M352 320c88.4 0 160-71.6 160-160c0-15.3-2.2-30.1-6.2-44.2c-3.1-10.8-16.4-13.2-24.3-5.3l-76.8 76.8c-3 3-7.1 4.7-11.3 4.7H336c-8.8 0-16-7.2-16-16V118.6c0-4.2 1.7-8.3 4.7-11.3l76.8-76.8c7.9-7.9 5.4-21.2-5.3-24.3C382.1 2.2 367.3 0 352 0C263.6 0 192 71.6 192 160c0 19.1 3.4 37.5 9.5 54.5L19.9 396.1C7.2 408.8 0 426.1 0 444.1C0 481.6 30.4 512 67.9 512c18 0 35.3-7.2 48-19.9L297.5 310.5c17 6.2 35.4 9.5 54.5 9.5zM80 408a24 24 0 1 1 0 48 24 24 0 1 1 0-48z"/>
+                </svg>
+                Settings
+              </span>&nbsp;
+               on the top right corner
+               to open Settings</small>
+          </div>
         </div>
       </div>
       <div style="display: none" v-show="true">
@@ -36,19 +49,19 @@
       <div id="active-overlay"></div>
 
         <div style="display: none" v-show="true" class="modal-wrapper" v-if="settingsMode">
-          <div class="modal-overlay" @click="closeSettings()"></div>
+          <div class="modal-overlay"></div>
           <div class="modal-dialog">
-            <div @click="closeSettings()" class="modal-close modal-close-top">Close</div>
-            <div class="modal-content">
-              <div class="configured-info">
-                <span>
-                  Version {{ appVersion.versionString }}
-                  (v.{{ appVersion.versionNumber }})
-                </span>
+            <div @click="scrollUp()" class="modal-close modal-close-top">Scroll UP &#9650;</div>
+            <div class="configured-info">
+              <span>
+                Version {{ appVersion.versionString }}
+                (v.{{ appVersion.versionNumber }})
+              </span>
 
-                <span class="configured" v-if="iqamahTimesConfigured">Configured</span>
-                <span class="not-configured" v-else>Not Configured</span>
-              </div>
+              <span class="configured" v-if="iqamahTimesConfigured">Configured</span>
+              <span class="not-configured" v-else>Not Configured</span>
+            </div>
+            <div class="modal-content" id="settings-modal-scrollable-content">
               <div class="update-info">
                 <div class="kiosk-config">
                   <!-- <button type="button" class="">
@@ -301,7 +314,7 @@
                   <div class="config-item other-config" style="height: auto;">
                     <div>
                       <template v-if="iqamahTimesConfigured">
-                        <a href="#" @click="backupSettings()"><small>Backup Settings</small></a>
+                        <a href="#" @click="backupSettings(true)"><small>Backup Current Settings</small></a>
                         &nbsp; &middot; &nbsp;
                       </template>
                       <template v-if="isCordovaReady">
@@ -411,8 +424,12 @@
                 </div>
 
               </div>
-              <div @click="closeSettings()" class="modal-close modal-close-bottom">Close</div>
+              <div class="close-buttons-container">
+                <span class="setting-close-button settings-save" @click="saveAndCloseSettings()">Save Settings</span>
+                <span class="setting-close-button settings-close" @click="closeSettingsWithoutSaving()">Close Settings</span>
+              </div>
             </div>
+            <div @click="scrollDown()" class="modal-close modal-close-bottom">Scroll DOWN &#9660;</div>
           </div>
         </div>
 
@@ -765,8 +782,17 @@
             updateSettings: function updateSettings() {
               window.mdApp.updateSettings();
             },
-            closeSettings: function closeSettings() {
-              window.mdApp.closeSettings();
+            scrollUp: function scrollUp() {
+              window.mdApp.scrollUp();
+            },
+            scrollDown: function scrollDown() {
+              window.mdApp.scrollDown();
+            },
+            closeSettingsWithoutSaving: function closeSettingsWithoutSaving() {
+              window.mdApp.closeSettingsWithoutSaving();
+            },
+            saveAndCloseSettings: function saveAndCloseSettings() {
+              window.mdApp.saveAndCloseSettings();
             },
             openSettings: function openSettings() {
               window.mdApp.openSettings();
@@ -784,8 +810,8 @@
             ssidChanged: function ssidChanged() {
               window.mdApp.ssidChanged();
             },
-            backupSettings: function backupSettings() {
-              window.mdApp.backupSettings();
+            backupSettings: function backupSettings(writeExisting) {
+              window.mdApp.backupSettings(writeExisting);
             },
             getSelected: function(options, selectedId) {
               return window.mdApp.getSelected(options, selectedId);

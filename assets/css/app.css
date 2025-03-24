@@ -201,18 +201,36 @@ body {
   background: rgba(121, 180, 201, 0.3);
   background: #343434;
   color: #bbb;
+  line-height: 2.25rem;
+  height: 2.25rem;
+
+  position: absolute;
+  right: 0;
+  left: 0;
 }
 
 #app .modal-close-top {
-  margin-bottom: 0.5rem;
+  /* margin-bottom: 0.5rem;
   margin-top: -1rem;
   margin-right: -1rem;
-  margin-left: -1rem;
+  margin-left: -1rem; */
+  top: 0;
 }
 
 #app .modal-close-bottom {
   margin-top: 1rem;
-  border-radius: 6px;
+  /* border-radius: 6px; */
+  bottom: 0;
+}
+
+#app .modal-content {
+  position: absolute;
+  top: 2.25rem;
+  bottom: 2.25rem;
+  left: 0;
+  right: 0;
+  overflow: auto;
+  padding: 1rem 0.5rem;
 }
 
 #app .config-wrapper {
@@ -247,7 +265,7 @@ body {
 
 #app .config-item {
   /* height: 4rem; */
-  height: 3.5rem;
+  /* height: 3.5rem; */
   line-height: 2.5rem;
   font-size: 1.5rem;
   padding: 0.5rem;
@@ -334,6 +352,30 @@ body {
 
 #app .configured-info .configured {
   color: #1eb624;
+}
+
+#app .close-buttons-container {
+  padding-top: 1rem;
+}
+
+#app .close-buttons-container .setting-close-button {
+  display: block;
+  color: #000;
+  font-weight: bold;
+  padding: 0.5rem;
+  font-size: 1.5rem;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  /* width: 50%;
+  float: left; */
+}
+
+#app .close-buttons-container .settings-save {
+  background-color: #77cd13;
+}
+
+#app .close-buttons-container .settings-close {
+  background-color: #aaa;
 }
 
 #app .update-info {

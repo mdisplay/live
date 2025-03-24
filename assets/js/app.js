@@ -261,7 +261,7 @@ function App() {
   };
   self.languageChanged = function () {
     localStorage.setItem('mdisplay.lang', self.data.selectedLanguage);
-    self.closeSettings();
+    self.saveAndCloseSettings();
   };
   self.ssidChanged = function () {
     localStorage.setItem('mdisplay.ssid', self.data.timeServerSSID);
@@ -1001,13 +1001,27 @@ function App() {
   };
   self.openSettings = function () {
     self.data.settingsMode = true;
+    if(self.backbuttonEventListener) {
+      document.addEventListener('backbutton', self.backbuttonEventListener, false);
+    }
     self.checkForKioskMode();
   };
-  self.closeSettings = function () {
-    self.updateSettings();
-    self.data.settingsMode = false;
-    var reloadOnSettings = true;
-    if (reloadOnSettings || self.shouldReload) {
+  self.saveAndCloseSettings = function () {
+    if(!confirm('Save changes?')) {
+      return;
+    }
+    self.backupSettings(false, function() {
+      self.updateSettings(true);
+      self.data.settingsMode = false;
+      var reloadOnSettings = true;
+      if (reloadOnSettings || self.shouldReload) {
+        window.location.reload();
+      }  
+    });
+  };
+  self.closeSettingsWithoutSaving = function() {
+    if(confirm('Are you sure to close Settings page without saving? All changes will be lost')) {
+      self.data.settingsMode = false;
       window.location.reload();
     }
   };
@@ -1040,7 +1054,7 @@ function App() {
     );
     setTimeout(function () {
       self.data.showSplash = false;
-    }, 1000);
+    }, 4000);
   };
   self.created = function () {
     if (window._theInterval) {
@@ -1084,12 +1098,6 @@ function App() {
       }
       if (settings.tarawihEnabled) {
         self.data.tarawihEnabled = true;
-      }
-      if (!self.data.tarawihEnabled && self.data.iqamahTimes.Tarawih) {
-        self.data.tarawihEnabled = true;
-        self.data.iqamahTimes.Tarawih.absolute = true;
-        self.data.iqamahTimes.Tarawih.hours = '21';
-        self.data.iqamahTimes.Tarawih.minutes = '30';
       }
       if (settings.time24Format) {
         self.data.time24Format = true;
@@ -1181,12 +1189,17 @@ function App() {
       callback();
     }
   };
-  self.updateSettings = function () {
+  self.updateSettings = function (write) {
+    if(!write) {
+      return;
+    }
     self.writeStorage();
     self.shouldReload = true;
   };
-  self.backupSettings = function () {
-    self.writeStorage();
+  self.backupSettings = function (writeExisting, doneCallback) {
+    if(writeExisting) {
+      self.writeStorage();
+    }
 
     var backupData = {
       'mdisplay.ssid': localStorage.getItem('mdisplay.ssid') || 'MDisplay TimeServer',
@@ -1216,13 +1229,22 @@ function App() {
       var blob = new Blob([fileContent], {type: "text/plain"});
       window.cordova.plugins.saveDialog.saveFile(blob, fileName).then(function(uri) {
         console.log("The file has been successfully saved to", uri);
+        if(doneCallback) {
+          doneCallback();
+        }
       }).catch(function(reason) {
         console.log(reason);
+        if(doneCallback) {
+          doneCallback();
+        }
       });
     } else if(window.cordova) {
       var errorCallback = function (e) {
         console.log('Error: ' + e);
         alert('FAILED to save file: ' + e);
+        if(doneCallback) {
+          doneCallback();
+        }
       };
 
       window.resolveLocalFileSystemURL(cordova.file.externalRootDirectory, function (fileSystem) {
@@ -1234,6 +1256,9 @@ function App() {
                 writer.onwriteend = function () {
                   console.log('File written to downloads');
                   alert('Backup file saved to downloads');
+                  if(doneCallback) {
+                    doneCallback();
+                  }          
                 };
                 writer.seek(0);
                 writer.write(
@@ -1256,6 +1281,11 @@ function App() {
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
+      if(doneCallback) {
+        setTimeout(function() {
+          doneCallback();
+        }, 1000);
+      }
     }
   };
 
@@ -1277,6 +1307,9 @@ function App() {
     window.location.reload();
   };
   self.onRestoreFileClick = function(dFile) {
+    if(!confirm('Restore file "' + dFile.name + '"? The current settings will be overwritten!')) {
+      return;
+    }
     var errorHandler = function(err) {
       alert('Failed to restore file' + err);
     }
@@ -1325,15 +1358,19 @@ function App() {
     }, errorHandler);
   };
   self.onRestoreFileChange = function (event) {
-    var file = document.getElementById('restore-settings-file-input');
+    var fileInput = document.getElementById('restore-settings-file-input');
     console.log('onRestoreFileChange', event);
     event.preventDefault();
     // If there's no file, do nothing
-    if (!file.value.length) return;
+    var file = fileInput.files[0];
+    if (!fileInput.value.length || !file) return;
     // Create a new FileReader() object
     var reader = new FileReader();
     // Setup the callback event to run when the file is read
     reader.onload = function (event) {
+      if(!confirm('Restore file "' + file.name + '"? The current settings will be overwritten!')) {
+        return;        
+      }
       self.restoreSettings(event.target.result);
       var str = event.target.result;
       var json = JSON.parse(str);
@@ -1341,7 +1378,26 @@ function App() {
       console.log('json', json);
     };
     // Read the file
-    reader.readAsText(file.files[0]);
+    reader.readAsText(file);
+  };
+  self.scrollSettingsContent = function(direction) {
+    var scrollPixels = 100;
+    var useAnimation = false;
+    var $scrollable = $('#settings-modal-scrollable-content');
+    var newScrollTop = $scrollable.scrollTop() + (direction == 'up' ? -scrollPixels : scrollPixels);
+    if(useAnimation) {
+      $scrollable.animate({
+        scrollTop: newScrollTop
+      });
+    } else {
+      $scrollable.scrollTop(newScrollTop); 
+    }
+  };
+  self.scrollUp = function() {
+    self.scrollSettingsContent('up');
+  };
+  self.scrollDown = function() {
+    self.scrollSettingsContent('down');
   };
   self.initShortcuts = function () {
     var KEY_CODES = {
@@ -1389,7 +1445,7 @@ function App() {
       if (pressed.enter) {
         event.preventDefault();
         if (self.data.settingsMode) {
-          self.closeSettings();
+          // self.closeSettings();
         } else {
           self.openSettings();
         }
@@ -1401,6 +1457,12 @@ function App() {
       var rows = document.querySelectorAll('.times-config .config-time-input');
       if (pressed.arrowDown || pressed.arrowUp) {
         event.preventDefault();
+        if (pressed.arrowUp) {
+          self.scrollUp();
+        } else {
+          self.scrollDown();
+        }
+        return;
         var lastSelectedRow = self.lastSelectedRow || 0;
         var lastSelectedCol = self.lastSelectedCol || 1;
         lastSelectedRow += pressed.arrowUp ? -1 : 1;
@@ -1674,6 +1736,11 @@ function App() {
     self.isDeviceReady = true;
     if (window.cordova) {
       self.data.isCordovaReady = true;
+      self.backbuttonEventListener = function (event) {
+        event.preventDefault();
+        event.stopPropagation();  
+        return false;
+      };
     }
     self.checkNetworkStatus();
   };
