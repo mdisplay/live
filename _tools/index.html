@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>MDisplay Tools</title>
+    <style>
+      * {
+        margin: 0;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Parse Prayer Data</h2>
+    <div style="width: 100%; display: flex;">
+      <div style="width: 50%; padding: 0.5rem;">
+        <div>Raw Text</div>
+        <textarea style="width: 100%; height: 200px;" id="prayer-data-raw-string" placeholder="Paste Raw text here..."></textarea>
+      </div>
+      <div style="width: 50%; padding: 0.5rem;">
+        <div>Parsed Text</div>
+        <textarea style="width: 100%; height: 200px;" id="prayer-data-parsed-string"></textarea>
+      </div>
+    </div>
+    <div>
+      <button style="width: 100%;" onclick="parseRawText()">Parse</button>
+    </div>
+    <h2>Download Prayer Times Data</h2>
+    <input type="checkbox" checked id="download-12hr-check"> 12 Hour format (AM/PM)
+    Data: <select id="download-name-select"></select>
+    Month: <select id="download-month-select">
+      <option></option>
+    </select>
+    <button id="download-action" onclick="downloadSelected()">Download</button>
+    <script src="../prayer-data.js"></script>
+    <script src="./tools.js"></script>
+  </body>
+</html>
