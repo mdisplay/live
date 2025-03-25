@@ -157,6 +157,14 @@ function App() {
     timeIsValid: false,
     timeFetchingMessage: undefined,
     timeAdjustmentMinutes: 0,
+    timeAdjustNew: {
+      Subah: 0,
+      Sunrise: 0,
+      Luhar: 0,
+      Asr: 0,
+      Magrib: 0,
+      Isha: 0,
+    },
     timeServerSSID: localStorage.getItem('mdisplay.ssid') || 'MDisplay TimeServer',
     timeServerSSIDs: ['NodeMCU TimeServer', 'MDisplay TimeServer'],
     network: {
@@ -178,6 +186,7 @@ function App() {
       clockThemes: false,
       languages: false,
       timeOriginModes: false,
+      timeAdjustNew: false,
     },
     focusActiveTimer: false,
     showRememberWifiSetting: false,
@@ -588,7 +597,7 @@ function App() {
   self.getDateParams = function (date) {
     return [date.getFullYear(), date.getMonth(), date.getDate()];
   };
-  self.getTime = function (yearParam, monthParam, dayParam, time) {
+  self.getTime = function (yearParam, monthParam, dayParam, time) { 
     var timeParts = time.split(':');
     var hoursAdd = 0;
     if (timeParts[1].indexOf('p') != -1) {
@@ -602,13 +611,28 @@ function App() {
     if (self.selectedPrayerDataDetails && self.selectedPrayerDataDetails.timeAdjustmentMinutes) {
       m.add(self.selectedPrayerDataDetails.timeAdjustmentMinutes, 'minutes');
     }
-    var timeAdjustmentMinutes = self.data.timeAdjustmentMinutes;
-    if (!isNaN(timeAdjustmentMinutes) && timeAdjustmentMinutes != 0) {
-      timeAdjustmentMinutes = parseInt(timeAdjustmentMinutes);
-      m.add(timeAdjustmentMinutes, 'minutes'); // when timeAdjustmentMinutes is < 0, it's substracted automatically
+    var timeAdjustOld = self.data.timeAdjustmentMinutes;
+    if (!isNaN(timeAdjustOld) && timeAdjustOld != 0) {
+      timeAdjustOld = parseInt(timeAdjustOld);
+      m.add(timeAdjustOld, 'minutes'); // when adjustment is < 0, it's substracted automatically
     }
 
     return m.toDate();
+  };
+  self.adjustTimesNew = function(times) {
+    for(var name in times) {
+      var adjustMinutes = self.data.timeAdjustNew[name];
+      if(!adjustMinutes || isNaN(adjustMinutes)) {
+        continue;
+      }
+      var m = moment(times[name]);
+      if (adjustMinutes != 0) {
+        adjustMinutes = parseInt(adjustMinutes);
+        m.add(adjustMinutes, 'minutes'); // when timeAdjustmentMinutes is < 0, it's substracted automatically
+      }
+      times[name] = m.toDate();
+    }
+    return times;
   };
   self.getTimes = function (yearParam, monthParam, dayParam) {
     var times = [];
@@ -625,7 +649,7 @@ function App() {
     if (!times.length) {
       return false;
     }
-    return {
+    return self.adjustTimesNew({
       Subah: times[0],
       Sunrise: times[1],
       Luhar: times[2],
@@ -633,7 +657,7 @@ function App() {
       Magrib: times[4],
       Isha: times[5],
       Tarawih: new Date(times[5].getTime() + 1),
-    };
+    });
   };
   self.getIqamahTimes = function (prayerTimes, monthParam, dayParam) {
     var iqamahTimes = {};
@@ -1007,17 +1031,12 @@ function App() {
     self.checkForKioskMode();
   };
   self.saveAndCloseSettings = function () {
-    if(!confirm('Save changes?')) {
-      return;
+    self.updateSettings();
+    self.data.settingsMode = false;
+    var reloadOnSettings = true;
+    if (reloadOnSettings || self.shouldReload) {
+      window.location.reload();
     }
-    self.backupSettings(false, function() {
-      self.updateSettings(true);
-      self.data.settingsMode = false;
-      var reloadOnSettings = true;
-      if (reloadOnSettings || self.shouldReload) {
-        window.location.reload();
-      }  
-    });
   };
   self.closeSettingsWithoutSaving = function() {
     if(confirm('Are you sure to close Settings page without saving? All changes will be lost')) {
@@ -1090,6 +1109,9 @@ function App() {
       if (!isNaN(timeAdjustmentMinutes)) {
         self.data.timeAdjustmentMinutes = timeAdjustmentMinutes;
       }
+      if (settings.timeAdjustNew && settings.timeAdjustNew.Subah) {
+        self.data.timeAdjustNew = settings.timeAdjustNew;
+      }
       if (settings.analogClockActive) {
         self.data.analogClockActive = true;
       }
@@ -1157,6 +1179,7 @@ function App() {
     var settings = {
       timeOriginMode: self.data.timeOriginMode,
       timeAdjustmentMinutes: self.data.timeAdjustmentMinutes,
+      timeAdjustNew: self.data.timeAdjustNew,
       analogClockActive: self.data.analogClockActive,
       activeClockTheme: 'digitalDefault', // reset to default for possible later usage
       activeClockTheme2: self.data.activeClockTheme,
@@ -1189,10 +1212,7 @@ function App() {
       callback();
     }
   };
-  self.updateSettings = function (write) {
-    if(!write) {
-      return;
-    }
+  self.updateSettings = function () {
     self.writeStorage();
     self.shouldReload = true;
   };
@@ -1739,6 +1759,7 @@ function App() {
       self.backbuttonEventListener = function (event) {
         event.preventDefault();
         event.stopPropagation();  
+        window.location.reload();
         return false;
       };
     }

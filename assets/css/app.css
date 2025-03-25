@@ -266,7 +266,7 @@ body {
 #app .config-item {
   /* height: 4rem; */
   /* height: 3.5rem; */
-  line-height: 2.5rem;
+  line-height: 2rem;
   font-size: 1.5rem;
   padding: 0.5rem;
 }
@@ -276,9 +276,9 @@ body {
 #app .config-item .time-input-colon,
 #app .config-item .toggle-absolute,
 #app .config-item .time-info {
-  font-size: 2rem;
-  line-height: 2.5rem;
-  height: 2.5rem;
+  /* font-size: 2rem; */
+  /* line-height: 2.5rem; */
+  height: 2rem;
   display: inline-block;
 }
 
@@ -320,11 +320,12 @@ body {
 #app .config-item .toggle-absolute {
   /* font-size: 2rem;
   line-height: 2.5rem; */
-  width: 3rem;
+  width: 2.5rem;
   text-align: center;
   display: inline-block;
   color: #fff;
   background: #518d0b;
+  border: none;
 }
 
 #app .config-item .toggle-absolute.is-absolute {
@@ -371,7 +372,8 @@ body {
 }
 
 #app .close-buttons-container .settings-save {
-  background-color: #77cd13;
+  background-color: #357ae8;
+  color: #FFF;
 }
 
 #app .close-buttons-container .settings-close {
