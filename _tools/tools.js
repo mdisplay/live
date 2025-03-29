@@ -1,6 +1,7 @@
 const rawEl = document.getElementById('prayer-data-raw-string');
 const parsedEl = document.getElementById('prayer-data-parsed-string');
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+const monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 function getMonth(month) {
   return months.filter(mon => mon.toUpperCase().indexOf(month.toUpperCase()) !== -1)[0];
@@ -56,13 +57,21 @@ function parseRawText() {
   const times = {};
   let lastDate = '';
   const allData = {};
+  const zoneDetails = {};
   for (let line of lines) {
     line = line.trim().toUpperCase();
     if (line === '') {
       continue;
     }
-    if (line.indexOf(':') !== -1) {
+    line = line.replace('•', ':');
+    if(line.toUpperCase().indexOf('ZONE') !== -1) {
+        let [zoneName, zoneDescription] = line.split(':');
+        zoneName = zoneName.replace('0', '').replace(' ', '');
+        zoneDetails.name = zoneName.toUpperCase();
+        zoneDetails.description = zoneDescription.trim().replace('(', '').replace(')', '');
+    } else if (line.indexOf(':') !== -1) {
       if (line.indexOf('PM') !== -1) {
+        line = line.toUpperCase().replace('O', '0');
         line = line.replace('PM', '').trim();
         let [hour, minutes] = line.split(':');
         hour = parseInt(hour);
@@ -71,15 +80,22 @@ function parseRawText() {
           hour += 12;
         }
         line = hour + ':' + minutes;
-      } else {
+      } else if(line.indexOf('AM') !== -1) {
+        line = line.toUpperCase().replace('O', '0');
         line = line.replace('AM', '').trim();
+      } else {
+        continue;
       }
       times[lastDate].times.push(line);
     } else {
-      lastDate = line.replace(/O/g, '0');
-      let [month, day] = lastDate.split('-');
+      line = line.replace(/O/g, '0');
+      let [month, day] = line.split('-');
       month = getMonth(month);
+      if (!month) {
+        continue;
+      }
       day = parseInt(day);
+      lastDate = line;
       times[lastDate] = {month, day, range: [day, day], times: []};
       if (!allData[month]) {
         allData[month] = {};
@@ -94,7 +110,8 @@ function parseRawText() {
     const data = allData[month];
     allDataProcessed[month] = [];
     let lastRange = null;
-    for(let i = 1; i <= 31; i++) {
+    const totalDays = monthDays[months.indexOf(month)];
+    for(let i = 1; i <= totalDays; i++) {
       const areEqual = lastRange && areEqualTimes(lastRange.times, data[i].times);
       if (areEqual) {
         lastRange.range[1] = i;
@@ -107,7 +124,7 @@ function parseRawText() {
 
   console.log(allData);
   console.log(allDataProcessed);
-  let allParsedValue = '{\n';
+  allParsedValue = '';
   for(const month in allDataProcessed) {
     let parsedValue = `  ${month}: [\n`;
     for (let t of allDataProcessed[month]) {
@@ -116,9 +133,16 @@ function parseRawText() {
     parsedValue += `  ],\n`;
     allParsedValue += parsedValue
   }
-  allParsedValue += '}\n';
   // let parsedValue = JSON.stringify(allDataProcessed, null, 2);
   console.log(allParsedValue);
+  function wrapZone(zone, val) {
+    val = '{\n' + val;
+    val = 'window.PRAYER_DATA.' + zone.name + ' = ' + val;
+      // val += '}\n';
+    val += '}\n';
+    return val;
+  }
+  // allParsedValue = wrapZone(zoneDetails, allParsedValue);
   parsedEl.value = allParsedValue;
 }
 
