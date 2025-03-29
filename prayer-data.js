@@ -3,7 +3,9 @@ Fixed typo March [19,2] => [19,20]
 Fixed Luhar AM issue (Oct 09 - Nov 27)
 Fixed Subah wrong time (Dec 08)
 */
-window.PRAYER_DATA = {};
+if(!window.PRAYER_DATA) {
+  window.PRAYER_DATA = {};
+}
 
 window.PRAYER_DATA.Puttalam = {
   January: [

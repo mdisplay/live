@@ -57,6 +57,7 @@ function App() {
   self.sunriseSupport = localStorage.getItem('mdisplay.sunriseSupport') !== '0';
   self.lang = localStorage.getItem('mdisplay.lang') || 'en';
   self.prayerDataId = localStorage.getItem('mdisplay.prayerDataId') || 'Colombo';
+  self.prayerNewDataId = localStorage.getItem('mdisplay.prayerNewDataId') || 'NONE';
   self.checkInternetJsonp = {
     jsonpCallback: 'checkInternet',
     url: 'https://mdisplay.github.io/live/check-internet.js',
@@ -125,6 +126,7 @@ function App() {
     isFriday: false,
     selectedLanguage: self.lang,
     selectedPrayerDataId: self.prayerDataId,
+    selectedPrayerNewDataId: self.prayerNewDataId,
     languages: [
       { id: 'si', label: 'Sinhala' },
       { id: 'ta', label: 'Tamil' },
@@ -136,6 +138,21 @@ function App() {
       { id: 'Mannar', label: 'Mannar' },
       { id: 'Eastern', label: 'Eastern', parent: 'Colombo', timeAdjustmentMinutes: -6 },
       { id: 'Central', label: 'Central (Kandy, Akurana) - beta' },
+    ],
+    prayerNewDataList: [
+      { id: 'NONE', label: 'None', type: 'NEW'},
+      { id: 'ZONE2', label: 'Zone 02: Jaffna & Nallur', type: 'NEW'},
+      { id: 'ZONE3', label: 'Zone 03: Mullaitivu District (Except Nallurs, Kilinochchi, Vavuniya District)', type: 'NEW'},
+      { id: 'ZONE4', label: 'Zone 04: Mannar & Puttalam District', type: 'NEW'},
+      { id: 'ZONE5', label: 'Zone 05: Anuradhapura & Polonnaruwa District', type: 'NEW'},
+      { id: 'ZONE6', label: 'Zone 06: Kurunegala District', type: 'NEW'},
+      { id: 'ZONE7', label: 'Zone 07: Kandy, Matale & Nuwara Eliya District', type: 'NEW'},
+      { id: 'ZONE8', label: 'Zone 08: Batticaloa & Ampara District', type: 'NEW'},
+      { id: 'ZONE9', label: 'Zone 09: Trincomalee District', type: 'NEW'},
+      { id: 'ZONE10', label: 'Zone 10: Badulla & Monaragala District, Dehiaththakandiya, Embilipitiya', type: 'NEW'},
+      { id: 'ZONE11', label: 'Zone 11: Ratnapura & Kegalle District', type: 'NEW'},
+      { id: 'ZONE12', label: 'Zone 12: Galle & Matara District', type: 'NEW'},
+      { id: 'ZONE13', label: 'Zone 13: Hambantota District', type: 'NEW'},
     ],
     clockThemes: [
       { id: 'digitalDefault', label: 'Classic Digital' },
@@ -183,6 +200,7 @@ function App() {
     showSunriseNow: false,
     expanded: {
       prayerTimesData: false,
+      prayerNewTimesData: false,
       clockThemes: false,
       languages: false,
       timeOriginModes: false,
@@ -199,6 +217,7 @@ function App() {
     downloadedFiles: [],
     alertImages: ['alert1.png', 'alert2.gif'],
     showSunriseLabel: false,
+    splashScreenMillis: 4000,
   };
   self.computed = {
     showAlert: function () {
@@ -232,20 +251,47 @@ function App() {
       && (self.data.showSunriseNow);
     },
   };
-  self.selectedPrayerDataDetails =
+
+  self.showToast = function (message, duration) {
+    duration = duration || 3000;
+    var toast = new Toast(message);
+    self.data.toasts.push(toast);
+    setTimeout(function () {
+      var i = self.data.toasts.indexOf(toast);
+      if (i !== -1) {
+        self.data.toasts.splice(i, 1);
+      }
+    }, duration);
+  };
+
+  self.selectedPrayerDataDetails = 
     self.data.prayerDataList.filter(function (pData) {
       return pData.id == self.prayerDataId;
     })[0] || self.prayerDataList[0];
+
+  self.selectedPrayerNewDataDetails =
+    self.data.prayerNewDataList.filter(function (pData) {
+      return pData.id == self.prayerNewDataId;
+    })[0] || self.prayerNewDataList[0];
 
   self.prayerData = [];
   var prayerData =
     window.PRAYER_DATA[(self.selectedPrayerDataDetails && self.selectedPrayerDataDetails.parent) || self.prayerDataId];
   if (!prayerData) {
-    alert('Invalid Prayer Data. Falling back to default');
+    self.showToast('Invalid Prayer Data. Falling back to default', 6000); 
     prayerData = window.PRAYER_DATA['Colombo'];
   }
+
+  var prayerNewData =
+    window.PRAYER_DATA[(self.selectedPrayerNewDataDetails && self.selectedPrayerNewDataDetails.parent) || self.prayerNewDataId];
   for (var month in prayerData) {
-    if (prayerData.hasOwnProperty(month)) {
+    if(prayerNewData && prayerNewData.hasOwnProperty(month)) {
+      self.prayerData.push(prayerNewData[month]);
+    }
+    else if (prayerData.hasOwnProperty(month)) {
+      if (prayerNewData) {
+        self.showToast('Zone Data not available for ' + month + '. Falling back to old Prayer Data', 6000);
+      }
       self.prayerData.push(prayerData[month]);
     }
   }
@@ -1044,17 +1090,6 @@ function App() {
       window.location.reload();
     }
   };
-  self.showToast = function (message, duration) {
-    duration = duration || 3000;
-    var toast = new Toast(message);
-    self.data.toasts.push(toast);
-    setTimeout(function () {
-      var i = self.data.toasts.indexOf(toast);
-      if (i !== -1) {
-        self.data.toasts.splice(i, 1);
-      }
-    }, duration);
-  };
   self.mounted = function () {
     self.showToast('Application loaded.', 3000);
     // self.simulateTime = 50;
@@ -1071,9 +1106,10 @@ function App() {
       },
       self.simulateTime ? self.simulateTime : 1000
     );
+    var splashScreenMillis = self.data.splashScreenMillis || 4000;
     setTimeout(function () {
       self.data.showSplash = false;
-    }, 4000);
+    }, splashScreenMillis);
   };
   self.created = function () {
     if (window._theInterval) {
@@ -1143,6 +1179,10 @@ function App() {
       if (self.data.lastKnownTime === 'undefined') {
         self.data.lastKnownTime = undefined;
       }
+      var splashScreenMillis = parseInt(settings.splashScreenMillis);
+      if (!isNaN(splashScreenMillis) && splashScreenMillis) {
+        self.data.splashScreenMillis = splashScreenMillis;
+      }
       if (typeof settings.activeClockTheme2 === 'string') {
         // self.data.activeClockTheme = settings.activeClockTheme2;
         // switch (settings.activeClockTheme2) {
@@ -1192,6 +1232,7 @@ function App() {
       disconnectWifi: self.data.disconnectWifi,
       rememberedWifiSSID: self.data.rememberedWifiSSID,
       tarawihEnabled: self.data.tarawihEnabled,
+      splashScreenMillis: self.data.splashScreenMillis,
     };
     if (!self.data.rememberWifi) {
       settings.rememberedWifiSSID = undefined;
@@ -1206,6 +1247,7 @@ function App() {
 
     localStorage.setItem('mdisplay.lang', self.data.selectedLanguage);
     localStorage.setItem('mdisplay.prayerDataId', self.data.selectedPrayerDataId);
+    localStorage.setItem('mdisplay.prayerNewDataId', self.data.selectedPrayerNewDataId);
     localStorage.setItem('mdisplay.sunriseSupport', self.data.sunriseSupport ? 1 : 0);
 
     if (callback) {

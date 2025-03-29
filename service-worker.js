@@ -36,6 +36,10 @@ var precacheList = [
     url: toUrl('prayer-data.js'),
     revision: dataVersion,
   },
+  {
+    url: toUrl('prayernew-data.js'),
+    revision: appVersion,
+  },
   // vendors
   {
     url: toUrl('assets/vendors/vue.min.js'),

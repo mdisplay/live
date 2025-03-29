@@ -110,6 +110,35 @@
 
                   <div class="config-item other-config" style="height: auto">
                     <div>
+                      <small>[beta] Time Zone</small>
+                      <small>
+                        >
+                        <a href="#" @click="expanded.prayerNewTimesData = !expanded.prayerNewTimesData;">
+                          <span v-if="expanded.prayerNewTimesData">dismiss</span>
+                          <span v-else>{{ getSelected(prayerNewDataList, selectedPrayerNewDataId) }}</span>
+                        </a>
+                      </small>
+                    </div>
+                    <div v-if="expanded.prayerNewTimesData">
+                    <template v-for="pData in prayerNewDataList">
+                    <label :for="'prayer-data-select-' + pData.id" style="display: block;">
+                      <input
+                        :id="'prayer-data-select-' + pData.id"
+                        type="radio"
+                        name="prayer-data-select"
+                        :value="pData.id"
+                        v-model="selectedPrayerNewDataId"
+                        @change="expanded.prayerNewTimesData = false; updateSettings()"
+                      />
+                      {{ pData.label }}
+                      &nbsp;
+                    </label>
+                    </template>
+                    </div>
+                  </div>
+
+                  <div class="config-item other-config" style="height: auto">
+                    <div>
                       <small>Prayer Times Data</small>
                       <small>
                         >
@@ -120,7 +149,8 @@
                       </small>
                     </div>
                     <div v-if="expanded.prayerTimesData">
-                    <label v-for="pData in prayerDataList" :for="'prayer-data-select-' + pData.id" style="display: block;">
+                    <template v-for="pData in prayerDataList">
+                    <label :for="'prayer-data-select-' + pData.id" style="display: block;">
                       <input
                         :id="'prayer-data-select-' + pData.id"
                         type="radio"
@@ -132,6 +162,7 @@
                       {{ pData.label }}
                       &nbsp;
                     </label>
+                    </template>
                     </div>
                   </div>
                   <div class="config-item other-config">
@@ -151,7 +182,7 @@
                   </div>
                   <div class="config-item other-config" style="height: auto;">
                     <div>
-                      <small>[NEW] Adhan Time Adjustment</small>
+                      <small>[NEW] Time Adjustment</small>
                       <small>
                         >
                         <a href="#" @click="expanded.timeAdjustNew = !expanded.timeAdjustNew;">
@@ -436,7 +467,7 @@
                 <div class="config-container times-config" v-if="!isDownloadsListOpen" style="margin-top: 0.5rem;">
 
                   <div class="config-item time-config" style="height: auto;">
-                    <strong>Developer Only</strong>
+                    <strong>Developer Mode</strong>
                   </div>
                   <div class="config-item other-config" style="height: auto;">
                     <label for="time-override-active-check">
@@ -458,6 +489,22 @@
                       step="1"
                       @change="updateSettings()"
                     />
+                  </div>
+
+                  <div class="config-item other-config">
+                    <label><small>Splash Screen Duration</small></label>
+                    <!-- <select>
+                      <option value="+">+</option>
+                      <option value="-">-</option>
+                    </select> -->
+                    <input
+                      class="time-input"
+                      type="number"
+                      v-model="splashScreenMillis"
+                      @input="updateSettings()"
+                      @change="updateSettings()"
+                    />
+                    <span><small>milli seconds</small></span>
                   </div>
                 </div>
 
@@ -745,6 +792,7 @@
       </div>
     </div>
     <script type="text/javascript" src="prayer-data.js?v=2.10.2-129"></script>
+    <script type="text/javascript" src="prayernew-data.js?v=2.10.2-129"></script>
     <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=2.10.2-129"></script>
     <script type="text/javascript" src="assets/vendors/vue.min.js?v=2.10.2-129"></script>
     <script type="text/javascript" src="assets/vendors/moment.min.js?v=2.10.2-129"></script>
