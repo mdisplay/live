@@ -1462,6 +1462,17 @@ function App() {
     self.scrollSettingsContent('down');
   };
   self.initShortcuts = function () {
+    document.addEventListener('mousemove', function(event) {
+      self.isMouseMoving = true;
+      if(self.mouseMovingTimoutRef) {
+        clearTimeout(self.mouseMovingTimoutRef);
+        self.mouseMovingTimoutRef = undefined;
+      }
+      self.mouseMovingTimoutRef = setTimeout(function(ev) {
+        self.isMouseMoving = false;
+        self.mouseMovingTimoutRef = undefined;
+      }, 1000);
+    }, false);
     var KEY_CODES = {
       ENTER: 13,
       ARROW_LEFT: 37,
@@ -1518,12 +1529,16 @@ function App() {
       }
       var rows = document.querySelectorAll('.times-config .config-time-input');
       if (pressed.arrowDown || pressed.arrowUp) {
-        event.preventDefault();
-        if (pressed.arrowUp) {
-          self.scrollUp();
-        } else {
-          self.scrollDown();
-        }
+        setTimeout(function() {
+          if(!self.isMouseMoving) {
+            event.preventDefault();
+            if (pressed.arrowUp) {
+              self.scrollUp();
+            } else {
+              self.scrollDown();
+            }    
+          }
+        }, 500);
         return;
         var lastSelectedRow = self.lastSelectedRow || 0;
         var lastSelectedCol = self.lastSelectedCol || 1;
