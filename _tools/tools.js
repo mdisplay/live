@@ -7,6 +7,14 @@ function getMonth(month) {
   return months.filter(mon => mon.toUpperCase().indexOf(month.toUpperCase()) !== -1)[0];
 }
 
+var padZero = function padZero(number) {
+  number = parseInt(number);
+  if (number < 10) {
+    return '0' + number;
+  }
+  return '' + number;
+};
+
 function downloadFile(fileName, fileContent, doneCallback) {
   var a = document.createElement('a');
   a.href = URL.createObjectURL(
@@ -52,58 +60,29 @@ function areEqualTimes(times1, times2) {
   return areEqual && times1.length == times2.length;
 }
 
-function parseRawText() {
-  const lines = rawEl.value.split(/\r?\n|\r|\n/g).map(line => line.trim());
-  const times = {};
-  let lastDate = '';
-  const allData = {};
-  const zoneDetails = {};
-  for (let line of lines) {
-    line = line.trim().toUpperCase();
-    if (line === '') {
-      continue;
+function to24Raw(txt) {
+  if (txt.indexOf('PM') !== -1) {
+    txt = txt.toUpperCase().replace('O', '0');
+    txt = txt.replace('PM', '').trim();
+    let [hour, minutes] = txt.split(':');
+    hour = parseInt(hour);
+    minutes = parseInt(minutes);
+    if (hour != 12) {
+      hour += 12;
     }
-    line = line.replace('•', ':');
-    if(line.toUpperCase().indexOf('ZONE') !== -1) {
-        let [zoneName, zoneDescription] = line.split(':');
-        zoneName = zoneName.replace('0', '').replace(' ', '');
-        zoneDetails.name = zoneName.toUpperCase();
-        zoneDetails.description = zoneDescription.trim().replace('(', '').replace(')', '');
-    } else if (line.indexOf(':') !== -1) {
-      if (line.indexOf('PM') !== -1) {
-        line = line.toUpperCase().replace('O', '0');
-        line = line.replace('PM', '').trim();
-        let [hour, minutes] = line.split(':');
-        hour = parseInt(hour);
-        minutes = parseInt(minutes);
-        if (hour != 12) {
-          hour += 12;
-        }
-        line = hour + ':' + minutes;
-      } else if(line.indexOf('AM') !== -1) {
-        line = line.toUpperCase().replace('O', '0');
-        line = line.replace('AM', '').trim();
-      } else {
-        continue;
-      }
-      times[lastDate].times.push(line);
-    } else {
-      line = line.replace(/O/g, '0');
-      let [month, day] = line.split('-');
-      month = getMonth(month);
-      if (!month) {
-        continue;
-      }
-      day = parseInt(day);
-      lastDate = line;
-      times[lastDate] = {month, day, range: [day, day], times: []};
-      if (!allData[month]) {
-        allData[month] = {};
-      }
-      allData[month][day] = times[lastDate];
-    }
+    txt = padZero(hour) + ':' + padZero(minutes);
+  } else if(txt.indexOf('AM') !== -1) {
+    txt = txt.toUpperCase().replace('O', '0');
+    txt = txt.replace('AM', '').trim();
+    let [hour, minutes] = txt.split(':');
+    txt = hour + ':' + minutes;
+  } else {
+    return false;
   }
+  return txt;
+}
 
+function applyAllData(allData) {
   const allDataProcessed = {};
 
   for (const month in allData) {
@@ -144,6 +123,90 @@ function parseRawText() {
   }
   // allParsedValue = wrapZone(zoneDetails, allParsedValue);
   parsedEl.value = allParsedValue;
+}
+
+function parseRawText() {
+  const lines = rawEl.value.split(/\r?\n|\r|\n/g).map(line => line.trim());
+  const times = {};
+  let lastDate = '';
+  const allData = {};
+  const zoneDetails = {};
+  for (let line of lines) {
+    line = line.trim().toUpperCase();
+    if (line === '') {
+      continue;
+    }
+    line = line.replace('•', ':');
+    if(line.toUpperCase().indexOf('ZONE') !== -1) {
+        let [zoneName, zoneDescription] = line.split(':');
+        zoneName = zoneName.replace('0', '').replace(' ', '');
+        zoneDetails.name = zoneName.toUpperCase();
+        zoneDetails.description = zoneDescription.trim().replace('(', '').replace(')', '');
+    } else if (line.indexOf(':') !== -1) {
+      const converted = to24Raw(line);
+      if(!converted) {
+        continue;
+      }
+      times[lastDate].times.push(converted);
+    } else {
+      line = line.replace(/O/g, '0');
+      let [month, day] = line.split('-');
+      month = getMonth(month);
+      if (!month) {
+        continue;
+      }
+      day = parseInt(day);
+      lastDate = line;
+      times[lastDate] = {month, day, range: [day, day], times: []};
+      if (!allData[month]) {
+        allData[month] = {};
+      }
+      allData[month][day] = times[lastDate];
+    }
+  }
+
+  applyAllData(allData);
+}
+
+function parseRawTextPdf() {
+  const lines = rawEl.value.split(/\r?\n|\r|\n/g).map(line => line.trim());
+  const times = {};
+  let lastDate = '';
+  const allData = {};
+  const zoneDetails = {};
+  for (let line of lines) {
+    line = line.trim().toUpperCase();
+    if (line === '') {
+      continue;
+    }
+    line = line.replace('•', ':');
+    if(line.toUpperCase().indexOf('ZONE') !== -1) {
+        let [zoneName, zoneDescription] = line.split(':');
+        zoneName = zoneName.replace('0', '').replace(' ', '');
+        zoneDetails.name = zoneName.toUpperCase();
+        zoneDetails.description = zoneDescription.trim().replace('(', '').replace(')', '');
+    } else if (line.indexOf(':') !== -1) {
+      const date = line.match(/(\w+?)-(\d+)/);
+      const month =  getMonth(date[1]);;
+      const day = parseInt(date[2]);
+      const timesNow = {month, day, range: [day, day], times: []};
+      if (!allData[month]) {
+        allData[month] = {};
+      }
+      // line.match(/(\d\d):(\d\d).+?([A|P]M)/g);
+      line.matchAll(/(\d\d):(\d\d).+?([A|P]M)/g).forEach((match => {
+        const converted = to24Raw(match[0]);
+        if(converted) {
+          timesNow.times.push(converted);
+        }
+      }));
+      allData[month][day] = timesNow;
+      // console.log(date[1], date[2], timesRaw);
+    } else {
+    }
+  }
+  console.log('allData', allData);
+  applyAllData(allData);
 }
 
 const monthSelectEl = document.getElementById('download-month-select');
