@@ -137,6 +137,33 @@
                     </div>
                   </div>
 
+                  <div class="config-item other-config" style="height: auto;">
+                    <div>
+                      <small>[beta] Time Adjustment</small>
+                      <small>
+                        >
+                        <a href="#" @click="expanded.timeAdjustNew = !expanded.timeAdjustNew;">
+                          <span v-if="expanded.timeAdjustNew">dismiss</span>
+                          <span v-else>{{ timeAdjustNew.Subah + ' ' + timeAdjustNew.Sunrise + ' ' + timeAdjustNew.Luhar + ' ' + timeAdjustNew.Asr + ' ' + timeAdjustNew.Magrib + ' ' + timeAdjustNew.Isha }}</span>
+                        </a>
+                      </small>
+                    </div>
+                    <div v-if="expanded.timeAdjustNew">
+                    <label v-for="(value, name) in timeAdjustNew" :for="'time-adjust-new-' + name" style="display: block;">
+                      <small style="display: inline-block; width: 120px;">{{ name }}</small>
+                      <input
+                        :id="'time-adjust-new-' + name"
+                        type="number"
+                        class="time-input"
+                        v-model="timeAdjustNew[name]"
+                        @input="updateSettings()"
+                        @change="updateSettings()"
+                      />
+                      &nbsp;
+                    </label>
+                    </div>
+                  </div>
+
                   <div class="config-item other-config" style="height: auto">
                     <div>
                       <small>Prayer Times Data</small>
@@ -179,32 +206,6 @@
                       @change="updateSettings()"
                     />
                     <span>minutes</span>
-                  </div>
-                  <div class="config-item other-config" style="height: auto;">
-                    <div>
-                      <small>[NEW] Time Adjustment</small>
-                      <small>
-                        >
-                        <a href="#" @click="expanded.timeAdjustNew = !expanded.timeAdjustNew;">
-                          <span v-if="expanded.timeAdjustNew">dismiss</span>
-                          <span v-else>{{ timeAdjustNew.Subah + ' ' + timeAdjustNew.Sunrise + ' ' + timeAdjustNew.Luhar + ' ' + timeAdjustNew.Asr + ' ' + timeAdjustNew.Magrib + ' ' + timeAdjustNew.Isha }}</span>
-                        </a>
-                      </small>
-                    </div>
-                    <div v-if="expanded.timeAdjustNew">
-                    <label v-for="(value, name) in timeAdjustNew" :for="'time-adjust-new-' + name" style="display: block;">
-                      <small style="display: inline-block; width: 120px;">{{ name }}</small>
-                      <input
-                        :id="'time-adjust-new-' + name"
-                        type="number"
-                        class="time-input"
-                        v-model="timeAdjustNew[name]"
-                        @input="updateSettings()"
-                        @change="updateSettings()"
-                      />
-                      &nbsp;
-                    </label>
-                    </div>
                   </div>
                   <div class="config-item other-config" style="height: auto">
                     <div>

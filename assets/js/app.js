@@ -274,6 +274,8 @@ function App() {
       return pData.id == self.prayerNewDataId;
     })[0] || self.prayerNewDataList[0];
 
+  self.prayerNewDataAvailableMonths = {};
+
   self.prayerData = [];
   var prayerData =
     window.PRAYER_DATA[(self.selectedPrayerDataDetails && self.selectedPrayerDataDetails.parent) || self.prayerDataId];
@@ -285,7 +287,9 @@ function App() {
   var prayerNewData =
     window.PRAYER_DATA[(self.selectedPrayerNewDataDetails && self.selectedPrayerNewDataDetails.parent) || self.prayerNewDataId];
   for (var month in prayerData) {
+    self.prayerNewDataAvailableMonths[month] = false;
     if(prayerNewData && prayerNewData.hasOwnProperty(month)) {
+      self.prayerNewDataAvailableMonths[month] = true;
       self.prayerData.push(prayerNewData[month]);
     }
     else if (prayerData.hasOwnProperty(month)) {
@@ -654,13 +658,15 @@ function App() {
     console.log(time);
     // var m = moment(yearParam + ' ' + (monthParam + 1) + ' ' + dayParam + ' ' + time + 'm', 'YYYY M D hh:mma');
     var m = moment(yearParam + ' ' + (monthParam + 1) + ' ' + dayParam + ' ' + time, 'YYYY M D HH:mm');
-    if (self.selectedPrayerDataDetails && self.selectedPrayerDataDetails.timeAdjustmentMinutes) {
+    var monthName = translations.en.months[monthParam];
+    if (self.selectedPrayerDataDetails && self.selectedPrayerDataDetails.timeAdjustmentMinutes && !self.prayerNewDataAvailableMonths[monthName]) {
       m.add(self.selectedPrayerDataDetails.timeAdjustmentMinutes, 'minutes');
-    }
-    var timeAdjustOld = self.data.timeAdjustmentMinutes;
-    if (!isNaN(timeAdjustOld) && timeAdjustOld != 0) {
-      timeAdjustOld = parseInt(timeAdjustOld);
-      m.add(timeAdjustOld, 'minutes'); // when adjustment is < 0, it's substracted automatically
+      // support manual time adjustment
+      var timeAdjustOld = self.data.timeAdjustmentMinutes;
+      if (!isNaN(timeAdjustOld) && timeAdjustOld != 0) {
+        timeAdjustOld = parseInt(timeAdjustOld);
+        m.add(timeAdjustOld, 'minutes'); // when adjustment is < 0, it's substracted automatically
+      }
     }
 
     return m.toDate();
@@ -674,7 +680,7 @@ function App() {
       var m = moment(times[name]);
       if (adjustMinutes != 0) {
         adjustMinutes = parseInt(adjustMinutes);
-        m.add(adjustMinutes, 'minutes'); // when timeAdjustmentMinutes is < 0, it's substracted automatically
+        m.add(adjustMinutes, 'minutes'); // when adjustMinutes is < 0, it's substracted automatically
       }
       times[name] = m.toDate();
     }
