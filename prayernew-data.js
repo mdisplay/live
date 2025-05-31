@@ -2,7 +2,7 @@ if(!window.PRAYER_DATA) {
   window.PRAYER_DATA = {};
 }
 
-// Zone 02: Jaffna & Nallur
+// Zone 01: Colombo, Gampaha & Kalutara District
 window.PRAYER_DATA.ZONE1 = {
   May: [
     { range: [1, 1], times: ['04:37', '05:57', '12:09', '15:25', '18:19', '19:31'] },

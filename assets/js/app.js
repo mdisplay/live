@@ -218,6 +218,7 @@ function App() {
     alertImages: ['alert1.png', 'alert2.gif'],
     showSunriseLabel: false,
     splashScreenMillis: 4000,
+    isPrayerNewDataApplied: false,
   };
   self.computed = {
     showAlert: function () {
@@ -748,6 +749,10 @@ function App() {
       _d.setDate(_d.getDate() + 1);
       dateParams = self.getDateParams(_d);
     }
+    
+    var monthName = translations.en.months[dateParams[1]];
+    self.data.isPrayerNewDataApplied = !!self.prayerNewDataAvailableMonths[monthName];
+
     var d = moment(self.data.time);
     var dayOfWeek = parseInt(d.format('d'));
     var day = translations[self.lang].days[dayOfWeek];
