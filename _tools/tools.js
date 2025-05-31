@@ -75,7 +75,7 @@ function to24Raw(txt) {
     txt = txt.toUpperCase().replace('O', '0');
     txt = txt.replace('AM', '').trim();
     let [hour, minutes] = txt.split(':');
-    txt = hour + ':' + minutes;
+    txt = padZero(hour) + ':' + padZero(minutes);
   } else {
     return false;
   }
@@ -186,15 +186,22 @@ function parseRawTextPdf() {
         zoneDetails.name = zoneName.toUpperCase();
         zoneDetails.description = zoneDescription.trim().replace('(', '').replace(')', '');
     } else if (line.indexOf(':') !== -1) {
-      const date = line.match(/(\w+?)-(\d+)/);
-      const month =  getMonth(date[1]);;
-      const day = parseInt(date[2]);
+      let date = line.match(/(\w+?)-(\d+)/);
+      let monthIndex = 1;
+      let dayIndex = 2;
+      if (!date) {
+        date = line.match(/(\d+?)-(\w+)/);
+        monthIndex = 2;
+        dayIndex = 1;
+      }
+      const month =  getMonth(date[monthIndex]);;
+      const day = parseInt(date[dayIndex]);
       const timesNow = {month, day, range: [day, day], times: []};
       if (!allData[month]) {
         allData[month] = {};
       }
       // line.match(/(\d\d):(\d\d).+?([A|P]M)/g);
-      line.matchAll(/(\d\d):(\d\d).+?([A|P]M)/g).forEach((match => {
+      line.matchAll(/(\d+?):(\d+?)\s+?([A|P]M)/g).forEach((match => {
         const converted = to24Raw(match[0]);
         if(converted) {
           timesNow.times.push(converted);
