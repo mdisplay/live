@@ -141,6 +141,7 @@ function App() {
     ],
     prayerNewDataList: [
       { id: 'NONE', label: 'None', type: 'NEW'},
+      { id: 'ZONE1', label: 'Zone 01: Colombo, Gampaha & Kalutara District', type: 'NEW'},
       { id: 'ZONE2', label: 'Zone 02: Jaffna & Nallur', type: 'NEW'},
       { id: 'ZONE3', label: 'Zone 03: Mullaitivu District (Except Nallurs, Kilinochchi, Vavuniya District)', type: 'NEW'},
       { id: 'ZONE4', label: 'Zone 04: Mannar & Puttalam District', type: 'NEW'},
