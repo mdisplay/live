@@ -2,8 +2,6 @@ if(!window.PRAYER_DATA) {
   window.PRAYER_DATA = {};
 }
 
-// August verified
-
 // Zone 01: Colombo, Gampaha & Kalutara District
 window.PRAYER_DATA.ZONE1 = {
   May: [
