@@ -389,6 +389,24 @@ body {
   text-align: right;
 }
 
+#app .prayer-times-applied-indicator {
+  border-radius: 50%;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 1px solid #000;
+  margin-left: 0.5rem;
+  display: inline-block;
+}
+
+#app .prayer-times-applied-indicator-new {
+  background: #00aaff;
+}
+
+#app .prayer-times-applied-indicator-old {
+  background: #ff2b2b;
+  background: #ff5a25;
+}
+
 /* #app .config-item {
   padding: 0.25rem;
   height: 3.5rem;

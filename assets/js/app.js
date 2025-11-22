@@ -2,6 +2,8 @@
 // The code should only be authored in ES5
 // to support older generation Android TV boxes
 
+var isDevDebugging = false;
+
 var padZero = function padZero(number) {
   number = parseInt(number);
   if (number < 10) {
@@ -91,7 +93,7 @@ function App() {
     // time: new Date(),
     // timeDisplay:
     // prayers: [],
-    settingsMode: false,
+    settingsMode: localStorage.getItem('isDevDebugging_settingsMode') == 'yes',
     iqamahTimesConfigured: false,
     iqamahTimes: {
       Subah: new IqamahTime(20),
@@ -207,7 +209,7 @@ function App() {
       timeOriginModes: false,
       timeAdjustNew: false,
     },
-    focusActiveTimer: false,
+    focusActiveTimer: true,
     showRememberWifiSetting: false,
     rememberWifi: false,
     disconnectWifi: true,
@@ -220,6 +222,9 @@ function App() {
     showSunriseLabel: false,
     splashScreenMillis: 4000,
     isPrayerNewDataApplied: false,
+    enableArrowKeyScroll: false,
+    isDevDebugging: isDevDebugging,
+    devDebugMessage: 'dev - testing 3',
   };
   self.computed = {
     showAlert: function () {
@@ -576,7 +581,7 @@ function App() {
     } else {
       self.data.time = new Date();
     }
-    var lastKnownDate = new Date(2024, 8, 12, 21, 15);
+    var lastKnownDate = new Date(2025, 10, 20, 21, 15);
     self.data.timeIsValid = self.data.time.getTime() >= lastKnownDate.getTime();
     if (!self.initialTestTime && !self.data.timeIsValid) {
       var d = new Date();
@@ -1118,7 +1123,7 @@ function App() {
       },
       self.simulateTime ? self.simulateTime : 1000
     );
-    var splashScreenMillis = self.data.splashScreenMillis || 4000;
+    var splashScreenMillis = self.data.isDevDebugging ? self.data.splashScreenMillis : 4000;
     setTimeout(function () {
       self.data.showSplash = false;
     }, splashScreenMillis);
@@ -1161,7 +1166,7 @@ function App() {
         self.data.timeAdjustNew = settings.timeAdjustNew;
       }
       if (settings.analogClockActive) {
-        self.data.analogClockActive = true;
+        // self.data.analogClockActive = true;
       }
       if (settings.alertEnabled === false) {
         self.data.alertEnabled = false;
@@ -1172,9 +1177,9 @@ function App() {
       if (settings.time24Format) {
         self.data.time24Format = true;
       }
-      // if (settings.focusActiveTimer) {
-      //   self.data.focusActiveTimer = true;
-      // }
+      if (settings.focusActiveTimerNew1 === false) {
+        self.data.focusActiveTimer = false;
+      }
       if (settings.timeOverrideEnabled) {
         self.data.timeOverrideEnabled = true;
       }
@@ -1194,6 +1199,9 @@ function App() {
       var splashScreenMillis = parseInt(settings.splashScreenMillis);
       if (!isNaN(splashScreenMillis) && splashScreenMillis) {
         self.data.splashScreenMillis = splashScreenMillis;
+      }
+      if (settings.enableArrowKeyScroll) {
+        self.data.enableArrowKeyScroll = true;
       }
       if (typeof settings.activeClockTheme2 === 'string') {
         // self.data.activeClockTheme = settings.activeClockTheme2;
@@ -1232,11 +1240,11 @@ function App() {
       timeOriginMode: self.data.timeOriginMode,
       timeAdjustmentMinutes: self.data.timeAdjustmentMinutes,
       timeAdjustNew: self.data.timeAdjustNew,
-      analogClockActive: self.data.analogClockActive,
+      // analogClockActive: self.data.analogClockActive,
       activeClockTheme: 'digitalDefault', // reset to default for possible later usage
       activeClockTheme2: self.data.activeClockTheme,
       alertEnabled: self.data.alertEnabled,
-      focusActiveTimer: self.data.focusActiveTimer,
+      focusActiveTimerNew1: self.data.focusActiveTimer,
       time24Format: self.data.time24Format,
       timeOverrideEnabled: self.data.timeOverrideEnabled,
       networkTimeApiUrl: self.data.networkTimeApiUrl,
@@ -1245,6 +1253,7 @@ function App() {
       rememberedWifiSSID: self.data.rememberedWifiSSID,
       tarawihEnabled: self.data.tarawihEnabled,
       splashScreenMillis: self.data.splashScreenMillis,
+      enableArrowKeyScroll: self.data.enableArrowKeyScroll,
     };
     if (!self.data.rememberWifi) {
       settings.rememberedWifiSSID = undefined;
@@ -1474,17 +1483,6 @@ function App() {
     self.scrollSettingsContent('down');
   };
   self.initShortcuts = function () {
-    document.addEventListener('mousemove', function(event) {
-      self.isMouseMoving = true;
-      if(self.mouseMovingTimoutRef) {
-        clearTimeout(self.mouseMovingTimoutRef);
-        self.mouseMovingTimoutRef = undefined;
-      }
-      self.mouseMovingTimoutRef = setTimeout(function(ev) {
-        self.isMouseMoving = false;
-        self.mouseMovingTimoutRef = undefined;
-      }, 1000);
-    }, false);
     var KEY_CODES = {
       ENTER: 13,
       ARROW_LEFT: 37,
@@ -1541,17 +1539,17 @@ function App() {
       }
       var rows = document.querySelectorAll('.times-config .config-time-input');
       if (pressed.arrowDown || pressed.arrowUp) {
-        setTimeout(function() {
-          if(!self.isMouseMoving) {
-            event.preventDefault();
-            if (pressed.arrowUp) {
-              self.scrollUp();
-            } else {
-              self.scrollDown();
-            }    
-          }
-        }, 500);
-        return;
+          // self.data.devDebugMessage = 'arrow up or down: ' + code;
+        event.preventDefault();
+        if(!self.data.enableArrowKeyScroll) {
+          return;
+        }
+        if (pressed.arrowUp) {
+          self.scrollUp();
+        } else {
+          self.scrollDown();
+        }
+        return; // TODO: confirm
         var lastSelectedRow = self.lastSelectedRow || 0;
         var lastSelectedCol = self.lastSelectedCol || 1;
         lastSelectedRow += pressed.arrowUp ? -1 : 1;
@@ -1637,6 +1635,7 @@ function App() {
       return;
     }
     self.setFetchingStatus('Requesting time from network...', 'init', true);
+    self.devDebug('updateInternetTime called');
     function parseDateTime(datetime) {
       var parts = datetime.split(' ');
       var dateParts = parts[0].split('-');
@@ -1650,8 +1649,9 @@ function App() {
         parseInt(timeParts[2])
       );
     }
-    var useSNTP = false; // do not use SNTP because of excessive data usage(doubted) @TODO: confirm
+    var useSNTP = self.data.isDevDebugging; // do not use SNTP because of excessive data usage(doubted) @TODO: confirm
     if(useSNTP && self.data.timeOriginMode == 'auto' && window.cordova && window.cordova.plugins && window.cordova.plugins.sntp) {
+    self.devDebug('using SNTP', 1000);
       console.log('time mode auto: using NTP server pool.ntp.org');
       window.cordova.plugins.sntp.setServer("pool.ntp.org", 10000);
       window.cordova.plugins.sntp.getTime(function(time) {
@@ -1854,5 +1854,22 @@ function App() {
       versionNumber: parseInt(fullVersion.replace(regex, '$2'), 10),
     };
   };
+  self.devDebug = function(message, timeout) {
+    if (Array.isArray(message)) {
+      // message = message.join(' ');
+      message = message.map(function(m) {
+        if(typeof m !== 'string') {
+          m = '' + JSON.stringify(m);
+        }
+        return m;
+      }).join(' | ');
+    }
+    self.data.devDebugMessage = message;
+    if(timeout) {
+      setTimeout(function() {
+        self.data.devDebugMessage = '';
+      }, timeout);
+    }
+  }
 }
 window.mdApp = new App();

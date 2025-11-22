@@ -25,6 +25,9 @@
       id="app"
       :class="[{'is-showing-alert': showAlert, 'analog-clock-active': analogClockActive, 'is-active': currentPrayer, 'is-waiting': currentPrayerWaiting, 'is-before': currentPrayerBefore, 'is-after': currentPrayerAfter, 'focus-active-timer': currentPrayer && focusActiveTimer}, 'active-prayer-info-' + prayerInfo, 'analog-clock-theme-' + analogClockTheme, 'digital-clock-theme-' + digitalClockTheme]"
     >
+    
+      <div v-show="true" v-if="isDevDebugging" style="display: none; background: red; position: fixed; z-index: 999999999999;">{{ devDebugMessage }}</div>
+
       <div id="splash" v-if="showSplash">
         <div class="splash-content">
           <!-- Loading... -->
@@ -53,7 +56,26 @@
         <div style="display: none" v-show="true" class="modal-wrapper" v-if="settingsMode">
           <div class="modal-overlay"></div>
           <div class="modal-dialog">
-            <div @click="scrollUp()" class="modal-close modal-close-top">Scroll UP &#9650;</div>
+            <div @click="scrollUp()" class="modal-close modal-close-top">Scroll UP &#9650;
+              <div style="   
+    position: absolute;
+    right: 1rem;
+    top: 0;
+    font-size: 50%;
+    text-transform: none;
+                ">
+                    <label for="top-enable-arrow-key-scroll-check">
+                      <input
+                        id="top-enable-arrow-key-scroll-check"
+                        type="checkbox"
+                        name="top-enable-arrow-key-scroll-check"
+                        v-model="enableArrowKeyScroll"
+                        @change="updateSettings()"
+                      />
+                      Enable Arrow Key Scroll
+                    </label>
+                </div>
+            </div>
             <div class="configured-info">
               <span>
                 Version {{ appVersion.versionString }}
@@ -110,7 +132,8 @@
 
                   <div class="config-item other-config" style="height: auto">
                     <div>
-                      <small>[beta] Time Zone</small>
+                      <span class="prayer-times-applied-indicator prayer-times-applied-indicator-new"></span>
+                      [NEW] Time Zone
                       <small>
                         >
                         <a href="#" @click="expanded.prayerNewTimesData = !expanded.prayerNewTimesData;">
@@ -139,7 +162,8 @@
 
                   <div class="config-item other-config" style="height: auto;">
                     <div>
-                      <small>[beta] Time Adjustment</small>
+                      <span class="prayer-times-applied-indicator prayer-times-applied-indicator-new"></span>
+                      [NEW] Time Adjustment
                       <small>
                         >
                         <a href="#" @click="expanded.timeAdjustNew = !expanded.timeAdjustNew;">
@@ -164,9 +188,11 @@
                     </div>
                   </div>
 
-                  <div class="config-item other-config" style="height: auto">
+                  <div class="config-item other-config" style="height: auto" v-if="selectedPrayerNewDataId == 'NONE'">
                     <div>
-                      <small>Prayer Times Data</small>
+                      <small>
+                        <span class="prayer-times-applied-indicator prayer-times-applied-indicator-old"></span>
+                        [OLD] Prayer Times Data</small>
                       <small>
                         >
                         <a href="#" @click="expanded.prayerTimesData = !expanded.prayerTimesData;">
@@ -192,8 +218,10 @@
                     </template>
                     </div>
                   </div>
-                  <div class="config-item other-config">
-                    <label>[OLD] Time Adjustment</label>
+                  <div class="config-item other-config" v-if="selectedPrayerNewDataId == 'NONE'">
+                    <label><small>
+                      <span class="prayer-times-applied-indicator prayer-times-applied-indicator-old"></span>
+                      [OLD] Time Adjustment</small></label>
                     <!-- <select>
                       <option value="+">+</option>
                       <option value="-">-</option>
@@ -205,7 +233,7 @@
                       @input="updateSettings()"
                       @change="updateSettings()"
                     />
-                    <span>minutes</span>
+                    <span><small>minutes</small></span>
                   </div>
                   <div class="config-item other-config" style="height: auto">
                     <div>
@@ -565,15 +593,8 @@
               "
               >v.{{ appVersion.versionNumber }}</span
             >
-            <span v-if="isPrayerNewDataApplied" style="
-              border-radius: 50%;
-              width: 1.25rem;
-              height: 1.25rem;
-              background: #00aaff;
-              border: 1px solid #000;
-              margin-left: 0.5rem;
-              display: inline-block;
-            "></span>
+            <span class="prayer-times-applied-indicator" style="
+            " v-bind:class="['prayer-times-applied-indicator-' + (isPrayerNewDataApplied ? 'new' : 'old')]"></span>
           </div>
         </div>
         <div style="visibility: hidden; position: fixed; top: -125%;">
