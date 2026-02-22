@@ -307,29 +307,89 @@
                     </div>
                     </section>
                   </div>
-                  <div class="config-item other-config" style="height: auto;" v-if="showRememberWifiSetting">
-                    <div><small>[beta] Remember Wifi: ({{ rememberedWifiSSID }})</small></div>
-                    <div v-if="!connectedWifiSSID">WiFi Not Connected</div>
-                    <label v-else for="remember-wifi-check">
-                      <input
-                        id="remember-wifi-check"
-                        type="checkbox"
-                        name="remember-wifi-check"
-                        v-model="rememberWifi"
-                        @change="updateSettings()"
-                      />
-                      {{connectedWifiSSID}}
-                    </label>
-                    <label for="disconnect-wifi-check" v-if="rememberWifi">
-                      <input
-                        id="disconnect-wifi-check"
-                        type="checkbox"
-                        name="disconnect-wifi-check"
-                        v-model="disconnectWifi"
-                        @change="updateSettings()"
-                      />
-                      <small>Disconnect after time sync (apk 1.9.0+)</small>
-                    </label>
+                  <div class="config-item other-config" style="height: auto;" v-if="true || showRememberWifiSetting">
+                    <div>
+                      <small>[beta] Remember Wifi</small>
+                      <small>
+                        >
+                        <a href="#" @click="expanded.rememberWifi = !expanded.rememberWifi;">
+                          <span v-if="expanded.rememberWifi">dismiss</span>
+                          <span v-else>{{ rememberWifi ? 'Enabled (' + rememberedWifiSSID + ')' : 'Disabled' }}</span>
+                        </a>
+                      </small>
+                    </div>
+                    <div>
+                      <small>Current Wifi: {{ connectedWifiSSID ? connectedWifiSSID : 'WiFi Not Connected' }}</small>
+                    </div>
+                    <section v-if="expanded.rememberWifi">
+                      <div>
+                        <label for="remember-wifi-check">
+                          <input
+                            id="remember-wifi-check"
+                            type="checkbox"
+                            name="remember-wifi-check"
+                            v-model="rememberWifi"
+                            @change="updateSettings()"
+                          />
+                          Remember Wifi <!-- ({{connectedWifiSSID}}) -->
+                        </label><br>
+                        <template v-if="rememberWifi">
+                          <label for="remember-wifi-password">
+                            &nbsp; 
+                            <small>Wifi SSID<!--  (<a href="#" @click="scanWifiNetworks()">scan</a>) -->:</small>
+                            <input
+                              id="remember-wifi-ssid"
+                              type="text"
+                              name="remember-wifi-ssid"
+                              v-model="rememberedWifiSSID"
+                              @change="updateSettings()"
+                              class="time-input"
+                              style="width: auto;"
+                            />
+                          </label><br>
+                          <div v-if="showWifiScan">
+                            <div v-if="isWifiScanning">Loading...</div>
+                            <div v-for="res in wifiScanResults">
+                              {{ res }}
+                            </div>
+                          </div>
+                          <label for="remember-wifi-password">
+                            &nbsp; 
+                            <small>Wifi Password:</small>
+                            <input
+                              id="remember-wifi-password"
+                              :type="rememberWifiShowCheck ? 'text' : 'password'"
+                              name="remember-wifi-password"
+                              v-model="rememberedWifiPassword"
+                              @change="updateSettings()"
+                              class="time-input"
+                              style="width: auto;"
+                            />
+                          </label><br>
+                          <label for="remember-wifi-password-show-check">
+                            &nbsp; 
+                            <input
+                              id="remember-wifi-password-show-check"
+                              type="checkbox"
+                              name="remember-wifi-password-show-check"
+                              v-model="rememberWifiShowCheck"
+                            />
+                            <small>Show Password</small>
+                          </label><br>
+                          <label for="disconnect-wifi-check">
+                            &nbsp; 
+                            <input
+                              id="disconnect-wifi-check"
+                              type="checkbox"
+                              name="disconnect-wifi-check"
+                              v-model="disconnectWifi"
+                              @change="updateSettings()"
+                            />
+                            <small>Disconnect after time sync (apk 1.9.0+)</small>
+                          </label>
+                        </template>
+                      </div>
+                  </section>
                   </div>
                   <div class="config-item other-config" style="height: auto;">
                     <div>
@@ -943,6 +1003,11 @@
             },
             onRestoreFileClick: function(dFile) {
               return window.mdApp.onRestoreFileClick(dFile);
+            },
+            scanWifiNetworks: function() {
+              return window.mdApp.scanWifiNetworks();
+            },
+            closeWifiScan: function() {
             },
           },
           created: function created() {

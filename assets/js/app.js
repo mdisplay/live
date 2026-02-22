@@ -63,7 +63,7 @@ function App() {
   self.checkInternetJsonp = {
     jsonpCallback: 'checkInternet',
     url: 'https://mdisplay.github.io/live/check-internet.js',
-    // url: ' http://192.168.1.10:3000/live/check-internet.js'
+    // url: ' http://192.168.1.58:8080/live/check-internet.js'
   };
 
   var timeServerIp = '192.168.1.1';
@@ -208,13 +208,16 @@ function App() {
       languages: false,
       timeOriginModes: false,
       timeAdjustNew: false,
+      rememberWifi: false,
     },
     focusActiveTimer: true,
     showRememberWifiSetting: false,
     rememberWifi: false,
-    disconnectWifi: true,
+    rememberedWifiPassword: '',
+    rememberWifiShowCheck: false,
+    disconnectWifi: false,
     connectedWifiSSID: undefined,
-    rememberedWifiSSID: '~',
+    rememberedWifiSSID: '',
     isCordovaReady: false,
     isDownloadsListOpen: false,
     downloadedFiles: [],
@@ -225,6 +228,9 @@ function App() {
     enableArrowKeyScroll: false,
     isDevDebugging: isDevDebugging,
     devDebugMessage: 'dev - testing 3',
+    showWifiScan: false,
+    isWifiScanning: false,
+    wifiScanResults: [],
   };
   self.computed = {
     showAlert: function () {
@@ -362,6 +368,9 @@ function App() {
           function (ssid) {
             self.data.network.status = states[Connection.WIFI] + ' (' + ssid + ')';
             self.data.connectedWifiSSID = ssid;
+            if (self.data.rememberedWifiSSID == '' || self.data.rememberedWifiSSID == '~') {
+              self.data.rememberedWifiSSID = ssid;
+            }
             self.data.network.connecting = undefined;
           },
           function (err) {
@@ -377,7 +386,7 @@ function App() {
         if(currentMillis > self.retryLastMillis + retryAfter) {
           self.retryLastMillis = currentMillis;
           self.retryWifiCount += 1;
-          self.tryConnectingToWiFiSSID(self.data.rememberedWifiSSID, self.retryWifiCount);
+          self.tryConnectingToWiFiSSID(self.data.rememberedWifiSSID, self.data.rememberedWifiPassword, self.retryWifiCount);
         }
       }
     }
@@ -473,6 +482,7 @@ function App() {
             okCallback();
             // self.data.network.checking = false;
           }, 2000);
+          self.wifiDisabled = false;
           return;
         }
         self.data.network.internetAvailable = false;
@@ -621,23 +631,44 @@ function App() {
       }
     } else {
       // time is valid
+      var allCond = [
+        self.useDeviceTimeOnly ,
+        self.data.disconnectWifi ,
+        self.launcherSettings ,
+        self.launcherSettings && self.launcherSettings.zipFirst && !self.launcherSettings.zipCheckInternet ,
+        self.data.rememberWifi , self.data.rememberedWifiSSID ,
+        !self.wifiDisabled , self.noUpdateAvailable , self.isDeviceReady , self.data.timeIsValid , typeof WifiWizard2 !== 'undefined'
+      ];
       if (
         self.useDeviceTimeOnly &&
         self.data.disconnectWifi &&
-        self.launcherSettings && self.launcherSettings.zipFirst && !self.launcherSettings.zipCheckInternet &&
+        self.launcherSettings && self.launcherSettings.zipFirst && /* !self.launcherSettings.zipCheckInternet && */
         self.data.rememberWifi && self.data.rememberedWifiSSID &&
         !self.wifiDisabled && self.noUpdateAvailable && self.isDeviceReady && self.data.timeIsValid && typeof WifiWizard2 !== 'undefined'
       ) {
-        self.wifiDisabled = true;
-        console.log('Disabling wifi in 10 seconds...');
-        self.showToast('Disconnecting WiFi in 10 seconds...', 3000);
-        setTimeout(function() {
-          WifiWizard2.setWifiEnabled(false);
-          // WifiWizard2.disconnect();
-          console.log('Wifi Disabled');
-          self.showToast('WiFi Disconnected', 3000);
-          // self.data.time.setSeconds(58);
-        }, 10 * 1000);
+        var rememberedWifi = {
+          ssid: self.data.rememberedWifiSSID,
+          password: self.data.rememberedWifiPassword
+        };
+        var doRemove = rememberedWifi.ssid && rememberedWifi.ssid != '' && rememberedWifi.ssid != '~' && rememberedWifi.password && rememberedWifi.password != '';
+        console.log(doRemove ? 'Removing wifi in 5 seconds...' : 'Set Wifi Password in Settings to disable');
+        self.showToast(doRemove ? 'Removing wifi in 5 seconds...' : 'Set Wifi Password in Settings to disable', 3000);
+        if (doRemove) {
+          self.wifiDisabled = true;
+          setTimeout(function() {
+            if (doRemove) {
+              WifiWizard2.remove(rememberedWifi.ssid);
+              console.log('Wifi Removed');
+              self.showToast('WiFi Removed', 3000);
+            } else {
+              // WifiWizard2.setWifiEnabled(false); 
+              // WifiWizard2.disconnect();
+              console.log('Set Wifi Password in Settings to disable');
+              // self.showToast('WiFi Disabled', 3000);
+            }
+            // self.data.time.setSeconds(58);
+          }, 5 * 1000);
+        }
       }
     }
     var m = moment(self.data.time);
@@ -948,7 +979,7 @@ function App() {
     }
     var checkInternetInMinutes = 1;
     var checkInternetNow = false;
-    if (!self.wifiDisabled && self.data.time.getMinutes() % checkInternetInMinutes === 0 && self.data.time.getSeconds() === 0) {
+    if (/* !self.wifiDisabled && */ self.data.time.getMinutes() % checkInternetInMinutes === 0 && self.data.time.getSeconds() === 0) {
       checkInternetNow = true;
     }
     // every 10 seconds
@@ -1186,11 +1217,14 @@ function App() {
       if (settings.rememberWifi) {
         self.data.rememberWifi = true;
       }
-      if (settings.disconnectWifi === false) {
-        self.data.disconnectWifi = false;
+      if (settings.disconnectWifi) {
+        self.data.disconnectWifi = true;
       }
       if (settings.rememberedWifiSSID) {
         self.data.rememberedWifiSSID = settings.rememberedWifiSSID;
+      }
+      if (settings.rememberedWifiPassword) {
+        self.data.rememberedWifiPassword = settings.rememberedWifiPassword;
       }
       self.data.lastKnownTime = localStorage.getItem('mdisplay.lastKnownTime');
       if (self.data.lastKnownTime === 'undefined') {
@@ -1251,16 +1285,20 @@ function App() {
       rememberWifi: self.data.rememberWifi,
       disconnectWifi: self.data.disconnectWifi,
       rememberedWifiSSID: self.data.rememberedWifiSSID,
+      rememberedWifiPassword: self.data.rememberedWifiPassword,
       tarawihEnabled: self.data.tarawihEnabled,
       splashScreenMillis: self.data.splashScreenMillis,
       enableArrowKeyScroll: self.data.enableArrowKeyScroll,
     };
-    if (!self.data.rememberWifi) {
-      settings.rememberedWifiSSID = undefined;
+    if (self.data.rememberedWifiSSID == '' || self.data.rememberedWifiSSID == '~') {
+      settings.rememberWifi = false;
     }
-    if (self.data.rememberWifi && self.data.connectedWifiSSID) {
-      settings.rememberedWifiSSID = self.data.connectedWifiSSID;
-    }
+    // if (!self.data.rememberWifi) {
+    //   settings.rememberedWifiSSID = undefined;
+    // }
+    // if (self.data.rememberWifi && self.data.connectedWifiSSID) {
+    //   settings.rememberedWifiSSID = self.data.connectedWifiSSID;
+    // }
     localStorage.setItem('mdisplay.iqamahTimes', JSON.stringify(iqamahTimes));
     localStorage.setItem('mdisplay.iqamahTimesConfigured', 1);
     localStorage.setItem('mdisplay.settings', JSON.stringify(settings));
@@ -1779,7 +1817,7 @@ function App() {
       }
     );
   };
-  self.tryConnectingToWiFiSSID = function (wifiSSID, retryCount) {
+  self.tryConnectingToWiFiSSID = function (wifiSSID, wifiPassword, retryCount) {
     retryCount = retryCount || 0;
     if (!wifiSSID || !self.isDeviceReady || self.data.timeIsValid || typeof WifiWizard2 === 'undefined') {
       return;
@@ -1795,21 +1833,26 @@ function App() {
     var isHiddenSSID = false;
     self.data.network.connecting = true;
     self.data.network.status = 'Connecting to: ' + wifiSSID + ' (' + retryCount + ')...';
+    if(!wifiPassword || wifiPassword == '') {
+      wifiPassword = undefined;
+    }
     setTimeout(function() {
-      WifiWizard2.connect(wifiSSID, bindAll, undefined, 'WPA', isHiddenSSID).then(
+      self.showToast('WiFi Connecting to: ' + wifiSSID, 3000);
+      WifiWizard2.connect(wifiSSID, bindAll, wifiPassword, 'WPA', isHiddenSSID).then(
       // WifiWizard2.enable(ssid, bindAll, waitForConnection)
       // WifiWizard2.connect(timeServerSSID, bindAll, '1234567890', 'WPA', isHiddenSSID).then(
       // WifiWizard2.enable(wifiSSID, bindAll, true).then(
         function (res) {
           self.data.network.connecting = undefined;
           self.data.network.status = 'Connected to: ' +  wifiSSID;
+          self.showToast('WiFi CONNECTED to: ' + wifiSSID, 3000);
           // self.checkNetworkStatus();
         },
         function (err) {
           self.data.network.status = 'ERR ' + wifiSSID + ' - ' + err;
           self.data.network.connecting = undefined;
           // setTimeout(function () {
-          //   self.tryConnectingToWiFiSSID(wifiSSID, retryCount + 1);
+          //   self.tryConnectingToWiFiSSID(wifiSSID, undefined, retryCount + 1);
           // }, 1000);
         }
       );
@@ -1833,6 +1876,28 @@ function App() {
       };
     }
     self.checkNetworkStatus();
+  };
+  self.scanWifiNetworks = function() {
+    if (typeof WifiWizard2 === 'undefined') {
+      alert('WifiWizard2 not available or ready yet');
+      return;
+    }
+    self.data.showWifiScan = true;
+    self.data.isWifiScanning = true;
+    WifiWizard2.scan([options])
+    .then(function (results) {
+      self.data.isWifiScanning = false;
+      self.data.wifiScanResults = results;
+        // Success handler: results is an array of objects representing nearby networks
+        console.log("SCAN RESULTS", results);
+    })
+    .catch(function (error) {
+        // Error handler: handle failures like permissions or timeouts
+        console.error("SCAN FAILED", error);
+        alert('Wifi Scan Failed: ' + error);
+        self.data.isWifiScanning = false;
+        self.data.showWifiScan = false;
+    });
   };
   self.init = function (initialTestTime, callback, analogClock) {
     self.initialTestTime = initialTestTime;
