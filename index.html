@@ -144,7 +144,7 @@
                     </div>
                     <div v-if="expanded.prayerNewTimesData">
                     <template v-for="pData in prayerNewDataList">
-                    <label :for="'prayer-data-select-' + pData.id" style="display: block;">
+                    <label :for="'prayer-data-select-' + pData.id" :style="{display: pData.id == 'NONE' ? 'none' : 'block'}">
                       <input
                         :id="'prayer-data-select-' + pData.id"
                         type="radio"
@@ -334,6 +334,13 @@
                           Remember Wifi <!-- ({{connectedWifiSSID}}) -->
                         </label><br>
                         <template v-if="rememberWifi">
+                          <div>
+                            &nbsp; &gt; 
+                            <small>
+                              <a v-if="rememberWifiEditLocked" href="#" @click="rememberWifiEditLocked = false;">Unlock Edit</a>
+                              <a v-else href="#" @click="rememberWifiEditLocked = true;">Lock Edit</a>
+                            </small>
+                          </div>
                           <label for="remember-wifi-password">
                             &nbsp; 
                             <small>Wifi SSID<!--  (<a href="#" @click="scanWifiNetworks()">scan</a>) -->:</small>
@@ -344,7 +351,8 @@
                               v-model="rememberedWifiSSID"
                               @change="updateSettings()"
                               class="time-input"
-                              style="width: auto;"
+                              :style="{width: '15rem', background: rememberWifiEditLocked ? '#ccc' : 'transparent'}"
+                              :disabled="rememberWifiEditLocked"
                             />
                           </label><br>
                           <div v-if="showWifiScan">
@@ -363,7 +371,8 @@
                               v-model="rememberedWifiPassword"
                               @change="updateSettings()"
                               class="time-input"
-                              style="width: auto;"
+                              :style="{width: '15rem', background: rememberWifiEditLocked ? '#ccc' : 'transparent'}"
+                              :disabled="rememberWifiEditLocked"
                             />
                           </label><br>
                           <label for="remember-wifi-password-show-check">
@@ -1009,6 +1018,12 @@
             },
             closeWifiScan: function() {
             },
+            // lockRememberWifiEdit: function() {
+            //   return window.mdApp.lockRememberWifiEdit();
+            // },
+            // unlockRememberWifiEdit: function() {
+            //   return window.mdApp.unlockRememberWifiEdit();
+            // },
           },
           created: function created() {
             window.mdApp.created();

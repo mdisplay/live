@@ -231,6 +231,7 @@ function App() {
     showWifiScan: false,
     isWifiScanning: false,
     wifiScanResults: [],
+    rememberWifiEditLocked: true,
   };
   self.computed = {
     showAlert: function () {
