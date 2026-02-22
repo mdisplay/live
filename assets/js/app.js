@@ -60,17 +60,19 @@ function App() {
   self.lang = localStorage.getItem('mdisplay.lang') || 'en';
   self.prayerDataId = localStorage.getItem('mdisplay.prayerDataId') || 'Colombo';
   self.prayerNewDataId = localStorage.getItem('mdisplay.prayerNewDataId') || 'NONE';
-  if (self.prayerDataId == 'Colombo') {
-    self.prayerNewDataId = 'ZONE1';
-    localStorage.setItem('mdisplay.prayerNewDataId', self.prayerNewDataId);
-  }
-  if (self.prayerDataId == 'Puttalam' && self.prayerDataId == 'Mannar') {
-    self.prayerNewDataId = 'ZONE4';
-    localStorage.setItem('mdisplay.prayerNewDataId', self.prayerNewDataId);
-  }
-  if (self.prayerDataId == 'Central') {
-    self.prayerNewDataId = 'ZONE7';
-    localStorage.setItem('mdisplay.prayerNewDataId', self.prayerNewDataId);
+  if(self.prayerNewDataId == 'NONE') {
+    if (self.prayerDataId == 'Colombo') {
+      self.prayerNewDataId = 'ZONE1';
+      localStorage.setItem('mdisplay.prayerNewDataId', self.prayerNewDataId);
+    }
+    if (self.prayerDataId == 'Puttalam' && self.prayerDataId == 'Mannar') {
+      self.prayerNewDataId = 'ZONE4';
+      localStorage.setItem('mdisplay.prayerNewDataId', self.prayerNewDataId);
+    }
+    if (self.prayerDataId == 'Central') {
+      self.prayerNewDataId = 'ZONE7';
+      localStorage.setItem('mdisplay.prayerNewDataId', self.prayerNewDataId);
+    }
   }
   self.checkInternetJsonp = {
     jsonpCallback: 'checkInternet',
@@ -655,7 +657,7 @@ function App() {
       if (
         self.useDeviceTimeOnly &&
         self.data.disconnectWifi &&
-        self.launcherSettings && self.launcherSettings.zipFirst && /* !self.launcherSettings.zipCheckInternet && */
+        self.launcherSettings && self.launcherSettings.zipFirst && !self.launcherSettings.zipCheckInternet &&
         self.data.rememberWifi && self.data.rememberedWifiSSID &&
         !self.wifiDisabled && self.noUpdateAvailable && self.isDeviceReady && self.data.timeIsValid && typeof WifiWizard2 !== 'undefined'
       ) {
