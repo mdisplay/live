@@ -396,6 +396,9 @@
                             />
                             <small>Disconnect after time sync (apk 1.9.0+)</small>
                           </label>
+                          <div v-if="disconnectWifi" style="color: red;">
+                            <small>WARNING: Apk settings should be: Enable "Offline (Zip) First" and Disable "Check Internet in Offline Mode"</small>
+                          </div>
                         </template>
                       </div>
                   </section>

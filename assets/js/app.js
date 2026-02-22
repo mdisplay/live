@@ -657,10 +657,10 @@ function App() {
       if (
         self.useDeviceTimeOnly &&
         self.data.disconnectWifi &&
-        self.launcherSettings && self.launcherSettings.zipFirst && !self.launcherSettings.zipCheckInternet &&
+        // self.launcherSettings && self.launcherSettings.zipFirst && !self.launcherSettings.zipCheckInternet &&
         self.data.rememberWifi && self.data.rememberedWifiSSID &&
         !self.wifiDisabled && self.noUpdateAvailable && self.isDeviceReady && self.data.timeIsValid && typeof WifiWizard2 !== 'undefined'
-      ) {
+      ) { 
         var rememberedWifi = {
           ssid: self.data.rememberedWifiSSID,
           password: self.data.rememberedWifiPassword
