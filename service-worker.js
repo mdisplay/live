@@ -5,7 +5,7 @@ if (workbox) {
   console.log(`Boo! Workbox didn't load 😬`);
 }
 var baseUrl = '/live/';
-var appVersion = '2.16.2-146';
+var appVersion = '2.16.3-147';
 var dataVersion = '10';
 var vendorVersion = '11';
 var bgVersion = '8';
