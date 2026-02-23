@@ -606,7 +606,7 @@ function App() {
     } else {
       self.data.time = new Date();
     }
-    var lastKnownDate = new Date(2025, 10, 20, 21, 15);
+    var lastKnownDate = new Date(2026, 1, 20, 21, 15);
     self.data.timeIsValid = self.data.time.getTime() >= lastKnownDate.getTime();
     if (!self.initialTestTime && !self.data.timeIsValid) {
       var d = new Date();
