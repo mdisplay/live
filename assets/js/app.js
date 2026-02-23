@@ -646,14 +646,14 @@ function App() {
       }
     } else {
       // time is valid
-      var allCond = [
-        self.useDeviceTimeOnly ,
-        self.data.disconnectWifi ,
-        self.launcherSettings ,
-        self.launcherSettings && self.launcherSettings.zipFirst && !self.launcherSettings.zipCheckInternet ,
-        self.data.rememberWifi , self.data.rememberedWifiSSID ,
-        !self.wifiDisabled , self.noUpdateAvailable , self.isDeviceReady , self.data.timeIsValid , typeof WifiWizard2 !== 'undefined'
-      ];
+      // var allCond = [
+      //   self.useDeviceTimeOnly ,
+      //   self.data.disconnectWifi ,
+      //   self.launcherSettings ,
+      //   self.launcherSettings && self.launcherSettings.zipFirst && !self.launcherSettings.zipCheckInternet ,
+      //   self.data.rememberWifi , self.data.rememberedWifiSSID ,
+      //   !self.wifiDisabled , self.noUpdateAvailable , self.isDeviceReady , self.data.timeIsValid , typeof WifiWizard2 !== 'undefined'
+      // ];
       if (
         self.useDeviceTimeOnly &&
         self.data.disconnectWifi &&
@@ -666,24 +666,23 @@ function App() {
           password: self.data.rememberedWifiPassword
         };
         var doRemove = rememberedWifi.ssid && rememberedWifi.ssid != '' && rememberedWifi.ssid != '~' && rememberedWifi.password && rememberedWifi.password != '';
-        console.log(doRemove ? 'Removing wifi in 5 seconds...' : 'Set Wifi Password in Settings to disable');
-        self.showToast(doRemove ? 'Removing wifi in 5 seconds...' : 'Set Wifi Password in Settings to disable', 3000);
-        if (doRemove) {
-          self.wifiDisabled = true;
-          setTimeout(function() {
-            if (doRemove) {
-              WifiWizard2.remove(rememberedWifi.ssid);
-              console.log('Wifi Removed');
-              self.showToast('WiFi Removed', 3000);
-            } else {
-              // WifiWizard2.setWifiEnabled(false); 
-              // WifiWizard2.disconnect();
-              console.log('Set Wifi Password in Settings to disable');
-              // self.showToast('WiFi Disabled', 3000);
-            }
-            // self.data.time.setSeconds(58);
-          }, 5 * 1000);
-        }
+        console.log(doRemove ? 'Removing wifi in 5 seconds...' : 'Set Wifi Password in Settings to remove WiFi');
+        self.showToast(doRemove ? 'Removing wifi in 5 seconds...' : 'Wifi OFF in 5 seconds...', 3000);
+
+        self.wifiDisabled = true;
+        setTimeout(function() {
+          if (doRemove) {
+            WifiWizard2.remove(rememberedWifi.ssid);
+            console.log('Wifi Removed');
+            self.showToast('WiFi Removed', 3000);
+          } else {
+            WifiWizard2.setWifiEnabled(false); 
+            // WifiWizard2.disconnect();
+            console.log('Set Wifi Password in Settings to remove wifi');
+            self.showToast('WiFi off', 3000);
+          }
+          // self.data.time.setSeconds(58);
+        }, 5 * 1000);
       }
     }
     var m = moment(self.data.time);
@@ -1891,6 +1890,14 @@ function App() {
       };
     }
     self.checkNetworkStatus();
+    if(window.plugins && window.plugins.bringtofront){
+      self.data.devDebugMessage = 'bringtofront YES!';
+      setTimeout(function() {
+        window.plugins.bringtofront();
+      }, 10 * 1000);
+    } else {
+      self.data.devDebugMessage = 'bringtofront NOT available!';
+    }
   };
   self.scanWifiNetworks = function() {
     if (typeof WifiWizard2 === 'undefined') {
