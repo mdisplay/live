@@ -862,7 +862,7 @@ function App() {
       new Prayer('Asr', tomorrowTimes.Asr, tomorrowIqamahTimes.Asr, self.lang, time24Format),
       new Prayer('Magrib', tomorrowTimes.Magrib, tomorrowIqamahTimes.Magrib, self.lang, time24Format),
       new Prayer('Isha', tomorrowTimes.Isha, tomorrowIqamahTimes.Isha, self.lang, time24Format),
-      new Prayer('Tarawih', tomorrowTimes.Isha, tomorrowIqamahTimes.Isha, self.lang, time24Format),
+      new Prayer('Tarawih', tomorrowTimes.Tarawih, tomorrowIqamahTimes.Tarawih, self.lang, time24Format),
     ];
     if (!self.sunriseSupport) {
       self.nextDayPrayers.splice(1, 1);
