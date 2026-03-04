@@ -84,7 +84,7 @@ function App() {
   if (window.location.protocol == 'file:') {
     try {
       self.launcherSettings = JSON.parse(localStorage.getItem(mdLauncher_SETTINGS_STORAGE_KEY));
-      if(self.launcherSettings && self.launcherSettings.zipUrl && self.launcherSettings.zipUrl.indexOf('-stage') != -1) {
+      if(self.launcherSettings && self.launcherSettings.zipFirst && self.launcherSettings.zipUrl && self.launcherSettings.zipUrl.indexOf('-stage') != -1) {
         isDevDebugging = true;
       }
     } catch(e) {}
