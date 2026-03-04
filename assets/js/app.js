@@ -78,6 +78,18 @@ function App() {
       localStorage.setItem('mdisplay.prayerNewDataId', self.prayerNewDataId);
     }
   }
+
+  var mdLauncher_SETTINGS_STORAGE_KEY = 'mdisplay-launcher.settings2';
+  self.launcherSettings = undefined;
+  if (window.location.protocol == 'file:') {
+    try {
+      self.launcherSettings = JSON.parse(localStorage.getItem(mdLauncher_SETTINGS_STORAGE_KEY));
+      if(self.launcherSettings && self.launcherSettings.zipUrl && self.launcherSettings.zipUrl.indexOf('-stage') != -1) {
+        isDevDebugging = true;
+      }
+    } catch(e) {}
+  }
+
   self.checkInternetJsonp = {
     jsonpCallback: 'checkInternet',
     url: 'https://mdisplay' + (isDevDebugging ? '-stage' : '') + '.github.io/live/check-internet.js',
@@ -91,14 +103,6 @@ function App() {
   self.retryWifiCount = 0;
   self.retryLastMillis = 0;
   self.useDeviceTimeOnly = false;
-
-  var mdLauncher_SETTINGS_STORAGE_KEY = 'mdisplay-launcher.settings2';
-  self.launcherSettings = undefined;
-  if (window.location.protocol == 'file:') {
-    try {
-      self.launcherSettings = JSON.parse(localStorage.getItem(mdLauncher_SETTINGS_STORAGE_KEY));
-    } catch(e) {}
-  }
 
   self.data = {
     appVersion: {
