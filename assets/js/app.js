@@ -854,8 +854,8 @@ function App() {
     if (!tomorrowTimes) {
       tomorrowTimes = times;
     }
-    tomorrowTimes.Tarawih = new Date(tomorrowIqamahTimes.Tarawih.getTime() - (self.beforeSeconds * 1000));
     var tomorrowIqamahTimes = self.getIqamahTimes(tomorrowTimes, tomorrowParams[1], tomorrowParams[2]);
+    tomorrowTimes.Tarawih = new Date(tomorrowIqamahTimes.Tarawih.getTime() - (self.beforeSeconds * 1000));
     self.nextDayPrayers = [
       new Prayer('Subah', tomorrowTimes.Subah, tomorrowIqamahTimes.Subah, self.lang, time24Format),
       new Prayer('Sunrise', tomorrowTimes.Sunrise, tomorrowIqamahTimes.Subah, self.lang, time24Format),
