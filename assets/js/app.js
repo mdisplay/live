@@ -854,6 +854,7 @@ function App() {
     if (!tomorrowTimes) {
       tomorrowTimes = times;
     }
+    tomorrowTimes.Tarawih = new Date(tomorrowIqamahTimes.Tarawih.getTime() - (self.beforeSeconds * 1000));
     var tomorrowIqamahTimes = self.getIqamahTimes(tomorrowTimes, tomorrowParams[1], tomorrowParams[2]);
     self.nextDayPrayers = [
       new Prayer('Subah', tomorrowTimes.Subah, tomorrowIqamahTimes.Subah, self.lang, time24Format),
@@ -862,7 +863,13 @@ function App() {
       new Prayer('Asr', tomorrowTimes.Asr, tomorrowIqamahTimes.Asr, self.lang, time24Format),
       new Prayer('Magrib', tomorrowTimes.Magrib, tomorrowIqamahTimes.Magrib, self.lang, time24Format),
       new Prayer('Isha', tomorrowTimes.Isha, tomorrowIqamahTimes.Isha, self.lang, time24Format),
-      new Prayer('Tarawih', tomorrowTimes.Tarawih, tomorrowIqamahTimes.Tarawih, self.lang, time24Format),
+      new Prayer(
+        'Tarawih',
+        times.Tarawih,
+        iqamahTimes.Tarawih,
+        self.lang,
+        time24Format
+      ),
     ];
     if (!self.sunriseSupport) {
       self.nextDayPrayers.splice(1, 1);
