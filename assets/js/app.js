@@ -3,7 +3,11 @@
 // to support older generation Android TV boxes
 
 var isDevDebugging = false;
+var isLocalhost = window.location.hostname == 'localhost' || window.location.hostname == '192.168.1.11' || window.location.hostname == localStorage.getItem('local-ip');
 
+if(isLocalhost || window.location.href.indexOf('live') == -1) {
+  isDevDebugging = true;
+}
 var padZero = function padZero(number) {
   number = parseInt(number);
   if (number < 10) {
@@ -76,8 +80,8 @@ function App() {
   }
   self.checkInternetJsonp = {
     jsonpCallback: 'checkInternet',
-    url: 'https://mdisplay.github.io/live/check-internet.js',
-    // url: ' http://192.168.1.58:8080/live/check-internet.js'
+    url: 'https://mdisplay' + (isDevDebugging ? '-stage' : '') + '.github.io/live/check-internet.js',
+    // url: ' http://192.168.1.200:8080/live/check-internet.js'
   };
 
   var timeServerIp = '192.168.1.1';
@@ -225,7 +229,7 @@ function App() {
       rememberWifi: false,
     },
     focusActiveTimer: true,
-    showRememberWifiSetting: false,
+    showRememberWifiSetting: true,
     rememberWifi: false,
     rememberedWifiPassword: '',
     rememberWifiShowCheck: false,
@@ -420,6 +424,95 @@ function App() {
     }, 3000);
   };
 
+  self.getStorageFileEntry = function(options, callback, errorCallback) {
+    resolveLocalFileSystemURL(cordova.file.dataDirectory, function (dataDir) {
+      dataDir.getDirectory('app', {
+        create: false,
+        exclusive: false
+      }, function (dirEntry) {
+        console.log('yes dir');
+        dirEntry.getFile('_mdisplay_storage', options, function (entry) {
+          console.log('_mdisplay_storage file available!');
+          callback(entry);
+        }, function (err) {
+          console.log('Could not create _mdisplay_storage file');
+          errorCallback(err);
+        });
+      }, function (err) {
+        console.error('Could not get/create directory: app');
+        errorCallback(err);
+      });
+    }, function (err) {
+      console.error('Could not resolve data directory for: app');
+      errorCallback(err);
+    });
+  };
+
+  self.writeStorageToFile = function(fileContent, doneCallback) {
+    if (!(window.cordova && self.isDeviceReady)) {
+      return;
+    }
+    self.getStorageFileEntry({
+      create: true,
+      exclusive: false,
+    }, function(fileEntry) {
+        fileEntry.createWriter(function (writer) {
+          writer.onwriteend = function () {
+            console.log('Storage file written');
+            // alert('Storage file saved');
+            if(doneCallback && typeof doneCallback == 'function') {
+              doneCallback();
+            }
+            // if(doneCallback) {
+            //   doneCallback();
+            // }          
+          };
+          writer.seek(0);
+          writer.write(
+            new Blob([fileContent], {
+              type: 'text/plain',
+            })
+          ); //You need to put the file, blob or base64 representation here.
+      }, function(err) { alert('Failed to write to storage file'); });
+    }, function(err) {
+      alert('Failed to write to storage file');
+    });
+  };
+
+  self.initStorageFromFile = function() {
+    if (!(window.cordova && self.isDeviceReady)) {
+      return;
+    }
+    self.getStorageFileEntry({
+      create: false
+    }, function(entry) {
+      var currentBackupFileName = localStorage.getItem('mdisplay.backupFileName');
+      console.log('Storage file exists');
+      entry.file(function (file) {
+          var reader = new FileReader();
+          reader.onloadend = function() {
+            console.log("Successful file read: " + this.result);
+            try {
+              var backupData = JSON.parse(this.result);
+              console.log('current: ' + currentBackupFileName + ' now: ' + backupData['mdisplay.backupFileName']);
+              if(backupData['mdisplay.backupFileName'] != currentBackupFileName) {
+                console.log('restoring from storage file');
+                self.restoreSettings(this.result);
+              } else {
+                // no op
+                console.log('Same backup version');
+              }
+            } catch(e) {
+              console.log('Json Encode failed?');
+            }
+          };
+          reader.readAsText(file);
+      }, function(err) { console.log('storage file cannot be read'); });
+    }, function(err) {
+      console.log('storage file cannot be read');
+    });
+  };
+
   self.appExpired = function() {
     if(!(window.cordova && window.location.protocol == 'file:')) {
       var notificationSeconds = 3000;
@@ -489,7 +582,9 @@ function App() {
             if(response.v) {
               var newVersion = self.parseVersion(response.v);
               if (newVersion && newVersion.versionNumber > self.data.appVersion.versionNumber) {
-                self.appExpired();
+                self.backupSettings(false, function() {
+                  self.appExpired();
+                }, true);
               } else {
                 self.noUpdateAvailable = true;
               }
@@ -1338,15 +1433,19 @@ function App() {
     self.writeStorage();
     self.shouldReload = true;
   };
-  self.backupSettings = function (writeExisting, doneCallback) {
+  self.backupSettings = function (writeExisting, doneCallback, storageOnly) {
     if(writeExisting) {
       self.writeStorage();
     }
+
+    var fileName = 'mdisplay.backup-' + moment(self.data.time).format('YYYY-MM-DD HH mm ss') + '.txt';
 
     var backupData = {
       'mdisplay.ssid': localStorage.getItem('mdisplay.ssid') || 'MDisplay TimeServer',
       'mdisplay.backupTime': self.data.time.getTime(),
       'mdisplay.backupVersion': 1,
+      'mdisplay.appVersion': self.data.appVersion,
+      'mdisplay.backupFileName': fileName,
     };
 
     for (var key in {
@@ -1357,13 +1456,18 @@ function App() {
 
       'mdisplay.lang': true,
       'mdisplay.prayerDataId': true,
+      'mdisplay.prayerNewDataId': true,
       'mdisplay.sunriseSupport': true,
     }) {
       backupData[key] = localStorage.getItem(key);
     }
 
-    var fileName = 'mdisplay.backup-' + moment(self.data.time).format('YYYY-MM-DD HH mm ss') + '.txt';
     var fileContent = JSON.stringify(backupData, null, 2);
+
+    if(storageOnly && window.cordova && self.isDeviceReady) {
+      self.writeStorageToFile(fileContent, doneCallback);
+      return;
+    }
 
     console.log('backupSettings', JSON.stringify(fileContent), backupData);
 
@@ -1895,6 +1999,7 @@ function App() {
         window.location.reload();
         return false;
       };
+      self.initStorageFromFile();
     }
     self.checkNetworkStatus();
     if(window.plugins && window.plugins.bringtofront){
