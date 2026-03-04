@@ -79,6 +79,33 @@ function App() {
     }
   }
 
+  var mdLauncher_SETTINGS_STORAGE_KEY = 'mdisplay-launcher.settings';
+  self.launcherSettings = undefined;
+  // if (window.location.protocol == 'file:') {
+    try {
+      self.launcherSettings = JSON.parse(localStorage.getItem(mdLauncher_SETTINGS_STORAGE_KEY));
+      alert(self.launcherSettings);
+      alert(self.launcherSettings.zipUrl);
+      if(self.launcherSettings && self.launcherSettings.zipUrl && self.launcherSettings.zipUrl.indexOf('-stage') != -1) {
+      alert('yes');
+        isDevDebugging = true;
+      }
+    } catch(e) {alert('err:' + e)}
+  // }
+  var mdLauncher_SETTINGS_STORAGE_KEY = 'mdisplay-launcher.settings2';
+  self.launcherSettings = undefined;
+  // if (window.location.protocol == 'file:') {
+    try {
+      self.launcherSettings = JSON.parse(localStorage.getItem(mdLauncher_SETTINGS_STORAGE_KEY));
+      alert(self.launcherSettings);
+      alert(self.launcherSettings.zipUrl);
+      if(self.launcherSettings && self.launcherSettings.zipUrl && self.launcherSettings.zipUrl.indexOf('-stage') != -1) {
+      alert('yes');
+        isDevDebugging = true;
+      }
+    } catch(e) {alert('err:' + e)}
+  // }
+  
   var mdLauncher_SETTINGS_STORAGE_KEY = 'mdisplay-launcher.settings2';
   self.launcherSettings = undefined;
   if (window.location.protocol == 'file:') {
@@ -89,7 +116,7 @@ function App() {
       }
     } catch(e) {}
   }
-
+  
   self.checkInternetJsonp = {
     jsonpCallback: 'checkInternet',
     url: 'https://mdisplay' + (isDevDebugging ? '-stage' : '') + '.github.io/live/check-internet.js',
