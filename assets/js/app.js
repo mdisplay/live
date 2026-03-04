@@ -3,9 +3,9 @@
 // to support older generation Android TV boxes
 
 var isDevDebugging = false;
-var isLocalhost = window.location.hostname == 'localhost' || window.location.hostname == '192.168.1.11' || window.location.hostname == localStorage.getItem('local-ip');
+var isLocalhost = window.location.hostname == 'localhost' || window.location.hostname.indexOf('192.168.1.') != -1 || window.location.hostname == localStorage.getItem('local-ip');
 
-if(isLocalhost || window.location.href.indexOf('live') == -1) {
+if(isLocalhost || window.location.href.indexOf('stage') != -1) {
   isDevDebugging = true;
 }
 var padZero = function padZero(number) {
@@ -473,9 +473,9 @@ function App() {
               type: 'text/plain',
             })
           ); //You need to put the file, blob or base64 representation here.
-      }, function(err) { alert('Failed to write to storage file'); });
+      }, function(err) { console.log('Failed to write to storage file'); });
     }, function(err) {
-      alert('Failed to write to storage file');
+      console.log('Failed to write to storage file');
     });
   };
 
