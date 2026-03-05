@@ -110,7 +110,7 @@ function App() {
       versionString: '0.0.0',
       versionNumber: 0,
     },
-    vStage: 1641,
+    vStable: 165, // should be updated major version
     isDevDebugging: isDevDebugging,
     devDebugMessage: 'dev - testing 3',
     showSplash: true,
@@ -586,8 +586,9 @@ function App() {
             self.data.network.internetAvailable = true;
             if(response.v) {
               var newVersion = self.parseVersion(response.v);
-              var debugVersionUpdated = isDevDebugging && response.vStage && self.data.vStage && response.vStage != self.data.vStage;
               var prodVersionUpdated = newVersion && newVersion.versionNumber > self.data.appVersion.versionNumber;
+              var debugVersionUpdated = isDevDebugging && prodVersionUpdated;
+              prodVersionUpdated = prodVersionUpdated && (!response.vStable || response.vStable != self.data.vStable);
               if(debugVersionUpdated || prodVersionUpdated) {
                 self.backupSettings(false, function() {
                   self.appExpired();
@@ -1473,9 +1474,9 @@ function App() {
 
     if(window.cordova && self.isDeviceReady) {
       self.writeStorageToFile(fileContent, doneCallback);
-      if(storageOnly) {
-        return;
-      }
+    }
+    if(storageOnly) {
+      return;
     }
 
     console.log('backupSettings', JSON.stringify(fileContent), backupData);
@@ -2052,9 +2053,6 @@ function App() {
       }
       self.initShortcuts();
     });
-    if (isDevDebugging) {
-      self.data.appVersion.versionNumber = self.data.vStage;
-    }
   };
   self.parseVersion = function(fullVersion) {
     fullVersion = fullVersion.replace('?v=', '');
