@@ -110,6 +110,9 @@ function App() {
       versionString: '0.0.0',
       versionNumber: 0,
     },
+    vStage: 1640,
+    isDevDebugging: isDevDebugging,
+    devDebugMessage: 'dev - testing 3',
     showSplash: true,
     // currentPrayerWaiting: false,
     // time: new Date(),
@@ -248,8 +251,6 @@ function App() {
     splashScreenMillis: 4000,
     isPrayerNewDataApplied: false,
     enableArrowKeyScroll: false,
-    isDevDebugging: isDevDebugging,
-    devDebugMessage: 'dev - testing 3',
     showWifiScan: false,
     isWifiScanning: false,
     wifiScanResults: [],
@@ -585,7 +586,9 @@ function App() {
             self.data.network.internetAvailable = true;
             if(response.v) {
               var newVersion = self.parseVersion(response.v);
-              if (newVersion && newVersion.versionNumber > self.data.appVersion.versionNumber) {
+              var debugVersionUpdated = isDevDebugging && response.vStage && self.data.vStage && response.vStage != self.data.vStage;
+              var prodVersionUpdated = newVersion && newVersion.versionNumber > self.data.appVersion.versionNumber;
+              if(debugVersionUpdated || prodVersionUpdated) {
                 self.backupSettings(false, function() {
                   self.appExpired();
                 }, true);
@@ -2049,6 +2052,9 @@ function App() {
       }
       self.initShortcuts();
     });
+    if (isDevDebugging) {
+      self.data.appVersion.versionNumber = self.data.vStage;
+    }
   };
   self.parseVersion = function(fullVersion) {
     fullVersion = fullVersion.replace('?v=', '');
