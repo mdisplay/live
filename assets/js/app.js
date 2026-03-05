@@ -1468,9 +1468,11 @@ function App() {
 
     var fileContent = JSON.stringify(backupData, null, 2);
 
-    if(storageOnly && window.cordova && self.isDeviceReady) {
+    if(window.cordova && self.isDeviceReady) {
       self.writeStorageToFile(fileContent, doneCallback);
-      return;
+      if(storageOnly) {
+        return;
+      }
     }
 
     console.log('backupSettings', JSON.stringify(fileContent), backupData);
