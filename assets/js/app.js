@@ -110,7 +110,7 @@ function App() {
       versionString: '0.0.0',
       versionNumber: 0,
     },
-    vStage: 1640,
+    vStage: 1641,
     isDevDebugging: isDevDebugging,
     devDebugMessage: 'dev - testing 3',
     showSplash: true,
