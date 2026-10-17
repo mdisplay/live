@@ -230,6 +230,7 @@ function App() {
     timeOverridden: false,
     time24Format: false,
     sunriseSupport: self.sunriseSupport,
+    asrMadhab: 'shafie',
     tarawihEnabled: false,
     showSunriseNow: false,
     expanded: {
@@ -241,6 +242,7 @@ function App() {
       timeAdjustNew: false,
       rememberWifi: false,
       showAlerts: false,
+      asrMadhab: false,
     },
     focusActiveTimer: true,
     showRememberWifiSetting: true,
@@ -877,15 +879,17 @@ function App() {
     if (!times.length) {
       return false;
     }
-    // Times may include an Asr-Hanafi column (index 4) which is skipped for now
+    // Asr uses the Shafie column (index 3) or the Asr-Hanafi column (index 4)
+    // when available; legacy data without the Hanafi column always uses Shafie
     var hasAsrHanafi = times.length > 6;
+    var asrIndex = hasAsrHanafi && self.data.asrMadhab == 'hanafi' ? 4 : 3;
     var magribIndex = hasAsrHanafi ? 5 : 4;
     var ishaIndex = hasAsrHanafi ? 6 : 5;
     return self.adjustTimesNew({
       Subah: times[0],
       Sunrise: times[1],
       Luhar: times[2],
-      Asr: times[3],
+      Asr: times[asrIndex],
       Magrib: times[magribIndex],
       Isha: times[ishaIndex],
       Tarawih: new Date(times[ishaIndex].getTime() + 1),
@@ -1362,6 +1366,9 @@ function App() {
       if (settings.time24Format) {
         self.data.time24Format = true;
       }
+      if (settings.asrMadhab == 'hanafi') {
+        self.data.asrMadhab = 'hanafi';
+      }
       if (settings.focusActiveTimerNew1 === false) {
         self.data.focusActiveTimer = false;
       }
@@ -1434,6 +1441,7 @@ function App() {
       alertEnabled: self.data.alertEnabled,
       focusActiveTimerNew1: self.data.focusActiveTimer,
       time24Format: self.data.time24Format,
+      asrMadhab: self.data.asrMadhab,
       timeOverrideEnabled: self.data.timeOverrideEnabled,
       networkTimeApiUrl: self.data.networkTimeApiUrl,
       rememberWifi: self.data.rememberWifi,
