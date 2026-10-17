@@ -19,11 +19,6 @@ Output format matches the existing prayernew-data.js style:
     };
 Consecutive days with identical times are merged into one range entry.
 
-Special case: ZONE3 (Mullaitivu) keeps the legacy times from
-_tools/legacy-zone3-prayer-data.json for Subah, Sunrise, Luhar, Asr-Shafie,
-Magrib and Isha; only its Asr-Hanafi column comes from the PDFs. Feb 29 is
-absent from the legacy data, so that single day uses the full PDF row.
-
 Usage (from the repository root):
     python3 _tools/generate-prayernew-data.py            # write prayernew-data.js
     python3 _tools/generate-prayernew-data.py --check    # verify current file, no write
@@ -31,7 +26,6 @@ Usage (from the repository root):
 
 import argparse
 import glob
-import json
 import os
 import re
 import sys
@@ -47,7 +41,6 @@ MONTH_DAYS = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RESOURCES_DIR = os.path.join(ROOT, 'resources')
 OUTPUT_FILE = os.path.join(ROOT, 'prayernew-data.js')
-LEGACY_ZONE3_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'legacy-zone3-prayer-data.json')
 
 
 def extract_text(path):
@@ -147,36 +140,7 @@ def collect_prayer_data():
     ]
     if missing:
         raise ValueError('missing zone/month data: %s' % missing)
-    apply_legacy_zone3(parsed)
     return parsed
-
-
-def apply_legacy_zone3(parsed):
-    if not os.path.exists(LEGACY_ZONE3_FILE):
-        raise ValueError('missing %s' % LEGACY_ZONE3_FILE)
-    legacy = json.load(open(LEGACY_ZONE3_FILE))
-    for month in MONTHS:
-        legacy_month = {int(day): times for day, times in legacy.get(month, {}).items()}
-        pdf_month = parsed[3][month]
-        missing_from_pdf = set(legacy_month) - set(pdf_month)
-        if missing_from_pdf:
-            raise ValueError('legacy ZONE3 days missing from PDFs: %s %s' % (
-                month, sorted(missing_from_pdf)))
-        pdf_only = set(pdf_month) - set(legacy_month)
-        if pdf_only and (month != 'February' or pdf_only != {29}):
-            raise ValueError('unexpected PDF-only days in ZONE3 %s: %s' % (
-                month, sorted(pdf_only)))
-        merged = {}
-        for day in sorted(pdf_month):
-            old_times = legacy_month.get(day)
-            if old_times is None:
-                merged[day] = pdf_month[day]
-            else:
-                if len(old_times) != 6:
-                    raise ValueError('legacy ZONE3 %s day %d has %d values' % (
-                        month, day, len(old_times)))
-                merged[day] = old_times[:4] + [pdf_month[day][4]] + old_times[4:]
-        parsed[3][month] = merged
 
 
 def zone_comments():
