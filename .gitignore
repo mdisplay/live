@@ -1,3 +1,5 @@
 1
 node_modules/
+resources/
+.DS_Store
 service-worker-local.js
