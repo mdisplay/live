@@ -877,14 +877,18 @@ function App() {
     if (!times.length) {
       return false;
     }
+    // Times may include an Asr-Hanafi column (index 4) which is skipped for now
+    var hasAsrHanafi = times.length > 6;
+    var magribIndex = hasAsrHanafi ? 5 : 4;
+    var ishaIndex = hasAsrHanafi ? 6 : 5;
     return self.adjustTimesNew({
       Subah: times[0],
       Sunrise: times[1],
       Luhar: times[2],
       Asr: times[3],
-      Magrib: times[4],
-      Isha: times[5],
-      Tarawih: new Date(times[5].getTime() + 1),
+      Magrib: times[magribIndex],
+      Isha: times[ishaIndex],
+      Tarawih: new Date(times[ishaIndex].getTime() + 1),
     });
   };
   self.getIqamahTimes = function (prayerTimes, monthParam, dayParam) {
