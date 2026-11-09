@@ -5,9 +5,9 @@ if (workbox) {
   console.log("Boo! Workbox didn't load 😬");
 }
 var baseUrl = '/live/';
-var appVersion = '2.20.3-177';
+var appVersion = '2.20.4-178';
 var dataVersion = '10';
-var vendorVersion = '16';
+var vendorVersion = '17';
 var bgVersion = '9';
 
 // Detailed logging is very useful during development
@@ -87,6 +87,10 @@ var precacheList = [
     revision: vendorVersion,
   },
   {
+    url: toUrl('assets/images/emerald-bg.svg'),
+    revision: vendorVersion,
+  },
+  {
     url: toUrl('assets/images/radix-bg.svg'),
     revision: vendorVersion,
   },
@@ -124,7 +128,7 @@ var precacheList = [
 ];
 
 // display themes that ship their own CSS file
-var displayThemes = ['digital-modern', 'analog-modern', 'galaxymin', 'darksplit', 'radix'];
+var displayThemes = ['digital-modern', 'galaxymin', 'darksplit', 'radix', 'emerald'];
 for (var themeIndex = 0; themeIndex < displayThemes.length; themeIndex++) {
   precacheList.push({
     url: toUrl('assets/css/display-theme-' + displayThemes[themeIndex] + '.css'),
@@ -140,26 +144,6 @@ for (var i = 0; i <= 59; i++) {
   });
 }
 precacheList = precacheList.concat(backgroundsList);
-
-var analogClockThemes = ['default', 'modern'];
-var analogClockThemeFileNames = [
-  'clock-face.png',
-  'clock-hand-hours.png',
-  'clock-hand-minutes.png',
-  'clock-hand-seconds.png',
-  'clock-center-circle.png',
-];
-
-var analogClockThemeFiles = [];
-for (var i = 0; i < analogClockThemes.length; i++) {
-  for (var j = 0; j < analogClockThemeFileNames.length; j++) {
-    analogClockThemeFiles.push({
-      url: toUrl('assets/analog-clock/themes/' + analogClockThemes[i] + '/' + analogClockThemeFileNames[j]),
-      revision: vendorVersion,
-    });
-  }
-}
-precacheList = precacheList.concat(analogClockThemeFiles);
 
 // precache all the site files
 workbox.precaching.precacheAndRoute(precacheList, {

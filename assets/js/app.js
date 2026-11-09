@@ -184,19 +184,17 @@ function App() {
       { id: 'ZONE13', label: 'Zone 13: Hambantota District', type: 'NEW'},
     ],
     // Display themes: each theme is a separate, self-contained identity.
-    // To add a theme: add a list entry below; optionally add images to
-    // assets/analog-clock/themes/<analogClockTheme>/ and CSS to
+    // To add a theme: add a list entry below and CSS to
     // assets/css/display-theme-<id>.css (scoped by the display-theme-<id> class).
-    //   analogClock: true -> shows the analog clock
-    //   analogClockTheme (optional): analog image folder, falls back to 'default'
+    //   analogClock: true -> shows the canvas analog clock
+    //   analogClockTheme (optional): engine theme name in analog-clock.js, falls back to 'default'
     displayThemes: [
       { id: 'digital-default', label: 'Classic Digital', analogClock: false },
-      { id: 'digital-modern', label: 'Modern Digital', analogClock: false },
-      { id: 'analog-default', label: 'Classic Analog', analogClock: true },
-      { id: 'analog-modern', label: 'Modern Analog', analogClock: true, analogClockTheme: 'modern' },
+      // { id: 'digital-modern', label: 'Modern Digital', analogClock: false },
       { id: 'galaxymin', label: '[NEW] Galaxy Minimal', analogClock: false },
       { id: 'darksplit', label: '[NEW] Galaxy Glow', analogClock: false },
-      { id: 'radix', label: '[Incomplete] Radix', analogClock: false },
+      // { id: 'radix', label: '[Incomplete] Radix', analogClock: false },
+      { id: 'emerald', label: '[NEW] Emerald Gold', analogClock: true, analogClockTheme: 'emerald' },
     ],
     timeOriginModes: [
       { id: 'auto', label: 'Auto (NTP first)' },
