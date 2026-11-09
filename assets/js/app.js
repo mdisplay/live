@@ -196,6 +196,7 @@ function App() {
       { id: 'analog-modern', label: 'Modern Analog', analogClock: true, analogClockTheme: 'modern' },
       { id: 'galaxymin', label: '[NEW] Galaxy Minimal', analogClock: false },
       { id: 'darksplit', label: '[NEW] Galaxy Glow', analogClock: false },
+      { id: 'radix', label: '[Incomplete] Radix', analogClock: false },
     ],
     timeOriginModes: [
       { id: 'auto', label: 'Auto (NTP first)' },

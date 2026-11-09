@@ -5,9 +5,9 @@ if (workbox) {
   console.log("Boo! Workbox didn't load 😬");
 }
 var baseUrl = '/live/';
-var appVersion = '2.20.2-176';
+var appVersion = '2.20.3-177';
 var dataVersion = '10';
-var vendorVersion = '15';
+var vendorVersion = '16';
 var bgVersion = '9';
 
 // Detailed logging is very useful during development
@@ -86,6 +86,10 @@ var precacheList = [
     url: toUrl('assets/images/galaxy-bg1.svg'),
     revision: vendorVersion,
   },
+  {
+    url: toUrl('assets/images/radix-bg.svg'),
+    revision: vendorVersion,
+  },
   // /app
   {
     url: toUrl('assets/js/translations.js'),
@@ -120,7 +124,7 @@ var precacheList = [
 ];
 
 // display themes that ship their own CSS file
-var displayThemes = ['digital-modern', 'analog-modern', 'galaxymin', 'darksplit'];
+var displayThemes = ['digital-modern', 'analog-modern', 'galaxymin', 'darksplit', 'radix'];
 for (var themeIndex = 0; themeIndex < displayThemes.length; themeIndex++) {
   precacheList.push({
     url: toUrl('assets/css/display-theme-' + displayThemes[themeIndex] + '.css'),
