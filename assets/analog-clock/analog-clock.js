@@ -30,6 +30,15 @@ function AnalogClock() {
         second: { len: 0.72, tail: 0.2, base: 0.011, tip: 0.005, c: '#f0d48a', edge: '#7a5c22' }
       },
       cap: { r: 0.045, c: '#e8c877', dot: 0.018, dotC: '#0a2e22' }
+    },
+    sunrise: {
+      face: 'sunrise',
+      hands: {
+        hour: { len: 0.42, tail: 0.1, base: 0.052, tip: 0.02, c: '#f7f4ea', edge: '#3a352a' },
+        minute: { len: 0.62, tail: 0.12, base: 0.04, tip: 0.014, c: '#f7f4ea', edge: '#3a352a' },
+        second: { len: 0.74, tail: 0.2, base: 0.011, tip: 0.005, c: '#f0c14b', edge: '#7a5c22' }
+      },
+      cap: { r: 0.045, c: '#f0c14b', dot: 0.018, dotC: '#141413' }
     }
   };
 
