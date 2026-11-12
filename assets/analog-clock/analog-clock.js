@@ -39,6 +39,15 @@ function AnalogClock() {
         second: { len: 0.74, tail: 0.2, base: 0.011, tip: 0.005, c: '#f0c14b', edge: '#7a5c22' }
       },
       cap: { r: 0.045, c: '#f0c14b', dot: 0.018, dotC: '#141413' }
+    },
+    galaxy: {
+      face: 'galaxy',
+      hands: {
+        hour: { len: 0.42, tail: 0.1, base: 0.05, tip: 0.02, c: '#f7fbff', edge: '#2a3b52' },
+        minute: { len: 0.62, tail: 0.12, base: 0.038, tip: 0.014, c: '#f7fbff', edge: '#2a3b52' },
+        second: { len: 0.72, tail: 0.2, base: 0.011, tip: 0.005, c: '#fc7878', edge: '#7a2020' }
+      },
+      cap: { r: 0.048, c: '#d9b45c', dot: 0.02, dotC: '#0a1524' }
     }
   };
 

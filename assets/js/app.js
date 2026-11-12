@@ -199,6 +199,7 @@ function App() {
       // { id: 'radix', label: '[Incomplete] Radix', analogClock: false },
       { id: 'emerald', label: '[NEW] Emerald Gold', analogClock: true, analogClockTheme: 'emerald' },
       { id: 'sunrise', label: '[NEW] Sunrise Panel', analogClock: true, analogClockTheme: 'sunrise' },
+      { id: 'galaxy-analog', label: '[NEW] Galaxy Analog', analogClock: true, analogClockTheme: 'galaxy' },
     ],
     timeOriginModes: [
       { id: 'auto', label: 'Auto (NTP first)' },

@@ -5,9 +5,9 @@ if (workbox) {
   console.log("Boo! Workbox didn't load 😬");
 }
 var baseUrl = '/live/';
-var appVersion = '2.20.7-181';
+var appVersion = '2.20.8-182';
 var dataVersion = '10';
-var vendorVersion = '19';
+var vendorVersion = '20';
 var bgVersion = '9';
 
 // Detailed logging is very useful during development
@@ -132,7 +132,7 @@ var precacheList = [
 ];
 
 // display themes that ship their own CSS file
-var displayThemes = ['digital-modern', 'galaxymin', 'darksplit', 'radix', 'emerald', 'sunrise'];
+var displayThemes = ['digital-modern', 'galaxymin', 'darksplit', 'radix', 'emerald', 'sunrise', 'galaxy-analog'];
 for (var themeIndex = 0; themeIndex < displayThemes.length; themeIndex++) {
   precacheList.push({
     url: toUrl('assets/css/display-theme-' + displayThemes[themeIndex] + '.css'),
@@ -141,7 +141,7 @@ for (var themeIndex = 0; themeIndex < displayThemes.length; themeIndex++) {
 }
 
 // analog clock faces that ship their own SVG file
-var analogThemes = ['default', 'emerald', 'sunrise'];
+var analogThemes = ['default', 'emerald', 'sunrise', 'galaxy'];
 for (var analogIndex = 0; analogIndex < analogThemes.length; analogIndex++) {
   precacheList.push({
     url: toUrl('assets/analog-clock/themes/' + analogThemes[analogIndex] + '/face.svg'),
