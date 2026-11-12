@@ -20,6 +20,57 @@
     display: none;
   }
 
+  /* Top bar: exact Galaxy Glow (darksplit) style */
+  #app.display-theme-galaxy-analog .branding-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4.25rem;
+    background-color: rgba(6, 10, 20, 0.22);
+    background-image: linear-gradient(90deg, rgba(25, 227, 194, 0.1), rgba(124, 92, 255, 0.09) 55%, rgba(255, 95, 158, 0.07)),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0) 64%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    backdrop-filter: blur(14px) saturate(140%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), inset 0 -1px 0 rgba(127, 216, 255, 0.1);
+    text-align: left;
+    padding-left: 2rem;
+    line-height: 5rem;
+  }
+
+  #app.display-theme-galaxy-analog .branding-bar .masjid-name {
+    display: block;
+    font-size: 2.25rem;
+    letter-spacing: 0.05em;
+    color: #f4fdff;
+    text-shadow: 0 0 1.2rem rgba(127, 216, 255, 0.35), 0 0 3rem rgba(124, 92, 255, 0.18), 0 1px 2px rgba(0, 0, 0, 0.35);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  #app.display-theme-galaxy-analog .branding-bar::after {
+    content: '';
+    position: absolute;
+    left: 2rem;
+    right: 2rem;
+    bottom: -1px;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(43, 210, 255, 0.65), rgba(124, 92, 255, 0.5) 48%, rgba(255, 95, 158, 0.4) 78%, rgba(255, 255, 255, 0));
+    box-shadow: 0 0 1.2rem rgba(43, 210, 255, 0.28);
+  }
+
+  /* Square clock box, kept square, clearing the top bar and bottom strip */
+  #app.display-theme-galaxy-analog .analog-clock-container {
+    top: calc(4.25rem + 1rem);
+    left: 0rem;
+    bottom: auto;
+    top: 4rem;
+    height: calc(100vh - 4rem - 8.75rem);
+    width: calc(100vh - 4rem - 8.75rem);
+    max-width: 50vw;
+  }
+
   #app.display-theme-galaxy-analog .analog-clock-container .analog-clock-face {
     -webkit-filter: drop-shadow(0 0 1.6rem rgba(127, 216, 255, 0.28)) drop-shadow(0 0 4rem rgba(92, 124, 255, 0.18));
     filter: drop-shadow(0 0 1.6rem rgba(127, 216, 255, 0.28)) drop-shadow(0 0 4rem rgba(92, 124, 255, 0.18));
@@ -43,12 +94,16 @@
 
   #app.display-theme-galaxy-analog .digital-clock .date-display {
     position: absolute;
-    top: 1.5rem;
-    left: auto;
-    right: 0;
+    top: calc(4.25rem + 1rem);
+    left: 0;
+    right: auto;
     width: auto;
     padding: 0;
-    text-align: right;
+    text-align: left;
+    /* width: calc(100vh - 4rem - 8.75rem); */
+    /* max-width: 50vw; */
+    left: calc(100vh - 3rem - 8.75rem);
+    top: 4rem;
   }
 
   /* Dates: 80% of Classic sizes */
@@ -57,6 +112,7 @@
     line-height: 1.2rem;
     margin-bottom: 0.6rem;
     color: #a9c4d8;
+    margin-left: 0;
   }
 
   #app.display-theme-galaxy-analog .digital-clock .date-display .datex {
@@ -64,12 +120,14 @@
     line-height: 1.8rem;
     margin-bottom: 0.6rem;
     color: #f2f2f2;
+    margin-left: 0;
   }
 
   #app.display-theme-galaxy-analog .digital-clock .date-display .weekday {
     font-size: 2.2rem;
     line-height: 2.2rem;
     color: #b7d0e0;
+    margin-left: 0;
   }
 
   /* Current / next prayer block: 80% of Classic sizes */
