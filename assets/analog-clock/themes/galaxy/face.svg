@@ -11,7 +11,7 @@
 		<stop offset="1" stop-color="#02040a"/>
 	</radialGradient>
 	<clipPath id="faceClip">
-		<rect x="0" y="0" width="2048" height="2048" rx="72"/>
+		<rect x="0" y="0" width="2048" height="2048" rx="210"/>
 	</clipPath>
 </defs>
 <g clip-path="url(#faceClip)">
@@ -101,6 +101,6 @@
 <path transform="translate(0,0)" fill="rgb(246,245,246)" d="M 925.007 170.833 C 928.941 170.575 931.119 170.068 933.678 172.293 C 935.571 181.6 938.647 217.01 938.576 226.686 C 937.167 226.462 933.723 226.213 933.213 225.368 C 927.388 215.724 926.017 182.027 925.007 170.833 z"/>
 <path transform="translate(0,0)" fill="rgb(246,245,246)" d="M 1099.79 1827.81 C 1102.68 1827.86 1105.31 1827.44 1107.4 1829.15 C 1110.2 1841.02 1112.1 1871.02 1113.09 1883.95 C 1110.03 1884.11 1108.78 1884.43 1105.97 1883.16 C 1102.83 1877.86 1100.1 1835.95 1099.79 1827.81 z"/>
 </g>
-<rect x="7" y="7" width="2034" height="2034" rx="68" fill="none" stroke="url(#rim)" stroke-width="14"/>
-<rect x="34" y="34" width="1980" height="1980" rx="50" fill="none" stroke="#7fd8ff" stroke-opacity="0.18" stroke-width="3"/>
+<rect x="7" y="7" width="2034" height="2034" rx="203" fill="none" stroke="url(#rim)" stroke-width="14"/>
+<rect x="34" y="34" width="1980" height="1980" rx="176" fill="none" stroke="#7fd8ff" stroke-opacity="0.18" stroke-width="3"/>
 </svg>
