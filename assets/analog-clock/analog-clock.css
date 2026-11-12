@@ -9,6 +9,7 @@
   background-size: 100%; /* To Fit the Background. */
 }
 
+.analog-clock-container .analog-clock-face,
 .analog-clock-container .analog-clock-canvas {
   position: absolute;
   top: 0;

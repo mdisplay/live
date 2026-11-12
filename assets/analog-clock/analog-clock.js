@@ -4,23 +4,18 @@ function AnalogClock() {
   self.container = null;
   self.canvas = null;
   self.ctx = null;
-  self.themeName = 'default';
-  self.lastDrawnSecond = -1;
+  self.faceEl = null;
+  self.themeName = 'emerald';
+  self.lastDate = null;
+  self.lastDrawnTime = null;
   self.size = 0;
   self.dpr = 1;
+  self.basePath = 'assets/analog-clock/themes/';
 
   self.THEMES = {
     default: {
-      face: ['#20242c', '#14171d', '#0a0c10'],
-      bezel: [
-        { r: 0.985, w: 0.014, c: '#c8ccd4' },
-        { r: 0.94, w: 0.004, c: '#6a7078' }
-      ],
-      dots: null,
-      ticks: {
-        minor: { from: 0.9, to: 0.94, w: 0.004, c: '#9aa0a8' },
-        major: { from: 0.84, to: 0.94, w: 0.012, c: '#e8eaee' }
-      },
+      face: 'default',
+      utcOffsetMinutes: 330,
       hands: {
         hour: { len: 0.44, tail: 0.1, base: 0.05, tip: 0.02, c: '#e8eaee', edge: '#5a6068' },
         minute: { len: 0.66, tail: 0.12, base: 0.04, tip: 0.014, c: '#e8eaee', edge: '#5a6068' },
@@ -29,18 +24,8 @@ function AnalogClock() {
       cap: { r: 0.045, c: '#e8eaee', dot: 0.018, dotC: '#20242c' }
     },
     emerald: {
-      face: ['#0f5240', '#073026', '#031712'],
-      bezel: [
-        { r: 0.988, w: 0.016, c: '#d9b45c' },
-        { r: 0.958, w: 0.004, c: '#8a6a2a' },
-        { r: 0.9, w: 0.022, c: '#caa14f' },
-        { r: 0.872, w: 0.004, c: '#8a6a2a' }
-      ],
-      dots: { r: 0.825, n: 72, dot: 0.006, c: '#d9b45c' },
-      ticks: {
-        minor: { from: 0.74, to: 0.78, w: 0.004, c: '#caa14f' },
-        major: { from: 0.66, to: 0.78, w: 0.014, c: '#f0d48a' }
-      },
+      face: 'emerald',
+      utcOffsetMinutes: 330,
       hands: {
         hour: { len: 0.4, tail: 0.1, base: 0.052, tip: 0.02, c: '#e8c877', edge: '#7a5c22' },
         minute: { len: 0.6, tail: 0.12, base: 0.04, tip: 0.014, c: '#e8c877', edge: '#7a5c22' },
@@ -61,16 +46,36 @@ function AnalogClock() {
   };
 
   self.applyTheme = function () {
-    var name = 'default';
+    var name = 'emerald';
     try {
       if (window.mdApp && window.mdApp.data && window.mdApp.data.analogClockTheme) {
         name = window.mdApp.data.analogClockTheme;
       }
     } catch (e) {}
     if (!self.THEMES[name]) {
-      name = 'default';
+      name = 'emerald';
     }
     self.themeName = name;
+  };
+
+  self.getConfig = function () {
+    return self.THEMES[self.themeName] || self.THEMES.default;
+  };
+
+  self.getUtcOffset = function (cfg) {
+    if (typeof cfg.utcOffsetMinutes === 'number') {
+      return cfg.utcOffsetMinutes;
+    }
+    try {
+      if (window.mdApp && window.mdApp.data && typeof window.mdApp.data.utcOffsetMinutes === 'number') {
+        return window.mdApp.data.utcOffsetMinutes;
+      }
+    } catch (e) {}
+    return 330;
+  };
+
+  self.faceSrc = function () {
+    return self.basePath + self.getConfig().face + '/face.svg';
   };
 
   self.resize = function () {
@@ -90,6 +95,7 @@ function AnalogClock() {
     self.dpr = dpr;
     self.canvas.width = Math.floor(size * dpr);
     self.canvas.height = Math.floor(size * dpr);
+    self.redraw();
   };
 
   self.init = function (el, time) {
@@ -97,24 +103,29 @@ function AnalogClock() {
     if (!self.container) {
       return;
     }
-    var canvas = document.createElement('canvas');
-    canvas.className = 'analog-clock-canvas';
-    self.container.appendChild(canvas);
+    self.applyTheme();
+    var lookup = self.container.querySelector;
+    self.faceEl = lookup ? self.container.querySelector('.analog-clock-face') : null;
+    if (!self.faceEl) {
+      self.faceEl = document.createElement('img');
+      self.faceEl.className = 'analog-clock-face';
+      self.faceEl.alt = '';
+      self.container.appendChild(self.faceEl);
+    }
+    self.faceEl.src = self.faceSrc();
+    var canvas = lookup ? self.container.querySelector('.analog-clock-canvas') : null;
+    if (!canvas) {
+      canvas = document.createElement('canvas');
+      canvas.className = 'analog-clock-canvas';
+      self.container.appendChild(canvas);
+    }
     self.canvas = canvas;
     self.ctx = canvas.getContext('2d');
-    self.applyTheme();
-    self.resize();
-    self.isInitalized = true;
-    if (window.addEventListener) {
-      window.addEventListener('resize', function () {
-        if (!self.isInitalized) {
-          return;
-        }
-        self.resize();
-        self.lastDrawnSecond = -1;
-        self.nextTick();
-      });
+    if (!self.ctx) {
+      return;
     }
+    self.isInitalized = true;
+    self.resize();
     self.nextTick(time);
   };
 
@@ -122,13 +133,29 @@ function AnalogClock() {
     if (!self.isInitalized || !self.ctx) {
       return;
     }
-    var date = time || new Date();
-    var s = date.getSeconds();
-    if (s === self.lastDrawnSecond && self.size > 0) {
+    if (!time) {
+      time = self.lastDate;
+    }
+    if (!time) {
       return;
     }
-    self.lastDrawnSecond = s;
-    self.draw(date);
+    self.lastDate = time;
+    var stamp = time.getTime ? time.getTime() : null;
+    if (stamp !== null && stamp === self.lastDrawnTime) {
+      return;
+    }
+    self.drawHands(time);
+  };
+
+  self.redraw = function () {
+    if (!self.isInitalized || !self.ctx) {
+      return;
+    }
+    if (!self.lastDate) {
+      return;
+    }
+    self.lastDrawnTime = null;
+    self.drawHands(self.lastDate);
   };
 
   self.circle = function (cx, cy, r) {
@@ -162,54 +189,27 @@ function AnalogClock() {
     }
   };
 
-  self.draw = function (date) {
-    var cfg = self.THEMES[self.themeName] || self.THEMES.default;
+  self.drawHands = function (date) {
+    var cfg = self.getConfig();
     var ctx = self.ctx;
     var s = self.size;
     var cx = s / 2;
     var cy = s / 2;
     var r = s / 2;
-    var i;
-    var a;
+    var offsetSeconds = self.getUtcOffset(cfg) * 60;
+    var totalSeconds = date.getUTCHours() * 3600 + date.getUTCMinutes() * 60 + date.getUTCSeconds();
+    if (date.getUTCMilliseconds) {
+      totalSeconds += date.getUTCMilliseconds() / 1000;
+    }
+    totalSeconds += offsetSeconds;
+    totalSeconds = ((totalSeconds % 86400) + 86400) % 86400;
+    var sec = totalSeconds % 60;
+    var min = Math.floor(totalSeconds / 60) % 60;
+    var hour = Math.floor(totalSeconds / 3600) % 12;
     ctx.setTransform(self.dpr, 0, 0, self.dpr, 0, 0);
     ctx.clearRect(0, 0, s, s);
-    var g = ctx.createRadialGradient(cx, cy - r * 0.15, r * 0.1, cx, cy, r);
-    g.addColorStop(0, cfg.face[0]);
-    g.addColorStop(0.55, cfg.face[1]);
-    g.addColorStop(1, cfg.face[2]);
-    ctx.fillStyle = g;
-    self.circle(cx, cy, r * 0.995);
-    ctx.fill();
-    for (i = 0; i < cfg.bezel.length; i++) {
-      ctx.beginPath();
-      ctx.arc(cx, cy, cfg.bezel[i].r * r, 0, Math.PI * 2);
-      ctx.strokeStyle = cfg.bezel[i].c;
-      ctx.lineWidth = Math.max(1, cfg.bezel[i].w * r);
-      ctx.stroke();
-    }
-    if (cfg.dots) {
-      ctx.fillStyle = cfg.dots.c;
-      for (i = 0; i < cfg.dots.n; i++) {
-        a = (i / cfg.dots.n) * Math.PI * 2;
-        self.circle(cx + Math.cos(a) * cfg.dots.r * r, cy + Math.sin(a) * cfg.dots.r * r, cfg.dots.dot * r);
-        ctx.fill();
-      }
-    }
-    for (i = 0; i < 60; i++) {
-      a = (i / 60) * Math.PI * 2;
-      var t = (i % 5 === 0) ? cfg.ticks.major : cfg.ticks.minor;
-      ctx.beginPath();
-      ctx.moveTo(cx + Math.cos(a) * t.from * r, cy + Math.sin(a) * t.from * r);
-      ctx.lineTo(cx + Math.cos(a) * t.to * r, cy + Math.sin(a) * t.to * r);
-      ctx.strokeStyle = t.c;
-      ctx.lineWidth = Math.max(1, t.w * r);
-      ctx.stroke();
-    }
-    var h = date.getHours() % 12;
-    var m = date.getMinutes();
-    var sec = date.getSeconds();
-    self.drawHand(h * 30 + m * 0.5 + sec * (0.5 / 60), cfg.hands.hour, cx, cy, r);
-    self.drawHand(m * 6 + sec * 0.1, cfg.hands.minute, cx, cy, r);
+    self.drawHand(hour * 30 + min * 0.5 + sec * (0.5 / 60), cfg.hands.hour, cx, cy, r);
+    self.drawHand(min * 6 + sec * 0.1, cfg.hands.minute, cx, cy, r);
     self.drawHand(sec * 6, cfg.hands.second, cx, cy, r);
     ctx.fillStyle = cfg.cap.c;
     self.circle(cx, cy, cfg.cap.r * r);
@@ -217,6 +217,7 @@ function AnalogClock() {
     ctx.fillStyle = cfg.cap.dotC;
     self.circle(cx, cy, cfg.cap.dot * r);
     ctx.fill();
+    self.lastDrawnTime = date.getTime ? date.getTime() : null;
   };
 }
 

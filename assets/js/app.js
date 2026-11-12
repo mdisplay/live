@@ -191,6 +191,9 @@ function App() {
     displayThemes: [
       { id: 'digital-default', label: 'Classic Digital', analogClock: false },
       // { id: 'digital-modern', label: 'Modern Digital', analogClock: false },
+      { id: 'analog-default', label: 'Classic Analog', analogClock: true },
+      // { id: 'analog-modern', label: 'Modern Analog', analogClock: true, analogClockTheme: 'modern' },
+      //
       { id: 'galaxymin', label: '[NEW] Galaxy Minimal', analogClock: false },
       { id: 'darksplit', label: '[NEW] Galaxy Glow', analogClock: false },
       // { id: 'radix', label: '[Incomplete] Radix', analogClock: false },
@@ -1317,7 +1320,12 @@ function App() {
     // self.simulateTime = 50;
     self.updateTime();
     if (self.analogClock && self.data.analogClockActive) {
-      self.analogClock.init(document.getElementById('analog-clock-container'), self.initialTestTime);
+      self.analogClock.init(document.getElementById('analog-clock-container'), self.data.time);
+      self.analogResizeHandler = function () {
+        self.analogClock.resize();
+        self.analogClock.nextTick(self.data.time);
+      };
+      window.addEventListener('resize', self.analogResizeHandler);
     }
     if ((self.data.timeOriginMode == 'auto' || self.data.timeOriginMode == 'network') && self.simulateTime) {
       console.warn('Warning: simulateTime feature is not compatible with network time');
@@ -1336,6 +1344,10 @@ function App() {
   self.created = function () {
     if (window._theInterval) {
       window.clearInterval(window._theInterval);
+    }
+    if (self.analogResizeHandler) {
+      window.removeEventListener('resize', self.analogResizeHandler);
+      self.analogResizeHandler = null;
     }
   };
   self.initStorage = function (callback) {
