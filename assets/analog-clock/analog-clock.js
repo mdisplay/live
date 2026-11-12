@@ -47,7 +47,7 @@ function AnalogClock() {
         minute: { len: 0.62, tail: 0.12, base: 0.038, tip: 0.014, c: '#f7fbff', edge: '#2a3b52' },
         second: { len: 0.72, tail: 0.2, base: 0.011, tip: 0.005, c: '#fc7878', edge: '#7a2020' }
       },
-      cap: { r: 0.048, c: '#d9b45c', dot: 0.02, dotC: '#0a1524' }
+      cap: { r: 0.048, c: '#fc7878', dot: 0.02, dotC: '#0a1524' }
     }
   };
 
