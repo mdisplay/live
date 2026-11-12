@@ -15,7 +15,6 @@ function AnalogClock() {
   self.THEMES = {
     default: {
       face: 'default',
-      utcOffsetMinutes: 330,
       hands: {
         hour: { len: 0.44, tail: 0.1, base: 0.05, tip: 0.02, c: '#e8eaee', edge: '#5a6068' },
         minute: { len: 0.66, tail: 0.12, base: 0.04, tip: 0.014, c: '#e8eaee', edge: '#5a6068' },
@@ -25,7 +24,6 @@ function AnalogClock() {
     },
     emerald: {
       face: 'emerald',
-      utcOffsetMinutes: 330,
       hands: {
         hour: { len: 0.4, tail: 0.1, base: 0.052, tip: 0.02, c: '#e8c877', edge: '#7a5c22' },
         minute: { len: 0.6, tail: 0.12, base: 0.04, tip: 0.014, c: '#e8c877', edge: '#7a5c22' },
@@ -60,18 +58,6 @@ function AnalogClock() {
 
   self.getConfig = function () {
     return self.THEMES[self.themeName] || self.THEMES.default;
-  };
-
-  self.getUtcOffset = function (cfg) {
-    if (typeof cfg.utcOffsetMinutes === 'number') {
-      return cfg.utcOffsetMinutes;
-    }
-    try {
-      if (window.mdApp && window.mdApp.data && typeof window.mdApp.data.utcOffsetMinutes === 'number') {
-        return window.mdApp.data.utcOffsetMinutes;
-      }
-    } catch (e) {}
-    return 330;
   };
 
   self.faceSrc = function () {
@@ -165,7 +151,7 @@ function AnalogClock() {
 
   self.drawHand = function (angleDeg, spec, cx, cy, r) {
     var ctx = self.ctx;
-    var rad = (angleDeg - 90) * Math.PI / 180;
+    var rad = (angleDeg + 90) * Math.PI / 180;
     var hw = spec.base * r / 2;
     var tw = spec.tip * r / 2;
     var len = spec.len * r;
@@ -196,13 +182,10 @@ function AnalogClock() {
     var cx = s / 2;
     var cy = s / 2;
     var r = s / 2;
-    var offsetSeconds = self.getUtcOffset(cfg) * 60;
-    var totalSeconds = date.getUTCHours() * 3600 + date.getUTCMinutes() * 60 + date.getUTCSeconds();
-    if (date.getUTCMilliseconds) {
-      totalSeconds += date.getUTCMilliseconds() / 1000;
+    var totalSeconds = date.getHours() * 3600 + date.getMinutes() * 60 + date.getSeconds();
+    if (date.getMilliseconds) {
+      totalSeconds += date.getMilliseconds() / 1000;
     }
-    totalSeconds += offsetSeconds;
-    totalSeconds = ((totalSeconds % 86400) + 86400) % 86400;
     var sec = totalSeconds % 60;
     var min = Math.floor(totalSeconds / 60) % 60;
     var hour = Math.floor(totalSeconds / 3600) % 12;
