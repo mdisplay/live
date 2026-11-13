@@ -583,6 +583,7 @@
     height: 10.5rem;
     padding: 1.5rem 0 0 0;
     text-align: center;
+    overflow: hidden;
   }
 
   #app.display-theme-darksplit.is-before .active-timer {

@@ -104,13 +104,6 @@
     line-height: 0;
   }
 
-  #app.display-theme-galaxy-analog .digital-clock .time .hours .h,
-  #app.display-theme-galaxy-analog .digital-clock .time .minutes .m,
-  #app.display-theme-galaxy-analog .digital-clock .time .colon-main,
-  #app.display-theme-galaxy-analog .digital-clock .time .seconds-container {
-    display: none;
-  }
-
   #app.display-theme-galaxy-analog .digital-clock .date-display {
     position: absolute;
     top: 5.5rem;

@@ -103,9 +103,10 @@
   #app.display-theme-sunrise .digital-clock .time .hours,
   #app.display-theme-sunrise .digital-clock .time .minutes {
     position: static;
-    display: inline;
-    height: auto;
-    line-height: normal;
+    display: block;
+    height: 0;
+    font-size: 0;
+    line-height: 0;
   }
 
   #app.display-theme-sunrise .digital-clock .date-display {

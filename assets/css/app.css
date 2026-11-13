@@ -7,6 +7,7 @@
 html {
   /*font-size: 16px;*/
   font-size: 1.6vw;
+  overflow: hidden;
 }
 
 body {
@@ -16,6 +17,7 @@ body {
   /*background: green;*/
   color: #fff;
   text-align: center;
+  overflow: hidden;
 }
 
 #app {
@@ -89,6 +91,7 @@ body {
   background: gray;
   bottom: -6rem;
   height: 6rem;
+  overflow: hidden;
 }
 
 .prayer-info {

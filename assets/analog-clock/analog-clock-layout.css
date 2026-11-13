@@ -28,6 +28,9 @@
 .analog-clock-active .digital-clock .time .colon-main,
 .analog-clock-active .digital-clock .time .minutes .m,
 .analog-clock-active .digital-clock .time .seconds-container /* .seconds */ {
-  /* display: none; */
   visibility: hidden;
+}
+
+.analog-clock-active .digital-clock .time .seconds-container {
+  display: none;
 }
