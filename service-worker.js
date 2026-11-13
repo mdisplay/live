@@ -5,9 +5,9 @@ if (workbox) {
   console.log("Boo! Workbox didn't load 😬");
 }
 var baseUrl = '/live/';
-var appVersion = '2.20.15-189';
+var appVersion = '2.20.18-192';
 var dataVersion = '10';
-var vendorVersion = '32';
+var vendorVersion = '34';
 var bgVersion = '9';
 
 // Detailed logging is very useful during development
@@ -116,15 +116,23 @@ var precacheList = [
     revision: appVersion,
   },
   {
+    url: toUrl('assets/css/common.css'),
+    revision: appVersion,
+  },
+  {
+    url: toUrl('assets/css/reset.css'),
+    revision: appVersion,
+  },
+  {
     url: toUrl('assets/css/app-settings.css'),
     revision: appVersion,
   },
   {
-    url: toUrl('assets/analog-clock/analog-clock.css'),
+    url: toUrl('assets/css/theme-base.css'),
     revision: appVersion,
   },
   {
-    url: toUrl('assets/css/theme-default.css'),
+    url: toUrl('assets/analog-clock/analog-clock.css'),
     revision: appVersion,
   },
   {
@@ -135,11 +143,11 @@ var precacheList = [
   // 'assets/**/*.{css,js}',
 ];
 
-// display themes that ship their own CSS file
-var displayThemes = ['digital-modern', 'galaxymin', 'darksplit', 'radix', 'emerald', 'sunrise', 'galaxy-analog'];
-for (var themeIndex = 0; themeIndex < displayThemes.length; themeIndex++) {
+// theme CSS files (one file per theme)
+var themeCssFiles = ['display-theme-digital-default.css', 'display-theme-analog-default.css', 'display-theme-digital-modern.css', 'display-theme-galaxymin.css', 'display-theme-darksplit.css', 'display-theme-radix.css', 'display-theme-emerald.css', 'display-theme-sunrise.css', 'display-theme-galaxy-analog.css'];
+for (var themeIndex = 0; themeIndex < themeCssFiles.length; themeIndex++) {
   precacheList.push({
-    url: toUrl('assets/css/display-theme-' + displayThemes[themeIndex] + '.css'),
+    url: toUrl('assets/css/' + themeCssFiles[themeIndex]),
     revision: vendorVersion,
   });
 }

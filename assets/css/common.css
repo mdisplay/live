@@ -1,0 +1,105 @@
+/* Common component styles (loaded for every theme). */
+
+#app #splash {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 20;
+  background: #000;
+  width: 100vw;
+  height: 100vh;
+  z-index: 4444;
+}
+
+#app #splash .splash-content {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  margin-top: -5rem;
+  text-align: center;
+  height: 10rem;
+  font-size: 2rem;
+  line-height: 10rem;
+}
+
+#splash .splash-content img {
+  height: 100%;
+}
+
+#app .toast-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10002 !important;
+}
+
+#app .toast-container .toast-item {
+  background: rgba(255, 255, 255, 0.9);
+  color: #000;
+  border-radius: 30px;
+  padding: 10px 15px;
+  box-shadow: 0px 0px 30px 10px rgba(0, 0, 0, 0.75);
+  margin-bottom: 10px;
+}
+
+#app .invalid-time-container {
+  color: #fff;
+  z-index: 3333;
+  position: fixed;
+  width: 100%;
+  height: 14rem;
+  left: 0;
+  top: 50%;
+  margin-top: -7rem;
+}
+
+#app .invalid-time-container h1,
+#app .invalid-time-container h2,
+#app .invalid-time-container h3 {
+  line-height: 2rem;
+  font-size: 1.25rem;
+  font-weight: normal;
+}
+#app .invalid-time-container h1 {
+  font-size: 1.75rem;
+}
+#app .invalid-time-container h1 small {
+  font-size: 1rem;
+}
+#app .invalid-time-container h2 {
+  font-size: 1.5rem;
+}
+#app .invalid-time-container h3 {
+  font-size: 1.25rem;
+}
+
+
+
+#app #bgful .bgful-image,
+#app #bgful .bgful-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+}
+
+#app #bgful .bgful-overlay {
+  background: rgba(0, 0, 0, 0.75);
+  /*  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);*/
+  z-index: 2;
+}
+
+#app #bgful .bgful-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  -webkit-filter: blur(10px);
+  filter: blur(10px);
+  object-fit: fill;
+}

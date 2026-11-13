@@ -1,8 +1,8 @@
 /* Display theme: Modern Digital */
 
-.display-theme-digital-modern .digital-clock .time .hours .h,
-.display-theme-digital-modern .digital-clock .time .colon-main,
-.display-theme-digital-modern .digital-clock .time .minutes .m {
+#app.display-theme-digital-modern .digital-clock .time .hours .h,
+#app.display-theme-digital-modern .digital-clock .time .colon-main,
+#app.display-theme-digital-modern .digital-clock .time .minutes .m {
   color: #00aaff;
   opacity: 1;
 }

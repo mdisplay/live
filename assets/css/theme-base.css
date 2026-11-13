@@ -1,5 +1,205 @@
-.colon {
-  text-align: center;
+/* Shared display structure used by all themes. */
+
+#app .alert-container {
+  position: absolute;
+  width: 30vw;
+  height: 30vw;
+  width: 17.5rem;
+  height: 17.5rem;
+  left: 0;
+  top: 0;
+  transition: all 300ms;
+}
+
+#app .alert-container img {
+  width: 100%;
+  height: 100%;
+  opacity: 0.9;
+  float: left;
+}
+
+.prayer-info-container {
+  background: gray;
+  bottom: -6rem;
+  height: 6rem;
+  overflow: hidden;
+}
+
+.prayer-info {
+  width: 20%;
+  /*width: 16.66%;*/
+  display: inline-block;
+}
+
+@media (orientation: landscape) {
+
+  .focus-active-timer .prayer-display .iqamah-time,
+  .focus-active-timer .prayer-display .time,
+  .focus-active-timer .active-timer .time {
+    font-size: 12.5rem;
+    line-height: 13rem;
+    height: 13rem;
+
+    font-size: 30vh;
+    line-height: 30vh;
+    height: 30vh;
+    z-index: 501 !important;
+  }
+
+  .focus-active-timer .prayer-display .time {
+    bottom: 12rem;
+    bottom: 30vh;
+  }
+
+  .focus-active-timer .prayer-display .iqamah-time {
+    bottom: 0.5rem;
+  }
+
+  .focus-active-timer .active-timer .time {}
+
+  .focus-active-timer.is-waiting .active-timer,
+  .focus-active-timer.is-after .active-timer {
+    bottom: 12rem;
+    bottom: 30vh;
+  }
+
+
+  .focus-active-timer .digital-clock .time .hours {
+    font-size: 9rem;
+    line-height: 10rem;
+  }
+
+  .focus-active-timer .digital-clock .time .colon-main {
+    font-size: 9rem;
+    line-height: 10rem;
+    left: 3rem;
+    top: 6rem;
+    height: 10rem;
+    width: 10rem;
+    margin: 0;
+  }
+
+  .focus-active-timer .digital-clock .time .minutes {
+    font-size: 9rem;
+    line-height: 10rem;
+    bottom: auto;
+    top: 12rem;
+  }
+
+  .focus-active-timer .digital-clock .time .seconds-container {
+    bottom: auto;
+    top: 9rem;
+    right: auto;
+    left: 15rem;
+  }
+
+  .focus-active-timer .digital-clock .seconds {
+    font-size: 2.5rem;
+  }
+
+  .focus-active-timer .digital-clock .am-pm {
+    font-size: 1.25rem;
+    bottom: 3.25rem;
+  }
+
+  .focus-active-timer .prayer-display .name {
+    bottom: calc(50vh + 0.5rem);
+    font-size: 2rem;
+    z-index: 501 !important;
+  }
+
+  .focus-active-timer .prayer-display .name .label {
+    font-size: 1.25rem;
+  }
+
+  .focus-active-timer #active-overlay,
+  .focus-active-timer .version-active-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 500 !important;
+    display: none;
+  }
+
+  .focus-active-timer .active-timer {
+    z-index: 501 !important;
+  }
+
+  .focus-active-timer .version-active-overlay {
+    position: absolute;
+    z-index: 512;
+  }
+
+  .focus-active-timer .digital-clock .date-display .hijri-datex {
+    font-size: 1rem;
+    line-height: 1rem;
+    ;
+  }
+
+  .focus-active-timer .digital-clock .date-display .datex {
+    font-size: 1.5rem;
+    line-height: 1.5rem;
+    ;
+  }
+
+  .focus-active-timer .digital-clock .date-display .weekday {
+    font-size: 1.8rem;
+    line-height: 1.8rem;
+
+  }
+
+  .focus-active-timer .prayer-display .iqamah-time .iqamah-label,
+  .focus-active-timer .prayer-display .time .label {
+    font-size: 2.5rem;
+    left: -12.5rem;
+    width: 12rem;
+    top: 4.5rem;
+  }
+
+  .focus-active-timer .analog-clock-container {
+    height: 20rem;
+    width: 20rem;
+    top: 0;
+    bottom: auto;
+  }
+
+  .focus-active-timer.analog-clock-active .digital-clock .date-display .hijri-datex {
+    margin-left: 5.25rem;
+  }
+
+  .focus-active-timer.analog-clock-active .digital-clock .date-display .datex {
+    margin-left: 7.25rem;
+  }
+
+  .focus-active-timer.analog-clock-active .digital-clock .date-display .weekday {
+    margin-left: 9.5rem;
+  }
+
+
+  .focus-active-timer .prayer-info-container,
+  .focus-active-timer #version-info,
+  .focus-active-timer .digital-clock .date-display  {
+    opacity: 0.5 !important;
+  }
+
+  .focus-active-timer .alert-container {
+    left: 0.5rem !important;
+    left: 10rem !important;
+    top: 0.5rem !important;
+    z-index: 15 !important;
+  }
+
+  .focus-active-timer .alert-container img {
+    opacity: 1 !important;
+  }
+
+  .is-showing-alert.focus-active-timer .digital-clock .seconds-container,
+  .is-showing-alert.focus-active-timer .analog-clock-container {
+        opacity: 0.5 !important;
+  }
 }
 
 .prayer-info-container {
@@ -535,145 +735,11 @@
 }
 */
 
-.prayer-info-container .prayer-info.is-current {
-  background: #fff;
-  transition: all 300ms;
-}
 
-.active-prayer-info-athan .prayer-info.is-current/* .prayer-time*/ {
-  background: #7eff74;
-}
 
-.active-prayer-info-iqamah .prayer-info.is-current/* .iqamah-time*/ {
-  background: #ffeb3b;
-}
 
-.prayer-info-container .prayer-info.is-current .prayer-name,
-.prayer-info-container .prayer-info.is-current .prayer-time,
-.prayer-info-container .prayer-info.is-current .iqamah-time {
-  color: #000;
-}
 
-.toast-container {
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 10002 !important;
-}
 
-.toast-container .toast-item {
-  background: rgba(255, 255, 255, 0.9);
-  color: #000;
-  border-radius: 30px;
-  padding: 10px 15px;
-  box-shadow: 0px 0px 30px 10px rgba(0, 0, 0, 0.75);
-  margin-bottom: 10px;
-}
-
-.invalid-time-container {
-  color: #fff;
-  z-index: 3333;
-  position: fixed;
-  width: 100%;
-  height: 14rem;
-  left: 0;
-  top: 50%;
-  margin-top: -7rem;
-}
-
-.invalid-time-container h1,
-.invalid-time-container h2,
-.invalid-time-container h3 {
-  line-height: 2rem;
-  font-size: 1.25rem;
-  font-weight: normal;
-}
-.invalid-time-container h1 {
-  font-size: 1.75rem;
-}
-.invalid-time-container h1 small {
-  font-size: 1rem;
-}
-.invalid-time-container h2 {
-  font-size: 1.5rem;
-}
-.invalid-time-container h3 {
-  font-size: 1.25rem;
-}
-
-.prayer-display .time,
-.prayer-display .am-pm,
-.prayer-info-container .prayer-time {
-  color: #7eff74;
-  /* color: cyan; */
-}
-
-.prayer-display .time.is-sunrise,
-.prayer-display .is-sunrise .am-pm {
-  color: #FF8F00;
-  /* color: cyan; */
-}
-
-.active-prayer-info-athan .prayer-info.is-current/* .prayer-time*/ {
-  background: #7eff74;
-  /* background: cyan; */
-}
-
-.prayer-display .iqamah-time,
-.prayer-display .iqamah-am-pm,
-.prayer-info-container .iqamah-time {
-  color: #ffeb3b;
-  /* color: magenta; */
-}
-
-.prayer-info-container .is-sunrise .iqamah-time {
-  color: #FF8F00;
-  /* color: magenta; */
-}
-
-.active-prayer-info-iqamah .prayer-info.is-current/* .iqamah-time*/ {
-  background: #ffeb3b;
-  /* background: magenta; */
-}
-
-.active-prayer-info-iqamah .prayer-info.is-current.is-sunrise/* .iqamah-time*/ {
-  background: #FF8F00;
-  /* background: magenta; */
-}
-
-.light-mode {
-  color: #000;
-}
-
-.light-mode #bgful .bgful-overlay {
-  background: rgba(255, 255, 255, 0.9);
-}
-
-.light-mode .prayer-display .time,
-.light-mode .prayer-display .am-pm,
-.light-mode .prayer-info-container .prayer-time
-{
-  color: #3cb371;
-}
-
-.light-mode .prayer-display .iqamah-time,
-.light-mode .prayer-display .iqamah-am-pm,
-.light-mode .prayer-info-container .iqamah-time
- {
-  color: #8a7100;
-}
-
-.light-mode .active-timer .time {
-  color: #db0000;
-}
-
-.light-mode .prayer-info-container .prayer-name {
-  background: rgba(0, 0, 0, 0.15);
-}
-
-.light-mode .prayer-info-container .prayer-info:nth-child(even) {
-  background: rgba(0, 0, 0, 0.1);
-}
 
 .digital-clock .time .date-display,
 .digital-clock .time .seconds-container {
@@ -685,292 +751,6 @@
   opacity: 1;
 }
 
-@media (orientation: portrait) {
-  .digital-clock .time .hours,
-    .digital-clock .time .colon-main,
-    .digital-clock .time .minutes {
-      top: 0;
-      left: 0;
-      font-size: 20rem;
-      line-height: 25rem;
-      bottom: auto;
-      height: 25rem;
-      margin: 0;
-      top: 10rem;
-    }
-    .digital-clock .time .hours,
-    .digital-clock .time .minutes {
-      width: 25rem;
-    }
-    .digital-clock .time .colon-main {
-      transform: none;
-      left: 22rem;
-      width: 10rem;
-    }
-    .digital-clock .time .minutes {
-      left: 30rem;
-    }
 
-    .digital-clock .date-display {
-      left: 2rem;
-      top: -6rem;
-    }
-
-    /*  */
-
-    .digital-clock .time .seconds-container {
-      right: 0;
-      text-align: right;
-      position: absolute;
-      left: auto;
-      top: 20.5rem;
-      right: 2rem;
-    }
-    .digital-clock .time .seconds-container .seconds,
-    .digital-clock .time .seconds-container .am-pm {
-      font-size: 5rem;
-      line-height: 6rem;
-      height: 6rem;
-      display: block;
-      position: absolute;
-      left: auto;
-      top: 0;
-      right: 0;
-      bottom: auto;
-    }
-    .digital-clock .time .seconds-container .seconds {
-    }
-    .digital-clock .time .seconds-container .seconds .colon {
-    }
-    .digital-clock .time .seconds-container .am-pm {
-      top: 4rem;
-      font-size: 2.5rem;
-      opacity: 0.5;
-    }
-
-
-    .prayer-display .iqamah-time, .prayer-display .time {
-      font-size: 12rem;
-    }
-    .prayer-display .time {
-      bottom: 13rem;
-    }
-    .prayer-display .iqamah-time {
-      bottom: 2rem;
-    }
-    .active-timer .time {
-      font-size: 12rem;
-    }
-    .is-before .active-timer {
-      bottom: 2rem;
-    }
-    .is-waiting .active-timer, .is-after .active-timer {
-      bottom: 13rem;
-    }
-    .prayer-display .name {
-      bottom: 20.5rem;
-    }
-    #app .alert-container {
-      top: 30rem;
-      left: 15rem;
-    }
-
-    #app.analog-clock-active .alert-container {
-      top: 20rem;
-      left: 35rem;
-    }
-
-    #version-info {
-      font-size: 2.5rem !important;
-    }
-    #version-info .version-text {
-      font-size: 3rem !important;
-    }
-
-    .analog-clock-active .analog-clock-container {
-      width: 30rem;
-      height: 30rem;
-      top: 10rem;
-      bottom: auto;
-      left: 1rem;
-    }
-
-    .analog-clock-active .digital-clock .date-display {
-      left: 24rem;
-      top: 2rem;
-      bottom: auto;
-    }
-}
 
 /* //////////////////////////////////////// */
-
-@media (orientation: landscape) {
-
-  .focus-active-timer .prayer-display .iqamah-time,
-  .focus-active-timer .prayer-display .time,
-  .focus-active-timer .active-timer .time {
-    font-size: 12.5rem;
-    line-height: 13rem;
-    height: 13rem;
-
-    font-size: 30vh;
-    line-height: 30vh;
-    height: 30vh;
-    z-index: 501 !important;
-  }
-
-  .focus-active-timer .prayer-display .time {
-    bottom: 12rem;
-    bottom: 30vh;
-  }
-
-  .focus-active-timer .prayer-display .iqamah-time {
-    bottom: 0.5rem;
-  }
-
-  .focus-active-timer .active-timer .time {}
-
-  .focus-active-timer.is-waiting .active-timer,
-  .focus-active-timer.is-after .active-timer {
-    bottom: 12rem;
-    bottom: 30vh;
-  }
-
-
-  .focus-active-timer .digital-clock .time .hours {
-    font-size: 9rem;
-    line-height: 10rem;
-  }
-
-  .focus-active-timer .digital-clock .time .colon-main {
-    font-size: 9rem;
-    line-height: 10rem;
-    left: 3rem;
-    top: 6rem;
-    height: 10rem;
-    width: 10rem;
-    margin: 0;
-  }
-
-  .focus-active-timer .digital-clock .time .minutes {
-    font-size: 9rem;
-    line-height: 10rem;
-    bottom: auto;
-    top: 12rem;
-  }
-
-  .focus-active-timer .digital-clock .time .seconds-container {
-    bottom: auto;
-    top: 9rem;
-    right: auto;
-    left: 15rem;
-  }
-
-  .focus-active-timer .digital-clock .seconds {
-    font-size: 2.5rem;
-  }
-
-  .focus-active-timer .digital-clock .am-pm {
-    font-size: 1.25rem;
-    bottom: 3.25rem;
-  }
-
-  .focus-active-timer .prayer-display .name {
-    bottom: calc(50vh + 0.5rem);
-    font-size: 2rem;
-    z-index: 501 !important;
-  }
-
-  .focus-active-timer .prayer-display .name .label {
-    font-size: 1.25rem;
-  }
-
-  .focus-active-timer #active-overlay,
-  .focus-active-timer .version-active-overlay {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 500 !important;
-    display: none;
-  }
-
-  .focus-active-timer .active-timer {
-    z-index: 501 !important;
-  }
-
-  .focus-active-timer .version-active-overlay {
-    position: absolute;
-    z-index: 512;
-  }
-
-  .focus-active-timer .digital-clock .date-display .hijri-datex {
-    font-size: 1rem;
-    line-height: 1rem;
-    ;
-  }
-
-  .focus-active-timer .digital-clock .date-display .datex {
-    font-size: 1.5rem;
-    line-height: 1.5rem;
-    ;
-  }
-
-  .focus-active-timer .digital-clock .date-display .weekday {
-    font-size: 1.8rem;
-    line-height: 1.8rem;
-
-  }
-
-  .focus-active-timer .prayer-display .iqamah-time .iqamah-label,
-  .focus-active-timer .prayer-display .time .label {
-    font-size: 2.5rem;
-    left: -12.5rem;
-    width: 12rem;
-    top: 4.5rem;
-  }
-
-  .focus-active-timer .analog-clock-container {
-    height: 20rem;
-    width: 20rem;
-    top: 0;
-    bottom: auto;
-  }
-
-  .focus-active-timer.analog-clock-active .digital-clock .date-display .hijri-datex {
-    margin-left: 5.25rem;
-  }
-
-  .focus-active-timer.analog-clock-active .digital-clock .date-display .datex {
-    margin-left: 7.25rem;
-  }
-
-  .focus-active-timer.analog-clock-active .digital-clock .date-display .weekday {
-    margin-left: 9.5rem;
-  }
-
-
-  .focus-active-timer .prayer-info-container,
-  .focus-active-timer #version-info,
-  .focus-active-timer .digital-clock .date-display  {
-    opacity: 0.5 !important;
-  }
-
-  .focus-active-timer .alert-container {
-    left: 0.5rem !important;
-    left: 10rem !important;
-    top: 0.5rem !important;
-    z-index: 15 !important;
-  }
-
-  .focus-active-timer .alert-container img {
-    opacity: 1 !important;
-  }
-
-  .is-showing-alert.focus-active-timer .digital-clock .seconds-container,
-  .is-showing-alert.focus-active-timer .analog-clock-container {
-        opacity: 0.5 !important;
-  }
-}

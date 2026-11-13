@@ -1,25 +1,3 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html {
-  /*font-size: 16px;*/
-  font-size: 1.6vw;
-  overflow: hidden;
-}
-
-body {
-  font-family: Arial, sans-serif;
-  font-size: 16px;
-  background: #000;
-  /*background: green;*/
-  color: #fff;
-  text-align: center;
-  overflow: hidden;
-}
-
 #app {
   position: absolute;
   top: 0;
@@ -41,64 +19,9 @@ body {
   z-index: 10;
 }
 
-#splash {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 20;
-  background: #000;
-  width: 100vw;
-  height: 100vh;
-}
 
-#splash .splash-content {
-  position: absolute;
-  top: 50%;
-  right: 0;
-  left: 0;
-  margin-top: -5rem;
-  text-align: center;
-  height: 10rem;
-  font-size: 2rem;
-  line-height: 10rem;
-}
 
-#splash .splash-content img {
-  height: 100%;
-}
 
-#app .alert-container {
-  position: absolute;
-  width: 30vw;
-  height: 30vw;
-  width: 17.5rem;
-  height: 17.5rem;
-  left: 0;
-  top: 0;
-  transition: all 300ms;
-}
-
-#app .alert-container img {
-  width: 100%;
-  height: 100%;
-  opacity: 0.9;
-  float: left;
-}
-
-.prayer-info-container {
-  background: gray;
-  bottom: -6rem;
-  height: 6rem;
-  overflow: hidden;
-}
-
-.prayer-info {
-  width: 20%;
-  /*width: 16.66%;*/
-  display: inline-block;
-}
 
 .analog-clock {
   background: #333;
@@ -134,31 +57,6 @@ body {
   left: 0;
 }*/
 
-#bgful .bgful-image,
-#bgful .bgful-overlay {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 1;
-}
-
-#bgful .bgful-overlay {
-  background: rgba(0, 0, 0, 0.75);
-  /*  background: rgba(0, 0, 0, 0.5);
-  background: rgba(0, 0, 0, 0.6);*/
-  z-index: 2;
-}
-
-#bgful .bgful-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  -webkit-filter: blur(10px);
-  filter: blur(10px);
-  object-fit: fill;
-}
 
 #app .prayer-times-applied-indicator {
   border-radius: 50%;
@@ -190,3 +88,9 @@ body {
     left: 0;
   }
 } */
+
+/* Shared UI (moved from theme-default.css) */
+
+.colon {
+  text-align: center;
+}
