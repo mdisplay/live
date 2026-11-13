@@ -15,24 +15,24 @@
     <link rel="shortcut icon" href="assets/images/favicon.png" />
     <link rel="icon" type="image/png" href="assets/images/favicon.png" />
     <!-- common styles -->
-    <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=2.20.20-194" />
-    <link rel="stylesheet" type="text/css" href="assets/css/reset.css?v=2.20.20-194" />
-    <link rel="stylesheet" type="text/css" href="assets/css/common.css?v=2.20.20-194" />
-    <link rel="stylesheet" type="text/css" href="assets/css/app-settings.css?v=2.20.20-194" />
+    <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=2.20.21-195" />
+    <link rel="stylesheet" type="text/css" href="assets/css/reset.css?v=2.20.21-195" />
+    <link rel="stylesheet" type="text/css" href="assets/css/common.css?v=2.20.21-195" />
+    <link rel="stylesheet" type="text/css" href="assets/css/app-settings.css?v=2.20.21-195" />
     <!-- specific styles -->
-    <link rel="stylesheet" type="text/css" href="assets/css/theme-base.css?v=2.20.20-194" />
-    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock.css?v=2.20.20-194" />
-    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock-layout.css?v=2.20.20-194" />
-    <link rel="stylesheet" type="text/css" href="assets/css/display-theme-digital-default.css?v=2.20.20-194" />
-    <link rel="stylesheet" type="text/css" href="assets/css/display-theme-galaxymin.css?v=2.20.20-194" />
-    <link rel="stylesheet" type="text/css" href="assets/css/display-theme-darksplit.css?v=2.20.20-194" />
-    <link rel="stylesheet" type="text/css" href="assets/css/display-theme-sunrise.css?v=2.20.20-194" />
-    <link rel="stylesheet" type="text/css" href="assets/css/display-theme-galaxy-analog.css?v=2.20.20-194" />
+    <link rel="stylesheet" type="text/css" href="assets/css/theme-base.css?v=2.20.21-195" />
+    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock.css?v=2.20.21-195" />
+    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock-layout.css?v=2.20.21-195" />
+    <link rel="stylesheet" type="text/css" href="assets/css/display-theme-digital-default.css?v=2.20.21-195" />
+    <link rel="stylesheet" type="text/css" href="assets/css/display-theme-moonlight-basic.css?v=2.20.21-195" />
+    <link rel="stylesheet" type="text/css" href="assets/css/display-theme-moonlight.css?v=2.20.21-195" />
+    <link rel="stylesheet" type="text/css" href="assets/css/display-theme-sunrise.css?v=2.20.21-195" />
+    <link rel="stylesheet" type="text/css" href="assets/css/display-theme-moonlight-analog.css?v=2.20.21-195" />
   </head>
   <body>
     <div
       id="app"
-      :class="[{'is-showing-alert': showAlert, 'analog-clock-active': analogClockActive, 'is-active': currentPrayer, 'is-waiting': currentPrayerWaiting, 'is-before': currentPrayerBefore, 'is-after': currentPrayerAfter, 'focus-active-timer': currentPrayer && focusActiveTimer}, 'active-prayer-info-' + prayerInfo, 'display-theme-' + activeDisplayTheme]"
+      :class="[{'is-showing-alert': showAlert, 'analog-clock-active': analogClockActive, 'is-active': currentPrayer, 'is-waiting': currentPrayerWaiting, 'is-before': currentPrayerBefore, 'is-after': currentPrayerAfter, 'focus-active-timer': currentPrayer && focusActiveTimer}, 'active-prayer-info-' + prayerInfo, displayThemeClasses]"
     >
     
       <div v-show="true" v-if="isDevDebugging" style="display: none; background: red; position: fixed; z-index: 999999999999;">{{ devDebugMessage }}</div>
@@ -113,7 +113,7 @@
                   <span class="error" v-if="appUdate.error">ERROR: {{ appUdate.error }}</span>
                   <span class="checking" v-if="appUdate.checking">Checking...</span>
                   <span class="updated" v-if="appUdate.updated"
-                    >Updated. Version {{ '?v=2.20.20-194'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1 ($2)') }}.</span
+                    >Updated. Version {{ '?v=2.20.21-195'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1 ($2)') }}.</span
                   >
                   <span class="updating" v-if="appUdate.updating">Updating...</span>
                 </div>
@@ -564,7 +564,7 @@
                       </small>
                     </div>
                     <div v-if="expanded.displayThemes">
-                    <label v-for="displayTheme in displayThemes" :for="'display-theme-select-' + displayTheme.id" style="display: block;">
+                    <label v-for="displayTheme in visibleDisplayThemes" :for="'display-theme-select-' + displayTheme.id" style="display: block;">
                       <input
                         :id="'display-theme-select-' + displayTheme.id"
                         type="radio"
@@ -747,7 +747,7 @@
             <span style="padding: 0.25rem; color: #ff0000; font-weight: bold; opacity: 0.75">No Internet</span>
           </div>
           <div v-else>
-            <!-- <span style="opacity: 0.25"> Version {{ '?v=2.20.20-194'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }} </span> -->
+            <!-- <span style="opacity: 0.25"> Version {{ '?v=2.20.21-195'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }} </span> -->
 
             <span style="opacity: 0.5">
               <svg style="height: 1em; color: #FFF; fill: #FFF;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -788,7 +788,7 @@
         <div v-if="currentPrayer && focusActiveTimer" class="alert-container" :style="{opacity: showAlert ? '1' : '0'}">
           <img :src="'assets/images/' + currentlyShowingAlert">
         </div>
-        <div class="branding-bar" v-if="activeDisplayTheme == 'darksplit' || activeDisplayTheme == 'galaxymin' || activeDisplayTheme == 'sunrise' || activeDisplayTheme == 'galaxy-analog'">
+        <div class="branding-bar" v-if="activeDisplayTheme == 'moonlight' || activeDisplayTheme == 'moonlight-basic' || activeDisplayTheme == 'sunrise' || activeDisplayTheme == 'moonlight-analog'">
           <span class="masjid-name">{{ masjidName || 'Enter Masjid Name in Settings' }}</span>
         </div>
         <div class="digital-clock" v-if="timeIsValid">
@@ -819,7 +819,7 @@
               ><span class="m">{{ timeDisplayMinutes }}</span>
 
               <span class="seconds-container">
-                <svg class="seconds-ring" viewBox="0 0 64 64" aria-hidden="true" v-if="activeDisplayTheme == 'darksplit' || activeDisplayTheme == 'galaxymin'">
+                <svg class="seconds-ring" viewBox="0 0 64 64" aria-hidden="true" v-if="activeDisplayTheme == 'moonlight' || activeDisplayTheme == 'moonlight-basic'">
                   <circle class="seconds-ring-track" cx="32" cy="32" r="28" fill="none" stroke-width="4"></circle>
                   <circle class="seconds-ring-progress" cx="32" cy="32" r="28" fill="none" stroke-width="4" stroke-linecap="round" stroke-dasharray="175.93" transform="rotate(-90 32 32)" :stroke-dashoffset="secondsRingOffset"></circle>
                   <g :transform="'rotate(' + secondsRingAngle + ' 32 32)'">
@@ -986,17 +986,17 @@
         </div>
       </div>
     </div>
-    <script type="text/javascript" src="prayer-data.js?v=2.20.20-194"></script>
-    <script type="text/javascript" src="prayernew-data.js?v=2.20.20-194"></script>
-    <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=2.20.20-194"></script>
-    <script type="text/javascript" src="assets/vendors/vue.min.js?v=2.20.20-194"></script>
-    <script type="text/javascript" src="assets/vendors/moment.min.js?v=2.20.20-194"></script>
-    <script type="text/javascript" src="assets/vendors/hijri.js?v=2.20.20-194"></script>
-    <script type="text/javascript" src="assets/vendors/jquery-3.6.0.min.js?v=2.20.20-194"></script>
-    <script type="text/javascript" src="assets/js/translations.js?v=2.20.20-194"></script>
+    <script type="text/javascript" src="prayer-data.js?v=2.20.21-195"></script>
+    <script type="text/javascript" src="prayernew-data.js?v=2.20.21-195"></script>
+    <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=2.20.21-195"></script>
+    <script type="text/javascript" src="assets/vendors/vue.min.js?v=2.20.21-195"></script>
+    <script type="text/javascript" src="assets/vendors/moment.min.js?v=2.20.21-195"></script>
+    <script type="text/javascript" src="assets/vendors/hijri.js?v=2.20.21-195"></script>
+    <script type="text/javascript" src="assets/vendors/jquery-3.6.0.min.js?v=2.20.21-195"></script>
+    <script type="text/javascript" src="assets/js/translations.js?v=2.20.21-195"></script>
     <script type="text/javascript" src="cdvfile://localhost/assets/www/cordova.js"></script>
-    <script type="text/javascript" src="assets/analog-clock/analog-clock.js?v=2.20.20-194"></script>
-    <script type="text/javascript" src="assets/js/app.js?v=2.20.20-194"></script>
+    <script type="text/javascript" src="assets/analog-clock/analog-clock.js?v=2.20.21-195"></script>
+    <script type="text/javascript" src="assets/js/app.js?v=2.20.21-195"></script>
     <script type="text/javascript">
       // WARNING: do not use ES6 syntax
       // The code should only be authored in ES5
@@ -1017,7 +1017,7 @@
       }
 
 
-      var fullVersion = '?v=2.20.20-194';
+      var fullVersion = '?v=2.20.21-195';
       window.mdApp.data.appVersion = window.mdApp.parseVersion(fullVersion);
 
       var hasCordova = !!window.cordova;

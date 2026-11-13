@@ -1,9 +1,9 @@
-/* Display theme: Dark Split (landscape only; the default theme remains the portrait layout) */
+/* Display theme: Moonlight Basic (landscape only; the default theme remains the portrait layout) */
 
 @media (orientation: landscape) {
 
   /* Canvas & background */
-  #app.display-theme-galaxymin {
+  #app.display-theme-moonlight-basic {
     top: 0;
     right: 0;
     bottom: 0;
@@ -11,16 +11,16 @@
     color: #f2f2f2;
   }
 
-  #app.display-theme-galaxymin #bgful .bgful-overlay {
+  #app.display-theme-moonlight-basic #bgful .bgful-overlay {
     background: #000;
   }
 
-  #app.display-theme-galaxymin #bgful .bgful-image {
+  #app.display-theme-moonlight-basic #bgful .bgful-image {
     display: none;
   }
 
   /* Branding bar: top-left section, styled like the right rail */
-  #app.display-theme-galaxymin .branding-bar {
+  #app.display-theme-moonlight-basic .branding-bar {
     position: absolute;
     top: 0;
     left: 0;
@@ -36,7 +36,7 @@
     line-height: 5rem;
   }
 
-  #app.display-theme-galaxymin .branding-bar .masjid-name {
+  #app.display-theme-moonlight-basic .branding-bar .masjid-name {
     display: block;
     font-size: 2.25rem;
     letter-spacing: 0.05em;
@@ -48,7 +48,7 @@
   }
 
   /* Left stage: clock, date, prayer line and countdown live here */
-  #app.display-theme-galaxymin .digital-clock {
+  #app.display-theme-moonlight-basic .digital-clock {
     position: absolute;
     top: 0;
     right: 13rem;
@@ -56,7 +56,7 @@
     left: 0;
   }
 
-  #app.display-theme-galaxymin .digital-clock .time {
+  #app.display-theme-moonlight-basic .digital-clock .time {
     position: absolute;
     top: 0;
     right: 0;
@@ -67,7 +67,7 @@
   }
 
   /* Date: two centered lines below the clock (Gregorian + weekday, then Hijri) */
-  #app.display-theme-galaxymin .digital-clock .date-display {
+  #app.display-theme-moonlight-basic .digital-clock .date-display {
     position: absolute;
     top: 18.3rem;
     left: 0;
@@ -84,7 +84,7 @@
     text-align: right;
   }
 
-  #app.display-theme-galaxymin .digital-clock .date-display .hijri-datex {
+  #app.display-theme-moonlight-basic .digital-clock .date-display .hijri-datex {
     display: block;
     font-size: 1.4rem;
     line-height: 1.7rem;
@@ -92,7 +92,7 @@
     color: #8f8f8f;
   }
 
-  #app.display-theme-galaxymin .digital-clock .date-display .datex {
+  #app.display-theme-moonlight-basic .digital-clock .date-display .datex {
     display: inline-block;
     font-size: 1.75rem;
     line-height: 2rem;
@@ -103,7 +103,7 @@
     margin-left: 0.75rem;
   }
 
-  #app.display-theme-galaxymin .digital-clock .date-display .weekday {
+  #app.display-theme-moonlight-basic .digital-clock .date-display .weekday {
     display: inline-block;
     font-size: 1.75rem;
     line-height: 2rem;
@@ -114,7 +114,7 @@
   }
 
   /* Big time (top of the left stage) */
-  #app.display-theme-galaxymin .digital-clock .time .hours {
+  #app.display-theme-moonlight-basic .digital-clock .time .hours {
     position: absolute;
     top: 0;
     right: 0;
@@ -124,7 +124,7 @@
     line-height: normal;
   }
 
-  #app.display-theme-galaxymin .digital-clock .time .hours .h {
+  #app.display-theme-moonlight-basic .digital-clock .time .hours .h {
     position: absolute;
     top: 4.456rem;
     right: calc(50% + 3.5rem);
@@ -136,7 +136,7 @@
     transition: opacity 150ms;
   }
 
-  #app.display-theme-galaxymin .digital-clock .time .minutes {
+  #app.display-theme-moonlight-basic .digital-clock .time .minutes {
     position: absolute;
     top: 0;
     right: 0;
@@ -146,7 +146,7 @@
     line-height: normal;
   }
 
-  #app.display-theme-galaxymin .digital-clock .time .minutes .m {
+  #app.display-theme-moonlight-basic .digital-clock .time .minutes .m {
     position: absolute;
     top: 4.456rem;
     left: calc(50% + 3.5rem);
@@ -157,7 +157,7 @@
     color: #f2f2f2;
   }
 
-  #app.display-theme-galaxymin .digital-clock .time .colon-main {
+  #app.display-theme-moonlight-basic .digital-clock .time .colon-main {
     position: absolute;
     top: 4.456rem;
     left: 50%;
@@ -173,7 +173,7 @@
   }
 
   /* Seconds: circular gauge in the top-right band (white arc + head dot) */
-  #app.display-theme-galaxymin .digital-clock .time .seconds-container {
+  #app.display-theme-moonlight-basic .digital-clock .time .seconds-container {
     position: absolute;
     top: 1rem;
     left: auto;
@@ -190,7 +190,7 @@
     top: calc((100vw - 13rem - 4rem - 7rem - 4rem) / 2.28);
   }
 
-  #app.display-theme-galaxymin .digital-clock .seconds-ring {
+  #app.display-theme-moonlight-basic .digital-clock .seconds-ring {
     position: absolute;
     top: 0;
     left: 0;
@@ -199,19 +199,19 @@
     height: 3.5rem;
   }
 
-  #app.display-theme-galaxymin .digital-clock .seconds-ring-track {
+  #app.display-theme-moonlight-basic .digital-clock .seconds-ring-track {
     stroke: rgba(242, 242, 242, 0.12);
   }
 
-  #app.display-theme-galaxymin .digital-clock .seconds-ring-progress {
+  #app.display-theme-moonlight-basic .digital-clock .seconds-ring-progress {
     stroke: #f2f2f2;
   }
 
-  #app.display-theme-galaxymin .digital-clock .seconds-ring-head {
+  #app.display-theme-moonlight-basic .digital-clock .seconds-ring-head {
     fill: #f2f2f2;
   }
 
-  #app.display-theme-galaxymin .digital-clock .seconds {
+  #app.display-theme-moonlight-basic .digital-clock .seconds {
     position: absolute;
     top: 0;
     left: 0;
@@ -224,16 +224,16 @@
     color: #f2f2f2;
   }
 
-  #app.display-theme-galaxymin .digital-clock .seconds .colon {
+  #app.display-theme-moonlight-basic .digital-clock .seconds .colon {
     display: none;
   }
 
-  #app.display-theme-galaxymin .digital-clock .am-pm {
+  #app.display-theme-moonlight-basic .digital-clock .am-pm {
     display: none;
   }
 
   /* Bottom module block: prayer header + two 9rem time modules */
-  #app.display-theme-galaxymin .prayer-display {
+  #app.display-theme-moonlight-basic .prayer-display {
     position: absolute;
     top: auto;
     left: 0;
@@ -243,7 +243,7 @@
     text-align: left;
   }
 
-  #app.display-theme-galaxymin .prayer-display .name {
+  #app.display-theme-moonlight-basic .prayer-display .name {
     position: absolute;
     top: 0;
     left: 2rem;
@@ -262,7 +262,7 @@
     bottom: 12rem;
   }
 
-  #app.display-theme-galaxymin .prayer-display .name .label {
+  #app.display-theme-moonlight-basic .prayer-display .name .label {
     position: static;
     font-size: 1.75rem;
     line-height: 3rem;
@@ -273,8 +273,8 @@
     display: block;
   }
 
-  #app.display-theme-galaxymin .prayer-display .time,
-  #app.display-theme-galaxymin .prayer-display .iqamah-time {
+  #app.display-theme-moonlight-basic .prayer-display .time,
+  #app.display-theme-moonlight-basic .prayer-display .iqamah-time {
     position: absolute;
     bottom: 0;
     height: 10.5rem;
@@ -287,30 +287,30 @@
     text-align: center;
   }
 
-  #app.display-theme-galaxymin .prayer-display .time {
+  #app.display-theme-moonlight-basic .prayer-display .time {
     left: 0;
     width: 50%;
     color: #7eff74;
   }
 
-  #app.display-theme-galaxymin .prayer-display .iqamah-time {
+  #app.display-theme-moonlight-basic .prayer-display .iqamah-time {
     right: 0;
     width: 50%;
     color: #ffeb3b;
   }
 
-  #app.display-theme-galaxymin .prayer-display .time.is-sunrise,
-  #app.display-theme-galaxymin .prayer-display .is-sunrise .am-pm {
+  #app.display-theme-moonlight-basic .prayer-display .time.is-sunrise,
+  #app.display-theme-moonlight-basic .prayer-display .is-sunrise .am-pm {
     color: #ff8f00;
   }
 
-  #app.display-theme-galaxymin .prayer-display .am-pm,
-  #app.display-theme-galaxymin .prayer-display .iqamah-am-pm {
+  #app.display-theme-moonlight-basic .prayer-display .am-pm,
+  #app.display-theme-moonlight-basic .prayer-display .iqamah-am-pm {
     display: none;
   }
 
-  #app.display-theme-galaxymin .prayer-display .time .label,
-  #app.display-theme-galaxymin .prayer-display .iqamah-time .iqamah-label {
+  #app.display-theme-moonlight-basic .prayer-display .time .label,
+  #app.display-theme-moonlight-basic .prayer-display .iqamah-time .iqamah-label {
     position: absolute;
     top: 0;
     left: 0;
@@ -326,30 +326,30 @@
     visibility: hidden;
   }
 
-  #app.display-theme-galaxymin .prayer-display .time .label {
+  #app.display-theme-moonlight-basic .prayer-display .time .label {
     visibility: hidden;
   }
 
   /* Keep the base hiding behavior for active prayer states */
-  #app.display-theme-galaxymin.is-waiting .active-prayer .time,
-  #app.display-theme-galaxymin.is-waiting .active-prayer .am-pm,
-  #app.display-theme-galaxymin.is-after .active-prayer .time,
-  #app.display-theme-galaxymin.is-after .active-prayer .am-pm,
-  #app.display-theme-galaxymin.is-before .active-prayer .iqamah-time,
-  #app.display-theme-galaxymin.is-before .active-prayer .iqamah-am-pm {
+  #app.display-theme-moonlight-basic.is-waiting .active-prayer .time,
+  #app.display-theme-moonlight-basic.is-waiting .active-prayer .am-pm,
+  #app.display-theme-moonlight-basic.is-after .active-prayer .time,
+  #app.display-theme-moonlight-basic.is-after .active-prayer .am-pm,
+  #app.display-theme-moonlight-basic.is-before .active-prayer .iqamah-time,
+  #app.display-theme-moonlight-basic.is-before .active-prayer .iqamah-am-pm {
     display: none;
   }
 
-  #app.display-theme-galaxymin .prayer-times-applied-indicator-new {
+  #app.display-theme-moonlight-basic .prayer-times-applied-indicator-new {
     display: none;
   }
 
-  #app.display-theme-galaxymin #version-info {
+  #app.display-theme-moonlight-basic #version-info {
     padding: 0.25rem 0.5rem !important;
     right: 0 !important;
   }
 
-  #app.display-theme-galaxymin #version-info .version-text {
+  #app.display-theme-moonlight-basic #version-info .version-text {
     display: block !important;
     border-radius: 0 !important;
     padding: 0 !important;
@@ -358,7 +358,7 @@
   }
 
   /* Right column: prayer timetable (five equal 20vh bands) */
-  #app.display-theme-galaxymin .prayer-info-container {
+  #app.display-theme-moonlight-basic .prayer-info-container {
     position: absolute;
     top: auto;
     right: 0;
@@ -373,7 +373,7 @@
     padding: 0;
   }
 
-  #app.display-theme-galaxymin .prayer-info-container .prayer-info {
+  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info {
     display: block;
     position: relative;
     width: 100%;
@@ -386,7 +386,7 @@
     height: calc((100vh - 4.25rem) / 5);
   }
 
-  #app.display-theme-galaxymin .prayer-info-container .prayer-info:nth-child(1) {
+  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(1) {
     background-color: #011414;
     background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.055) 0, rgba(255, 255, 255, 0.055) 1px, rgba(255, 255, 255, 0) 1px, rgba(255, 255, 255, 0) 1.2rem),
       radial-gradient(ellipse at 50% 48%, rgba(2, 3, 6, 0.24), rgba(2, 3, 6, 0.09) 58%, rgba(2, 3, 6, 0) 80%),
@@ -394,7 +394,7 @@
       linear-gradient(135deg, #064a4a 0%, #03302f 46%, #011414 100%);
   }
 
-  #app.display-theme-galaxymin .prayer-info-container .prayer-info:nth-child(2) {
+  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(2) {
     background-color: #140a02;
     background-image: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.06) 0, rgba(255, 255, 255, 0.06) 0.06rem, rgba(255, 255, 255, 0) 0.08rem),
       radial-gradient(ellipse at 50% 48%, rgba(2, 3, 6, 0.3), rgba(2, 3, 6, 0.12) 58%, rgba(2, 3, 6, 0) 80%),
@@ -404,7 +404,7 @@
     background-size: 0.85rem 0.85rem, auto, auto, auto;
   }
 
-  #app.display-theme-galaxymin .prayer-info-container .prayer-info:nth-child(3) {
+  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(3) {
     background-color: #120414;
     background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.045) 0, rgba(255, 255, 255, 0.045) 1px, rgba(255, 255, 255, 0) 1px, rgba(255, 255, 255, 0) 1rem),
       repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.045) 0, rgba(255, 255, 255, 0.045) 1px, rgba(255, 255, 255, 0) 1px, rgba(255, 255, 255, 0) 1rem),
@@ -413,7 +413,7 @@
       linear-gradient(135deg, #4b0f52 0%, #2a0830 48%, #120414 100%);
   }
 
-  #app.display-theme-galaxymin .prayer-info-container .prayer-info:nth-child(4) {
+  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(4) {
     background-color: #140206;
     background-image: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0, rgba(255, 255, 255, 0.05) 1px, rgba(255, 255, 255, 0) 1px, rgba(255, 255, 255, 0) 1.1rem),
       radial-gradient(ellipse at 50% 48%, rgba(2, 3, 6, 0.22), rgba(2, 3, 6, 0.08) 58%, rgba(2, 3, 6, 0) 80%),
@@ -421,7 +421,7 @@
       linear-gradient(135deg, #4f0a1a 0%, #2e0510 48%, #140206 100%);
   }
 
-  #app.display-theme-galaxymin .prayer-info-container .prayer-info:nth-child(5) {
+  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(5) {
     background-color: #070818;
     background-image: repeating-radial-gradient(circle at 50% 55%, rgba(255, 255, 255, 0.05) 0, rgba(255, 255, 255, 0.05) 1px, rgba(255, 255, 255, 0) 1px, rgba(255, 255, 255, 0) 1rem),
       radial-gradient(ellipse at 50% 48%, rgba(2, 3, 6, 0.22), rgba(2, 3, 6, 0.08) 58%, rgba(2, 3, 6, 0) 80%),
@@ -429,52 +429,52 @@
       linear-gradient(135deg, #1b2266 0%, #101444 46%, #070818 100%);
   }
 
-  #app.display-theme-galaxymin .prayer-info-container .prayer-info:nth-child(1) .prayer-name {
+  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(1) .prayer-name {
     /* border-bottom-color: rgba(244, 114, 182, 0.75); */
   }
 
-  #app.display-theme-galaxymin .prayer-info-container .prayer-info:nth-child(1) .prayer-name::before {
+  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(1) .prayer-name::before {
     background: #a3e635;
     box-shadow: 0 0 0.7rem rgba(163, 230, 53, 0.8);
   }
 
-  #app.display-theme-galaxymin .prayer-info-container .prayer-info:nth-child(2) .prayer-name {
+  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(2) .prayer-name {
     /* border-bottom-color: rgba(34, 211, 238, 0.75); */
   }
 
-  #app.display-theme-galaxymin .prayer-info-container .prayer-info:nth-child(2) .prayer-name::before {
+  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(2) .prayer-name::before {
     background: #fbbf24;
     box-shadow: 0 0 0.7rem rgba(251, 191, 36, 0.8);
   }
 
-  #app.display-theme-galaxymin .prayer-info-container .prayer-info:nth-child(3) .prayer-name {
+  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(3) .prayer-name {
     /* border-bottom-color: rgba(251, 191, 36, 0.75); */
   }
 
-  #app.display-theme-galaxymin .prayer-info-container .prayer-info:nth-child(3) .prayer-name::before {
+  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(3) .prayer-name::before {
     background: #f472b6;
     box-shadow: 0 0 0.7rem rgba(244, 114, 182, 0.8);
   }
 
-  #app.display-theme-galaxymin .prayer-info-container .prayer-info:nth-child(4) .prayer-name {
+  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(4) .prayer-name {
     /* border-bottom-color: rgba(251, 113, 133, 0.75); */
   }
 
-  #app.display-theme-galaxymin .prayer-info-container .prayer-info:nth-child(4) .prayer-name::before {
+  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(4) .prayer-name::before {
     background: #fb7185;
     box-shadow: 0 0 0.7rem rgba(251, 113, 133, 0.8);
   }
 
-  #app.display-theme-galaxymin .prayer-info-container .prayer-info:nth-child(5) .prayer-name {
+  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(5) .prayer-name {
     /* border-bottom-color: rgba(129, 140, 248, 0.75); */
   }
 
-  #app.display-theme-galaxymin .prayer-info-container .prayer-info:nth-child(5) .prayer-name::before {
+  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(5) .prayer-name::before {
     background: #818cf8;
     box-shadow: 0 0 0.7rem rgba(129, 140, 248, 0.8);
   }
 
-  #app.display-theme-galaxymin .prayer-info-container .prayer-name {
+  #app.display-theme-moonlight-basic .prayer-info-container .prayer-name {
     position: relative;
     width: 100%;
     height: 2rem;
@@ -493,12 +493,12 @@
     text-overflow: ellipsis;
   }
 
-  #app.display-theme-galaxymin .prayer-info-container .prayer-name.is-sunrise-label {
+  #app.display-theme-moonlight-basic .prayer-info-container .prayer-name.is-sunrise-label {
     background-color: rgba(123, 76, 18, 0.6) !important;
   }
 
-  #app.display-theme-galaxymin .prayer-info-container .prayer-info .prayer-time,
-  #app.display-theme-galaxymin .prayer-info-container .prayer-info .iqamah-time {
+  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info .prayer-time,
+  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info .iqamah-time {
     top: calc(10vh - 1rem);
     left: 0.75rem;
     right: 0.75rem;
@@ -510,60 +510,60 @@
     margin-top: -0.25rem;
   }
 
-  #app.display-theme-galaxymin .prayer-info-container .prayer-time {
+  #app.display-theme-moonlight-basic .prayer-info-container .prayer-time {
     color: #7eff74;
     text-shadow: 0 0 1.4rem rgba(126, 255, 116, 0.3);
   }
 
-  #app.display-theme-galaxymin .prayer-info-container .iqamah-time {
+  #app.display-theme-moonlight-basic .prayer-info-container .iqamah-time {
     color: #ffeb3b;
     text-shadow: 0 0 1.4rem rgba(255, 235, 59, 0.25);
   }
 
-  #app.display-theme-galaxymin .prayer-info-container .is-sunrise .prayer-name {
+  #app.display-theme-moonlight-basic .prayer-info-container .is-sunrise .prayer-name {
     background-color: transparent !important;
   }
 
-  #app.display-theme-galaxymin .prayer-info-container .is-sunrise .iqamah-time {
+  #app.display-theme-moonlight-basic .prayer-info-container .is-sunrise .iqamah-time {
     color: #FF8F00;
     /* color: #fff; */
     text-shadow: 0 0 1.4rem rgba(255, 143, 0, 0.3);
   }
 
-  #app.display-theme-galaxymin .prayer-info-container .is-tarawih .iqamah-time {
+  #app.display-theme-moonlight-basic .prayer-info-container .is-tarawih .iqamah-time {
     color: #c391ff !important;
   }
 
-  #app.display-theme-galaxymin .prayer-display .iqamah-time.showing-tarawih {
+  #app.display-theme-moonlight-basic .prayer-display .iqamah-time.showing-tarawih {
     bottom: 0 !important;
     color: #c391ff !important;
     left: 0;
   }
 
-  #app.display-theme-galaxymin.is-waiting .active-timer.is-tarawih,
-  #app.display-theme-galaxymin.is-after .active-timer.is-tarawih {
+  #app.display-theme-moonlight-basic.is-waiting .active-timer.is-tarawih,
+  #app.display-theme-moonlight-basic.is-after .active-timer.is-tarawih {
     left: 24.75rem;
     right: 13rem;
   }
 
   /* Current row highlight follows the athan/iqamah phase (dark tints) */
-  #app.display-theme-galaxymin.active-prayer-info-athan .prayer-info-container .prayer-info.is-current {
+  #app.display-theme-moonlight-basic.active-prayer-info-athan .prayer-info-container .prayer-info.is-current {
     border-left-color: #7eff74;
   }
 
-  #app.display-theme-galaxymin.active-prayer-info-iqamah .prayer-info-container .prayer-info.is-current {
+  #app.display-theme-moonlight-basic.active-prayer-info-iqamah .prayer-info-container .prayer-info.is-current {
     border-left-color: #ffeb3b;
   }
 
-  #app.display-theme-galaxymin .prayer-info-container .prayer-info.is-current .prayer-name {
+  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info.is-current .prayer-name {
     color: #f2f2f2;
   }
 
   /* Countdown module: fills the hidden time slot for the current phase */
-  #app.display-theme-galaxymin .active-timer,
-  #app.display-theme-galaxymin.is-before .active-timer,
-  #app.display-theme-galaxymin.is-waiting .active-timer,
-  #app.display-theme-galaxymin.is-after .active-timer {
+  #app.display-theme-moonlight-basic .active-timer,
+  #app.display-theme-moonlight-basic.is-before .active-timer,
+  #app.display-theme-moonlight-basic.is-waiting .active-timer,
+  #app.display-theme-moonlight-basic.is-after .active-timer {
     position: absolute;
     left: 0;
     right: 13rem;
@@ -573,18 +573,18 @@
     text-align: center;
   }
 
-  #app.display-theme-galaxymin.is-before .active-timer {
+  #app.display-theme-moonlight-basic.is-before .active-timer {
     left: 24.75rem;
     right: 13rem;
   }
 
-  #app.display-theme-galaxymin.is-waiting .active-timer,
-  #app.display-theme-galaxymin.is-after .active-timer {
+  #app.display-theme-moonlight-basic.is-waiting .active-timer,
+  #app.display-theme-moonlight-basic.is-after .active-timer {
     left: 0;
     right: 37.75rem;
   }
 
-  #app.display-theme-galaxymin .active-timer .time {
+  #app.display-theme-moonlight-basic .active-timer .time {
     display: inline-block;
     font-size: 9rem;
     height: 9rem;
@@ -593,7 +593,7 @@
     /* color: #7fd8ff; */
   }
 
-  #app.display-theme-galaxymin .active-timer .time .colon {
+  #app.display-theme-moonlight-basic .active-timer .time .colon {
     width: 3rem;
     min-height: 0;
     margin: 0 0.15rem;
@@ -601,7 +601,7 @@
     margin: 0;
   }
 
-  #app.display-theme-galaxymin .active-timer .description {
+  #app.display-theme-moonlight-basic .active-timer .description {
     position: absolute;
     top: 0;
     left: 0;
@@ -617,7 +617,7 @@
   }
 
   /* Alert icon: no free slot in this layout */
-  #app.display-theme-galaxymin .alert-container {
+  #app.display-theme-moonlight-basic .alert-container {
     /* display: none; */
     position: fixed;
     top: 5.5rem !important;
@@ -625,21 +625,21 @@
     z-index: 85785;
   }
 
-  #app.display-theme-galaxymin.is-showing-alert .digital-clock .time .hours .h {
+  #app.display-theme-moonlight-basic.is-showing-alert .digital-clock .time .hours .h {
     opacity: 0;
   }
 
   /* Focus-timer mode: keep the split layout */
-  #app.display-theme-galaxymin.focus-active-timer .prayer-info-container,
-  #app.display-theme-galaxymin.focus-active-timer .digital-clock .date-display {
+  #app.display-theme-moonlight-basic.focus-active-timer .prayer-info-container,
+  #app.display-theme-moonlight-basic.focus-active-timer .digital-clock .date-display {
     opacity: 1 !important;
   }
 
-  #app.display-theme-galaxymin.is-showing-alert.focus-active-timer .digital-clock .seconds-container {
+  #app.display-theme-moonlight-basic.is-showing-alert.focus-active-timer .digital-clock .seconds-container {
     opacity: 1 !important;
   }
 
-  #app.display-theme-galaxymin #bgful .bgful-overlay {
+  #app.display-theme-moonlight-basic #bgful .bgful-overlay {
     background-color: #04060a;
     background-image: radial-gradient(ellipse at 18% 14%, rgba(94, 92, 255, 0.26), transparent 55%),
       radial-gradient(ellipse at 72% 22%, rgba(127, 216, 255, 0.18), transparent 50%),
@@ -649,7 +649,7 @@
     background-position: 0 0, 0 0, 0 0;
   }
 
-  #app.display-theme-galaxymin .branding-bar::before {
+  #app.display-theme-moonlight-basic .branding-bar::before {
     content: '';
     position: absolute;
     top: 50%;
@@ -662,7 +662,7 @@
     background: #bfeaff; */
   }
 
-  #app.display-theme-galaxymin .branding-bar::after {
+  #app.display-theme-moonlight-basic .branding-bar::after {
     content: '';
     position: absolute;
     left: 2rem;
@@ -672,35 +672,35 @@
     background: linear-gradient(90deg, rgba(127, 216, 255, 0.45), rgba(94, 92, 255, 0.22) 55%, rgba(255, 255, 255, 0));
   }
 
-  #app.display-theme-galaxymin .digital-clock .time .hours .h,
-  #app.display-theme-galaxymin .digital-clock .time .minutes .m {
+  #app.display-theme-moonlight-basic .digital-clock .time .hours .h,
+  #app.display-theme-moonlight-basic .digital-clock .time .minutes .m {
     color: #f5f2ea;
     color: #7fd8ff;
     text-shadow: 0 0 3rem rgba(127, 216, 255, 0.07);
   }
 
-  #app.display-theme-galaxymin .digital-clock .time .colon-main {
+  #app.display-theme-moonlight-basic .digital-clock .time .colon-main {
     color: #7fd8ff;
     text-shadow: 0 0 1.5rem rgba(127, 216, 255, 0.35);
   }
 
-  #app.display-theme-galaxymin .digital-clock .seconds-ring-track {
+  #app.display-theme-moonlight-basic .digital-clock .seconds-ring-track {
     stroke: rgba(127, 216, 255, 0.15);
   }
 
-  #app.display-theme-galaxymin .digital-clock .seconds-ring-progress {
+  #app.display-theme-moonlight-basic .digital-clock .seconds-ring-progress {
     stroke: #7fd8ff;
   }
 
-  #app.display-theme-galaxymin .digital-clock .seconds-ring-head {
+  #app.display-theme-moonlight-basic .digital-clock .seconds-ring-head {
     fill: #bfeaff;
   }
 
-  #app.display-theme-galaxymin .digital-clock .seconds {
+  #app.display-theme-moonlight-basic .digital-clock .seconds {
     color: #cfeaff;
   }
 
-  #app.display-theme-galaxymin .prayer-info-container .prayer-name::before {
+  #app.display-theme-moonlight-basic .prayer-info-container .prayer-name::before {
     content: '';
     position: absolute;
     top: 50%;
@@ -713,7 +713,7 @@
     box-shadow: 0 0 0.7rem rgba(127, 216, 255, 0.7);
   }
 
-  #app.display-theme-galaxymin .prayer-info-container .prayer-info.is-current {
+  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info.is-current {
     /* box-shadow: inset 0 0 3rem rgba(126, 255, 116, 0.22), inset 0 0 0 1px rgba(255, 255, 255, 0.55); */
     border-left: 0.5rem solid #FFF !important;
 
@@ -724,23 +724,23 @@
 
   }
 
-  #app.display-theme-galaxymin.active-prayer-info-iqamah .prayer-info-container .prayer-info.is-current {
+  #app.display-theme-moonlight-basic.active-prayer-info-iqamah .prayer-info-container .prayer-info.is-current {
     /* box-shadow: inset 0 0 3rem rgba(255, 235, 59, 0.2), inset 0 0 0 1px rgba(255, 255, 255, 0.55); */
   }
 
-  #app.display-theme-galaxymin .prayer-display .time {
+  #app.display-theme-moonlight-basic .prayer-display .time {
     text-shadow: 0 0 2.5rem rgba(126, 255, 116, 0.1);
   }
 
-  #app.display-theme-galaxymin .prayer-display .iqamah-time {
+  #app.display-theme-moonlight-basic .prayer-display .iqamah-time {
     text-shadow: 0 0 2.5rem rgba(255, 235, 59, 0.1);
   }
 
-  #app.display-theme-galaxymin .prayer-display .time.is-sunrise {
+  #app.display-theme-moonlight-basic .prayer-display .time.is-sunrise {
     text-shadow: 0 0 2.5rem rgba(255, 143, 0, 0.12);
   }
 
-  #app.display-theme-galaxymin .active-timer .time {
+  #app.display-theme-moonlight-basic .active-timer .time {
     text-shadow: 0 0 2.5rem rgba(252, 120, 120, 0.12);
   }
 

@@ -189,11 +189,11 @@ function App() {
     //   analogClock: true -> shows the canvas analog clock
     //   analogClockTheme (optional): engine theme name in analog-clock.js, falls back to 'galaxy'
     displayThemes: [
+      { id: 'moonlight', label: 'Moonlight', analogClock: false, baseTheme: 'moonlight-basic', defaultFor: 'digital' },
+      { id: 'moonlight-analog', label: 'Moonlight Analog', analogClock: true, analogClockTheme: 'galaxy', defaultFor: 'analog' },
       { id: 'digital-default', label: 'Classic Digital', analogClock: false },
-      { id: 'galaxymin', label: '[NEW] Galaxy Minimal', analogClock: false },
-      { id: 'darksplit', label: '[NEW] Galaxy Glow', analogClock: false },
-      { id: 'sunrise', label: '[NEW] Sunrise Panel', analogClock: true, analogClockTheme: 'sunrise' },
-      { id: 'galaxy-analog', label: '[NEW] Galaxy Analog', analogClock: true, analogClockTheme: 'galaxy' },
+      { id: 'moonlight-basic', label: 'Moonlight Basic', analogClock: false, isInternal: true },
+      { id: 'sunrise', label: 'Sunrise Panel', analogClock: true, analogClockTheme: 'sunrise', isInternal: true },
     ],
     timeOriginModes: [
       { id: 'auto', label: 'Auto (NTP first)' },
@@ -208,7 +208,7 @@ function App() {
     analogClockActive: false,
     alertEnabled: true,
     analogClockTheme: 'galaxy',
-    activeDisplayTheme: 'digital-default',
+    activeDisplayTheme: 'moonlight',
     masjidName: localStorage.getItem('mdisplay.masjidName') || '',
     networkTimeInitialized: false,
     timeIsValid: false,
@@ -329,6 +329,25 @@ function App() {
         seconds = 0;
       }
       return seconds * 6;
+    },
+    displayThemeClasses: function () {
+      var chain = self.getDisplayThemeChain(self.data.activeDisplayTheme);
+      var classes = [];
+      for (var i = 0; i < chain.length; i++) {
+        classes.push('display-theme-' + chain[i].id);
+      }
+      if (!classes.length) {
+        classes.push('display-theme-' + self.data.activeDisplayTheme);
+      }
+      return classes;
+    },
+    visibleDisplayThemes: function () {
+      if(self.data.isDevDebugging) {
+        return self.data.displayThemes;
+      }
+      return self.data.displayThemes.filter(function (theme) {
+        return !theme.isInternal;
+      });
     },
   };
 
@@ -2063,13 +2082,49 @@ function App() {
     }
     return undefined;
   };
+  self.getDisplayThemeChain = function (id) {
+    var chain = [];
+    var theme = self.getDisplayTheme(id);
+    var guard = 0;
+    while (theme && guard < 10) {
+      chain.unshift(theme);
+      theme = theme.baseTheme ? self.getDisplayTheme(theme.baseTheme) : undefined;
+      guard += 1;
+    }
+    return chain;
+  };
+  self.getDefaultDisplayTheme = function (isAnalog) {
+    var fallback;
+    var target = isAnalog ? 'analog' : 'digital';
+    for (var i = 0; i < self.data.displayThemes.length; i++) {
+      var theme = self.data.displayThemes[i];
+      if (theme.defaultFor === 'digital' && !fallback) {
+        fallback = theme;
+      }
+      if (theme.defaultFor === target) {
+        return theme;
+      }
+    }
+    return fallback || self.data.displayThemes[0];
+  };
   self.applyDisplayTheme = function (theme) {
     if (!theme) {
-      theme = self.data.displayThemes[0];
+      theme = self.getDefaultDisplayTheme(false);
+    }
+    var chain = self.getDisplayThemeChain(theme.id);
+    var analogClock = false;
+    var analogClockTheme = 'galaxy';
+    for (var i = 0; i < chain.length; i++) {
+      if (chain[i].analogClock !== undefined) {
+        analogClock = !!chain[i].analogClock;
+      }
+      if (chain[i].analogClockTheme) {
+        analogClockTheme = chain[i].analogClockTheme;
+      }
     }
     self.data.activeDisplayTheme = theme.id;
-    self.data.analogClockActive = !!theme.analogClock;
-    self.data.analogClockTheme = theme.analogClockTheme || 'galaxy';
+    self.data.analogClockActive = analogClock;
+    self.data.analogClockTheme = analogClockTheme;
   };
   self.deviceReady = function () {
     self.isDeviceReady = true;
