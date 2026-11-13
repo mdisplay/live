@@ -11,14 +11,6 @@
     color: #f2f2f2;
   }
 
-  #app.display-theme-moonlight-basic #bgful .bgful-overlay {
-    background: #000;
-  }
-
-  #app.display-theme-moonlight-basic #bgful .bgful-image {
-    display: none;
-  }
-
   /* Branding bar: top-left section, styled like the right rail */
   #app.display-theme-moonlight-basic .branding-bar {
     position: absolute;
@@ -637,16 +629,6 @@
 
   #app.display-theme-moonlight-basic.is-showing-alert.focus-active-timer .digital-clock .seconds-container {
     opacity: 1 !important;
-  }
-
-  #app.display-theme-moonlight-basic #bgful .bgful-overlay {
-    background-color: #04060a;
-    background-image: radial-gradient(ellipse at 18% 14%, rgba(94, 92, 255, 0.26), transparent 55%),
-      radial-gradient(ellipse at 72% 22%, rgba(127, 216, 255, 0.18), transparent 50%),
-      radial-gradient(ellipse at 82% 88%, rgba(255, 120, 160, 0.12), transparent 55%);
-    background-repeat: no-repeat, no-repeat, no-repeat;
-    background-size: auto, auto, auto;
-    background-position: 0 0, 0 0, 0 0;
   }
 
   #app.display-theme-moonlight-basic .branding-bar::before {

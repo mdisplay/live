@@ -10,15 +10,16 @@
   }
 
   #app.display-theme-sunrise #bgful .bgful-overlay {
+    /* background: transparent; */
+  }
+
+  #app.display-theme-sunrise .bgful-theme {
     background-color: #2b2718;
     background-image: url("../images/sunrise-bg.svg");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
-  }
-
-  #app.display-theme-sunrise #bgful .bgful-image {
-    display: none;
+    opacity: 0.75;
   }
 
   #app.display-theme-sunrise .branding-bar {

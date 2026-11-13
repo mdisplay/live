@@ -11,14 +11,6 @@
     color: #f2f2f2;
   }
 
-  #app.display-theme-moonlight #bgful .bgful-overlay {
-    background: #000;
-  }
-
-  #app.display-theme-moonlight #bgful .bgful-image {
-    display: none;
-  }
-
   /* Branding bar: top-left section, styled like the right rail */
   #app.display-theme-moonlight .branding-bar {
     position: absolute;
@@ -653,18 +645,6 @@
     opacity: 1 !important;
   }
 
-  #app.display-theme-moonlight #bgful .bgful-overlay {
-    background-color: #02040b;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center center;
-
-    background-image: url("../images/galaxy-bg1.svg");
-    background-size: calc(100vw - 12rem) 100vh;
-    background-position: 0 0;
-    opacity: 0.75;
-    filter: blur(2px);
-  }
 
   #app.display-theme-moonlight .branding-bar::after {
     content: '';

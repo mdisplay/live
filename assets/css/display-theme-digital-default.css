@@ -76,40 +76,6 @@
   /* background: magenta; */
 }
 
-#app.display-theme-digital-default.light-mode {
-  color: #000;
-}
-
-#app.display-theme-digital-default.light-mode #bgful .bgful-overlay {
-  background: rgba(255, 255, 255, 0.9);
-}
-
-#app.display-theme-digital-default.light-mode .prayer-display .time,
-#app.display-theme-digital-default.light-mode .prayer-display .am-pm,
-#app.display-theme-digital-default.light-mode .prayer-info-container .prayer-time
-{
-  color: #3cb371;
-}
-
-#app.display-theme-digital-default.light-mode .prayer-display .iqamah-time,
-#app.display-theme-digital-default.light-mode .prayer-display .iqamah-am-pm,
-#app.display-theme-digital-default.light-mode .prayer-info-container .iqamah-time
- {
-  color: #8a7100;
-}
-
-#app.display-theme-digital-default.light-mode .active-timer .time {
-  color: #db0000;
-}
-
-#app.display-theme-digital-default.light-mode .prayer-info-container .prayer-name {
-  background: rgba(0, 0, 0, 0.15);
-}
-
-#app.display-theme-digital-default.light-mode .prayer-info-container .prayer-info:nth-child(even) {
-  background: rgba(0, 0, 0, 0.1);
-}
-
 @media (orientation: portrait) {
   #app.display-theme-digital-default .digital-clock .time .hours,
     #app.display-theme-digital-default .digital-clock .time .colon-main,
