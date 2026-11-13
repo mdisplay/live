@@ -143,7 +143,7 @@
     bottom: 17rem;
     font-size: 3.2rem;
     color: #f2f2f2;
-    right: 1rem;
+    right: 2rem;
   }
 
   #app.display-theme-galaxy-analog .prayer-display .name .label {
@@ -157,6 +157,7 @@
     height: 7.2rem;
     line-height: 7.2rem;
     font-size: 7.2rem;
+    right: 2rem;
   }
 
   #app.display-theme-galaxy-analog .prayer-display .time {
@@ -231,6 +232,7 @@
     line-height: 7.2rem;
     font-size: 7.2rem;
     color: #fc7878;
+    padding-right: 2rem;
   }
 
   #app.display-theme-galaxy-analog .active-timer .time .minutes,
