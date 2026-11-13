@@ -187,17 +187,11 @@ function App() {
     // To add a theme: add a list entry below and CSS to
     // assets/css/display-theme-<id>.css (scoped by the display-theme-<id> class).
     //   analogClock: true -> shows the canvas analog clock
-    //   analogClockTheme (optional): engine theme name in analog-clock.js, falls back to 'default'
+    //   analogClockTheme (optional): engine theme name in analog-clock.js, falls back to 'galaxy'
     displayThemes: [
       { id: 'digital-default', label: 'Classic Digital', analogClock: false },
-      // { id: 'digital-modern', label: 'Modern Digital', analogClock: false },
-      { id: 'analog-default', label: 'Classic Analog', analogClock: true },
-      // { id: 'analog-modern', label: 'Modern Analog', analogClock: true, analogClockTheme: 'modern' },
-      //
       { id: 'galaxymin', label: '[NEW] Galaxy Minimal', analogClock: false },
       { id: 'darksplit', label: '[NEW] Galaxy Glow', analogClock: false },
-      // { id: 'radix', label: '[Incomplete] Radix', analogClock: false },
-      { id: 'emerald', label: '[NEW] Emerald Gold', analogClock: true, analogClockTheme: 'emerald' },
       { id: 'sunrise', label: '[NEW] Sunrise Panel', analogClock: true, analogClockTheme: 'sunrise' },
       { id: 'galaxy-analog', label: '[NEW] Galaxy Analog', analogClock: true, analogClockTheme: 'galaxy' },
     ],
@@ -213,7 +207,7 @@ function App() {
     ],
     analogClockActive: false,
     alertEnabled: true,
-    analogClockTheme: 'default',
+    analogClockTheme: 'galaxy',
     activeDisplayTheme: 'digital-default',
     masjidName: localStorage.getItem('mdisplay.masjidName') || '',
     networkTimeInitialized: false,
@@ -2075,7 +2069,7 @@ function App() {
     }
     self.data.activeDisplayTheme = theme.id;
     self.data.analogClockActive = !!theme.analogClock;
-    self.data.analogClockTheme = theme.analogClockTheme || 'default';
+    self.data.analogClockTheme = theme.analogClockTheme || 'galaxy';
   };
   self.deviceReady = function () {
     self.isDeviceReady = true;

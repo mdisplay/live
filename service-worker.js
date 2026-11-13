@@ -5,7 +5,7 @@ if (workbox) {
   console.log("Boo! Workbox didn't load 😬");
 }
 var baseUrl = '/live/';
-var appVersion = '2.20.19-193';
+var appVersion = '2.20.20-194';
 var dataVersion = '10';
 var vendorVersion = '34';
 var bgVersion = '9';
@@ -87,14 +87,6 @@ var precacheList = [
     revision: vendorVersion,
   },
   {
-    url: toUrl('assets/images/emerald-bg.svg'),
-    revision: vendorVersion,
-  },
-  {
-    url: toUrl('assets/images/radix-bg.svg'),
-    revision: vendorVersion,
-  },
-  {
     url: toUrl('assets/images/sunrise-bg.svg'),
     revision: vendorVersion,
   },
@@ -140,7 +132,7 @@ var precacheList = [
 ];
 
 // theme CSS files (one file per theme)
-var themeCssFiles = ['display-theme-digital-default.css', 'display-theme-analog-default.css', 'display-theme-digital-modern.css', 'display-theme-galaxymin.css', 'display-theme-darksplit.css', 'display-theme-radix.css', 'display-theme-emerald.css', 'display-theme-sunrise.css', 'display-theme-galaxy-analog.css'];
+var themeCssFiles = ['display-theme-digital-default.css', 'display-theme-galaxymin.css', 'display-theme-darksplit.css', 'display-theme-sunrise.css', 'display-theme-galaxy-analog.css'];
 for (var themeIndex = 0; themeIndex < themeCssFiles.length; themeIndex++) {
   precacheList.push({
     url: toUrl('assets/css/' + themeCssFiles[themeIndex]),
@@ -149,7 +141,7 @@ for (var themeIndex = 0; themeIndex < themeCssFiles.length; themeIndex++) {
 }
 
 // analog clock faces that ship their own SVG file
-var analogThemes = ['default', 'emerald', 'sunrise', 'galaxy'];
+var analogThemes = ['sunrise', 'galaxy'];
 for (var analogIndex = 0; analogIndex < analogThemes.length; analogIndex++) {
   precacheList.push({
     url: toUrl('assets/analog-clock/themes/' + analogThemes[analogIndex] + '/face.svg'),

@@ -5,7 +5,7 @@ function AnalogClock() {
   self.canvas = null;
   self.ctx = null;
   self.faceEl = null;
-  self.themeName = 'emerald';
+  self.themeName = 'galaxy';
   self.lastDate = null;
   self.lastDrawnTime = null;
   self.size = 0;
@@ -13,24 +13,6 @@ function AnalogClock() {
   self.basePath = 'assets/analog-clock/themes/';
 
   self.THEMES = {
-    default: {
-      face: 'default',
-      hands: {
-        hour: { len: 0.44, tail: 0.1, base: 0.05, tip: 0.02, c: '#e8eaee', edge: '#5a6068' },
-        minute: { len: 0.66, tail: 0.12, base: 0.04, tip: 0.014, c: '#e8eaee', edge: '#5a6068' },
-        second: { len: 0.78, tail: 0.2, base: 0.012, tip: 0.006, c: '#d84a4a', edge: '#7a2020' }
-      },
-      cap: { r: 0.045, c: '#e8eaee', dot: 0.018, dotC: '#20242c' }
-    },
-    emerald: {
-      face: 'emerald',
-      hands: {
-        hour: { len: 0.4, tail: 0.1, base: 0.052, tip: 0.02, c: '#e8c877', edge: '#7a5c22' },
-        minute: { len: 0.6, tail: 0.12, base: 0.04, tip: 0.014, c: '#e8c877', edge: '#7a5c22' },
-        second: { len: 0.72, tail: 0.2, base: 0.011, tip: 0.005, c: '#f0d48a', edge: '#7a5c22' }
-      },
-      cap: { r: 0.045, c: '#e8c877', dot: 0.018, dotC: '#0a2e22' }
-    },
     sunrise: {
       face: 'sunrise',
       hands: {
@@ -62,20 +44,20 @@ function AnalogClock() {
   };
 
   self.applyTheme = function () {
-    var name = 'emerald';
+    var name = 'galaxy';
     try {
       if (window.mdApp && window.mdApp.data && window.mdApp.data.analogClockTheme) {
         name = window.mdApp.data.analogClockTheme;
       }
     } catch (e) {}
     if (!self.THEMES[name]) {
-      name = 'emerald';
+      name = 'galaxy';
     }
     self.themeName = name;
   };
 
   self.getConfig = function () {
-    return self.THEMES[self.themeName] || self.THEMES.default;
+    return self.THEMES[self.themeName] || self.THEMES.galaxy;
   };
 
   self.faceSrc = function () {
