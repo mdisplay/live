@@ -191,7 +191,7 @@ function App() {
     displayThemes: [
       { id: 'moonlight', label: 'Moonlight', analogClock: false, baseTheme: 'moonlight-basic', defaultFor: 'digital' },
       { id: 'moonlight-analog', label: 'Moonlight Analog', analogClock: true, analogClockTheme: 'galaxy', baseTheme: 'moonlight-analog-basic', defaultFor: 'analog' },
-      { id: 'digital-default', label: 'Classic Digital', analogClock: false },
+      { id: 'digital-default', label: 'Classic Digital', analogClock: false, isLegacy: true },
       { id: 'moonlight-basic', label: 'Moonlight Basic', analogClock: false, isInternal: true },
       { id: 'moonlight-analog-basic', label: 'Moonlight Analog Basic', analogClock: true, analogClockTheme: 'galaxy', isInternal: true },
       { id: 'sunrise', label: 'Sunrise Panel', analogClock: true, analogClockTheme: 'sunrise', isInternal: true },
@@ -349,6 +349,10 @@ function App() {
       return self.data.displayThemes.filter(function (theme) {
         return !theme.isInternal;
       });
+    },
+    showBrandingBar: function () {
+      var theme = self.getDisplayTheme(self.data.activeDisplayTheme);
+      return !theme || !theme.isLegacy;
     },
   };
 

@@ -51,6 +51,17 @@
     text-overflow: ellipsis;
   }
 
+  #app.display-theme-moonlight-analog-basic .branding-bar::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 7rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    transform: translateY(-50%);
+    border-radius: 50%;
+  }
+
   #app.display-theme-moonlight-analog-basic .branding-bar::after {
     content: '';
     position: absolute;
