@@ -5,7 +5,7 @@ if (workbox) {
   console.log("Boo! Workbox didn't load 😬");
 }
 var baseUrl = '/live/';
-var appVersion = '2.20.13-187';
+var appVersion = '2.20.15-189';
 var dataVersion = '10';
 var vendorVersion = '32';
 var bgVersion = '9';
@@ -113,6 +113,10 @@ var precacheList = [
   },
   {
     url: toUrl('assets/css/app.css'),
+    revision: appVersion,
+  },
+  {
+    url: toUrl('assets/css/app-settings.css'),
     revision: appVersion,
   },
   {
