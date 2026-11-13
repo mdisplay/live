@@ -5,7 +5,7 @@ if (workbox) {
   console.log("Boo! Workbox didn't load 😬");
 }
 var baseUrl = '/live/';
-var appVersion = '2.20.18-192';
+var appVersion = '2.20.19-193';
 var dataVersion = '10';
 var vendorVersion = '34';
 var bgVersion = '9';
@@ -109,10 +109,6 @@ var precacheList = [
   },
   {
     url: toUrl('assets/analog-clock/analog-clock.js'),
-    revision: appVersion,
-  },
-  {
-    url: toUrl('assets/css/app.css'),
     revision: appVersion,
   },
   {

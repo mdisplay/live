@@ -1,3 +1,24 @@
+#app {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  /*top: 20px;*/
+  /* top: 1.5rem; */
+  /*right: 30px;*/
+  /* right: 2rem; */
+  /*bottom: 20px;*/
+  /*bottom: 1.5rem;*/
+  /* bottom: 6rem; */
+  /*left: 30px;*/
+  /* left: 2rem; */
+}
+
+#app * {
+  z-index: 10;
+}
+
 /* Common component styles (loaded for every theme). */
 
 #app #splash {
