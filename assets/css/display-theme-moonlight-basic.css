@@ -358,7 +358,7 @@
     left: auto;
     width: calc(4rem * 2.5 + 3rem);
     height: auto;
-    background: #141414;
+    background: transparent;
     border-left: 1px solid #2a2a2a;
     font-size: 1.5rem;
     line-height: 1.5rem;
@@ -379,91 +379,23 @@
   }
 
   #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(1) {
-    background-color: #011414;
-    background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.055) 0, rgba(255, 255, 255, 0.055) 1px, rgba(255, 255, 255, 0) 1px, rgba(255, 255, 255, 0) 1.2rem),
-      radial-gradient(ellipse at 50% 48%, rgba(2, 3, 6, 0.24), rgba(2, 3, 6, 0.09) 58%, rgba(2, 3, 6, 0) 80%),
-      radial-gradient(ellipse at 0% 0%, rgba(163, 230, 53, 0.13), rgba(163, 230, 53, 0) 55%),
-      linear-gradient(135deg, #064a4a 0%, #03302f 46%, #011414 100%);
+    background-color: rgba(77, 124, 15, 0.5);
   }
 
   #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(2) {
-    background-color: #140a02;
-    background-image: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.06) 0, rgba(255, 255, 255, 0.06) 0.06rem, rgba(255, 255, 255, 0) 0.08rem),
-      radial-gradient(ellipse at 50% 48%, rgba(2, 3, 6, 0.3), rgba(2, 3, 6, 0.12) 58%, rgba(2, 3, 6, 0) 80%),
-      radial-gradient(ellipse at 0% 0%, rgba(251, 191, 36, 0.13), rgba(251, 191, 36, 0) 55%),
-      linear-gradient(135deg, #4d2a06 0%, #2e1804 46%, #140a02 100%);
-    background-repeat: repeat, no-repeat, no-repeat, no-repeat;
-    background-size: 0.85rem 0.85rem, auto, auto, auto;
+    background-color: rgba(180, 83, 9, 0.5);
   }
 
   #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(3) {
-    background-color: #120414;
-    background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.045) 0, rgba(255, 255, 255, 0.045) 1px, rgba(255, 255, 255, 0) 1px, rgba(255, 255, 255, 0) 1rem),
-      repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.045) 0, rgba(255, 255, 255, 0.045) 1px, rgba(255, 255, 255, 0) 1px, rgba(255, 255, 255, 0) 1rem),
-      radial-gradient(ellipse at 50% 48%, rgba(2, 3, 6, 0.22), rgba(2, 3, 6, 0.08) 58%, rgba(2, 3, 6, 0) 80%),
-      radial-gradient(ellipse at 0% 0%, rgba(244, 114, 182, 0.15), rgba(244, 114, 182, 0) 55%),
-      linear-gradient(135deg, #4b0f52 0%, #2a0830 48%, #120414 100%);
+    background-color: rgba(255, 0, 255, 0.5);
   }
 
   #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(4) {
-    background-color: #140206;
-    background-image: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0, rgba(255, 255, 255, 0.05) 1px, rgba(255, 255, 255, 0) 1px, rgba(255, 255, 255, 0) 1.1rem),
-      radial-gradient(ellipse at 50% 48%, rgba(2, 3, 6, 0.22), rgba(2, 3, 6, 0.08) 58%, rgba(2, 3, 6, 0) 80%),
-      radial-gradient(ellipse at 0% 0%, rgba(251, 113, 133, 0.14), rgba(251, 113, 133, 0) 55%),
-      linear-gradient(135deg, #4f0a1a 0%, #2e0510 48%, #140206 100%);
+    background-color: rgba(190, 18, 60, 0.5);
   }
 
   #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(5) {
-    background-color: #070818;
-    background-image: repeating-radial-gradient(circle at 50% 55%, rgba(255, 255, 255, 0.05) 0, rgba(255, 255, 255, 0.05) 1px, rgba(255, 255, 255, 0) 1px, rgba(255, 255, 255, 0) 1rem),
-      radial-gradient(ellipse at 50% 48%, rgba(2, 3, 6, 0.22), rgba(2, 3, 6, 0.08) 58%, rgba(2, 3, 6, 0) 80%),
-      radial-gradient(ellipse at 0% 0%, rgba(129, 140, 248, 0.15), rgba(129, 140, 248, 0) 55%),
-      linear-gradient(135deg, #1b2266 0%, #101444 46%, #070818 100%);
-  }
-
-  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(1) .prayer-name {
-    /* border-bottom-color: rgba(244, 114, 182, 0.75); */
-  }
-
-  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(1) .prayer-name::before {
-    background: #a3e635;
-    box-shadow: 0 0 0.7rem rgba(163, 230, 53, 0.8);
-  }
-
-  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(2) .prayer-name {
-    /* border-bottom-color: rgba(34, 211, 238, 0.75); */
-  }
-
-  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(2) .prayer-name::before {
-    background: #fbbf24;
-    box-shadow: 0 0 0.7rem rgba(251, 191, 36, 0.8);
-  }
-
-  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(3) .prayer-name {
-    /* border-bottom-color: rgba(251, 191, 36, 0.75); */
-  }
-
-  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(3) .prayer-name::before {
-    background: #f472b6;
-    box-shadow: 0 0 0.7rem rgba(244, 114, 182, 0.8);
-  }
-
-  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(4) .prayer-name {
-    /* border-bottom-color: rgba(251, 113, 133, 0.75); */
-  }
-
-  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(4) .prayer-name::before {
-    background: #fb7185;
-    box-shadow: 0 0 0.7rem rgba(251, 113, 133, 0.8);
-  }
-
-  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(5) .prayer-name {
-    /* border-bottom-color: rgba(129, 140, 248, 0.75); */
-  }
-
-  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info:nth-child(5) .prayer-name::before {
-    background: #818cf8;
-    box-shadow: 0 0 0.7rem rgba(129, 140, 248, 0.8);
+    background-color: rgba(67, 56, 202, 0.5);
   }
 
   #app.display-theme-moonlight-basic .prayer-info-container .prayer-name {
@@ -682,18 +614,7 @@
     color: #cfeaff;
   }
 
-  #app.display-theme-moonlight-basic .prayer-info-container .prayer-name::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 0.7rem;
-    width: 0.3rem;
-    height: 0.3rem;
-    margin-top: -0.15rem;
-    border-radius: 50%;
-    background: #7fd8ff;
-    box-shadow: 0 0 0.7rem rgba(127, 216, 255, 0.7);
-  }
+
 
   #app.display-theme-moonlight-basic .prayer-info-container .prayer-info.is-current {
     /* box-shadow: inset 0 0 3rem rgba(126, 255, 116, 0.22), inset 0 0 0 1px rgba(255, 255, 255, 0.55); */

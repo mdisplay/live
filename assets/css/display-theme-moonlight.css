@@ -358,7 +358,7 @@
     left: auto;
     width: calc(4rem * 2.5 + 3rem);
     height: auto;
-    background: #141414;
+    background: transparent;
     border-left: 1px solid #2a2a2a;
     font-size: 1.5rem;
     line-height: 1.5rem;
@@ -412,8 +412,8 @@
     background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.045) 0, rgba(255, 255, 255, 0.045) 1px, rgba(255, 255, 255, 0) 1px, rgba(255, 255, 255, 0) 1rem),
       repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.045) 0, rgba(255, 255, 255, 0.045) 1px, rgba(255, 255, 255, 0) 1px, rgba(255, 255, 255, 0) 1rem),
       radial-gradient(ellipse at 50% 48%, rgba(2, 3, 6, 0.22), rgba(2, 3, 6, 0.08) 58%, rgba(2, 3, 6, 0) 80%),
-      radial-gradient(ellipse at 0% 0%, rgba(244, 114, 182, 0.22), rgba(244, 114, 182, 0) 55%),
-      linear-gradient(135deg, #4b0f52 0%, #2a0830 48%, #120414 100%);
+      radial-gradient(ellipse at 0% 0%, rgba(255, 0, 255, 0.22), rgba(255, 0, 255, 0) 55%),
+      linear-gradient(135deg, #4d0a4d 0%, #2e052e 48%, #120414 100%);
   }
 
   #app.display-theme-moonlight .prayer-info-container .prayer-info:nth-child(4) {
@@ -433,7 +433,7 @@
   }
 
   #app.display-theme-moonlight .prayer-info-container .prayer-info:nth-child(1) .prayer-name {
-    /* border-bottom-color: rgba(244, 114, 182, 0.75); */
+    /* border-bottom-color: rgba(255, 0, 255, 0.75); */
   }
 
   #app.display-theme-moonlight .prayer-info-container .prayer-info:nth-child(1) .prayer-name::before {
@@ -455,8 +455,8 @@
   }
 
   #app.display-theme-moonlight .prayer-info-container .prayer-info:nth-child(3) .prayer-name::before {
-    background: #f472b6;
-    box-shadow: 0 0 0.7rem rgba(244, 114, 182, 0.8);
+    background: #ff00ff;
+    box-shadow: 0 0 0.7rem rgba(255, 0, 255, 0.8);
   }
 
   #app.display-theme-moonlight .prayer-info-container .prayer-info:nth-child(4) .prayer-name {
