@@ -158,11 +158,12 @@
   }
 
   #app.display-theme-moonlight-analog-basic .prayer-display .time.is-sunrise {
-    color: #ff8f00;
+    color: #f279ff;
     text-shadow: 0 0 2.5rem rgba(255, 143, 0, 0.12);
   }
 
   #app.display-theme-moonlight-analog-basic .prayer-display .iqamah-time.showing-tarawih {
+    /* safrazik: removed tarawih style */
     color: #c391ff !important;
   }
 
@@ -253,11 +254,12 @@
   }
 
   #app.display-theme-moonlight-analog-basic .prayer-info-container .is-sunrise .iqamah-time {
-    color: #FF8F00;
+    color: #f279ff;
     text-shadow: 0 0 1.4rem rgba(255, 143, 0, 0.3);
   }
 
   #app.display-theme-moonlight-analog-basic .prayer-info-container .is-tarawih .iqamah-time {
+    /* safrazik: removed tarawih style */
     color: #c391ff !important;
   }
 

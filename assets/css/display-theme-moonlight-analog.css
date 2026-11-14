@@ -48,7 +48,8 @@
   }
 
   #app.display-theme-moonlight-analog .prayer-display .iqamah-time.showing-tarawih {
-    color: #ffeb3b !important;
+    /* safrazik: removed tarawih style */
+    /* color: #ffeb3b !important; */
   }
 
   #app.display-theme-moonlight-analog .prayer-display .time .hours,
@@ -74,12 +75,14 @@
   #app.display-theme-moonlight-analog .prayer-display .time.is-sunrise .hours,
   #app.display-theme-moonlight-analog .prayer-display .time.is-sunrise .colon,
   #app.display-theme-moonlight-analog .prayer-display .time.is-sunrise .minutes {
-    background-image: linear-gradient(180deg, #ffffff 0%, #ffffff 20%, #ffb04d 66%, #ff7a00 100%);
+    /* safrazik: removed wrong sunrise gradient */
+    background-image: linear-gradient(180deg, #ffffff 0%, #ffffff 20%, #f279ff 66%, #ed4cff 100%);
   }
 
   #app.display-theme-moonlight-analog .prayer-display .iqamah-time.showing-tarawih .hours,
   #app.display-theme-moonlight-analog .prayer-display .iqamah-time.showing-tarawih .colon,
   #app.display-theme-moonlight-analog .prayer-display .iqamah-time.showing-tarawih .minutes {
+    /* safrazik: removed tarawih style */
     background-image: linear-gradient(180deg, #ffffff 0%, #ffffff 20%, #c391ff 66%, #8a4dff 100%);
   }
 
@@ -144,7 +147,8 @@
   }
 
   #app.display-theme-moonlight-analog .prayer-info-container .is-tarawih .iqamah-time {
-    color: #ffeb3b !important;
+    /* safrazik: removed tarawih style */
+    /* color: #ffeb3b !important; */
   }
 
   #app.display-theme-moonlight-analog .prayer-info-container .prayer-time {
@@ -161,11 +165,13 @@
     -webkit-text-fill-color: transparent;
   }
 
-  #app.display-theme-moonlight-analog .prayer-info-container .is-sunrise .prayer-time {
-    background-image: linear-gradient(180deg, #ffffff 0%, #ffffff 20%, #ffb04d 66%, #ff7a00 100%);
+  #app.display-theme-moonlight-analog .prayer-info-container .is-sunrise .iqamah-time {
+    /* safrazik: removed wrong sunrise gradient */
+    background-image: linear-gradient(180deg, #ffffff 0%, #ffffff 20%, #f279ff 66%, #ed4cff 100%);
   }
 
   #app.display-theme-moonlight-analog .prayer-info-container .is-tarawih .iqamah-time {
+    /* safrazik: removed tarawih style */
     background-image: linear-gradient(180deg, #ffffff 0%, #ffffff 20%, #c391ff 66%, #8a4dff 100%);
   }
 
