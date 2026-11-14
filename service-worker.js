@@ -5,9 +5,9 @@ if (workbox) {
   console.log("Boo! Workbox didn't load 😬");
 }
 var baseUrl = '/live/';
-var appVersion = '2.20.28-202';
+var appVersion = '2.20.29-203';
 var dataVersion = '10';
-var vendorVersion = '42';
+var vendorVersion = '43';
 var bgVersion = '9';
 
 // Detailed logging is very useful during development
