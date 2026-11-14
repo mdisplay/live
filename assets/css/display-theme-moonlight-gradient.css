@@ -1,0 +1,117 @@
+/* Display theme: Moonlight Gradient (shared rules for full Moonlight themes) */
+
+@media (orientation: landscape) {
+
+  #app.display-theme-moonlight-gradient .branding-bar {
+    background-color: rgba(6, 10, 20, 0.22);
+    background-image: linear-gradient(90deg, rgba(25, 227, 194, 0.1), rgba(124, 92, 255, 0.09) 55%, rgba(255, 95, 158, 0.07)), linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0) 64%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), inset 0 -1px 0 rgba(127, 216, 255, 0.1);
+  }
+
+  #app.display-theme-moonlight-gradient .branding-bar .masjid-name {
+    color: #f4fdff;
+    text-shadow: 0 0 1.2rem rgba(127, 216, 255, 0.35), 0 0 3rem rgba(124, 92, 255, 0.18), 0 1px 2px rgba(0, 0, 0, 0.35);
+  }
+
+  #app.display-theme-moonlight-gradient .digital-clock .date-display .hijri-datex {
+    color: #a9c4d8;
+  }
+
+  #app.display-theme-moonlight-gradient .digital-clock .date-display .weekday {
+    color: #b7d0e0;
+  }
+
+  #app.display-theme-moonlight-gradient .prayer-info-container .prayer-time, #app.display-theme-moonlight-gradient .prayer-info-container .iqamah-time {
+    text-shadow: none;
+  }
+
+  #app.display-theme-moonlight-gradient .prayer-info-container .is-sunrise .iqamah-time {
+    color: #ffeb3b;
+    text-shadow: none;
+  }
+
+  #app.display-theme-moonlight-gradient .prayer-info-container .prayer-time {
+    background-image: linear-gradient(180deg, #ffffff 0%, #ffffff 20%, #8fff78 66%, #20c997 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  #app.display-theme-moonlight-gradient .prayer-info-container .iqamah-time {
+    background-image: linear-gradient(180deg, #ffffff 0%, #ffffff 20%, #ffeb3b 66%, #ffb300 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  #app.display-theme-moonlight-gradient .prayer-info-container .is-sunrise .iqamah-time {
+    background-image: linear-gradient(180deg, #ffffff 0%, #ffffff 20%, #f279ff 66%, #ed4cff 100%);
+  }
+
+  #app.display-theme-moonlight-gradient .prayer-info-container .is-tarawih .iqamah-time {
+    background-image: linear-gradient(180deg, #ffffff 0%, #ffffff 20%, #c391ff 66%, #8a4dff 100%);
+  }
+
+  #app.display-theme-moonlight-gradient .branding-bar::after {
+    height: 2px;
+    background: linear-gradient(90deg, rgba(43, 210, 255, 0.65), rgba(124, 92, 255, 0.5) 48%, rgba(255, 95, 158, 0.4) 78%, rgba(255, 255, 255, 0));
+    box-shadow: 0 0 1.2rem rgba(43, 210, 255, 0.28);
+  }
+
+  #app.display-theme-moonlight-gradient .prayer-display .time .hours, #app.display-theme-moonlight-gradient .prayer-display .time .colon, #app.display-theme-moonlight-gradient .prayer-display .time .minutes {
+    color: #7eff74;
+    background-image: linear-gradient(180deg, #ffffff 0%, #ffffff 20%, #8fff78 66%, #20c997 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  #app.display-theme-moonlight-gradient .prayer-display .iqamah-time .hours, #app.display-theme-moonlight-gradient .prayer-display .iqamah-time .colon, #app.display-theme-moonlight-gradient .prayer-display .iqamah-time .minutes {
+    color: #ffeb3b;
+    background-image: linear-gradient(180deg, #ffffff 0%, #ffffff 20%, #ffeb3b 66%, #ffb300 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  #app.display-theme-moonlight-gradient .prayer-display .time.is-sunrise .hours, #app.display-theme-moonlight-gradient .prayer-display .time.is-sunrise .colon, #app.display-theme-moonlight-gradient .prayer-display .time.is-sunrise .minutes {
+    background-image: linear-gradient(180deg, #ffffff 0%, #ffffff 20%, #f279ff 66%, #ed4cff 100%);
+  }
+
+  #app.display-theme-moonlight-gradient .prayer-display .iqamah-time.showing-tarawih .hours, #app.display-theme-moonlight-gradient .prayer-display .iqamah-time.showing-tarawih .colon, #app.display-theme-moonlight-gradient .prayer-display .iqamah-time.showing-tarawih .minutes {
+    background-image: linear-gradient(180deg, #ffffff 0%, #ffffff 20%, #c391ff 66%, #8a4dff 100%);
+  }
+
+  #app.display-theme-moonlight-gradient .active-timer .time .minutes, #app.display-theme-moonlight-gradient .active-timer .time .colon, #app.display-theme-moonlight-gradient .active-timer .time .seconds {
+    color: #fc7878;
+    background-image: linear-gradient(180deg, #ffffff 0%, #ffffff 10%, #fc7878 56%, #e0446c 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  #app.display-theme-moonlight-gradient .prayer-display .time, #app.display-theme-moonlight-gradient .prayer-display .iqamah-time {
+    text-shadow: none;
+  }
+
+  #app.display-theme-moonlight-gradient .active-timer .time {
+    text-shadow: none;
+  }
+
+  #app.display-theme-moonlight-gradient .prayer-info-container .prayer-info:nth-child(1) {
+    background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.055) 0, rgba(255, 255, 255, 0.055) 1px, rgba(255, 255, 255, 0) 1px, rgba(255, 255, 255, 0) 1.2rem), radial-gradient(ellipse at 50% 48%, rgba(2, 3, 6, 0.24), rgba(2, 3, 6, 0.09) 58%, rgba(2, 3, 6, 0) 80%), radial-gradient(ellipse at 0% 0%, rgba(163, 230, 53, 0.2), rgba(163, 230, 53, 0) 55%), linear-gradient(135deg, #064a4a 0%, #03302f 46%, #011414 100%);
+  }
+
+  #app.display-theme-moonlight-gradient .prayer-info-container .prayer-info:nth-child(2) {
+    background-image: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.06) 0, rgba(255, 255, 255, 0.06) 0.06rem, rgba(255, 255, 255, 0) 0.08rem), radial-gradient(ellipse at 50% 48%, rgba(2, 3, 6, 0.3), rgba(2, 3, 6, 0.12) 58%, rgba(2, 3, 6, 0) 80%), radial-gradient(ellipse at 0% 0%, rgba(251, 191, 36, 0.2), rgba(251, 191, 36, 0) 55%), linear-gradient(135deg, #4d2a06 0%, #2e1804 46%, #140a02 100%);
+  }
+
+  #app.display-theme-moonlight-gradient .prayer-info-container .prayer-info:nth-child(3) {
+    background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.045) 0, rgba(255, 255, 255, 0.045) 1px, rgba(255, 255, 255, 0) 1px, rgba(255, 255, 255, 0) 1rem), repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.045) 0, rgba(255, 255, 255, 0.045) 1px, rgba(255, 255, 255, 0) 1px, rgba(255, 255, 255, 0) 1rem), radial-gradient(ellipse at 50% 48%, rgba(2, 3, 6, 0.22), rgba(2, 3, 6, 0.08) 58%, rgba(2, 3, 6, 0) 80%), radial-gradient(ellipse at 0% 0%, rgba(255, 0, 255, 0.22), rgba(255, 0, 255, 0) 55%), linear-gradient(135deg, #4d0a4d 0%, #2e052e 48%, #120414 100%);
+  }
+
+  #app.display-theme-moonlight-gradient .prayer-info-container .prayer-info:nth-child(5) {
+    background-image: repeating-radial-gradient(circle at 50% 55%, rgba(255, 255, 255, 0.05) 0, rgba(255, 255, 255, 0.05) 1px, rgba(255, 255, 255, 0) 1px, rgba(255, 255, 255, 0) 1rem), radial-gradient(ellipse at 50% 48%, rgba(2, 3, 6, 0.22), rgba(2, 3, 6, 0.08) 58%, rgba(2, 3, 6, 0) 80%), radial-gradient(ellipse at 0% 0%, rgba(129, 140, 248, 0.22), rgba(129, 140, 248, 0) 55%), linear-gradient(135deg, #1b2266 0%, #101444 46%, #070818 100%);
+  }
+
+}

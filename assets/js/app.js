@@ -189,11 +189,14 @@ function App() {
     //   analogClock: true -> shows the canvas analog clock
     //   analogClockTheme (optional): engine theme name in analog-clock.js, falls back to 'galaxy'
     displayThemes: [
-      { id: 'moonlight', label: 'Moonlight', analogClock: false, baseTheme: 'moonlight-basic', defaultFor: 'digital' },
-      { id: 'moonlight-analog', label: 'Moonlight Analog', analogClock: true, analogClockTheme: 'galaxy', baseTheme: 'moonlight-analog-basic', defaultFor: 'analog' },
+      { id: 'moonlight', label: 'Moonlight', analogClock: false, baseThemes: ['moonlight-common', 'moonlight-basic', 'moonlight-gradient'], defaultFor: 'digital' },
+      { id: 'moonlight-analog', label: 'Moonlight Analog', analogClock: true, analogClockTheme: 'galaxy', baseThemes: ['moonlight-common', 'moonlight-analog-basic', 'moonlight-gradient'], defaultFor: 'analog' },
       { id: 'digital-default', label: 'Classic Digital', analogClock: false, isLegacy: true },
-      { id: 'moonlight-basic', label: 'Moonlight Basic', analogClock: false, isInternal: true },
-      { id: 'moonlight-analog-basic', label: 'Moonlight Analog Basic', analogClock: true, analogClockTheme: 'galaxy', isInternal: true },
+      { id: 'moonlight-basic', label: 'Moonlight Basic', analogClock: false, baseThemes: ['moonlight-common', 'moonlight-flat'], isInternal: true },
+      { id: 'moonlight-analog-basic', label: 'Moonlight Analog Basic', analogClock: true, analogClockTheme: 'galaxy', baseThemes: ['moonlight-common', 'moonlight-flat'], isInternal: true },
+      { id: 'moonlight-common', label: '[INTERNAL] Moonlight Common Shared', isInternal: true, isStyleOnly: true },
+      { id: 'moonlight-flat', label: '[INTERNAL] Moonlight Flat Shared', isInternal: true, isStyleOnly: true },
+      { id: 'moonlight-gradient', label: '[INTERNAL] Moonlight Gradient Shared', isInternal: true, isStyleOnly: true },
       { id: 'sunrise', label: 'Sunrise Panel', analogClock: true, analogClockTheme: 'sunrise', isInternal: true },
     ],
     timeOriginModes: [
@@ -343,11 +346,13 @@ function App() {
       return classes;
     },
     visibleDisplayThemes: function () {
-      if(self.data.isDevDebugging) {
-        return self.data.displayThemes;
+      if (self.data.isDevDebugging) {
+        return self.data.displayThemes.filter(function (theme) {
+          return !theme.isStyleOnly;
+        });
       }
       return self.data.displayThemes.filter(function (theme) {
-        return !theme.isInternal;
+        return !theme.isInternal && !theme.isStyleOnly;
       });
     },
     showBrandingBar: function () {
@@ -2090,12 +2095,23 @@ function App() {
   self.getDisplayThemeChain = function (id) {
     var chain = [];
     var theme = self.getDisplayTheme(id);
-    var guard = 0;
-    while (theme && guard < 10) {
-      chain.unshift(theme);
-      theme = theme.baseTheme ? self.getDisplayTheme(theme.baseTheme) : undefined;
-      guard += 1;
+    if (!theme) {
+      return chain;
     }
+    var bases = theme.baseThemes || (theme.baseTheme ? [theme.baseTheme] : []);
+    var seen = {};
+    for (var i = 0; i < bases.length; i++) {
+      var baseId = bases[i];
+      if (!baseId || baseId === id || seen[baseId]) {
+        continue;
+      }
+      var base = self.getDisplayTheme(baseId);
+      if (base) {
+        seen[baseId] = true;
+        chain.push(base);
+      }
+    }
+    chain.push(theme);
     return chain;
   };
   self.getDefaultDisplayTheme = function (isAnalog) {
