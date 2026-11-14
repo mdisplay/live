@@ -103,6 +103,9 @@ function App() {
   self.retryWifiCount = 0;
   self.retryLastMillis = 0;
   self.useDeviceTimeOnly = false;
+  self.displayThemeLinks = {};
+  self.displayThemeLoadToken = 0;
+  self.displayThemeStylesMarker = null;
 
   self.data = {
     appVersion: {
@@ -1378,6 +1381,7 @@ function App() {
   self.initStorage = function (callback) {
     var iqamahTimes;
     var settings;
+    var themeId = self.data.activeDisplayTheme;
     try {
       settings = JSON.parse(localStorage.getItem('mdisplay.settings'));
     } catch (e) {}
@@ -1385,7 +1389,9 @@ function App() {
       iqamahTimes = JSON.parse(localStorage.getItem('mdisplay.iqamahTimes'));
     } catch (e) {}
     if (!iqamahTimes) {
-      return callback();
+      return self.activateDisplayTheme(themeId, function () {
+        callback();
+      });
     }
     var iqamahTimesConfigured = localStorage.getItem('mdisplay.iqamahTimesConfigured');
     for (var name in iqamahTimes) {
@@ -1456,11 +1462,13 @@ function App() {
       if (settings.enableArrowKeyScroll) {
         self.data.enableArrowKeyScroll = true;
       }
-      self.applyDisplayTheme(self.getDisplayTheme(settings.activeDisplayTheme));
+      themeId = settings.activeDisplayTheme || themeId;
       // ...
     }
 
-    callback();
+    self.activateDisplayTheme(themeId, function () {
+      callback();
+    });
   };
   self.writeStorage = function (callback) {
     var iqamahTimes = {};
@@ -2114,6 +2122,223 @@ function App() {
     chain.push(theme);
     return chain;
   };
+  self.getDisplayThemeCssHref = function (themeId) {
+    var version = self.data.appVersion && self.data.appVersion.fullVersion ? self.data.appVersion.fullVersion : '';
+    return 'assets/css/display-theme-' + themeId + '.css' + (version ? '?v=' + version : '');
+  };
+  self.getDisplayThemeStylesMarker = function () {
+    if (!self.displayThemeStylesMarker) {
+      var head = document.head || document.getElementsByTagName('head')[0];
+      var marker = document.createComment('display-theme-styles');
+      head.appendChild(marker);
+      self.displayThemeStylesMarker = marker;
+    }
+    return self.displayThemeStylesMarker;
+  };
+  self.ensureDisplayThemeLink = function (themeId, callback) {
+    var existing = self.displayThemeLinks[themeId];
+    if (existing) {
+      if (existing._mdLoaded) {
+        callback(null);
+      } else if (existing._mdError) {
+        callback(existing._mdError);
+      } else {
+        existing._mdCallbacks.push(callback);
+      }
+      return;
+    }
+    var head = document.head || document.getElementsByTagName('head')[0];
+    var link = document.createElement('link');
+    link.id = 'display-theme-css-' + themeId;
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.setAttribute('data-display-theme', themeId);
+    link.href = self.getDisplayThemeCssHref(themeId);
+    link._mdLoaded = false;
+    link._mdError = null;
+    link._mdCallbacks = [callback];
+    var finish = function (err) {
+      if (link._mdLoaded || link._mdError) {
+        return;
+      }
+      link._mdLoaded = !err;
+      link._mdError = err || null;
+      var callbacks = link._mdCallbacks;
+      link._mdCallbacks = [];
+      for (var i = 0; i < callbacks.length; i++) {
+        callbacks[i](err || null);
+      }
+    };
+    link.onload = function () {
+      finish(null);
+    };
+    link.onerror = function () {
+      finish(new Error('Failed to load theme CSS: ' + themeId));
+    };
+    self.displayThemeLinks[themeId] = link;
+    head.insertBefore(link, self.getDisplayThemeStylesMarker());
+    setTimeout(function () {
+      finish(new Error('Timed out loading theme CSS: ' + themeId));
+    }, 8000);
+  };
+  self.loadDisplayThemeStyles = function (themeId, callback) {
+    callback = callback || function () {};
+    var theme = self.getDisplayTheme(themeId);
+    if (!theme || theme.isStyleOnly) {
+      theme = self.getDefaultDisplayTheme(false);
+    }
+    var chain = self.getDisplayThemeChain(theme.id);
+    if (!chain.length) {
+      theme = self.getDefaultDisplayTheme(false);
+      chain = self.getDisplayThemeChain(theme.id);
+    }
+    var ids = [];
+    var desired = {};
+    for (var i = 0; i < chain.length; i++) {
+      if (!desired[chain[i].id]) {
+        desired[chain[i].id] = true;
+        ids.push(chain[i].id);
+      }
+    }
+    var token = ++self.displayThemeLoadToken;
+    var remaining = ids.length;
+    var firstError = null;
+    var complete = function (err) {
+      if (err && !firstError) {
+        firstError = err;
+      }
+      remaining -= 1;
+      if (remaining > 0) {
+        return;
+      }
+      if (token !== self.displayThemeLoadToken) {
+        return;
+      }
+      if (firstError) {
+        for (var failedId in self.displayThemeLinks) {
+          var failed = self.displayThemeLinks[failedId];
+          if (failed && failed._mdError) {
+            if (failed.parentNode) {
+              failed.parentNode.removeChild(failed);
+            }
+            delete self.displayThemeLinks[failedId];
+          }
+        }
+        callback(firstError);
+        return;
+      }
+      var head = document.head || document.getElementsByTagName('head')[0];
+      var marker = self.getDisplayThemeStylesMarker();
+      for (var j = 0; j < ids.length; j++) {
+        var link = self.displayThemeLinks[ids[j]];
+        if (link) {
+          head.insertBefore(link, marker);
+        }
+      }
+      callback(null);
+      for (var oldId in self.displayThemeLinks) {
+        if (!desired[oldId]) {
+          var oldLink = self.displayThemeLinks[oldId];
+          if (oldLink.parentNode) {
+            oldLink.parentNode.removeChild(oldLink);
+          }
+          delete self.displayThemeLinks[oldId];
+        }
+      }
+    };
+    if (!remaining) {
+      callback(null);
+      return;
+    }
+    for (var k = 0; k < ids.length; k++) {
+      self.ensureDisplayThemeLink(ids[k], complete);
+    }
+  };
+  self.activateDisplayTheme = function (themeId, callback) {
+    callback = callback || function () {};
+    var theme = self.getDisplayTheme(themeId);
+    if (!theme || theme.isStyleOnly) {
+      theme = self.getDefaultDisplayTheme(false);
+    }
+    self.loadDisplayThemeStyles(theme.id, function (err) {
+      if (err) {
+        var fallback = self.getDefaultDisplayTheme(false);
+        if (fallback && fallback.id !== theme.id) {
+          self.loadDisplayThemeStyles(fallback.id, function (fallbackErr) {
+            self.applyDisplayTheme(fallback);
+            callback(fallbackErr || err);
+          });
+          return;
+        }
+        self.applyDisplayTheme(theme);
+        callback(err);
+        return;
+      }
+      self.applyDisplayTheme(theme);
+      callback(null);
+    });
+  };
+  self.selectDisplayTheme = function (themeId) {
+    var theme = self.getDisplayTheme(themeId);
+    if (!theme || theme.isStyleOnly) {
+      return;
+    }
+    self.loadDisplayThemeStyles(theme.id, function (err) {
+      if (err) {
+        self.loadDisplayThemeStyles(self.data.activeDisplayTheme, function () {
+          self.showToast('Failed to load theme: ' + themeId, 3000);
+        });
+        return;
+      }
+      self.applyDisplayTheme(theme);
+      self.data.expanded.displayThemes = false;
+      self.updateSettings();
+    });
+  };
+  self.validateDisplayThemes = function () {
+    var themes = self.data.displayThemes;
+    var ids = {};
+    var digitalDefaults = 0;
+    var analogDefaults = 0;
+    for (var i = 0; i < themes.length; i++) {
+      var theme = themes[i];
+      if (ids[theme.id]) {
+        console.warn('Duplicate display theme id: ' + theme.id);
+      }
+      ids[theme.id] = true;
+      if (theme.isStyleOnly && theme.defaultFor) {
+        console.warn('Style-only theme cannot be a default: ' + theme.id);
+      }
+      if (theme.defaultFor === 'digital') {
+        digitalDefaults += 1;
+      }
+      if (theme.defaultFor === 'analog') {
+        analogDefaults += 1;
+      }
+      var bases = theme.baseThemes || (theme.baseTheme ? [theme.baseTheme] : []);
+      var seenBases = {};
+      for (var j = 0; j < bases.length; j++) {
+        var baseId = bases[j];
+        if (!baseId || baseId === theme.id) {
+          console.warn('Invalid base theme for ' + theme.id + ': ' + baseId);
+          continue;
+        }
+        if (seenBases[baseId]) {
+          console.warn('Duplicate base theme for ' + theme.id + ': ' + baseId);
+        }
+        seenBases[baseId] = true;
+        if (!self.getDisplayTheme(baseId)) {
+          console.warn('Missing base theme for ' + theme.id + ': ' + baseId);
+        }
+      }
+    }
+    if (digitalDefaults !== 1) {
+      console.warn('Expected exactly one digital default theme, found ' + digitalDefaults);
+    }
+    if (analogDefaults > 1) {
+      console.warn('Expected at most one analog default theme, found ' + analogDefaults);
+    }
+  };
   self.getDefaultDisplayTheme = function (isAnalog) {
     var fallback;
     var target = isAnalog ? 'analog' : 'digital';
@@ -2410,6 +2635,7 @@ function App() {
   self.init = function (initialTestTime, callback, analogClock) {
     self.initialTestTime = initialTestTime;
     self.analogClock = analogClock;
+    self.validateDisplayThemes();
     self.initStorage(function () {
       self.nextTick();
       if (callback) {
