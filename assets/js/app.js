@@ -103,9 +103,9 @@ function App() {
   self.retryWifiCount = 0;
   self.retryLastMillis = 0;
   self.useDeviceTimeOnly = false;
-  self.displayThemeLinks = {};
-  self.displayThemeLoadToken = 0;
-  self.displayThemeStylesMarker = null;
+  self.themeLinks = {};
+  self.themeLoadToken = 0;
+  self.themeStylesMarker = null;
 
   self.data = {
     appVersion: {
@@ -186,12 +186,12 @@ function App() {
       { id: 'ZONE12', label: 'Zone 12: Galle & Matara District', type: 'NEW'},
       { id: 'ZONE13', label: 'Zone 13: Hambantota District', type: 'NEW'},
     ],
-    // Display themes: each theme is a separate, self-contained identity.
+    // Themes: each theme is a separate, self-contained identity.
     // To add a theme: add a list entry below and CSS to
-    // assets/css/display-theme-<id>.css (scoped by the display-theme-<id> class).
+    // assets/css/theme-<id>.css (scoped by the theme-<id> class).
     //   analogClock: true -> shows the canvas analog clock
     //   analogClockTheme (optional): engine theme name in analog-clock.js, falls back to 'galaxy'
-    displayThemes: [
+    themes: [
       { id: 'moonlight', label: 'Moonlight', analogClock: false, baseThemes: ['moonlight-common', 'moonlight-basic', 'moonlight-gradient'], defaultFor: 'digital' },
       { id: 'moonlight-analog', label: 'Moonlight Analog', analogClock: true, analogClockTheme: 'galaxy', baseThemes: ['moonlight-common', 'moonlight-analog-basic', 'moonlight-gradient'], defaultFor: 'analog' },
       { id: 'digital-default', label: 'Classic Digital', analogClock: false, isLegacy: true },
@@ -215,7 +215,7 @@ function App() {
     analogClockActive: false,
     alertEnabled: true,
     analogClockTheme: 'galaxy',
-    activeDisplayTheme: 'moonlight',
+    activeTheme: 'moonlight',
     masjidName: localStorage.getItem('mdisplay.masjidName') || '',
     networkTimeInitialized: false,
     timeIsValid: false,
@@ -249,7 +249,7 @@ function App() {
     expanded: {
       prayerTimesData: false,
       prayerNewTimesData: false,
-      displayThemes: false,
+      themes: false,
       languages: false,
       timeOriginModes: false,
       timeAdjustNew: false,
@@ -337,29 +337,29 @@ function App() {
       }
       return seconds * 6;
     },
-    displayThemeClasses: function () {
-      var chain = self.getDisplayThemeChain(self.data.activeDisplayTheme);
+    themeClasses: function () {
+      var chain = self.getThemeChain(self.data.activeTheme);
       var classes = [];
       for (var i = 0; i < chain.length; i++) {
-        classes.push('display-theme-' + chain[i].id);
+        classes.push('theme-' + chain[i].id);
       }
       if (!classes.length) {
-        classes.push('display-theme-' + self.data.activeDisplayTheme);
+        classes.push('theme-' + self.data.activeTheme);
       }
       return classes;
     },
-    visibleDisplayThemes: function () {
+    visibleThemes: function () {
       if (self.data.isDevDebugging) {
-        return self.data.displayThemes.filter(function (theme) {
+        return self.data.themes.filter(function (theme) {
           return !theme.isStyleOnly;
         });
       }
-      return self.data.displayThemes.filter(function (theme) {
+      return self.data.themes.filter(function (theme) {
         return !theme.isInternal && !theme.isStyleOnly;
       });
     },
     showBrandingBar: function () {
-      var theme = self.getDisplayTheme(self.data.activeDisplayTheme);
+      var theme = self.getTheme(self.data.activeTheme);
       return !theme || !theme.isLegacy;
     },
   };
@@ -1381,7 +1381,7 @@ function App() {
   self.initStorage = function (callback) {
     var iqamahTimes;
     var settings;
-    var themeId = self.data.activeDisplayTheme;
+    var themeId = self.data.activeTheme;
     try {
       settings = JSON.parse(localStorage.getItem('mdisplay.settings'));
     } catch (e) {}
@@ -1389,7 +1389,7 @@ function App() {
       iqamahTimes = JSON.parse(localStorage.getItem('mdisplay.iqamahTimes'));
     } catch (e) {}
     if (!iqamahTimes) {
-      return self.activateDisplayTheme(themeId, function () {
+      return self.activateTheme(themeId, function () {
         callback();
       });
     }
@@ -1462,11 +1462,11 @@ function App() {
       if (settings.enableArrowKeyScroll) {
         self.data.enableArrowKeyScroll = true;
       }
-      themeId = settings.activeDisplayTheme || themeId;
+      themeId = settings.activeTheme || themeId;
       // ...
     }
 
-    self.activateDisplayTheme(themeId, function () {
+    self.activateTheme(themeId, function () {
       callback();
     });
   };
@@ -1481,7 +1481,7 @@ function App() {
       timeAdjustmentMinutes: self.data.timeAdjustmentMinutes,
       timeAdjustNew: self.data.timeAdjustNew,
       // analogClockActive: self.data.analogClockActive,
-      activeDisplayTheme: self.data.activeDisplayTheme,
+      activeTheme: self.data.activeTheme,
       alertEnabled: self.data.alertEnabled,
       focusActiveTimerNew1: self.data.focusActiveTimer,
       time24Format: self.data.time24Format,
@@ -2092,17 +2092,17 @@ function App() {
     })[0];
     return selected ? selected.label : 'Not Selected';
   };
-  self.getDisplayTheme = function (id) {
-    for (var i = 0; i < self.data.displayThemes.length; i++) {
-      if (self.data.displayThemes[i].id === id) {
-        return self.data.displayThemes[i];
+  self.getTheme = function (id) {
+    for (var i = 0; i < self.data.themes.length; i++) {
+      if (self.data.themes[i].id === id) {
+        return self.data.themes[i];
       }
     }
     return undefined;
   };
-  self.getDisplayThemeChain = function (id) {
+  self.getThemeChain = function (id) {
     var chain = [];
-    var theme = self.getDisplayTheme(id);
+    var theme = self.getTheme(id);
     if (!theme) {
       return chain;
     }
@@ -2113,7 +2113,7 @@ function App() {
       if (!baseId || baseId === id || seen[baseId]) {
         continue;
       }
-      var base = self.getDisplayTheme(baseId);
+      var base = self.getTheme(baseId);
       if (base) {
         seen[baseId] = true;
         chain.push(base);
@@ -2122,21 +2122,21 @@ function App() {
     chain.push(theme);
     return chain;
   };
-  self.getDisplayThemeCssHref = function (themeId) {
+  self.getThemeCssHref = function (themeId) {
     var version = self.data.appVersion && self.data.appVersion.fullVersion ? self.data.appVersion.fullVersion : '';
-    return 'assets/css/display-theme-' + themeId + '.css' + (version ? '?v=' + version : '');
+    return 'assets/css/theme-' + themeId + '.css' + (version ? '?v=' + version : '');
   };
-  self.getDisplayThemeStylesMarker = function () {
-    if (!self.displayThemeStylesMarker) {
+  self.getThemeStylesMarker = function () {
+    if (!self.themeStylesMarker) {
       var head = document.head || document.getElementsByTagName('head')[0];
-      var marker = document.createComment('display-theme-styles');
+      var marker = document.createComment('theme-styles');
       head.appendChild(marker);
-      self.displayThemeStylesMarker = marker;
+      self.themeStylesMarker = marker;
     }
-    return self.displayThemeStylesMarker;
+    return self.themeStylesMarker;
   };
-  self.ensureDisplayThemeLink = function (themeId, callback) {
-    var existing = self.displayThemeLinks[themeId];
+  self.ensureThemeLink = function (themeId, callback) {
+    var existing = self.themeLinks[themeId];
     if (existing) {
       if (existing._mdLoaded) {
         callback(null);
@@ -2149,11 +2149,11 @@ function App() {
     }
     var head = document.head || document.getElementsByTagName('head')[0];
     var link = document.createElement('link');
-    link.id = 'display-theme-css-' + themeId;
+    link.id = 'theme-css-' + themeId;
     link.rel = 'stylesheet';
     link.type = 'text/css';
-    link.setAttribute('data-display-theme', themeId);
-    link.href = self.getDisplayThemeCssHref(themeId);
+    link.setAttribute('data-theme', themeId);
+    link.href = self.getThemeCssHref(themeId);
     link._mdLoaded = false;
     link._mdError = null;
     link._mdCallbacks = [callback];
@@ -2175,22 +2175,22 @@ function App() {
     link.onerror = function () {
       finish(new Error('Failed to load theme CSS: ' + themeId));
     };
-    self.displayThemeLinks[themeId] = link;
-    head.insertBefore(link, self.getDisplayThemeStylesMarker());
+    self.themeLinks[themeId] = link;
+    head.insertBefore(link, self.getThemeStylesMarker());
     setTimeout(function () {
       finish(new Error('Timed out loading theme CSS: ' + themeId));
     }, 8000);
   };
-  self.loadDisplayThemeStyles = function (themeId, callback) {
+  self.loadThemeStyles = function (themeId, callback) {
     callback = callback || function () {};
-    var theme = self.getDisplayTheme(themeId);
+    var theme = self.getTheme(themeId);
     if (!theme || theme.isStyleOnly) {
-      theme = self.getDefaultDisplayTheme(false);
+      theme = self.getDefaultTheme(false);
     }
-    var chain = self.getDisplayThemeChain(theme.id);
+    var chain = self.getThemeChain(theme.id);
     if (!chain.length) {
-      theme = self.getDefaultDisplayTheme(false);
-      chain = self.getDisplayThemeChain(theme.id);
+      theme = self.getDefaultTheme(false);
+      chain = self.getThemeChain(theme.id);
     }
     var ids = [];
     var desired = {};
@@ -2200,7 +2200,7 @@ function App() {
         ids.push(chain[i].id);
       }
     }
-    var token = ++self.displayThemeLoadToken;
+    var token = ++self.themeLoadToken;
     var remaining = ids.length;
     var firstError = null;
     var complete = function (err) {
@@ -2211,38 +2211,38 @@ function App() {
       if (remaining > 0) {
         return;
       }
-      if (token !== self.displayThemeLoadToken) {
+      if (token !== self.themeLoadToken) {
         return;
       }
       if (firstError) {
-        for (var failedId in self.displayThemeLinks) {
-          var failed = self.displayThemeLinks[failedId];
+        for (var failedId in self.themeLinks) {
+          var failed = self.themeLinks[failedId];
           if (failed && failed._mdError) {
             if (failed.parentNode) {
               failed.parentNode.removeChild(failed);
             }
-            delete self.displayThemeLinks[failedId];
+            delete self.themeLinks[failedId];
           }
         }
         callback(firstError);
         return;
       }
       var head = document.head || document.getElementsByTagName('head')[0];
-      var marker = self.getDisplayThemeStylesMarker();
+      var marker = self.getThemeStylesMarker();
       for (var j = 0; j < ids.length; j++) {
-        var link = self.displayThemeLinks[ids[j]];
+        var link = self.themeLinks[ids[j]];
         if (link) {
           head.insertBefore(link, marker);
         }
       }
       callback(null);
-      for (var oldId in self.displayThemeLinks) {
+      for (var oldId in self.themeLinks) {
         if (!desired[oldId]) {
-          var oldLink = self.displayThemeLinks[oldId];
+          var oldLink = self.themeLinks[oldId];
           if (oldLink.parentNode) {
             oldLink.parentNode.removeChild(oldLink);
           }
-          delete self.displayThemeLinks[oldId];
+          delete self.themeLinks[oldId];
         }
       }
     };
@@ -2251,59 +2251,59 @@ function App() {
       return;
     }
     for (var k = 0; k < ids.length; k++) {
-      self.ensureDisplayThemeLink(ids[k], complete);
+      self.ensureThemeLink(ids[k], complete);
     }
   };
-  self.activateDisplayTheme = function (themeId, callback) {
+  self.activateTheme = function (themeId, callback) {
     callback = callback || function () {};
-    var theme = self.getDisplayTheme(themeId);
+    var theme = self.getTheme(themeId);
     if (!theme || theme.isStyleOnly) {
-      theme = self.getDefaultDisplayTheme(false);
+      theme = self.getDefaultTheme(false);
     }
-    self.loadDisplayThemeStyles(theme.id, function (err) {
+    self.loadThemeStyles(theme.id, function (err) {
       if (err) {
-        var fallback = self.getDefaultDisplayTheme(false);
+        var fallback = self.getDefaultTheme(false);
         if (fallback && fallback.id !== theme.id) {
-          self.loadDisplayThemeStyles(fallback.id, function (fallbackErr) {
-            self.applyDisplayTheme(fallback);
+          self.loadThemeStyles(fallback.id, function (fallbackErr) {
+            self.applyTheme(fallback);
             callback(fallbackErr || err);
           });
           return;
         }
-        self.applyDisplayTheme(theme);
+        self.applyTheme(theme);
         callback(err);
         return;
       }
-      self.applyDisplayTheme(theme);
+      self.applyTheme(theme);
       callback(null);
     });
   };
-  self.selectDisplayTheme = function (themeId) {
-    var theme = self.getDisplayTheme(themeId);
+  self.selectTheme = function (themeId) {
+    var theme = self.getTheme(themeId);
     if (!theme || theme.isStyleOnly) {
       return;
     }
-    self.loadDisplayThemeStyles(theme.id, function (err) {
+    self.loadThemeStyles(theme.id, function (err) {
       if (err) {
-        self.loadDisplayThemeStyles(self.data.activeDisplayTheme, function () {
+        self.loadThemeStyles(self.data.activeTheme, function () {
           self.showToast('Failed to load theme: ' + themeId, 3000);
         });
         return;
       }
-      self.applyDisplayTheme(theme);
-      self.data.expanded.displayThemes = false;
+      self.applyTheme(theme);
+      self.data.expanded.themes = false;
       self.updateSettings();
     });
   };
-  self.validateDisplayThemes = function () {
-    var themes = self.data.displayThemes;
+  self.validateThemes = function () {
+    var themes = self.data.themes;
     var ids = {};
     var digitalDefaults = 0;
     var analogDefaults = 0;
     for (var i = 0; i < themes.length; i++) {
       var theme = themes[i];
       if (ids[theme.id]) {
-        console.warn('Duplicate display theme id: ' + theme.id);
+        console.warn('Duplicate theme id: ' + theme.id);
       }
       ids[theme.id] = true;
       if (theme.isStyleOnly && theme.defaultFor) {
@@ -2327,7 +2327,7 @@ function App() {
           console.warn('Duplicate base theme for ' + theme.id + ': ' + baseId);
         }
         seenBases[baseId] = true;
-        if (!self.getDisplayTheme(baseId)) {
+        if (!self.getTheme(baseId)) {
           console.warn('Missing base theme for ' + theme.id + ': ' + baseId);
         }
       }
@@ -2339,11 +2339,11 @@ function App() {
       console.warn('Expected at most one analog default theme, found ' + analogDefaults);
     }
   };
-  self.getDefaultDisplayTheme = function (isAnalog) {
+  self.getDefaultTheme = function (isAnalog) {
     var fallback;
     var target = isAnalog ? 'analog' : 'digital';
-    for (var i = 0; i < self.data.displayThemes.length; i++) {
-      var theme = self.data.displayThemes[i];
+    for (var i = 0; i < self.data.themes.length; i++) {
+      var theme = self.data.themes[i];
       if (theme.defaultFor === 'digital' && !fallback) {
         fallback = theme;
       }
@@ -2351,13 +2351,13 @@ function App() {
         return theme;
       }
     }
-    return fallback || self.data.displayThemes[0];
+    return fallback || self.data.themes[0];
   };
-  self.applyDisplayTheme = function (theme) {
+  self.applyTheme = function (theme) {
     if (!theme) {
-      theme = self.getDefaultDisplayTheme(false);
+      theme = self.getDefaultTheme(false);
     }
-    var chain = self.getDisplayThemeChain(theme.id);
+    var chain = self.getThemeChain(theme.id);
     var analogClock = false;
     var analogClockTheme = 'galaxy';
     for (var i = 0; i < chain.length; i++) {
@@ -2368,7 +2368,7 @@ function App() {
         analogClockTheme = chain[i].analogClockTheme;
       }
     }
-    self.data.activeDisplayTheme = theme.id;
+    self.data.activeTheme = theme.id;
     self.data.analogClockActive = analogClock;
     self.data.analogClockTheme = analogClockTheme;
   };
@@ -2635,7 +2635,7 @@ function App() {
   self.init = function (initialTestTime, callback, analogClock) {
     self.initialTestTime = initialTestTime;
     self.analogClock = analogClock;
-    self.validateDisplayThemes();
+    self.validateThemes();
     self.initStorage(function () {
       self.nextTick();
       if (callback) {

@@ -1,4 +1,4 @@
-/* Display theme: Moonlight Basic (landscape only; the default theme remains the portrait layout) */
+/* Theme: Moonlight Basic (landscape only; the default theme remains the portrait layout) */
 
 @media (orientation: landscape) {
 
@@ -8,7 +8,7 @@
 
 
   /* Left stage: clock, date, prayer line and countdown live here */
-  #app.display-theme-moonlight-basic .digital-clock {
+  #app.theme-moonlight-basic .digital-clock {
     position: absolute;
     top: 0;
     right: 13rem;
@@ -16,7 +16,7 @@
     left: 0;
   }
 
-  #app.display-theme-moonlight-basic .digital-clock .time {
+  #app.theme-moonlight-basic .digital-clock .time {
     position: absolute;
     top: 0;
     right: 0;
@@ -27,7 +27,7 @@
   }
 
   /* Date: two centered lines below the clock (Gregorian + weekday, then Hijri) */
-  #app.display-theme-moonlight-basic .digital-clock .date-display {
+  #app.theme-moonlight-basic .digital-clock .date-display {
     position: absolute;
     top: 18.3rem;
     left: 0;
@@ -44,7 +44,7 @@
     text-align: right;
   }
 
-  #app.display-theme-moonlight-basic .digital-clock .date-display .hijri-datex {
+  #app.theme-moonlight-basic .digital-clock .date-display .hijri-datex {
     display: block;
     font-size: 1.4rem;
     line-height: 1.7rem;
@@ -52,7 +52,7 @@
     color: #8f8f8f;
   }
 
-  #app.display-theme-moonlight-basic .digital-clock .date-display .datex {
+  #app.theme-moonlight-basic .digital-clock .date-display .datex {
     display: inline-block;
     font-size: 1.75rem;
     line-height: 2rem;
@@ -63,7 +63,7 @@
     margin-left: 0.75rem;
   }
 
-  #app.display-theme-moonlight-basic .digital-clock .date-display .weekday {
+  #app.theme-moonlight-basic .digital-clock .date-display .weekday {
     display: inline-block;
     font-size: 1.75rem;
     line-height: 2rem;
@@ -74,7 +74,7 @@
   }
 
   /* Big time (top of the left stage) */
-  #app.display-theme-moonlight-basic .digital-clock .time .hours {
+  #app.theme-moonlight-basic .digital-clock .time .hours {
     position: absolute;
     top: 0;
     right: 0;
@@ -84,7 +84,7 @@
     line-height: normal;
   }
 
-  #app.display-theme-moonlight-basic .digital-clock .time .hours .h {
+  #app.theme-moonlight-basic .digital-clock .time .hours .h {
     position: absolute;
     top: 4.456rem;
     right: calc(50% + 3.5rem);
@@ -96,7 +96,7 @@
     transition: opacity 150ms;
   }
 
-  #app.display-theme-moonlight-basic .digital-clock .time .minutes {
+  #app.theme-moonlight-basic .digital-clock .time .minutes {
     position: absolute;
     top: 0;
     right: 0;
@@ -106,7 +106,7 @@
     line-height: normal;
   }
 
-  #app.display-theme-moonlight-basic .digital-clock .time .minutes .m {
+  #app.theme-moonlight-basic .digital-clock .time .minutes .m {
     position: absolute;
     top: 4.456rem;
     left: calc(50% + 3.5rem);
@@ -117,7 +117,7 @@
     color: #f2f2f2;
   }
 
-  #app.display-theme-moonlight-basic .digital-clock .time .colon-main {
+  #app.theme-moonlight-basic .digital-clock .time .colon-main {
     position: absolute;
     top: 4.456rem;
     left: 50%;
@@ -133,7 +133,7 @@
   }
 
   /* Seconds: circular gauge in the top-right band (white arc + head dot) */
-  #app.display-theme-moonlight-basic .digital-clock .time .seconds-container {
+  #app.theme-moonlight-basic .digital-clock .time .seconds-container {
     position: absolute;
     top: 1rem;
     left: auto;
@@ -150,7 +150,7 @@
     top: calc((100vw - 13rem - 4rem - 7rem - 4rem) / 2.28);
   }
 
-  #app.display-theme-moonlight-basic .digital-clock .seconds-ring {
+  #app.theme-moonlight-basic .digital-clock .seconds-ring {
     position: absolute;
     top: 0;
     left: 0;
@@ -159,19 +159,19 @@
     height: 3.5rem;
   }
 
-  #app.display-theme-moonlight-basic .digital-clock .seconds-ring-track {
+  #app.theme-moonlight-basic .digital-clock .seconds-ring-track {
     stroke: rgba(242, 242, 242, 0.12);
   }
 
-  #app.display-theme-moonlight-basic .digital-clock .seconds-ring-progress {
+  #app.theme-moonlight-basic .digital-clock .seconds-ring-progress {
     stroke: #f2f2f2;
   }
 
-  #app.display-theme-moonlight-basic .digital-clock .seconds-ring-head {
+  #app.theme-moonlight-basic .digital-clock .seconds-ring-head {
     fill: #f2f2f2;
   }
 
-  #app.display-theme-moonlight-basic .digital-clock .seconds {
+  #app.theme-moonlight-basic .digital-clock .seconds {
     position: absolute;
     top: 0;
     left: 0;
@@ -184,13 +184,13 @@
     color: #f2f2f2;
   }
 
-  #app.display-theme-moonlight-basic .digital-clock .seconds .colon {
+  #app.theme-moonlight-basic .digital-clock .seconds .colon {
     display: none;
   }
 
 
   /* Bottom module block: prayer header + two 9rem time modules */
-  #app.display-theme-moonlight-basic .prayer-display {
+  #app.theme-moonlight-basic .prayer-display {
     position: absolute;
     top: auto;
     left: 0;
@@ -200,7 +200,7 @@
     text-align: left;
   }
 
-  #app.display-theme-moonlight-basic .prayer-display .name {
+  #app.theme-moonlight-basic .prayer-display .name {
     position: absolute;
     top: 0;
     left: 2rem;
@@ -219,7 +219,7 @@
     bottom: 12rem;
   }
 
-  #app.display-theme-moonlight-basic .prayer-display .name .label {
+  #app.theme-moonlight-basic .prayer-display .name .label {
     position: static;
     font-size: 1.75rem;
     line-height: 3rem;
@@ -230,8 +230,8 @@
     display: block;
   }
 
-  #app.display-theme-moonlight-basic .prayer-display .time,
-  #app.display-theme-moonlight-basic .prayer-display .iqamah-time {
+  #app.theme-moonlight-basic .prayer-display .time,
+  #app.theme-moonlight-basic .prayer-display .iqamah-time {
     position: absolute;
     bottom: 0;
     height: 10.5rem;
@@ -244,28 +244,28 @@
     text-align: center;
   }
 
-  #app.display-theme-moonlight-basic .prayer-display .time {
+  #app.theme-moonlight-basic .prayer-display .time {
     left: 0;
     width: 50%;
     color: #7eff74;
   }
 
-  #app.display-theme-moonlight-basic .prayer-display .iqamah-time {
+  #app.theme-moonlight-basic .prayer-display .iqamah-time {
     right: 0;
     width: 50%;
     color: #ffeb3b;
   }
 
-  #app.display-theme-moonlight-basic .prayer-display .time.is-sunrise,
-  #app.display-theme-moonlight-basic .prayer-display .is-sunrise .am-pm {
+  #app.theme-moonlight-basic .prayer-display .time.is-sunrise,
+  #app.theme-moonlight-basic .prayer-display .is-sunrise .am-pm {
     color: #f279ff;
   }
 
 
 
 
-  #app.display-theme-moonlight-basic .prayer-display .time .label,
-  #app.display-theme-moonlight-basic .prayer-display .iqamah-time .iqamah-label {
+  #app.theme-moonlight-basic .prayer-display .time .label,
+  #app.theme-moonlight-basic .prayer-display .iqamah-time .iqamah-label {
     position: absolute;
     top: 0;
     left: 0;
@@ -281,17 +281,17 @@
     visibility: hidden;
   }
 
-  #app.display-theme-moonlight-basic .prayer-display .time .label {
+  #app.theme-moonlight-basic .prayer-display .time .label {
     visibility: hidden;
   }
 
   /* Keep the base hiding behavior for active prayer states */
-  #app.display-theme-moonlight-basic.is-waiting .active-prayer .time,
-  #app.display-theme-moonlight-basic.is-waiting .active-prayer .am-pm,
-  #app.display-theme-moonlight-basic.is-after .active-prayer .time,
-  #app.display-theme-moonlight-basic.is-after .active-prayer .am-pm,
-  #app.display-theme-moonlight-basic.is-before .active-prayer .iqamah-time,
-  #app.display-theme-moonlight-basic.is-before .active-prayer .iqamah-am-pm {
+  #app.theme-moonlight-basic.is-waiting .active-prayer .time,
+  #app.theme-moonlight-basic.is-waiting .active-prayer .am-pm,
+  #app.theme-moonlight-basic.is-after .active-prayer .time,
+  #app.theme-moonlight-basic.is-after .active-prayer .am-pm,
+  #app.theme-moonlight-basic.is-before .active-prayer .iqamah-time,
+  #app.theme-moonlight-basic.is-before .active-prayer .iqamah-am-pm {
     display: none;
   }
 
@@ -299,7 +299,7 @@
 
 
   /* Right column: prayer timetable (five equal 20vh bands) */
-  #app.display-theme-moonlight-basic .prayer-info-container {
+  #app.theme-moonlight-basic .prayer-info-container {
     position: absolute;
     top: auto;
     right: 0;
@@ -314,7 +314,7 @@
     padding: 0;
   }
 
-  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info {
+  #app.theme-moonlight-basic .prayer-info-container .prayer-info {
     display: block;
     position: relative;
     width: 100%;
@@ -332,7 +332,7 @@
 
 
 
-  #app.display-theme-moonlight-basic .prayer-info-container .prayer-name {
+  #app.theme-moonlight-basic .prayer-info-container .prayer-name {
     position: relative;
     width: 100%;
     height: 2rem;
@@ -351,8 +351,8 @@
     text-overflow: ellipsis;
   }
 
-  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info .prayer-time,
-  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info .iqamah-time {
+  #app.theme-moonlight-basic .prayer-info-container .prayer-info .prayer-time,
+  #app.theme-moonlight-basic .prayer-info-container .prayer-info .iqamah-time {
     top: calc(10vh - 1rem);
     left: 0.75rem;
     right: 0.75rem;
@@ -369,7 +369,7 @@
 
 
 
-  #app.display-theme-moonlight-basic .prayer-display .iqamah-time.showing-tarawih {
+  #app.theme-moonlight-basic .prayer-display .iqamah-time.showing-tarawih {
     bottom: 0 !important;
     /* safrazik: removed tarawih style */
     /* layout only - color in other sytle */
@@ -377,8 +377,8 @@
     left: 0;
   }
 
-  #app.display-theme-moonlight-basic.is-waiting .active-timer.is-tarawih,
-  #app.display-theme-moonlight-basic.is-after .active-timer.is-tarawih {
+  #app.theme-moonlight-basic.is-waiting .active-timer.is-tarawih,
+  #app.theme-moonlight-basic.is-after .active-timer.is-tarawih {
     left: 24.75rem;
     right: 13rem;
   }
@@ -386,15 +386,15 @@
   /* Current row highlight follows the athan/iqamah phase (dark tints) */
 
 
-  #app.display-theme-moonlight-basic .prayer-info-container .prayer-info.is-current .prayer-name {
+  #app.theme-moonlight-basic .prayer-info-container .prayer-info.is-current .prayer-name {
     color: #f2f2f2;
   }
 
   /* Countdown module: fills the hidden time slot for the current phase */
-  #app.display-theme-moonlight-basic .active-timer,
-  #app.display-theme-moonlight-basic.is-before .active-timer,
-  #app.display-theme-moonlight-basic.is-waiting .active-timer,
-  #app.display-theme-moonlight-basic.is-after .active-timer {
+  #app.theme-moonlight-basic .active-timer,
+  #app.theme-moonlight-basic.is-before .active-timer,
+  #app.theme-moonlight-basic.is-waiting .active-timer,
+  #app.theme-moonlight-basic.is-after .active-timer {
     position: absolute;
     left: 0;
     right: 13rem;
@@ -404,18 +404,18 @@
     text-align: center;
   }
 
-  #app.display-theme-moonlight-basic.is-before .active-timer {
+  #app.theme-moonlight-basic.is-before .active-timer {
     left: 24.75rem;
     right: 13rem;
   }
 
-  #app.display-theme-moonlight-basic.is-waiting .active-timer,
-  #app.display-theme-moonlight-basic.is-after .active-timer {
+  #app.theme-moonlight-basic.is-waiting .active-timer,
+  #app.theme-moonlight-basic.is-after .active-timer {
     left: 0;
     right: 37.75rem;
   }
 
-  #app.display-theme-moonlight-basic .active-timer .time {
+  #app.theme-moonlight-basic .active-timer .time {
     display: inline-block;
     font-size: 9rem;
     height: 9rem;
@@ -424,7 +424,7 @@
     /* color: #7fd8ff; */
   }
 
-  #app.display-theme-moonlight-basic .active-timer .time .colon {
+  #app.theme-moonlight-basic .active-timer .time .colon {
     width: 3rem;
     min-height: 0;
     margin: 0 0.15rem;
@@ -432,7 +432,7 @@
     margin: 0;
   }
 
-  #app.display-theme-moonlight-basic .active-timer .description {
+  #app.theme-moonlight-basic .active-timer .description {
     position: absolute;
     top: 0;
     left: 0;
@@ -449,47 +449,47 @@
 
   /* Alert icon: no free slot in this layout */
 
-  #app.display-theme-moonlight-basic.is-showing-alert .digital-clock .time .hours .h {
+  #app.theme-moonlight-basic.is-showing-alert .digital-clock .time .hours .h {
     opacity: 0;
   }
 
   /* Focus-timer mode: keep the split layout */
-  #app.display-theme-moonlight-basic.focus-active-timer .prayer-info-container,
-  #app.display-theme-moonlight-basic.focus-active-timer .digital-clock .date-display {
+  #app.theme-moonlight-basic.focus-active-timer .prayer-info-container,
+  #app.theme-moonlight-basic.focus-active-timer .digital-clock .date-display {
     opacity: 1 !important;
   }
 
-  #app.display-theme-moonlight-basic.is-showing-alert.focus-active-timer .digital-clock .seconds-container {
+  #app.theme-moonlight-basic.is-showing-alert.focus-active-timer .digital-clock .seconds-container {
     opacity: 1 !important;
   }
 
 
 
-  #app.display-theme-moonlight-basic .digital-clock .time .hours .h,
-  #app.display-theme-moonlight-basic .digital-clock .time .minutes .m {
+  #app.theme-moonlight-basic .digital-clock .time .hours .h,
+  #app.theme-moonlight-basic .digital-clock .time .minutes .m {
     color: #f5f2ea;
     color: #7fd8ff;
     text-shadow: 0 0 3rem rgba(127, 216, 255, 0.07);
   }
 
-  #app.display-theme-moonlight-basic .digital-clock .time .colon-main {
+  #app.theme-moonlight-basic .digital-clock .time .colon-main {
     color: #7fd8ff;
     text-shadow: 0 0 1.5rem rgba(127, 216, 255, 0.35);
   }
 
-  #app.display-theme-moonlight-basic .digital-clock .seconds-ring-track {
+  #app.theme-moonlight-basic .digital-clock .seconds-ring-track {
     stroke: rgba(127, 216, 255, 0.15);
   }
 
-  #app.display-theme-moonlight-basic .digital-clock .seconds-ring-progress {
+  #app.theme-moonlight-basic .digital-clock .seconds-ring-progress {
     stroke: #7fd8ff;
   }
 
-  #app.display-theme-moonlight-basic .digital-clock .seconds-ring-head {
+  #app.theme-moonlight-basic .digital-clock .seconds-ring-head {
     fill: #bfeaff;
   }
 
-  #app.display-theme-moonlight-basic .digital-clock .seconds {
+  #app.theme-moonlight-basic .digital-clock .seconds {
     color: #cfeaff;
   }
 
@@ -497,19 +497,19 @@
 
 
 
-  #app.display-theme-moonlight-basic .prayer-display .time {
+  #app.theme-moonlight-basic .prayer-display .time {
     text-shadow: 0 0 2.5rem rgba(126, 255, 116, 0.1);
   }
 
-  #app.display-theme-moonlight-basic .prayer-display .iqamah-time {
+  #app.theme-moonlight-basic .prayer-display .iqamah-time {
     text-shadow: 0 0 2.5rem rgba(255, 235, 59, 0.1);
   }
 
-  #app.display-theme-moonlight-basic .prayer-display .time.is-sunrise {
+  #app.theme-moonlight-basic .prayer-display .time.is-sunrise {
     text-shadow: 0 0 2.5rem rgba(255, 143, 0, 0.12);
   }
 
-  #app.display-theme-moonlight-basic .active-timer .time {
+  #app.theme-moonlight-basic .active-timer .time {
     text-shadow: 0 0 2.5rem rgba(252, 120, 120, 0.12);
   }
 

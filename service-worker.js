@@ -5,9 +5,9 @@ if (workbox) {
   console.log("Boo! Workbox didn't load 😬");
 }
 var baseUrl = '/live/';
-var appVersion = '2.20.32-206';
+var appVersion = '2.20.33-207';
 var dataVersion = '10';
-var vendorVersion = '46';
+var vendorVersion = '47';
 var bgVersion = '9';
 
 // Detailed logging is very useful during development
@@ -132,7 +132,7 @@ var precacheList = [
 ];
 
 // theme CSS files (one file per theme)
-var themeCssFiles = ['display-theme-digital-default.css', 'display-theme-sunrise.css', 'display-theme-moonlight-common.css', 'display-theme-moonlight-flat.css', 'display-theme-moonlight-basic.css', 'display-theme-moonlight-analog-basic.css', 'display-theme-moonlight-gradient.css', 'display-theme-moonlight.css', 'display-theme-moonlight-analog.css'];
+var themeCssFiles = ['theme-digital-default.css', 'theme-sunrise.css', 'theme-moonlight-common.css', 'theme-moonlight-flat.css', 'theme-moonlight-basic.css', 'theme-moonlight-analog-basic.css', 'theme-moonlight-gradient.css', 'theme-moonlight.css', 'theme-moonlight-analog.css'];
 for (var themeIndex = 0; themeIndex < themeCssFiles.length; themeIndex++) {
   precacheList.push({
     url: toUrl('assets/css/' + themeCssFiles[themeIndex]),

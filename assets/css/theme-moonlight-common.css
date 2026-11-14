@@ -1,20 +1,20 @@
-/* Display theme: Moonlight Common (shared rules for all Moonlight family themes) */
+/* Theme: Moonlight Common (shared rules for all Moonlight family themes) */
 
 @media (orientation: landscape) {
 
-  #app.display-theme-moonlight-common .am-pm, #app.display-theme-moonlight-common .iqamah-am-pm {
+  #app.theme-moonlight-common .am-pm, #app.theme-moonlight-common .iqamah-am-pm {
     display: none !important;
   }
 
-  #app.display-theme-moonlight-common .prayer-info-container .is-sunrise .prayer-name {
+  #app.theme-moonlight-common .prayer-info-container .is-sunrise .prayer-name {
     background-color: transparent !important;
   }
 
-  #app.display-theme-moonlight-common .prayer-display .iqamah-time.showing-tarawih .iqamah-label {
+  #app.theme-moonlight-common .prayer-display .iqamah-time.showing-tarawih .iqamah-label {
     display: none;
   }
 
-  #app.display-theme-moonlight-common {
+  #app.theme-moonlight-common {
     top: 0;
     right: 0;
     bottom: 0;
@@ -22,7 +22,7 @@
     color: #f2f2f2;
   }
 
-  #app.display-theme-moonlight-common .branding-bar {
+  #app.theme-moonlight-common .branding-bar {
     position: absolute;
     top: 0;
     left: 0;
@@ -38,7 +38,7 @@
     line-height: 5rem;
   }
 
-  #app.display-theme-moonlight-common .branding-bar .masjid-name {
+  #app.theme-moonlight-common .branding-bar .masjid-name {
     display: block;
     font-size: 2.25rem;
     letter-spacing: 0.05em;
@@ -49,20 +49,20 @@
     text-overflow: ellipsis;
   }
 
-  #app.display-theme-moonlight-common .prayer-display .iqamah-time.showing-tarawih {
+  #app.theme-moonlight-common .prayer-display .iqamah-time.showing-tarawih {
     color: #c391ff !important;
   }
 
-  #app.display-theme-moonlight-common .prayer-times-applied-indicator-new {
+  #app.theme-moonlight-common .prayer-times-applied-indicator-new {
     display: none;
   }
 
-  #app.display-theme-moonlight-common #version-info {
+  #app.theme-moonlight-common #version-info {
     padding: 0.25rem 0.5rem !important;
     right: 0 !important;
   }
 
-  #app.display-theme-moonlight-common #version-info .version-text {
+  #app.theme-moonlight-common #version-info .version-text {
     display: block !important;
     border-radius: 0 !important;
     padding: 0 !important;
@@ -70,61 +70,61 @@
     background: rgba(0, 0, 0, 0.3) !important;
   }
 
-  #app.display-theme-moonlight-common .prayer-info-container .prayer-info:nth-child(1) {
+  #app.theme-moonlight-common .prayer-info-container .prayer-info:nth-child(1) {
     background-color: rgba(77, 124, 15, 0.5);
   }
 
-  #app.display-theme-moonlight-common .prayer-info-container .prayer-info:nth-child(2) {
+  #app.theme-moonlight-common .prayer-info-container .prayer-info:nth-child(2) {
     background-color: rgba(180, 83, 9, 0.5);
   }
 
-  #app.display-theme-moonlight-common .prayer-info-container .prayer-info:nth-child(3) {
+  #app.theme-moonlight-common .prayer-info-container .prayer-info:nth-child(3) {
     background-color: rgba(255, 0, 255, 0.5);
   }
 
-  #app.display-theme-moonlight-common .prayer-info-container .prayer-info:nth-child(4) {
+  #app.theme-moonlight-common .prayer-info-container .prayer-info:nth-child(4) {
     background-color: rgba(190, 18, 60, 0.5);
   }
 
-  #app.display-theme-moonlight-common .prayer-info-container .prayer-info:nth-child(5) {
+  #app.theme-moonlight-common .prayer-info-container .prayer-info:nth-child(5) {
     background-color: rgba(67, 56, 202, 0.5);
   }
 
-  #app.display-theme-moonlight-common .prayer-info-container .prayer-time {
+  #app.theme-moonlight-common .prayer-info-container .prayer-time {
     color: #7eff74;
     text-shadow: 0 0 1.4rem rgba(126, 255, 116, 0.3);
   }
 
-  #app.display-theme-moonlight-common .prayer-info-container .iqamah-time {
+  #app.theme-moonlight-common .prayer-info-container .iqamah-time {
     color: #ffeb3b;
     text-shadow: 0 0 1.4rem rgba(255, 235, 59, 0.25);
   }
 
-  #app.display-theme-moonlight-common .prayer-info-container .is-sunrise .iqamah-time {
+  #app.theme-moonlight-common .prayer-info-container .is-sunrise .iqamah-time {
     color: #f279ff;
     text-shadow: 0 0 1.4rem rgba(255, 143, 0, 0.3);
   }
 
-  #app.display-theme-moonlight-common .prayer-info-container .is-tarawih .iqamah-time {
+  #app.theme-moonlight-common .prayer-info-container .is-tarawih .iqamah-time {
     color: #c391ff !important;
   }
 
-  #app.display-theme-moonlight-common.active-prayer-info-athan .prayer-info-container .prayer-info.is-current {
+  #app.theme-moonlight-common.active-prayer-info-athan .prayer-info-container .prayer-info.is-current {
     border-left-color: #7eff74;
   }
 
-  #app.display-theme-moonlight-common.active-prayer-info-iqamah .prayer-info-container .prayer-info.is-current {
+  #app.theme-moonlight-common.active-prayer-info-iqamah .prayer-info-container .prayer-info.is-current {
     border-left-color: #ffeb3b;
   }
 
-  #app.display-theme-moonlight-common .alert-container {
+  #app.theme-moonlight-common .alert-container {
     position: fixed;
     top: 5.5rem !important;
     left: 4rem !important;
     z-index: 85785;
   }
 
-  #app.display-theme-moonlight-common .branding-bar::before {
+  #app.theme-moonlight-common .branding-bar::before {
     content: '';
     position: absolute;
     top: 50%;
@@ -135,7 +135,7 @@
     border-radius: 50%;
   }
 
-  #app.display-theme-moonlight-common .branding-bar::after {
+  #app.theme-moonlight-common .branding-bar::after {
     content: '';
     position: absolute;
     left: 2rem;
@@ -145,7 +145,7 @@
     background: linear-gradient(90deg, rgba(127, 216, 255, 0.45), rgba(94, 92, 255, 0.22) 55%, rgba(255, 255, 255, 0));
   }
 
-  #app.display-theme-moonlight-common .prayer-info-container .prayer-info.is-current {
+  #app.theme-moonlight-common .prayer-info-container .prayer-info.is-current {
     border-left: 0.5rem solid #FFF !important;
     box-shadow: inset 1.25rem 0px 1rem -0.75rem rgba(255, 255, 255, 0.99);
   }
