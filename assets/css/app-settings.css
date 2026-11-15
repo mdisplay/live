@@ -1,0 +1,266 @@
+/* Settings modal styles. Scoped to #app #settings_mode. */
+
+#app #settings_mode {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  color: #000;
+}
+
+#app #settings_mode .modal-overlay {
+  background: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+}
+
+#app #settings_mode .modal-dialog {
+  background: rgba(255, 255, 255, 0.95);
+  background: #afafaf;
+  background: #646464;
+  /*width: 500px;*/
+  width: 36rem;
+  height: calc(100vh - 6rem);
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  padding: 1rem;
+  overflow-y: auto;
+  width: 100%;
+  height: 100%;
+}
+
+#app #settings_mode .modal-close {
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.5);
+  background: rgba(121, 180, 201, 0.3);
+  background: #343434;
+  color: #bbb;
+  line-height: 2.25rem;
+  height: 2.25rem;
+
+  position: absolute;
+  right: 0;
+  left: 0;
+}
+
+#app #settings_mode .modal-close-top {
+  /* margin-bottom: 0.5rem;
+  margin-top: -1rem;
+  margin-right: -1rem;
+  margin-left: -1rem; */
+  top: 0;
+}
+
+#app #settings_mode .modal-close-bottom {
+  margin-top: 1rem;
+  /* border-radius: 6px; */
+  bottom: 0;
+}
+
+#app #settings_mode .modal-content {
+  position: absolute;
+  top: 2.25rem;
+  bottom: 2.25rem;
+  left: 0;
+  right: 0;
+  overflow: auto;
+  padding: 1rem 0.5rem;
+}
+
+#app #settings_mode .config-wrapper {
+
+}
+
+#app #settings_mode .config-wrapper:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+#app #settings_mode .config-container {
+  text-align: left;
+  width: 50%;
+  float: left;
+  border: 1px solid #555;
+  border-radius: 5px;
+  border: 2px solid #fff;
+  box-shadow: 2px 2px 10px -2px #000;
+  background: #d2d2d2;
+}
+
+#app #settings_mode .times-config {
+  width: calc(50% - 1rem);
+  margin-right: 1rem;
+}
+
+#app #settings_mode .others-config {
+  float: right;
+}
+
+#app #settings_mode .config-item {
+  /* height: 4rem; */
+  /* height: 3.5rem; */
+  line-height: 2rem;
+  font-size: 1.5rem;
+  padding: 0.5rem;
+}
+
+#app #settings_mode .config-item .label,
+#app #settings_mode .config-item .time-input,
+#app #settings_mode .config-item .time-input-colon,
+#app #settings_mode .config-item .toggle-absolute,
+#app #settings_mode .config-item .time-info {
+  /* font-size: 2rem; */
+  /* line-height: 2.5rem; */
+  height: 2rem;
+  display: inline-block;
+}
+
+#app #settings_mode .config-item:nth-child(even) {
+  background: #dadada;
+  background: #e9e9e9;
+}
+
+#app #settings_mode .config-item .label {
+  /* font-size: 2rem;
+  height: 2.5rem; */
+  width: 7rem;
+  width: 7.75rem;
+  width: 9rem;
+  display: inline-block;
+  /* height: 100%; */
+}
+
+#app #settings_mode .config-item .time-input {
+  width: 20px;
+  width: 4rem;
+  /* font-size: 2rem;
+  line-height: 2.5rem; */
+  border: 2px solid #aaa;
+  outline: 0;
+  display: inline-block;
+  /* height: 100%; */
+}
+
+#app #settings_mode .config-item .time-input-colon {
+  /* font-size: 2rem; */
+}
+
+#app #settings_mode .config-item .time-input:focus {
+  border-color: #0f6f9b;
+  outline: 0;
+}
+
+#app #settings_mode .config-item .toggle-absolute {
+  /* font-size: 2rem;
+  line-height: 2.5rem; */
+  width: 2.5rem;
+  text-align: center;
+  display: inline-block;
+  color: #fff;
+  background: #518d0b;
+  border: none;
+}
+
+#app #settings_mode .config-item .toggle-absolute.is-absolute {
+  font-size: 1.5rem;
+  background: #555;
+}
+
+#app #settings_mode .config-item .time-info {
+  /* font-size: 2rem; */
+  margin-left: 0.5rem;
+}
+
+#app #settings_mode .configured-info {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  position: absolute;
+  top: 0.5rem;
+  left: 1rem;
+  color: #EEE;
+}
+
+#app #settings_mode .configured-info .not-configured {
+  color: #d91010;
+}
+
+#app #settings_mode .configured-info .configured {
+  color: #1eb624;
+}
+
+#app #settings_mode .close-buttons-container {
+  padding-top: 1rem;
+}
+
+#app #settings_mode .close-buttons-container .setting-close-button {
+  display: block;
+  color: #000;
+  font-weight: bold;
+  padding: 0.5rem;
+  font-size: 1.5rem;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  /* width: 50%;
+  float: left; */
+}
+
+#app #settings_mode .close-buttons-container .settings-save {
+  background-color: #357ae8;
+  color: #FFF;
+}
+
+#app #settings_mode .close-buttons-container .settings-close {
+  background-color: #aaa;
+}
+
+#app #settings_mode .update-info {
+  font-size: 1rem;
+  position: absolute;
+  /*top: 0.5rem;*/
+  right: 1rem;
+  bottom: 0.25rem;
+  text-align: right;
+}
+
+/* #app #settings_mode .config-item {
+  padding: 0.25rem;
+  height: 3.5rem;
+  line-height: 3rem;
+} */
+
+/* #app #settings_mode .config-item {
+  padding: 0.5rem;
+  height: 3rem;
+  line-height: 2rem;
+}
+
+#app #settings_mode .config-item .label {
+  font-size: 1.5rem;
+}
+
+#app #settings_mode .config-item .time-input {
+  width: 4.5rem;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  height: 2rem;
+  padding: 0 0.25rem;
+}
+
+#app #settings_mode .config-item .toggle-absolute {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+#app #settings_mode .config-item .time-info {
+  font-size: 1.5rem;
+} */

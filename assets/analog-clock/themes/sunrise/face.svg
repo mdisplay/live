@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
+  <defs>
+    <radialGradient id="dial" cx="50%" cy="42%" r="62%">
+      <stop offset="0" stop-color="#232320"/>
+      <stop offset="0.6" stop-color="#141413"/>
+      <stop offset="1" stop-color="#070706"/>
+    </radialGradient>
+  </defs>
+  <g id="sunrise-face">
+    <circle cx="300" cy="300" r="298.5" fill="url(#dial)"/>
+    <circle cx="300" cy="300" r="295" fill="none" stroke="#d9b45c" stroke-width="4.5"/>
+    <circle cx="300" cy="300" r="286" fill="none" stroke="#7a6331" stroke-width="1.4"/>
+    <circle cx="300" cy="300" r="240" fill="none" stroke="#5a4b26" stroke-width="0.8"/>
+    <line x1="558" y1="300" x2="582" y2="300" stroke="#f2d38a" stroke-width="5"/>
+    <line x1="568.52" y1="328.22" x2="580.46" y2="329.48" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="564.1" y1="356.14" x2="575.84" y2="358.63" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="556.79" y1="383.43" x2="568.2" y2="387.14" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="546.66" y1="409.82" x2="557.62" y2="414.7" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="523.43" y1="429" x2="544.22" y2="441" stroke="#f2d38a" stroke-width="5"/>
+    <line x1="518.43" y1="458.7" x2="528.14" y2="465.76" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="500.65" y1="480.67" x2="509.57" y2="488.69" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="480.67" y1="500.65" x2="488.69" y2="509.57" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="458.7" y1="518.43" x2="465.76" y2="528.14" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="429" y1="523.43" x2="441" y2="544.22" stroke="#f2d38a" stroke-width="5"/>
+    <line x1="409.82" y1="546.66" x2="414.7" y2="557.62" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="383.43" y1="556.79" x2="387.14" y2="568.2" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="356.14" y1="564.1" x2="358.63" y2="575.84" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="328.22" y1="568.52" x2="329.48" y2="580.46" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="300" y1="558" x2="300" y2="582" stroke="#f2d38a" stroke-width="5"/>
+    <line x1="271.78" y1="568.52" x2="270.52" y2="580.46" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="243.86" y1="564.1" x2="241.37" y2="575.84" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="216.57" y1="556.79" x2="212.86" y2="568.2" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="190.18" y1="546.66" x2="185.3" y2="557.62" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="171" y1="523.43" x2="159" y2="544.22" stroke="#f2d38a" stroke-width="5"/>
+    <line x1="141.3" y1="518.43" x2="134.24" y2="528.14" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="119.33" y1="500.65" x2="111.31" y2="509.57" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="99.35" y1="480.67" x2="90.43" y2="488.69" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="81.57" y1="458.7" x2="71.86" y2="465.76" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="76.57" y1="429" x2="55.78" y2="441" stroke="#f2d38a" stroke-width="5"/>
+    <line x1="53.34" y1="409.82" x2="42.38" y2="414.7" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="43.21" y1="383.43" x2="31.8" y2="387.14" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="35.9" y1="356.14" x2="24.16" y2="358.63" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="31.48" y1="328.22" x2="19.54" y2="329.48" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="42" y1="300" x2="18" y2="300" stroke="#f2d38a" stroke-width="5"/>
+    <line x1="31.48" y1="271.78" x2="19.54" y2="270.52" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="35.9" y1="243.86" x2="24.16" y2="241.37" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="43.21" y1="216.57" x2="31.8" y2="212.86" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="53.34" y1="190.18" x2="42.38" y2="185.3" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="76.57" y1="171" x2="55.78" y2="159" stroke="#f2d38a" stroke-width="5"/>
+    <line x1="81.57" y1="141.3" x2="71.86" y2="134.24" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="99.35" y1="119.33" x2="90.43" y2="111.31" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="119.33" y1="99.35" x2="111.31" y2="90.43" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="141.3" y1="81.57" x2="134.24" y2="71.86" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="171" y1="76.57" x2="159" y2="55.78" stroke="#f2d38a" stroke-width="5"/>
+    <line x1="190.18" y1="53.34" x2="185.3" y2="42.38" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="216.57" y1="43.21" x2="212.86" y2="31.8" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="243.86" y1="35.9" x2="241.37" y2="24.16" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="271.78" y1="31.48" x2="270.52" y2="19.54" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="300" y1="42" x2="300" y2="18" stroke="#f2d38a" stroke-width="5"/>
+    <line x1="328.22" y1="31.48" x2="329.48" y2="19.54" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="356.14" y1="35.9" x2="358.63" y2="24.16" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="383.43" y1="43.21" x2="387.14" y2="31.8" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="409.82" y1="53.34" x2="414.7" y2="42.38" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="429" y1="76.57" x2="441" y2="55.78" stroke="#f2d38a" stroke-width="5"/>
+    <line x1="458.7" y1="81.57" x2="465.76" y2="71.86" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="480.67" y1="99.35" x2="488.69" y2="90.43" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="500.65" y1="119.33" x2="509.57" y2="111.31" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="518.43" y1="141.3" x2="528.14" y2="134.24" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="523.43" y1="171" x2="544.22" y2="159" stroke="#f2d38a" stroke-width="5"/>
+    <line x1="546.66" y1="190.18" x2="557.62" y2="185.3" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="556.79" y1="216.57" x2="568.2" y2="212.86" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="564.1" y1="243.86" x2="575.84" y2="241.37" stroke="#f4f1e6" stroke-width="2"/>
+    <line x1="568.52" y1="271.78" x2="580.46" y2="270.52" stroke="#f4f1e6" stroke-width="2"/>
+    <text x="300" y="84" dy=".35em" fill="#f7f4ea" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="bold" text-anchor="middle">12</text>
+    <text x="408" y="112.94" dy=".35em" fill="#f7f4ea" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="bold" text-anchor="middle">1</text>
+    <text x="487.06" y="192" dy=".35em" fill="#f7f4ea" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="bold" text-anchor="middle">2</text>
+    <text x="516" y="300" dy=".35em" fill="#f7f4ea" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="bold" text-anchor="middle">3</text>
+    <text x="487.06" y="408" dy=".35em" fill="#f7f4ea" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="bold" text-anchor="middle">4</text>
+    <text x="408" y="487.06" dy=".35em" fill="#f7f4ea" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="bold" text-anchor="middle">5</text>
+    <text x="300" y="516" dy=".35em" fill="#f7f4ea" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="bold" text-anchor="middle">6</text>
+    <text x="192" y="487.06" dy=".35em" fill="#f7f4ea" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="bold" text-anchor="middle">7</text>
+    <text x="112.94" y="408" dy=".35em" fill="#f7f4ea" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="bold" text-anchor="middle">8</text>
+    <text x="84" y="300" dy=".35em" fill="#f7f4ea" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="bold" text-anchor="middle">9</text>
+    <text x="112.94" y="192" dy=".35em" fill="#f7f4ea" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="bold" text-anchor="middle">10</text>
+    <text x="192" y="112.94" dy=".35em" fill="#f7f4ea" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="bold" text-anchor="middle">11</text>
+    <circle cx="300" cy="300" r="4" fill="#d9b45c"/>
+  </g>
+</svg>

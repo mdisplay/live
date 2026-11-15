@@ -1,0 +1,194 @@
+/* Classic theme: digital-default. Scoped to #app.theme-digital-default. */
+
+#app {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  /*top: 20px;*/
+  top: 1.5rem;
+  /*right: 30px;*/
+  right: 2rem;
+  /*bottom: 20px;*/
+  /*bottom: 1.5rem;*/
+  bottom: 6rem;
+  /*left: 30px;*/
+  left: 2rem;
+}
+
+#app.theme-digital-default .prayer-info-container .prayer-info.is-current {
+  background: #fff;
+  transition: all 300ms;
+}
+
+#app.theme-digital-default.active-prayer-info-athan .prayer-info.is-current/* .prayer-time*/ {
+  background: #7eff74;
+}
+
+#app.theme-digital-default.active-prayer-info-iqamah .prayer-info.is-current/* .iqamah-time*/ {
+  background: #ffeb3b;
+}
+
+#app.theme-digital-default .prayer-info-container .prayer-info.is-current .prayer-name,
+#app.theme-digital-default .prayer-info-container .prayer-info.is-current .prayer-time,
+#app.theme-digital-default .prayer-info-container .prayer-info.is-current .iqamah-time {
+  color: #000;
+}
+
+#app.theme-digital-default .prayer-display .time,
+#app.theme-digital-default .prayer-display .am-pm,
+#app.theme-digital-default .prayer-info-container .prayer-time {
+  color: #7eff74;
+  /* color: cyan; */
+}
+
+#app.theme-digital-default .prayer-display .time.is-sunrise,
+#app.theme-digital-default .prayer-display .is-sunrise .am-pm {
+  color: #FF8F00;
+  /* color: cyan; */
+}
+
+#app.theme-digital-default.active-prayer-info-athan .prayer-info.is-current/* .prayer-time*/ {
+  background: #7eff74;
+  /* background: cyan; */
+}
+
+#app.theme-digital-default .prayer-display .iqamah-time,
+#app.theme-digital-default .prayer-display .iqamah-am-pm,
+#app.theme-digital-default .prayer-info-container .iqamah-time {
+  color: #ffeb3b;
+  /* color: magenta; */
+}
+
+#app.theme-digital-default .prayer-info-container .is-sunrise .iqamah-time {
+  color: #FF8F00;
+  /* color: magenta; */
+}
+
+#app.theme-digital-default.active-prayer-info-iqamah .prayer-info.is-current/* .iqamah-time*/ {
+  background: #ffeb3b;
+  /* background: magenta; */
+}
+
+#app.theme-digital-default.active-prayer-info-iqamah .prayer-info.is-current.is-sunrise/* .iqamah-time*/ {
+  background: #FF8F00;
+  /* background: magenta; */
+}
+
+@media (orientation: portrait) {
+  #app.theme-digital-default .digital-clock .time .hours,
+    #app.theme-digital-default .digital-clock .time .colon-main,
+    #app.theme-digital-default .digital-clock .time .minutes {
+      top: 0;
+      left: 0;
+      font-size: 20rem;
+      line-height: 25rem;
+      bottom: auto;
+      height: 25rem;
+      margin: 0;
+      top: 10rem;
+    }
+    #app.theme-digital-default .digital-clock .time .hours,
+    #app.theme-digital-default .digital-clock .time .minutes {
+      width: 25rem;
+    }
+    #app.theme-digital-default .digital-clock .time .colon-main {
+      transform: none;
+      left: 22rem;
+      width: 10rem;
+    }
+    #app.theme-digital-default .digital-clock .time .minutes {
+      left: 30rem;
+    }
+
+    #app.theme-digital-default .digital-clock .date-display {
+      left: 2rem;
+      top: -6rem;
+    }
+
+    /*  */
+
+    #app.theme-digital-default .digital-clock .time .seconds-container {
+      right: 0;
+      text-align: right;
+      position: absolute;
+      left: auto;
+      top: 20.5rem;
+      right: 2rem;
+    }
+    #app.theme-digital-default .digital-clock .time .seconds-container .seconds,
+    #app.theme-digital-default .digital-clock .time .seconds-container .am-pm {
+      font-size: 5rem;
+      line-height: 6rem;
+      height: 6rem;
+      display: block;
+      position: absolute;
+      left: auto;
+      top: 0;
+      right: 0;
+      bottom: auto;
+    }
+    #app.theme-digital-default .digital-clock .time .seconds-container .seconds {
+    }
+    #app.theme-digital-default .digital-clock .time .seconds-container .seconds .colon {
+    }
+    #app.theme-digital-default .digital-clock .time .seconds-container .am-pm {
+      top: 4rem;
+      font-size: 2.5rem;
+      opacity: 0.5;
+    }
+
+
+    #app.theme-digital-default .prayer-display .iqamah-time, #app.theme-digital-default .prayer-display .time {
+      font-size: 12rem;
+    }
+    #app.theme-digital-default .prayer-display .time {
+      bottom: 13rem;
+    }
+    #app.theme-digital-default .prayer-display .iqamah-time {
+      bottom: 2rem;
+    }
+    #app.theme-digital-default .active-timer .time {
+      font-size: 12rem;
+    }
+    #app.theme-digital-default.is-before .active-timer {
+      bottom: 2rem;
+    }
+    #app.theme-digital-default.is-waiting .active-timer, #app.theme-digital-default.is-after .active-timer {
+      bottom: 13rem;
+    }
+    #app.theme-digital-default .prayer-display .name {
+      bottom: 20.5rem;
+    }
+    #app.theme-digital-default .alert-container {
+      top: 30rem;
+      left: 15rem;
+    }
+
+    #app.theme-digital-default.analog-clock-active .alert-container {
+      top: 20rem;
+      left: 35rem;
+    }
+
+    #app.theme-digital-default #version-info {
+      font-size: 2.5rem !important;
+    }
+    #app.theme-digital-default #version-info .version-text {
+      font-size: 3rem !important;
+    }
+
+    #app.theme-digital-default.analog-clock-active .analog-clock-container {
+      width: 30rem;
+      height: 30rem;
+      top: 10rem;
+      bottom: auto;
+      left: 1rem;
+    }
+
+    #app.theme-digital-default.analog-clock-active .digital-clock .date-display {
+      left: 24rem;
+      top: 2rem;
+      bottom: auto;
+    }
+}

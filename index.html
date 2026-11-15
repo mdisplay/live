@@ -14,20 +14,20 @@
     <title>MDisplay Live</title>
     <link rel="shortcut icon" href="assets/images/favicon.png" />
     <link rel="icon" type="image/png" href="assets/images/favicon.png" />
-    <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=2.20.2-176" />
-    <link rel="stylesheet" type="text/css" href="assets/css/app.css?v=2.20.2-176" />
-    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock.css?v=2.20.2-176" />
-    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock-layout.css?v=2.20.2-176" />
-    <link rel="stylesheet" type="text/css" href="assets/css/theme-default.css?v=2.20.2-176" />
-    <link rel="stylesheet" type="text/css" href="assets/css/display-theme-digital-modern.css?v=2.20.2-176" />
-    <link rel="stylesheet" type="text/css" href="assets/css/display-theme-analog-modern.css?v=2.20.2-176" />
-    <link rel="stylesheet" type="text/css" href="assets/css/display-theme-galaxymin.css?v=2.20.2-176" />
-    <link rel="stylesheet" type="text/css" href="assets/css/display-theme-darksplit.css?v=2.20.2-176" />
+    <!-- common styles -->
+    <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=3.0.0-208" />
+    <link rel="stylesheet" type="text/css" href="assets/css/reset.css?v=3.0.0-208" />
+    <link rel="stylesheet" type="text/css" href="assets/css/common.css?v=3.0.0-208" />
+    <link rel="stylesheet" type="text/css" href="assets/css/app-settings.css?v=3.0.0-208" />
+    <!-- specific styles -->
+    <link rel="stylesheet" type="text/css" href="assets/css/theme-base.css?v=3.0.0-208" />
+    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock.css?v=3.0.0-208" />
+    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock-layout.css?v=3.0.0-208" />
   </head>
   <body>
     <div
       id="app"
-      :class="[{'is-showing-alert': showAlert, 'analog-clock-active': analogClockActive, 'is-active': currentPrayer, 'is-waiting': currentPrayerWaiting, 'is-before': currentPrayerBefore, 'is-after': currentPrayerAfter, 'focus-active-timer': currentPrayer && focusActiveTimer}, 'active-prayer-info-' + prayerInfo, 'display-theme-' + activeDisplayTheme]"
+      :class="[{'is-showing-alert': showAlert, 'analog-clock-active': analogClockActive, 'is-active': currentPrayer, 'is-waiting': currentPrayerWaiting, 'is-before': currentPrayerBefore, 'is-after': currentPrayerAfter, 'focus-active-timer': currentPrayer && focusActiveTimer}, 'active-prayer-info-' + prayerInfo, themeClasses]"
     >
     
       <div v-show="true" v-if="isDevDebugging" style="display: none; background: red; position: fixed; z-index: 999999999999;">{{ devDebugMessage }}</div>
@@ -57,7 +57,7 @@
 
       <div id="active-overlay"></div>
 
-        <div style="display: none" v-show="true" class="modal-wrapper" v-if="settingsMode">
+        <div id="settings_mode" style="display: none" v-show="true" class="modal-wrapper" v-if="settingsMode">
           <div class="modal-overlay"></div>
           <div class="modal-dialog">
             <div @click="scrollUp()" class="modal-close modal-close-top">Scroll UP &#9650;
@@ -108,7 +108,7 @@
                   <span class="error" v-if="appUdate.error">ERROR: {{ appUdate.error }}</span>
                   <span class="checking" v-if="appUdate.checking">Checking...</span>
                   <span class="updated" v-if="appUdate.updated"
-                    >Updated. Version {{ '?v=2.20.2-176'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1 ($2)') }}.</span
+                    >Updated. Version {{ '?v=3.0.0-208'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1 ($2)') }}.</span
                   >
                   <span class="updating" v-if="appUdate.updating">Updating...</span>
                 </div>
@@ -549,26 +549,26 @@
                   </div>
                   <div class="config-item other-config" style="height: auto;">
                     <div>
-                      <small>Display Theme</small>
+                      <small>Theme</small>
                       <small>
                         >
-                        <a href="#" @click="expanded.displayThemes = !expanded.displayThemes;">
-                          <span v-if="expanded.displayThemes">dismiss</span>
-                          <span v-else>{{ getSelected(displayThemes, activeDisplayTheme) }}</span>
+                        <a href="#" @click="expanded.themes = !expanded.themes;">
+                          <span v-if="expanded.themes">dismiss</span>
+                          <span v-else>{{ getSelected(themes, activeTheme) }}</span>
                         </a>
                       </small>
                     </div>
-                    <div v-if="expanded.displayThemes">
-                    <label v-for="displayTheme in displayThemes" :for="'display-theme-select-' + displayTheme.id" style="display: block;">
+                    <div v-if="expanded.themes">
+                    <label v-for="theme in visibleThemes" :for="'theme-select-' + theme.id" style="display: block;">
                       <input
-                        :id="'display-theme-select-' + displayTheme.id"
+                        :id="'theme-select-' + theme.id"
                         type="radio"
-                        name="display-theme-select"
-                        :value="displayTheme.id"
-                        v-model="activeDisplayTheme"
-                        @change="expanded.displayThemes = false; updateSettings()"
+                        name="theme-select"
+                        :value="theme.id"
+                        :checked="activeTheme === theme.id"
+                        @change="selectTheme(theme.id)"
                       />
-                      {{ displayTheme.label }}
+                      {{ theme.label }}
                       &nbsp;
                     </label>
                     </div>
@@ -732,7 +732,7 @@
             top: 0;
             height: 3rem;
             display: none;
-            z-index: 511;
+            z-index: 5555;
             padding-right: 2rem;
             padding-top: 1.25rem;
           "
@@ -742,7 +742,7 @@
             <span style="padding: 0.25rem; color: #ff0000; font-weight: bold; opacity: 0.75">No Internet</span>
           </div>
           <div v-else>
-            <!-- <span style="opacity: 0.25"> Version {{ '?v=2.20.2-176'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }} </span> -->
+            <!-- <span style="opacity: 0.25"> Version {{ '?v=3.0.0-208'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }} </span> -->
 
             <span style="opacity: 0.5">
               <svg style="height: 1em; color: #FFF; fill: #FFF;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -780,10 +780,11 @@
             <img :src="backgroundImage" />
           </div>
         </div>
+        <div class="bgful-theme"></div>
         <div v-if="currentPrayer && focusActiveTimer" class="alert-container" :style="{opacity: showAlert ? '1' : '0'}">
           <img :src="'assets/images/' + currentlyShowingAlert">
         </div>
-        <div class="branding-bar" v-if="activeDisplayTheme == 'darksplit' || activeDisplayTheme == 'galaxymin'">
+        <div class="branding-bar" v-if="showBrandingBar">
           <span class="masjid-name">{{ masjidName || 'Enter Masjid Name in Settings' }}</span>
         </div>
         <div class="digital-clock" v-if="timeIsValid">
@@ -814,7 +815,7 @@
               ><span class="m">{{ timeDisplayMinutes }}</span>
 
               <span class="seconds-container">
-                <svg class="seconds-ring" viewBox="0 0 64 64" aria-hidden="true" v-if="activeDisplayTheme == 'darksplit' || activeDisplayTheme == 'galaxymin'">
+                <svg class="seconds-ring" viewBox="0 0 64 64" aria-hidden="true" v-if="activeTheme == 'moonlight' || activeTheme == 'moonlight-basic'">
                   <circle class="seconds-ring-track" cx="32" cy="32" r="28" fill="none" stroke-width="4"></circle>
                   <circle class="seconds-ring-progress" cx="32" cy="32" r="28" fill="none" stroke-width="4" stroke-linecap="round" stroke-dasharray="175.93" transform="rotate(-90 32 32)" :stroke-dashoffset="secondsRingOffset"></circle>
                   <g :transform="'rotate(' + secondsRingAngle + ' 32 32)'">
@@ -922,37 +923,14 @@
         </template>
 
         <div
+          id="analog-clock-container"
           class="analog-clock-container"
           :style="{'visibility': timeIsValid ? 'visible' : 'hidden'}"
         >
-          <img class="analog-clock-bg" :src="'assets/analog-clock/themes/' + analogClockTheme + '/clock-face.png'"></span>
-          <span class="analog-clock-overalay"></span>
-          <!-- HOURS' HAND -->
           <img
-            id="analog-clock-hand-hours"
-            :src="'assets/analog-clock/themes/' + analogClockTheme + '/clock-hand-hours.png'"
-            alt="HOURS HAND"
-          />
-
-          <!-- MINUTES' HAND -->
-          <img
-            id="analog-clock-hand-minutes"
-            :src="'assets/analog-clock/themes/' + analogClockTheme + '/clock-hand-minutes.png'"
-            alt="MINUTES HAND"
-          />
-
-          <!-- SECONDS' HAND -->
-          <img
-            id="analog-clock-hand-seconds"
-            :src="'assets/analog-clock/themes/' + analogClockTheme + '/clock-hand-seconds.png'"
-            alt="SECONDS HAND"
-          />
-
-          <!-- CENTER CIRCLE -->
-          <img
-            class="analog-clock-center-circle"
-            :src="'assets/analog-clock/themes/' + analogClockTheme + '/clock-center-circle.png'"
-            alt="CENTER CIRCLE"
+            class="analog-clock-face"
+            alt=""
+            :src="'assets/analog-clock/themes/' + analogClockTheme + '/face.svg'"
           />
         </div>
 
@@ -1004,17 +982,17 @@
         </div>
       </div>
     </div>
-    <script type="text/javascript" src="prayer-data.js?v=2.20.2-176"></script>
-    <script type="text/javascript" src="prayernew-data.js?v=2.20.2-176"></script>
-    <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=2.20.2-176"></script>
-    <script type="text/javascript" src="assets/vendors/vue.min.js?v=2.20.2-176"></script>
-    <script type="text/javascript" src="assets/vendors/moment.min.js?v=2.20.2-176"></script>
-    <script type="text/javascript" src="assets/vendors/hijri.js?v=2.20.2-176"></script>
-    <script type="text/javascript" src="assets/vendors/jquery-3.6.0.min.js?v=2.20.2-176"></script>
-    <script type="text/javascript" src="assets/js/translations.js?v=2.20.2-176"></script>
+    <script type="text/javascript" src="prayer-data.js?v=3.0.0-208"></script>
+    <script type="text/javascript" src="prayernew-data.js?v=3.0.0-208"></script>
+    <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=3.0.0-208"></script>
+    <script type="text/javascript" src="assets/vendors/vue.min.js?v=3.0.0-208"></script>
+    <script type="text/javascript" src="assets/vendors/moment.min.js?v=3.0.0-208"></script>
+    <script type="text/javascript" src="assets/vendors/hijri.js?v=3.0.0-208"></script>
+    <script type="text/javascript" src="assets/vendors/jquery-3.6.0.min.js?v=3.0.0-208"></script>
+    <script type="text/javascript" src="assets/js/translations.js?v=3.0.0-208"></script>
     <script type="text/javascript" src="cdvfile://localhost/assets/www/cordova.js"></script>
-    <script type="text/javascript" src="assets/analog-clock/analog-clock.js?v=2.20.2-176"></script>
-    <script type="text/javascript" src="assets/js/app.js?v=2.20.2-176"></script>
+    <script type="text/javascript" src="assets/analog-clock/analog-clock.js?v=3.0.0-208"></script>
+    <script type="text/javascript" src="assets/js/app.js?v=3.0.0-208"></script>
     <script type="text/javascript">
       // WARNING: do not use ES6 syntax
       // The code should only be authored in ES5
@@ -1035,7 +1013,7 @@
       }
 
 
-      var fullVersion = '?v=2.20.2-176';
+      var fullVersion = '?v=3.0.0-208';
       window.mdApp.data.appVersion = window.mdApp.parseVersion(fullVersion);
 
       var hasCordova = !!window.cordova;
@@ -1094,6 +1072,9 @@
             },
             updateSettings: function updateSettings() {
               window.mdApp.updateSettings();
+            },
+            selectTheme: function selectTheme(themeId) {
+              window.mdApp.selectTheme(themeId);
             },
             scrollUp: function scrollUp() {
               window.mdApp.scrollUp();

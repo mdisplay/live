@@ -1,0 +1,187 @@
+/* Theme: Moonlight Analog Basic (landscape only; internal base for Moonlight Analog) */
+
+@media (orientation: landscape) {
+
+
+
+
+
+
+
+  #app.theme-moonlight-analog-basic .analog-clock-container {
+    top: 5.5rem;
+    left: 2rem;
+    bottom: auto;
+    width: 50vw;
+    height: 50vw;
+    max-width: calc(100vh - 12.75rem);
+    max-height: calc(100vh - 12.75rem);
+  }
+
+  #app.theme-moonlight-analog-basic .digital-clock {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+  }
+
+  #app.theme-moonlight-analog-basic .digital-clock .time,
+  #app.theme-moonlight-analog-basic .digital-clock .time .hours,
+  #app.theme-moonlight-analog-basic .digital-clock .time .minutes {
+    position: static;
+  }
+
+  #app.theme-moonlight-analog-basic .digital-clock .time {
+    display: block;
+    height: 0;
+    font-size: 0;
+    line-height: 0;
+  }
+
+  #app.theme-moonlight-analog-basic .digital-clock .date-display {
+    position: absolute;
+    top: 5.5rem;
+    left: calc(100vh - 1rem - 8.75rem);
+    right: auto;
+    width: auto;
+    padding: 0;
+    text-align: left;
+  }
+
+  #app.theme-moonlight-analog-basic .digital-clock .date-display .hijri-datex {
+    font-size: 1.2rem;
+    line-height: 1.2rem;
+    margin-bottom: 0.6rem;
+    color: #8f8f8f;
+    margin-left: 0;
+  }
+
+  #app.theme-moonlight-analog-basic .digital-clock .date-display .datex {
+    font-size: 1.8rem;
+    line-height: 1.8rem;
+    margin-bottom: 0.6rem;
+    color: #f2f2f2;
+    margin-left: 0;
+  }
+
+  #app.theme-moonlight-analog-basic .digital-clock .date-display .weekday {
+    font-size: 2.2rem;
+    line-height: 2.2rem;
+    color: #8f8f8f;
+    margin-left: 0;
+  }
+
+  #app.theme-moonlight-analog-basic .prayer-display .name {
+    bottom: 17rem;
+    font-size: 3.2rem;
+    color: #f2f2f2;
+    right: 2rem;
+  }
+
+  #app.theme-moonlight-analog-basic .prayer-display .name .label {
+    top: -1.6rem;
+    font-size: 1.6rem;
+    color: #8f8f8f;
+  }
+
+  #app.theme-moonlight-analog-basic .prayer-display .time,
+  #app.theme-moonlight-analog-basic .prayer-display .iqamah-time {
+    height: 7.2rem;
+    line-height: 7.2rem;
+    font-size: 7.2rem;
+    right: 2rem;
+  }
+
+  #app.theme-moonlight-analog-basic .prayer-display .time {
+    bottom: 12.8rem;
+    color: #7eff74;
+    text-shadow: 0 0 2.5rem rgba(126, 255, 116, 0.1);
+  }
+
+  #app.theme-moonlight-analog-basic .prayer-display .iqamah-time {
+    bottom: 6.4rem;
+    color: #ffeb3b;
+    text-shadow: 0 0 2.5rem rgba(255, 235, 59, 0.1);
+  }
+
+  #app.theme-moonlight-analog-basic .prayer-display .time.is-sunrise {
+    color: #f279ff;
+    text-shadow: 0 0 2.5rem rgba(255, 143, 0, 0.12);
+  }
+
+
+  #app.theme-moonlight-analog-basic .prayer-display .am-pm,
+  #app.theme-moonlight-analog-basic .prayer-display .iqamah-am-pm {
+    font-size: 1.2rem;
+  }
+
+  #app.theme-moonlight-analog-basic .prayer-display .time .label,
+  #app.theme-moonlight-analog-basic .prayer-display .iqamah-time .iqamah-label {
+    top: 2.8rem;
+    left: -6rem;
+    width: 5.6rem;
+    font-size: 1.2rem;
+    line-height: 1.2rem;
+  }
+
+  #app.theme-moonlight-analog-basic .active-timer,
+  #app.theme-moonlight-analog-basic.is-before .active-timer {
+    bottom: 6.4rem;
+  }
+
+  #app.theme-moonlight-analog-basic.is-waiting .active-timer,
+  #app.theme-moonlight-analog-basic.is-after .active-timer {
+    bottom: 12.8rem;
+  }
+
+  #app.theme-moonlight-analog-basic .active-timer .time {
+    height: 7.2rem;
+    line-height: 7.2rem;
+    font-size: 7.2rem;
+    color: #fc7878;
+    padding-right: 2rem;
+    text-shadow: 0 0 2.5rem rgba(252, 120, 120, 0.12);
+  }
+
+  #app.theme-moonlight-analog-basic .active-timer .description {
+    margin-top: -0.8rem;
+    font-size: 2rem;
+  }
+
+  #app.theme-moonlight-analog-basic .prayer-info-container {
+    display: flex;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  #app.theme-moonlight-analog-basic .prayer-info-container .prayer-info {
+    flex: 1 1 20%;
+    width: auto;
+    display: block;
+  }
+
+
+
+
+
+
+  #app.theme-moonlight-analog-basic .prayer-info-container .prayer-name {
+    color: #cfcfcf;
+    background: transparent;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+}

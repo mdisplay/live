@@ -5,9 +5,9 @@ if (workbox) {
   console.log("Boo! Workbox didn't load 😬");
 }
 var baseUrl = '/live/';
-var appVersion = '2.20.2-176';
+var appVersion = '3.0.0-208';
 var dataVersion = '10';
-var vendorVersion = '15';
+var vendorVersion = '47';
 var bgVersion = '9';
 
 // Detailed logging is very useful during development
@@ -86,6 +86,10 @@ var precacheList = [
     url: toUrl('assets/images/galaxy-bg1.svg'),
     revision: vendorVersion,
   },
+  {
+    url: toUrl('assets/images/sunrise-bg.svg'),
+    revision: vendorVersion,
+  },
   // /app
   {
     url: toUrl('assets/js/translations.js'),
@@ -100,15 +104,23 @@ var precacheList = [
     revision: appVersion,
   },
   {
-    url: toUrl('assets/css/app.css'),
+    url: toUrl('assets/css/common.css'),
+    revision: appVersion,
+  },
+  {
+    url: toUrl('assets/css/reset.css'),
+    revision: appVersion,
+  },
+  {
+    url: toUrl('assets/css/app-settings.css'),
+    revision: appVersion,
+  },
+  {
+    url: toUrl('assets/css/theme-base.css'),
     revision: appVersion,
   },
   {
     url: toUrl('assets/analog-clock/analog-clock.css'),
-    revision: appVersion,
-  },
-  {
-    url: toUrl('assets/css/theme-default.css'),
     revision: appVersion,
   },
   {
@@ -119,11 +131,20 @@ var precacheList = [
   // 'assets/**/*.{css,js}',
 ];
 
-// display themes that ship their own CSS file
-var displayThemes = ['digital-modern', 'analog-modern', 'galaxymin', 'darksplit'];
-for (var themeIndex = 0; themeIndex < displayThemes.length; themeIndex++) {
+// theme CSS files (one file per theme)
+var themeCssFiles = ['theme-digital-default.css', 'theme-sunrise.css', 'theme-moonlight-common.css', 'theme-moonlight-flat.css', 'theme-moonlight-basic.css', 'theme-moonlight-analog-basic.css', 'theme-moonlight-gradient.css', 'theme-moonlight.css', 'theme-moonlight-analog.css'];
+for (var themeIndex = 0; themeIndex < themeCssFiles.length; themeIndex++) {
   precacheList.push({
-    url: toUrl('assets/css/display-theme-' + displayThemes[themeIndex] + '.css'),
+    url: toUrl('assets/css/' + themeCssFiles[themeIndex]),
+    revision: vendorVersion,
+  });
+}
+
+// analog clock faces that ship their own SVG file
+var analogThemes = ['sunrise', 'galaxy'];
+for (var analogIndex = 0; analogIndex < analogThemes.length; analogIndex++) {
+  precacheList.push({
+    url: toUrl('assets/analog-clock/themes/' + analogThemes[analogIndex] + '/face.svg'),
     revision: vendorVersion,
   });
 }
@@ -136,26 +157,6 @@ for (var i = 0; i <= 59; i++) {
   });
 }
 precacheList = precacheList.concat(backgroundsList);
-
-var analogClockThemes = ['default', 'modern'];
-var analogClockThemeFileNames = [
-  'clock-face.png',
-  'clock-hand-hours.png',
-  'clock-hand-minutes.png',
-  'clock-hand-seconds.png',
-  'clock-center-circle.png',
-];
-
-var analogClockThemeFiles = [];
-for (var i = 0; i < analogClockThemes.length; i++) {
-  for (var j = 0; j < analogClockThemeFileNames.length; j++) {
-    analogClockThemeFiles.push({
-      url: toUrl('assets/analog-clock/themes/' + analogClockThemes[i] + '/' + analogClockThemeFileNames[j]),
-      revision: vendorVersion,
-    });
-  }
-}
-precacheList = precacheList.concat(analogClockThemeFiles);
 
 // precache all the site files
 workbox.precaching.precacheAndRoute(precacheList, {

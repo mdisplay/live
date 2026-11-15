@@ -1,0 +1,467 @@
+@media (orientation: landscape) {
+
+  #app.theme-sunrise {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    color: #eaf0fa;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  #app.theme-sunrise #bgful .bgful-overlay {
+    /* background: transparent; */
+  }
+
+  #app.theme-sunrise .bgful-theme {
+    background-color: #2b2718;
+    background-image: url("../images/sunrise-bg.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    opacity: 0.75;
+  }
+
+  #app.theme-sunrise .branding-bar {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: auto;
+    width: auto;
+    max-width: 66vw;
+    height: auto;
+    padding: 1.6vh 15vh 0 2rem;
+    background: transparent;
+    box-shadow: none;
+    line-height: normal;
+    text-align: right;
+    z-index: 20;
+  }
+
+  #app.theme-sunrise .branding-bar .masjid-name {
+    display: block;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 4.2vh;
+    line-height: 5vh;
+    letter-spacing: 0.02em;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+  }
+
+  #app.theme-sunrise .branding-bar::after {
+    content: '';
+    position: absolute;
+    top: 1.2vh;
+    right: 1.6rem;
+    width: 8vh;
+    height: 8vh;
+    border-radius: 50%;
+    background-color: #f7f3e6;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg fill='%232b3444'%3E%3Cpath d='M26 16c-9 3-15 12-13 22 2 10 12 16 22 14 6-1 10-5 13-10-4 3-9 4-14 3-9-2-14-11-12-20 1-4 3-7 6-9z'/%3E%3Crect x='44' y='12' width='3' height='8'/%3E%3Crect x='41.5' y='14.5' width='8' height='3'/%3E%3Cpath d='M20 42h24v3H20z'/%3E%3Cpath d='M26 34h3v11h-3zM35 34h3v11h-3zM30 34h4v11h-4z'/%3E%3Cpath d='M20 45h24v3H20z'/%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: 66%;
+    background-position: center;
+    box-shadow: 0 0 0 1px rgba(217, 180, 92, 0.6), 0 3px 10px rgba(0, 0, 0, 0.45);
+  }
+
+  #app.theme-sunrise .analog-clock-container {
+    left: 22.5vw;
+    right: auto;
+    top: 18.5vh;
+    bottom: auto;
+    width: 41vh;
+    height: 41vh;
+    margin: 0;
+    z-index: 10 !important;
+  }
+
+  #app.theme-sunrise .analog-clock-container::after {
+    content: '';
+    position: absolute;
+    top: -3%;
+    left: -3%;
+    width: 106%;
+    height: 106%;
+    border-radius: 50%;
+    box-shadow: 0 0 2.2rem rgba(240, 193, 75, 0.5), 0 0 5.5rem rgba(240, 193, 75, 0.28), 0 0 9rem rgba(240, 193, 75, 0.12);
+    pointer-events: none;
+  }
+
+  #app.theme-sunrise .digital-clock {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 6;
+  }
+
+  #app.theme-sunrise .digital-clock .time,
+  #app.theme-sunrise .digital-clock .time .hours,
+  #app.theme-sunrise .digital-clock .time .minutes {
+    position: static;
+    display: block;
+    height: 0;
+    font-size: 0;
+    line-height: 0;
+  }
+
+  #app.theme-sunrise .digital-clock .date-display {
+    position: absolute;
+    top: auto;
+    right: 0;
+    bottom: 0;
+    left: 31vw;
+    display: flex;
+    align-items: center;
+    width: auto;
+    height: 7vh;
+    margin: 0;
+    padding: 0 34vh 0 2rem;
+    background-image: linear-gradient(90deg, rgba(16, 31, 53, 0.97), rgba(31, 55, 88, 0.97));
+    border-top: 1px solid rgba(240, 193, 75, 0.55);
+    font-size: 2.4vh;
+    line-height: 7vh;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  #app.theme-sunrise .digital-clock .date-display > span:last-child {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  #app.theme-sunrise .digital-clock .date-display .weekday {
+    order: 1;
+    display: inline;
+    margin: 0;
+    padding: 0;
+    font-size: 2.8vh;
+    line-height: 7vh;
+    font-weight: bold;
+    color: #f0c14b;
+  }
+
+  #app.theme-sunrise .digital-clock .date-display .datex {
+    order: 2;
+    display: inline;
+    margin: 0;
+    padding: 0;
+    font-size: 2.4vh;
+    line-height: 7vh;
+    color: #eaf0fa;
+  }
+
+  #app.theme-sunrise .digital-clock .date-display .datex::before {
+    content: '\00b7';
+    margin: 0 0.7rem 0 0.1rem;
+    color: #f0c14b;
+  }
+
+  #app.theme-sunrise .digital-clock .date-display .hijri-datex {
+    order: 3;
+    display: inline;
+    margin: 0;
+    padding: 0;
+    font-size: 2.2vh;
+    line-height: 7vh;
+    color: #a9bdd8;
+  }
+
+  #app.theme-sunrise .digital-clock .date-display .hijri-datex::before {
+    content: '/';
+    margin: 0 0.7rem 0 0.7rem;
+    color: #6d84a5;
+  }
+
+  #app.theme-sunrise .prayer-info-container {
+    position: absolute;
+    top: 0;
+    right: auto;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    width: 31vw;
+    height: auto;
+    margin: 0;
+    padding: 0.6vh 0;
+    background-color: rgba(30, 45, 66, 0.94);
+    background-image: linear-gradient(165deg, rgba(46, 64, 88, 0.97), rgba(21, 32, 49, 0.97));
+    border-right: 1px solid rgba(240, 193, 75, 0.8);
+    border-radius: 0 1.6rem 1.6rem 0;
+    box-shadow: inset -0.3rem 0 0 rgba(240, 193, 75, 0.12), 0.5rem 0 2.6rem rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    z-index: 5;
+  }
+
+  #app.theme-sunrise .prayer-info-container .prayer-info {
+    position: relative;
+    flex: 1 1 0;
+    width: auto;
+    height: auto;
+    min-height: 0;
+    margin: 0;
+    padding: 0.8vh 1.4rem 0.8vh 5.6rem;
+    background: transparent;
+    border-bottom: 1px solid rgba(240, 193, 75, 0.2);
+    overflow: hidden;
+    text-align: left;
+  }
+
+  #app.theme-sunrise .prayer-info-container .prayer-info:nth-child(even) {
+    background: transparent;
+  }
+
+  #app.theme-sunrise .prayer-info-container .prayer-info:last-child {
+    border-bottom: 0;
+  }
+
+  #app.theme-sunrise .prayer-info-container .prayer-info::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 1.2rem;
+    width: 5.4vh;
+    height: 5.4vh;
+    margin-top: -2.7vh;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    opacity: 0.95;
+  }
+
+  #app.theme-sunrise .prayer-info-container .prayer-info:nth-child(1)::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg fill='%23f0c14b'%3E%3Ccircle cx='32' cy='37' r='11'/%3E%3Crect x='9' y='50' width='46' height='4' rx='2'/%3E%3C/g%3E%3Cg stroke='%23f0c14b' stroke-width='3.4' stroke-linecap='round'%3E%3Cpath d='M32 12v7M14 19l5 5M50 19l-5 5M9 37h6M49 37h6'/%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  #app.theme-sunrise .prayer-info-container .prayer-info:nth-child(2)::before,
+  #app.theme-sunrise .prayer-info-container .prayer-info:nth-child(3)::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='11' fill='%23f0c14b'/%3E%3Cg stroke='%23f0c14b' stroke-width='3.4' stroke-linecap='round'%3E%3Cpath d='M32 8v7M32 49v7M8 32h7M49 32h7M15 15l5 5M44 44l5 5M49 15l-5 5M20 44l-5 5'/%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  #app.theme-sunrise .prayer-info-container .prayer-info:nth-child(4)::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cg fill='%23f0c14b'%3E%3Ccircle cx='32' cy='41' r='10'/%3E%3Crect x='9' y='52' width='46' height='4' rx='2'/%3E%3C/g%3E%3Cg stroke='%23f0c14b' stroke-width='3.4' stroke-linecap='round'%3E%3Cpath d='M14 24l7 3M50 24l-7 3M22 15l4 6M42 15l-4 6'/%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  #app.theme-sunrise .prayer-info-container .prayer-info:nth-child(5)::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M40 8a24 24 0 1 0 0 48 20 20 0 1 1 0-48z' fill='%23f0c14b'/%3E%3C/svg%3E");
+  }
+
+  #app.theme-sunrise .prayer-info-container .prayer-name {
+    display: block;
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    background: transparent !important;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 2.3vh;
+    line-height: 2.9vh;
+    font-weight: normal;
+    letter-spacing: 0.01em;
+    color: #eaf0fa;
+    opacity: 1;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  #app.theme-sunrise .prayer-info-container .prayer-name.is-sunrise-label {
+    background: transparent !important;
+    color: #eaf0fa !important;
+  }
+
+  #app.theme-sunrise .prayer-info-container .prayer-time,
+  #app.theme-sunrise .prayer-info-container .iqamah-time {
+    position: static !important;
+    display: block !important;
+    width: auto;
+    height: auto;
+    transform: none !important;
+    opacity: 1 !important;
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  #app.theme-sunrise .prayer-info-container .prayer-time {
+    font-size: 6.4vh;
+    line-height: 6.8vh;
+    font-weight: bold;
+    letter-spacing: 0.01em;
+    color: #f0c14b;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.55);
+  }
+
+  #app.theme-sunrise .prayer-info-container .prayer-time .am-pm {
+    display: none;
+  }
+
+  #app.theme-sunrise .prayer-info-container .iqamah-time {
+    display: inline-flex !important;
+    align-items: baseline;
+    margin-top: 0.4vh;
+    padding: 0.15vh 0.9vh;
+    border: 1px solid rgba(240, 193, 75, 0.55);
+    border-radius: 0.25rem;
+    background-color: rgba(10, 16, 26, 0.6);
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.85vh;
+    line-height: 2.4vh;
+    letter-spacing: 0.06em;
+    color: #f2f6fc;
+  }
+
+  #app.theme-sunrise .prayer-info-container .iqamah-time .am-pm {
+    display: none;
+  }
+
+  #app.theme-sunrise .prayer-info-container .iqamah-time .iqamah-label {
+    position: static;
+    order: -1;
+    display: inline;
+    margin: 0 0.6vh 0 0;
+    font-size: 1.75vh;
+    line-height: 2.4vh;
+    letter-spacing: 0.08em;
+    color: #d9b45c;
+  }
+
+  #app.theme-sunrise .prayer-info-container .prayer-info.is-current {
+    background-image: linear-gradient(90deg, rgba(240, 193, 75, 0.22), rgba(240, 193, 75, 0.06));
+    box-shadow: inset 0.35rem 0 0 #f0c14b, inset 0 1px 0 rgba(240, 193, 75, 0.35), inset 0 -1px 0 rgba(240, 193, 75, 0.2);
+  }
+
+  #app.theme-sunrise .prayer-info-container .prayer-info.is-current .prayer-time {
+    color: #ffd97a;
+  }
+
+  #app.theme-sunrise .prayer-info-container .is-sunrise .iqamah-time,
+  #app.theme-sunrise .prayer-info-container .is-tarawih .iqamah-time {
+    color: #dfe7f2;
+  }
+
+  #app.theme-sunrise .prayer-display {
+    display: none !important;
+  }
+
+  #app.theme-sunrise .active-timer {
+    position: absolute;
+    right: 1.4rem;
+    bottom: 1.1vh;
+    left: auto;
+    z-index: 9;
+    text-align: right;
+    font-size: 2.4vh;
+  }
+
+  #app.theme-sunrise .active-timer .timer {
+    display: flex;
+    align-items: center;
+    height: 5.2vh;
+    padding: 0 1.3vh;
+    border: 1px solid rgba(255, 255, 255, 0.65);
+    background-color: #f7f3e6;
+    border-radius: 0.35rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  }
+
+  #app.theme-sunrise .active-timer .description {
+    display: inline-block;
+    order: 1;
+    margin: 0 0.8rem 0 0;
+    font-size: 2.6vh;
+    line-height: 5.2vh;
+    font-weight: bold;
+    color: #1b2a40;
+    opacity: 1;
+  }
+
+  #app.theme-sunrise .active-timer .description::before {
+    content: '';
+    display: inline-block;
+    width: 2.8vh;
+    height: 2.8vh;
+    margin-right: 0.6vh;
+    vertical-align: -0.4vh;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='none' stroke='%231b2a40' stroke-width='2.4'/%3E%3Cpath d='M16 8v8l5 3' fill='none' stroke='%231b2a40' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+  #app.theme-sunrise .active-timer .time {
+    order: 2;
+    display: inline-block;
+    height: auto;
+    margin: 0;
+    font-size: 3.2vh;
+    line-height: 5.2vh;
+    font-weight: bold;
+    color: #1b2a40;
+  }
+
+  #app.theme-sunrise .active-timer .time .colon {
+    display: inline-block;
+    width: auto;
+    min-height: 0;
+    opacity: 1;
+  }
+
+  #app.theme-sunrise .active-timer .time::before {
+    content: '-';
+    margin-right: 0.4vh;
+  }
+
+  #app.theme-sunrise .prayer-times-applied-indicator-new {
+    display: none;
+  }
+
+  #app.theme-sunrise #version-info {
+    right: 0 !important;
+    padding: 0.25rem 0.5rem !important;
+  }
+
+  #app.theme-sunrise #version-info .version-text {
+    display: block !important;
+    margin-right: -0.25rem !important;
+    padding: 0.2rem 0.55rem !important;
+    border-radius: 0 !important;
+    background: rgba(10, 18, 30, 0.72) !important;
+    color: #f0c14b !important;
+  }
+
+  #app.theme-sunrise .alert-container {
+    position: fixed;
+    top: 6rem !important;
+    right: 4rem !important;
+    left: auto !important;
+    z-index: 85785;
+  }
+
+  #app.theme-sunrise .invalid-time-container {
+    left: 31vw;
+    right: 3vw;
+    color: #eaf0fa;
+    text-align: right;
+  }
+
+  #app.theme-sunrise .invalid-time-container h1,
+  #app.theme-sunrise .invalid-time-container h2,
+  #app.theme-sunrise .invalid-time-container h3 {
+    color: #f0c14b;
+  }
+
+  #app.theme-sunrise .toast-container .toast-item {
+    background: rgba(16, 26, 42, 0.94);
+    color: #eaf0fa;
+    border: 1px solid rgba(240, 193, 75, 0.5);
+  }
+
+}
