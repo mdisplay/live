@@ -268,7 +268,7 @@ function App() {
     isCordovaReady: false,
     isDownloadsListOpen: false,
     downloadedFiles: [],
-    alertImages: ['alert1.png', 'alert2.gif'],
+    alertImages: ['alert-phone-moonlight.svg', 'alert2.gif'],
     showSunriseLabel: false,
     splashScreenMillis: 4000,
     isPrayerNewDataApplied: false,

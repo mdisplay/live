@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" style="display: block;" viewBox="0 0 1548 1548" width="587" height="587" preserveAspectRatio="none">
+<defs>
+	<linearGradient id="screenWall" x1="0" y1="0" x2="1" y2="1">
+		<stop offset="0" stop-color="#1b2a5e"/>
+		<stop offset="0.55" stop-color="#3b2a6e"/>
+		<stop offset="1" stop-color="#0a0f1a"/>
+	</linearGradient>
+	<radialGradient id="screenGlow" cx="50%" cy="45%" r="55%">
+		<stop offset="0" stop-color="#7fd8ff" stop-opacity="0.35"/>
+		<stop offset="1" stop-color="#7fd8ff" stop-opacity="0"/>
+	</radialGradient>
+	<radialGradient id="iceWash" cx="50%" cy="50%" r="50%">
+		<stop offset="0" stop-color="#bfeaff" stop-opacity="0.5"/>
+		<stop offset="1" stop-color="#bfeaff" stop-opacity="0"/>
+	</radialGradient>
+	<radialGradient id="violetWash" cx="50%" cy="50%" r="50%">
+		<stop offset="0" stop-color="#c391ff" stop-opacity="0.45"/>
+		<stop offset="1" stop-color="#c391ff" stop-opacity="0"/>
+	</radialGradient>
+	<radialGradient id="roseWash" cx="50%" cy="50%" r="50%">
+		<stop offset="0" stop-color="#ff8fa0" stop-opacity="0.35"/>
+		<stop offset="1" stop-color="#ff8fa0" stop-opacity="0"/>
+	</radialGradient>
+	<clipPath id="phoneGlowClip">
+		<rect x="409" y="174" width="730" height="1200" rx="170"/>
+	</clipPath>
+	<clipPath id="screenClip">
+		<rect x="514" y="369" width="520" height="700" rx="10"/>
+	</clipPath>
+</defs>
+<g>
+	<!-- white inner panel -->
+	<rect x="0" y="0" width="1548" height="1548" rx="230" fill="#f7f7f8"/>
+	<!-- abstract washes, confined behind the phone -->
+	<g clip-path="url(#phoneGlowClip)">
+		<ellipse cx="650" cy="390" rx="220" ry="170" fill="url(#iceWash)"/>
+		<ellipse cx="940" cy="1170" rx="180" ry="160" fill="url(#violetWash)"/>
+		<ellipse cx="570" cy="1050" rx="140" ry="120" fill="url(#roseWash)"/>
+	</g>
+	<!-- smartphone -->
+	<rect x="459" y="224" width="630" height="1100" rx="112" fill="#2b2b2e"/>
+	<g clip-path="url(#screenClip)">
+		<rect x="514" y="369" width="520" height="700" fill="#0a0f1a"/>
+		<rect x="514" y="369" width="520" height="700" fill="url(#screenWall)" opacity="0.85"/>
+		<ellipse cx="774" cy="719" rx="225" ry="235" fill="url(#screenGlow)"/>
+		<rect x="532" y="406" width="17" height="27" fill="#ffffff" opacity="0.8"/>
+		<rect x="554" y="398" width="17" height="35" fill="#ffffff" opacity="0.8"/>
+		<rect x="576" y="390" width="17" height="43" fill="#ffffff" opacity="0.8"/>
+		<rect x="978" y="396" width="34" height="27" rx="5" fill="none" stroke="#ffffff" stroke-width="6" opacity="0.8"/>
+		<rect x="1014" y="404" width="7" height="12" fill="#ffffff" opacity="0.8"/>
+	</g>
+	<rect x="689" y="274" width="170" height="20" rx="10" fill="#ffffff"/>
+	<circle cx="774" cy="1250" r="42" fill="#ffffff"/>
+	<!-- prohibition rounded square -->
+	<rect x="75" y="75" width="1398" height="1398" rx="155" fill="none" stroke="#e01b24" stroke-width="150" stroke-linejoin="round"/>
+	<!-- slash: top-right to bottom-left, ends tucked under border -->
+	<line x1="1383" y1="165" x2="165" y2="1383" stroke="#e01b24" stroke-width="150"/>
+</g>
+</svg>
