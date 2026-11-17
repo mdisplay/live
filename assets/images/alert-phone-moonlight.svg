@@ -21,6 +21,24 @@
 		<stop offset="0" stop-color="#ff8fa0" stop-opacity="0.35"/>
 		<stop offset="1" stop-color="#ff8fa0" stop-opacity="0"/>
 	</radialGradient>
+	<linearGradient id="redBevel" x1="0" y1="0" x2="1" y2="1">
+		<stop offset="0" stop-color="#ff7a86"/>
+		<stop offset="0.35" stop-color="#e01b24"/>
+		<stop offset="0.75" stop-color="#a5121e"/>
+		<stop offset="1" stop-color="#7c0d16"/>
+	</linearGradient>
+	<linearGradient id="bandLight" x1="0" y1="0" x2="0" y2="1">
+		<stop offset="0" stop-color="#ffffff" stop-opacity="0.7"/>
+		<stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+	</linearGradient>
+	<linearGradient id="bandShade" x1="0" y1="0" x2="0" y2="1">
+		<stop offset="0" stop-color="#6f7ba8" stop-opacity="0"/>
+		<stop offset="0.5" stop-color="#6f7ba8" stop-opacity="0.5"/>
+		<stop offset="1" stop-color="#6f7ba8" stop-opacity="0"/>
+	</linearGradient>
+	<clipPath id="panelClip">
+		<rect x="0" y="0" width="1548" height="1548" rx="230"/>
+	</clipPath>
 	<clipPath id="phoneGlowClip">
 		<rect x="409" y="174" width="730" height="1200" rx="170"/>
 	</clipPath>
@@ -29,8 +47,14 @@
 	</clipPath>
 </defs>
 <g>
-	<!-- white inner panel -->
-	<rect x="0" y="0" width="1548" height="1548" rx="230" fill="#f7f7f8"/>
+	<!-- white inner panel: cylindrical sheen bands -->
+	<rect x="0" y="0" width="1548" height="1548" rx="230" fill="#eef1f6"/>
+	<g clip-path="url(#panelClip)">
+		<rect x="0" y="150" width="1548" height="300" fill="url(#bandLight)"/>
+		<rect x="0" y="592" width="1548" height="16" fill="#ffffff" opacity="0.5"/>
+		<rect x="0" y="600" width="1548" height="300" fill="url(#bandShade)"/>
+		<rect x="0" y="1120" width="1548" height="260" fill="url(#bandLight)"/>
+	</g>
 	<!-- abstract washes, confined behind the phone -->
 	<g clip-path="url(#phoneGlowClip)">
 		<ellipse cx="650" cy="390" rx="220" ry="170" fill="url(#iceWash)"/>
@@ -51,9 +75,17 @@
 	</g>
 	<rect x="689" y="274" width="170" height="20" rx="10" fill="#ffffff"/>
 	<circle cx="774" cy="1250" r="42" fill="#ffffff"/>
-	<!-- prohibition rounded square -->
-	<rect x="75" y="75" width="1398" height="1398" rx="155" fill="none" stroke="#e01b24" stroke-width="150" stroke-linejoin="round"/>
-	<!-- slash: top-right to bottom-left, ends tucked under border -->
-	<line x1="1383" y1="165" x2="165" y2="1383" stroke="#e01b24" stroke-width="150"/>
+	<!-- prohibition rounded square: beveled base -->
+	<rect x="75" y="75" width="1398" height="1398" rx="155" fill="none" stroke="url(#redBevel)" stroke-width="150" stroke-linejoin="round"/>
+	<!-- bevel light: top + left inner edges -->
+	<path d="M 230 151 L 1318 151" stroke="rgba(255,255,255,0.35)" stroke-width="12" stroke-linecap="round" fill="none"/>
+	<path d="M 151 230 L 151 1318" stroke="rgba(255,255,255,0.35)" stroke-width="12" stroke-linecap="round" fill="none"/>
+	<!-- bevel shadow: bottom + right outer edges -->
+	<path d="M 230 1397 L 1318 1397" stroke="rgba(0,0,0,0.25)" stroke-width="12" stroke-linecap="round" fill="none"/>
+	<path d="M 1397 230 L 1397 1318" stroke="rgba(0,0,0,0.25)" stroke-width="12" stroke-linecap="round" fill="none"/>
+	<!-- slash: beveled, top-right to bottom-left, ends tucked under border -->
+	<line x1="1383" y1="165" x2="165" y2="1383" stroke="url(#redBevel)" stroke-width="150"/>
+	<line x1="1341" y1="123" x2="123" y2="1341" stroke="rgba(255,255,255,0.30)" stroke-width="10" stroke-linecap="round"/>
+	<line x1="1425" y1="207" x2="207" y2="1425" stroke="rgba(0,0,0,0.25)" stroke-width="10" stroke-linecap="round"/>
 </g>
 </svg>
