@@ -115,12 +115,19 @@
   }
 
   #app.theme-moonlight-gradient.is-before .prayer-info-container .prayer-info.is-current {
-    background-image: linear-gradient(180deg, #9dff95 0%, #7eff74 55%, #5ef06a 100%);
+    background-image: radial-gradient(ellipse at 50% 42%, #9dff95 0%, #7eff74 55%, #5ef06a 100%);
+    background-image: linear-gradient(180deg, #7eff74 0%, #FFF 46%, #5ef06a 100%);
+    background-repeat: no-repeat;
+    background-size: cover;
   }
 
   #app.theme-moonlight-gradient.is-waiting .prayer-info-container .prayer-info.is-current,
   #app.theme-moonlight-gradient.is-after .prayer-info-container .prayer-info.is-current {
-    background-image: linear-gradient(180deg, #fff27a 0%, #ffeb3b 55%, #ffdf2b 100%);
+    background-image: radial-gradient(ellipse at 50% 42%, #fff27a 0%, #ffeb3b 55%, #ffdf2b 100%);
+    background-image: linear-gradient(135deg, #3bce1e 0%, #00F 46%, #F00 100%);
+    background-image: linear-gradient(180deg, #ffeb3b 0%, #FFF 46%, #ffdf2b 100%);
+    background-repeat: no-repeat;
+    background-size: cover;
   }
 
   #app.theme-moonlight-gradient.is-before .prayer-info-container .prayer-info.is-current .prayer-name,

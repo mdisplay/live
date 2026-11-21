@@ -184,8 +184,6 @@
   }
 
   #app.theme-moonlight-common .prayer-info-container .prayer-info.is-current {
-    border-left: 0.5rem solid #FFF !important;
-    box-shadow: inset 1.25rem 0px 1rem -0.75rem rgba(255, 255, 255, 0.99);
   }
 
 }
