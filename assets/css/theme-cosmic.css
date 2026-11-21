@@ -315,6 +315,18 @@
     color: #e8c15a;
   }
 
+  #app.theme-cosmic .prayer-display .iqamah-time .iqamah-label {
+    color: #e8c15a;
+  }
+
+  #app.theme-cosmic .prayer-display .iqamah-time.is-jummah-end-time {
+    color: #f279ff;
+  }
+
+  #app.theme-cosmic .prayer-display .iqamah-time.is-jummah-end-time .iqamah-label {
+    color: #f279ff;
+  }
+
   /* Prayer cards: bottom row of five */
   #app.theme-cosmic .prayer-info-container {
     position: absolute;

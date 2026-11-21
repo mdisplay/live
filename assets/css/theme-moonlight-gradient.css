@@ -90,6 +90,11 @@
     -webkit-text-fill-color: transparent;
   }
 
+  #app.theme-moonlight-gradient .prayer-display .iqamah-time.is-jummah-end-time .hours, #app.theme-moonlight-gradient .prayer-display .iqamah-time.is-jummah-end-time .colon, #app.theme-moonlight-gradient .prayer-display .iqamah-time.is-jummah-end-time .minutes {
+    color: #f279ff;
+    background-image: linear-gradient(180deg, #ffffff 0%, #ffffff 20%, #f279ff 66%, #ed4cff 100%);
+  }
+
   #app.theme-moonlight-gradient .prayer-display .time, #app.theme-moonlight-gradient .prayer-display .iqamah-time {
     text-shadow: none;
   }

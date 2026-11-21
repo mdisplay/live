@@ -192,3 +192,15 @@
       bottom: auto;
     }
 }
+
+#app.theme-digital-default .prayer-display .iqamah-time .iqamah-label {
+  color: #ffeb3b;
+}
+
+#app.theme-digital-default .prayer-display .iqamah-time.is-jummah-end-time {
+  color: #FF8F00;
+}
+
+#app.theme-digital-default .prayer-display .iqamah-time.is-jummah-end-time .iqamah-label {
+  color: #FF8F00;
+}

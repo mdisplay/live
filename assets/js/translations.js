@@ -49,6 +49,8 @@ window.translations = {
     // currentPrayerAfter: 'இகாமத்துக்குப் பின்',
     // currentPrayerAfter: 'தொழுகை ஆரம்பம்',
     'currentPrayerAfter': 'தொழுகை',
+    'currentJummahStart': 'ஜும்ஆ ஆரம்பம்',
+    'currentJummahEnd': 'ஜும்ஆ முடிவு',
     // currentPrayerAfter: 'இகாமத் முடிந்தது',
     // currentPrayerAfter: 'இகாமத் முடிந்து',
     'Tarawih': 'தராவீஹ்',
@@ -97,6 +99,8 @@ window.translations = {
     'currentPrayerBefore': 'for Adhan',
     'currentPrayerWaiting': 'for Iqamath',
     'currentPrayerAfter': 'Prayer',
+    'currentJummahStart': 'Jummah Start',
+    'currentJummahEnd': 'Jummah End',
     'Tarawih': 'Tarawih',
   },
   si: {
@@ -143,6 +147,8 @@ window.translations = {
     'currentPrayerBefore': 'for Adhan',
     'currentPrayerWaiting': 'for Iqamath',
     'currentPrayerAfter': 'Prayer',
+    'currentJummahStart': 'Jummah Start',
+    'currentJummahEnd': 'Jummah End',
     'Tarawih': 'Tarawih',
   },
 };

@@ -200,6 +200,18 @@
     color: #e8c15a;
   }
 
+  #app.theme-cosmic-analog .prayer-display .iqamah-time .iqamah-label {
+    color: #e8c15a;
+  }
+
+  #app.theme-cosmic-analog .prayer-display .iqamah-time.is-jummah-end-time {
+    color: #f279ff;
+  }
+
+  #app.theme-cosmic-analog .prayer-display .iqamah-time.is-jummah-end-time .iqamah-label {
+    color: #f279ff;
+  }
+
   #app.theme-cosmic-analog .prayer-info-container {
     display: flex;
     left: 0;

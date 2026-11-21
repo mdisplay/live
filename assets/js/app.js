@@ -113,7 +113,7 @@ function App() {
       versionString: '0.0.0',
       versionNumber: 0,
     },
-    vStable: 236, // should be updated major version
+    vStable: 239, // should be updated major version
     latestApkVersion: '2.1.1',
     isDevDebugging: isDevDebugging,
     devDebugMessage: '',
@@ -133,6 +133,7 @@ function App() {
       Jummah: new IqamahTime(45),
       Tarawih: new IqamahTime(45),
     },
+    jummahEnd: new IqamahTime(30),
     appUdate: {
       enabled: false,
       checking: false,
@@ -424,6 +425,7 @@ function App() {
   // self.afterSeconds = 1*60;
   self.afterSeconds = 2 * 60;
   self.pauseSeconds = 15;
+  self.jummahStartPauseSeconds = 60;
   self.data.bgVersion = '12';
 
   // METHODS begin
@@ -1017,6 +1019,18 @@ function App() {
     var iqamahTimes = self.getIqamahTimes(times, dateParams[1], dateParams[2]);
     times.Tarawih = new Date(iqamahTimes.Tarawih.getTime() - (self.beforeSeconds * 1000));
     var time24Format = self.data.time24Format;
+    var luharPrayer;
+    if (self.data.isFriday) {
+      luharPrayer = new Prayer('Jummah', times.Luhar, iqamahTimes.Jummah, self.lang, time24Format);
+      luharPrayer.endTime = self.getJummahEndTime(iqamahTimes.Jummah, dateParams[1], dateParams[2]);
+      var luharEndMoment = moment(luharPrayer.endTime);
+      luharPrayer.endTimeDisplay = luharEndMoment.format(time24Format ? 'HH:mm' : 'hh:mm');
+      luharPrayer.endTimeHours = luharEndMoment.format(time24Format ? 'HH' : 'hh');
+      luharPrayer.endTimeMinutes = luharEndMoment.format('mm');
+      luharPrayer.endTimeAmPm = time24Format ? '' : luharEndMoment.format('A');
+    } else {
+      luharPrayer = new Prayer('Luhar', times.Luhar, iqamahTimes.Luhar, self.lang, time24Format);
+    }
     self.todayPrayers = [
       new Prayer('Subah', times.Subah, iqamahTimes.Subah, self.lang, time24Format),
       // new Prayer('Sunrise', times[1], 10, self.lang),
@@ -1028,13 +1042,7 @@ function App() {
         self.lang,
         time24Format
       ),
-      new Prayer(
-        self.data.isFriday ? 'Jummah' : 'Luhar',
-        times.Luhar,
-        self.data.isFriday ? iqamahTimes.Jummah : iqamahTimes.Luhar,
-        self.lang,
-        time24Format
-      ),
+      luharPrayer,
       new Prayer('Asr', times.Asr, iqamahTimes.Asr, self.lang, time24Format),
       new Prayer('Magrib', times.Magrib, iqamahTimes.Magrib, self.lang, time24Format),
       new Prayer('Isha', times.Isha, iqamahTimes.Isha, self.lang, time24Format),
@@ -1123,9 +1131,36 @@ function App() {
     // return (self.data.backgroundImage = backgroundImages[0]);
     self.data.backgroundImage = 'backgrounds/' + self.data.time.getMinutes() + '.svg?v=' + self.data.bgVersion;
   };
+  self.getJummahEndTime = function (startTime, monthParam, dayParam) {
+    var end = self.data.jummahEnd;
+    var durationMinutes = end ? parseInt(end.minutes, 10) : NaN;
+    var endTime;
+    if (end && end.absolute && end.hours) {
+      endTime = self.getTime(startTime.getFullYear(), monthParam, dayParam, end.toTime());
+    } else {
+      if (isNaN(durationMinutes) || durationMinutes <= 0) {
+        durationMinutes = 30;
+      }
+      endTime = new Date(startTime.getTime() + durationMinutes * 60 * 1000);
+    }
+    if (endTime.getTime() <= startTime.getTime()) {
+      endTime = new Date(startTime.getTime() + 30 * 60 * 1000);
+    }
+    return endTime;
+  };
   self.commitCurrentPrayer = function () {
     if (!self.data.currentPrayer) {
       self.data.currentPrayerDescription = '';
+      return;
+    }
+    if (self.data.currentPrayer.name === 'Jummah') {
+      if (self.data.currentPrayerAfter) {
+        self.data.currentPrayerDescription = translations[self.lang].currentJummahEnd;
+      } else if (self.data.currentPrayerWaiting) {
+        self.data.currentPrayerDescription = translations[self.lang].currentJummahStart;
+      } else if (self.data.currentPrayerBefore) {
+        self.data.currentPrayerDescription = translations[self.lang].currentPrayerBefore;
+      }
       return;
     }
     if (self.data.currentPrayerWaiting) {
@@ -1139,20 +1174,42 @@ function App() {
   self.checkCurrentPrayer = function (currentPrayer) {
     var nowTime = self.data.time.getTime();
     var iqamahTime = currentPrayer.iqamahTime.getTime();
+    var isJummah = !!currentPrayer.endTime;
+    var endTime = isJummah ? currentPrayer.endTime.getTime() : iqamahTime + self.afterSeconds * 1000;
     if (nowTime >= iqamahTime) {
-      if (nowTime - iqamahTime < self.afterSeconds * 1000) {
+      if (isJummah && nowTime < iqamahTime + self.jummahStartPauseSeconds * 1000 && nowTime < endTime) {
+        self.data.currentPrayer = currentPrayer;
+        self.data.currentPrayerBefore = false;
+        self.data.currentPrayerAfter = false;
+        self.data.currentPrayerWaiting = {
+          minutes: '00',
+          colon: ':',
+          seconds: '00',
+        };
+        return;
+      }
+      if (nowTime < endTime) {
         self.data.currentPrayer = currentPrayer;
         self.data.currentPrayerBefore = false;
         // self.data.currentPrayerAfter = true;
-        var duration = moment.duration(nowTime - iqamahTime, 'milliseconds');
-        // self.data.currentPrayerAfter = padZero(duration.minutes()) + ':' + padZero(duration.seconds());
-        var pause = nowTime - iqamahTime < self.pauseSeconds * 1000;
-        pause = true;
-        self.data.currentPrayerAfter = {
-          minutes: pause ? '00' : padZero(duration.minutes()),
-          colon: self.data.currentPrayerAfter && self.data.currentPrayerAfter.colon == ':' ? ':' : ':',
-          seconds: pause ? '00' : padZero(duration.seconds()),
-        };
+        if (isJummah) {
+          var remainingSeconds = Math.max(0, Math.floor((endTime - nowTime) / 1000));
+          self.data.currentPrayerAfter = {
+            minutes: padZero(Math.floor(remainingSeconds / 60)),
+            colon: self.data.currentPrayerAfter && self.data.currentPrayerAfter.colon == ':' ? ':' : ':',
+            seconds: padZero(remainingSeconds % 60),
+          };
+        } else {
+          var duration = moment.duration(nowTime - iqamahTime, 'milliseconds');
+          // self.data.currentPrayerAfter = padZero(duration.minutes()) + ':' + padZero(duration.seconds());
+          var pause = nowTime - iqamahTime < self.pauseSeconds * 1000;
+          pause = true;
+          self.data.currentPrayerAfter = {
+            minutes: pause ? '00' : padZero(duration.minutes()),
+            colon: self.data.currentPrayerAfter && self.data.currentPrayerAfter.colon == ':' ? ':' : ':',
+            seconds: pause ? '00' : padZero(duration.seconds()),
+          };
+        }
         self.data.currentPrayerWaiting = false;
       } else {
         if (currentPrayer.name === 'Isha') {
@@ -1456,6 +1513,9 @@ function App() {
       if (settings.focusActiveTimerNew1 === false) {
         self.data.focusActiveTimer = false;
       }
+      if (settings.jummahEnd) {
+        self.data.jummahEnd = IqamahTime.fromRaw(settings.jummahEnd);
+      }
       if (settings.timeOverrideEnabled) {
         self.data.timeOverrideEnabled = true;
       }
@@ -1515,6 +1575,7 @@ function App() {
       tarawihEnabled: self.data.tarawihEnabled,
       splashScreenMillis: self.data.splashScreenMillis,
       enableArrowKeyScroll: self.data.enableArrowKeyScroll,
+      jummahEnd: self.data.jummahEnd.toRaw(),
     };
     if (self.data.rememberedWifiSSID == '' || self.data.rememberedWifiSSID == '~') {
       settings.rememberWifi = false;

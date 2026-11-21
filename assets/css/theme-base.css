@@ -496,6 +496,14 @@
   display: none;
 }
 
+.prayer-display .iqamah-time.is-jummah-end-time {
+  color: #f279ff;
+}
+
+.prayer-display .iqamah-time.is-jummah-end-time .iqamah-label {
+  color: #f279ff;
+}
+
 .active-timer .time .minutes,
 .active-timer .time .colon,
 .active-timer .time .seconds {

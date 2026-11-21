@@ -206,4 +206,14 @@
     opacity: 1 !important;
   }
 
+  #app.theme-moonlight-common .prayer-display .iqamah-time.is-jummah-end-time {
+    color: #f279ff;
+    text-shadow: 0 0 2.5rem rgba(255, 143, 0, 0.12);
+    filter: drop-shadow(0 0 0.55rem rgba(255, 143, 0, 0.32));
+  }
+
+  #app.theme-moonlight-common .prayer-display .iqamah-time.is-jummah-end-time .iqamah-label {
+    color: #f279ff;
+  }
+
 }
