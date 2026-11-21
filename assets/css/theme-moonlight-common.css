@@ -113,44 +113,37 @@
     color: #c391ff !important;
   }
 
-  #app.theme-moonlight-common.is-before .prayer-info-container .prayer-info.is-current {
+  #app.theme-moonlight-common .prayer-info-container .prayer-info.is-current {
+    background-image: none;
+    border-left-color: rgba(0, 0, 0, 0.2) !important;
+    box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.14), inset 0 0 1.6rem rgba(0, 0, 0, 0.12);
+  }
+
+  #app.theme-moonlight-common.active-prayer-info-athan .prayer-info-container .prayer-info.is-current {
     background-color: #7eff74;
-    background-image: none;
-    border-left-color: rgba(0, 0, 0, 0.2) !important;
-    box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.14), inset 0 0 1.6rem rgba(0, 0, 0, 0.12);
   }
 
-  #app.theme-moonlight-common.is-waiting .prayer-info-container .prayer-info.is-current,
-  #app.theme-moonlight-common.is-after .prayer-info-container .prayer-info.is-current {
+  #app.theme-moonlight-common.active-prayer-info-iqamah .prayer-info-container .prayer-info.is-current {
     background-color: #ffeb3b;
-    background-image: none;
-    border-left-color: rgba(0, 0, 0, 0.2) !important;
-    box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 0.14), inset 0 0 1.6rem rgba(0, 0, 0, 0.12);
   }
 
-  #app.theme-moonlight-common.is-before .prayer-info-container .prayer-info.is-current .prayer-name,
-  #app.theme-moonlight-common.is-before .prayer-info-container .prayer-info.is-current .prayer-time,
-  #app.theme-moonlight-common.is-before .prayer-info-container .prayer-info.is-current .iqamah-time,
-  #app.theme-moonlight-common.is-waiting .prayer-info-container .prayer-info.is-current .prayer-name,
-  #app.theme-moonlight-common.is-waiting .prayer-info-container .prayer-info.is-current .prayer-time,
-  #app.theme-moonlight-common.is-waiting .prayer-info-container .prayer-info.is-current .iqamah-time,
-  #app.theme-moonlight-common.is-after .prayer-info-container .prayer-info.is-current .prayer-name,
-  #app.theme-moonlight-common.is-after .prayer-info-container .prayer-info.is-current .prayer-time,
-  #app.theme-moonlight-common.is-after .prayer-info-container .prayer-info.is-current .iqamah-time {
+  #app.theme-moonlight-common.active-prayer-info-iqamah .prayer-info-container .prayer-info.is-current.is-sunrise:not(.is-tarawih) {
+    background-color: #f279ff;
+  }
+
+  #app.theme-moonlight-common .prayer-info-container .prayer-info.is-current .prayer-name,
+  #app.theme-moonlight-common .prayer-info-container .prayer-info.is-current .prayer-time,
+  #app.theme-moonlight-common .prayer-info-container .prayer-info.is-current .iqamah-time {
     color: #0a0a0a !important;
     text-shadow: none;
   }
 
-  #app.theme-moonlight-common.is-before .prayer-info-container .prayer-info.is-current .prayer-name,
-  #app.theme-moonlight-common.is-waiting .prayer-info-container .prayer-info.is-current .prayer-name,
-  #app.theme-moonlight-common.is-after .prayer-info-container .prayer-info.is-current .prayer-name {
+  #app.theme-moonlight-common .prayer-info-container .prayer-info.is-current .prayer-name {
     background: transparent;
     opacity: 1;
   }
 
-  #app.theme-moonlight-common.is-before .prayer-info-container .prayer-info.is-current .prayer-name.is-sunrise-label,
-  #app.theme-moonlight-common.is-waiting .prayer-info-container .prayer-info.is-current .prayer-name.is-sunrise-label,
-  #app.theme-moonlight-common.is-after .prayer-info-container .prayer-info.is-current .prayer-name.is-sunrise-label {
+  #app.theme-moonlight-common .prayer-info-container .prayer-info.is-current .prayer-name.is-sunrise-label {
     background-color: transparent !important;
     color: #0a0a0a !important;
   }
