@@ -21,6 +21,10 @@
     left: 0;
     color: #f2f2f2;
   }
+  
+  #app.theme-moonlight-common .active-timer .time .colon {
+    width: auto;
+  }
 
   #app.theme-moonlight-common .branding-bar {
     position: absolute;

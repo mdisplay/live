@@ -5,9 +5,9 @@ if (workbox) {
   console.log("Boo! Workbox didn't load 😬");
 }
 var baseUrl = '/live/';
-var appVersion = '3.0.21-229';
+var appVersion = '3.0.23-231';
 var dataVersion = '10';
-var vendorVersion = '67';
+var vendorVersion = '69';
 var bgVersion = '9';
 
 // Detailed logging is very useful during development
@@ -94,6 +94,14 @@ var precacheList = [
     url: toUrl('assets/images/sunrise-bg.svg'),
     revision: vendorVersion,
   },
+  {
+    url: toUrl('assets/images/night-sky-bg.svg'),
+    revision: vendorVersion,
+  },
+  {
+    url: toUrl('assets/images/cosmic-bg.svg'),
+    revision: vendorVersion,
+  },
   // /app
   {
     url: toUrl('assets/js/translations.js'),
@@ -136,7 +144,7 @@ var precacheList = [
 ];
 
 // theme CSS files (one file per theme)
-var themeCssFiles = ['theme-digital-default.css', 'theme-sunrise.css', 'theme-moonlight-common.css', 'theme-moonlight-flat.css', 'theme-moonlight-basic.css', 'theme-moonlight-analog-basic.css', 'theme-moonlight-gradient.css', 'theme-moonlight.css', 'theme-moonlight-analog.css'];
+var themeCssFiles = ['theme-digital-default.css', 'theme-sunrise.css', 'theme-moonlight-common.css', 'theme-moonlight-flat.css', 'theme-moonlight-basic.css', 'theme-moonlight-analog-basic.css', 'theme-moonlight-gradient.css', 'theme-moonlight.css', 'theme-moonlight-analog.css', 'theme-night-sky.css', 'theme-cosmic.css', 'theme-cosmic-analog.css'];
 for (var themeIndex = 0; themeIndex < themeCssFiles.length; themeIndex++) {
   precacheList.push({
     url: toUrl('assets/css/' + themeCssFiles[themeIndex]),
@@ -145,7 +153,7 @@ for (var themeIndex = 0; themeIndex < themeCssFiles.length; themeIndex++) {
 }
 
 // analog clock faces that ship their own SVG file
-var analogThemes = ['sunrise', 'galaxy'];
+var analogThemes = ['sunrise', 'galaxy', 'cosmic'];
 for (var analogIndex = 0; analogIndex < analogThemes.length; analogIndex++) {
   precacheList.push({
     url: toUrl('assets/analog-clock/themes/' + analogThemes[analogIndex] + '/face.svg'),

@@ -201,6 +201,9 @@ function App() {
       { id: 'moonlight-flat', label: '[INTERNAL] Moonlight Flat Shared', isInternal: true, isStyleOnly: true },
       { id: 'moonlight-gradient', label: '[INTERNAL] Moonlight Gradient Shared', isInternal: true, isStyleOnly: true },
       { id: 'sunrise', label: '[INTERNAL] Sunrise Panel', analogClock: true, analogClockTheme: 'sunrise', isInternal: true },
+      { id: 'night-sky', label: '[INTERNAL] Night Sky', analogClock: false, isInternal: true, isStyleOnly: false },
+      { id: 'cosmic', label: '[INTERNAL] Cosmic', analogClock: false, isInternal: true, isStyleOnly: false },
+      { id: 'cosmic-analog', label: '[INTERNAL] Cosmic Analog', analogClock: true, analogClockTheme: 'cosmic', isInternal: true, isStyleOnly: false },
     ],
     timeOriginModes: [
       { id: 'auto', label: 'Auto (NTP first)' },

@@ -1,0 +1,260 @@
+/* Theme: Cosmic Analog (oasis garden, landscape only; analog clock + compact digital readout + gold next-prayer card) */
+
+@media (orientation: landscape) {
+
+  #app.theme-cosmic-analog {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    color: #eaf4f0;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  #app.theme-cosmic-analog #bgful .bgful-overlay {
+    background: rgba(2, 10, 11, 0.45);
+  }
+
+  #app.theme-cosmic-analog .bgful-theme {
+    background-color: #04262b;
+    background-image: url("../images/cosmic-bg.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    opacity: 0.95;
+  }
+
+  #app.theme-cosmic-analog .branding-bar {
+    position: absolute;
+    top: 1.5vh;
+    right: 3vw;
+    left: auto;
+    width: auto;
+    max-width: 44vw;
+    height: auto;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+    line-height: normal;
+    text-align: right;
+    z-index: 20;
+  }
+
+  #app.theme-cosmic-analog .branding-bar .masjid-name {
+    display: block;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 3.2vh;
+    line-height: 4vh;
+    letter-spacing: 0.04em;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+  }
+
+  #app.theme-cosmic-analog .analog-clock-container {
+    top: 5.5rem;
+    left: 2rem;
+    bottom: auto;
+    width: 50vw;
+    height: 50vw;
+    max-width: calc(100vh - 12.75rem);
+    max-height: calc(100vh - 12.75rem);
+  }
+
+  #app.theme-cosmic-analog .analog-clock-container .analog-clock-face {
+    -webkit-filter: drop-shadow(0 0 1.6rem rgba(127, 216, 200, 0.28)) drop-shadow(0 0 4rem rgba(232, 193, 90, 0.18));
+    filter: drop-shadow(0 0 1.6rem rgba(127, 216, 200, 0.28)) drop-shadow(0 0 4rem rgba(232, 193, 90, 0.18));
+  }
+
+  #app.theme-cosmic-analog .digital-clock {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+  }
+
+  #app.theme-cosmic-analog .digital-clock .time,
+  #app.theme-cosmic-analog .digital-clock .time .hours,
+  #app.theme-cosmic-analog .digital-clock .time .minutes {
+    position: static;
+  }
+
+  #app.theme-cosmic-analog .digital-clock .time {
+    display: block;
+    height: 0;
+    font-size: 0;
+    line-height: 0;
+  }
+
+  #app.theme-cosmic-analog .digital-clock .date-display {
+    position: absolute;
+    top: 5.5rem;
+    left: calc(100vh - 1rem - 8.75rem);
+    right: auto;
+    width: auto;
+    padding: 0;
+    text-align: left;
+  }
+
+  #app.theme-cosmic-analog .digital-clock .date-display .hijri-datex {
+    font-size: 1.2rem;
+    line-height: 1.2rem;
+    margin-bottom: 0.6rem;
+    color: #e8c15a;
+    margin-left: 0;
+  }
+
+  #app.theme-cosmic-analog .digital-clock .date-display .datex {
+    font-size: 1.8rem;
+    line-height: 1.8rem;
+    margin-bottom: 0.6rem;
+    color: #eaf4f0;
+    margin-left: 0;
+  }
+
+  #app.theme-cosmic-analog .digital-clock .date-display .weekday {
+    font-size: 2.2rem;
+    line-height: 2.2rem;
+    color: #9fd8cf;
+    margin-left: 0;
+  }
+
+  #app.theme-cosmic-analog .prayer-display .name {
+    bottom: 17rem;
+    font-size: 3.2rem;
+    color: #ffffff;
+    right: 2rem;
+  }
+
+  #app.theme-cosmic-analog .prayer-display .name .label {
+    top: -1.6rem;
+    font-size: 1.6rem;
+    color: #9fd8cf;
+  }
+
+  #app.theme-cosmic-analog .prayer-display .time,
+  #app.theme-cosmic-analog .prayer-display .iqamah-time {
+    height: 7.2rem;
+    line-height: 7.2rem;
+    font-size: 7.2rem;
+    right: 2rem;
+  }
+
+  #app.theme-cosmic-analog .prayer-display .time {
+    bottom: 12.8rem;
+    color: #ffffff;
+    text-shadow: 0 0 2.5rem rgba(232, 193, 90, 0.18);
+  }
+
+  #app.theme-cosmic-analog .prayer-display .iqamah-time {
+    bottom: 6.4rem;
+    color: #e8c15a;
+    text-shadow: 0 0 2.5rem rgba(232, 193, 90, 0.25);
+  }
+
+  #app.theme-cosmic-analog .prayer-display .time.is-sunrise {
+    color: #f279ff;
+    text-shadow: 0 0 2.5rem rgba(255, 143, 0, 0.12);
+  }
+
+  #app.theme-cosmic-analog .prayer-display .am-pm,
+  #app.theme-cosmic-analog .prayer-display .iqamah-am-pm {
+    font-size: 1.2rem;
+  }
+
+  #app.theme-cosmic-analog .prayer-display .time .label,
+  #app.theme-cosmic-analog .prayer-display .iqamah-time .iqamah-label {
+    top: 2.8rem;
+    left: -6rem;
+    width: 5.6rem;
+    font-size: 1.2rem;
+    line-height: 1.2rem;
+  }
+
+  #app.theme-cosmic-analog .active-timer,
+  #app.theme-cosmic-analog.is-before .active-timer {
+    bottom: 6.4rem;
+  }
+
+  #app.theme-cosmic-analog.is-waiting .active-timer,
+  #app.theme-cosmic-analog.is-after .active-timer {
+    bottom: 12.8rem;
+  }
+
+  #app.theme-cosmic-analog .active-timer .time {
+    height: 7.2rem;
+    line-height: 7.2rem;
+    font-size: 7.2rem;
+    color: #fc7878;
+    padding-right: 2rem;
+    text-shadow: 0 0 2.5rem rgba(252, 120, 120, 0.12);
+  }
+
+  #app.theme-cosmic-analog .active-timer .description {
+    margin-top: -0.8rem;
+    font-size: 2rem;
+    color: #e8c15a;
+  }
+
+  #app.theme-cosmic-analog .prayer-info-container {
+    display: flex;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  #app.theme-cosmic-analog .prayer-info-container .prayer-info {
+    flex: 1 1 20%;
+    width: auto;
+    display: block;
+    background-color: rgba(8, 30, 30, 0.94);
+    background-image: linear-gradient(180deg, rgba(24, 84, 78, 0.97), rgba(5, 20, 21, 0.97));
+    border: 1px solid rgba(127, 216, 200, 0.22);
+  }
+
+  #app.theme-cosmic-analog .prayer-info-container .prayer-name {
+    color: #eaf4f0;
+    background: transparent;
+  }
+
+  #app.theme-cosmic-analog .prayer-info-container .prayer-time {
+    color: #ffffff;
+  }
+
+  #app.theme-cosmic-analog .prayer-info-container .iqamah-time {
+    color: #e8c15a;
+  }
+
+  #app.theme-cosmic-analog .prayer-info-container .prayer-info.is-current {
+    background-color: #e8b62a;
+    background-image: linear-gradient(180deg, #f7cf5e 0%, #e8b62a 55%, #cf9412 100%);
+    box-shadow: 0 0 3rem rgba(232, 182, 42, 0.45), 0 0.6vh 1.8vh rgba(0, 0, 0, 0.5);
+  }
+
+  #app.theme-cosmic-analog .prayer-info-container .prayer-info.is-current .prayer-name,
+  #app.theme-cosmic-analog .prayer-info-container .prayer-info.is-current .prayer-time,
+  #app.theme-cosmic-analog .prayer-info-container .prayer-info.is-current .iqamah-time {
+    color: #1b2340;
+    text-shadow: none;
+  }
+
+  #app.theme-cosmic-analog .prayer-info-container .is-sunrise .iqamah-time,
+  #app.theme-cosmic-analog .prayer-info-container .is-tarawih .iqamah-time {
+    color: #f279ff;
+  }
+
+  #app.theme-cosmic-analog .invalid-time-container {
+    color: #eaf4f0;
+  }
+
+  #app.theme-cosmic-analog .toast-container .toast-item {
+    background: rgba(8, 28, 30, 0.94);
+    color: #eaf4f0;
+    border: 1px solid rgba(232, 193, 90, 0.5);
+  }
+
+}

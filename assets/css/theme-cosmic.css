@@ -1,0 +1,515 @@
+/* Theme: Cosmic (oasis garden at first light, landscape only; digital clock + countdown hero + gold next-prayer card) */
+
+@media (orientation: landscape) {
+
+  #app.theme-cosmic {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    color: #eaf4f0;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  #app.theme-cosmic #bgful .bgful-overlay {
+    background: rgba(2, 10, 11, 0.35);
+  }
+
+  #app.theme-cosmic .bgful-theme {
+    background-color: #04262b;
+    background-image: url("../images/cosmic-bg.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    opacity: 0.95;
+  }
+
+  #app.theme-cosmic .analog-clock-container {
+    display: none !important;
+  }
+
+  /* Layout resets: undo absolute/fixed positioning from the base theme */
+  #app.theme-cosmic .digital-clock .time,
+  #app.theme-cosmic .digital-clock .time .hours,
+  #app.theme-cosmic .digital-clock .time .minutes,
+  #app.theme-cosmic .digital-clock .time .colon-main,
+  #app.theme-cosmic .digital-clock .time .seconds-container,
+  #app.theme-cosmic .digital-clock .time .seconds-container .seconds,
+  #app.theme-cosmic .digital-clock .time .seconds-container .am-pm,
+  #app.theme-cosmic .digital-clock .am-pm,
+  #app.theme-cosmic .digital-clock .date-display,
+  #app.theme-cosmic .prayer-display .name,
+  #app.theme-cosmic .prayer-display .name .label,
+  #app.theme-cosmic .prayer-display .time,
+  #app.theme-cosmic .prayer-display .iqamah-time,
+  #app.theme-cosmic .prayer-display .am-pm,
+  #app.theme-cosmic .prayer-display .iqamah-am-pm,
+  #app.theme-cosmic .prayer-display .time .label,
+  #app.theme-cosmic .prayer-display .iqamah-time .iqamah-label {
+    position: static;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    float: none;
+    transform: none;
+    width: auto;
+    height: auto;
+    margin-top: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+  }
+
+  /* Branding bar: top-left masjid name */
+  #app.theme-cosmic .branding-bar {
+    position: absolute;
+    top: 1.5vh;
+    left: 3vw;
+    right: auto;
+    width: auto;
+    max-width: 44vw;
+    height: auto;
+    padding: 0;
+    background: transparent;
+    box-shadow: none;
+    line-height: normal;
+    text-align: left;
+    z-index: 20;
+  }
+
+  #app.theme-cosmic .branding-bar .masjid-name {
+    display: block;
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 3.4vh;
+    line-height: 4.4vh;
+    letter-spacing: 0.04em;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+  }
+
+  /* Digital clock block: top-left, big time with date lines beneath */
+  #app.theme-cosmic .digital-clock {
+    position: absolute;
+    top: 8vh;
+    right: auto;
+    bottom: auto;
+    left: 3vw;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    z-index: 6;
+  }
+
+  #app.theme-cosmic .digital-clock .time {
+    display: block;
+    height: auto;
+    font-size: 9vh;
+    line-height: 1;
+  }
+
+  #app.theme-cosmic .digital-clock .time .hours,
+  #app.theme-cosmic .digital-clock .time .minutes {
+    display: inline;
+    font-size: 9vh;
+    line-height: 9.5vh;
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.85);
+  }
+
+  #app.theme-cosmic .digital-clock .time .colon-main {
+    display: inline-block;
+    min-width: 0.6em;
+    text-align: center;
+    font-size: 8vh;
+    line-height: 9.5vh;
+    color: #ffffff;
+  }
+
+  #app.theme-cosmic .digital-clock .time .seconds-container {
+    display: inline;
+    margin-left: 1rem;
+    font-size: 3vh;
+    line-height: 4vh;
+    color: #9fd8cf;
+    text-align: left;
+  }
+
+  #app.theme-cosmic .digital-clock .time .seconds-container .seconds {
+    font-size: 3.2vh;
+    line-height: 4vh;
+  }
+
+  #app.theme-cosmic .digital-clock .time .seconds-container .seconds .colon {
+    display: inline;
+    min-height: 0;
+    opacity: 1;
+  }
+
+  #app.theme-cosmic .digital-clock .time .seconds-container .am-pm {
+    font-size: 2.6vh;
+    line-height: 4vh;
+    color: #e8c15a;
+    font-weight: bold;
+  }
+
+  #app.theme-cosmic .digital-clock .am-pm {
+    font-size: 2.6vh;
+  }
+
+  #app.theme-cosmic .digital-clock .date-display {
+    position: absolute;
+    top: 12vh;
+    left: 0;
+    display: block;
+    width: 34vw;
+    margin: 0;
+    padding: 0;
+    font-size: 2.3vh;
+    line-height: 3.2vh;
+    text-align: left;
+    white-space: normal;
+  }
+
+  #app.theme-cosmic .digital-clock .date-display .hijri-datex {
+    display: block;
+    font-size: 2.5vh;
+    line-height: 3.2vh;
+    color: #e8c15a;
+    font-weight: bold;
+  }
+
+  #app.theme-cosmic .digital-clock .date-display .datex {
+    display: block;
+    font-size: 2.2vh;
+    line-height: 3vh;
+    color: #eaf4f0;
+  }
+
+  #app.theme-cosmic .digital-clock .date-display .weekday {
+    display: block;
+    font-size: 2.2vh;
+    line-height: 3vh;
+    color: #9fd8cf;
+  }
+
+  /* Prayer display hero: centered current/next prayer */
+  #app.theme-cosmic .prayer-display {
+    position: absolute;
+    right: 0;
+    left: 0;
+    width: auto;
+    text-align: center;
+    z-index: 6;
+  }
+
+  #app.theme-cosmic .active-prayer.prayer-display {
+    top: 24vh;
+    bottom: auto;
+  }
+
+  #app.theme-cosmic .next-prayer.prayer-display {
+    top: 40vh;
+    bottom: auto;
+  }
+
+  #app.theme-cosmic .prayer-display .name {
+    display: block;
+    font-size: 3.6vh;
+    line-height: 4.6vh;
+    font-weight: bold;
+    color: #ffffff;
+    letter-spacing: 0.02em;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85);
+  }
+
+  #app.theme-cosmic .prayer-display .name .label {
+    color: #9fd8cf;
+    font-weight: normal;
+    font-size: 2.5vh;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  #app.theme-cosmic .prayer-display .time,
+  #app.theme-cosmic .prayer-display .iqamah-time {
+    display: inline-block;
+    font-size: 5vh;
+    line-height: 6vh;
+    font-weight: bold;
+    color: #ffffff;
+  }
+
+  #app.theme-cosmic .prayer-display .time.is-sunrise {
+    color: #f279ff;
+  }
+
+  #app.theme-cosmic .prayer-display .am-pm,
+  #app.theme-cosmic .prayer-display .iqamah-am-pm {
+    font-size: 2.4vh;
+    color: #9fd8cf;
+  }
+
+  #app.theme-cosmic .prayer-display .time .label,
+  #app.theme-cosmic .prayer-display .iqamah-time .iqamah-label {
+    display: inline-block;
+    font-size: 1.8vh;
+    line-height: 2.4vh;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #9fd8cf;
+  }
+
+  #app.theme-cosmic .next-prayer.prayer-display .name {
+    font-size: 2.8vh;
+    line-height: 3.6vh;
+    color: #e8c15a;
+  }
+
+  #app.theme-cosmic .next-prayer.prayer-display .time,
+  #app.theme-cosmic .next-prayer.prayer-display .iqamah-time {
+    font-size: 3.4vh;
+    line-height: 4vh;
+  }
+
+  /* Countdown hero */
+  #app.theme-cosmic .active-timer {
+    position: absolute;
+    top: 48vh;
+    right: 0;
+    bottom: auto;
+    left: 0;
+    z-index: 7;
+    text-align: center;
+  }
+
+  #app.theme-cosmic .active-timer .time {
+    display: inline-block;
+    font-size: 12vh;
+    line-height: 12.5vh;
+    font-weight: bold;
+    letter-spacing: 0.02em;
+    color: #ffffff;
+    text-shadow: 0 0 4rem rgba(127, 216, 200, 0.28), 0 2px 12px rgba(0, 0, 0, 0.9);
+  }
+
+  #app.theme-cosmic .active-timer .time .minutes,
+  #app.theme-cosmic .active-timer .time .colon,
+  #app.theme-cosmic .active-timer .time .seconds {
+    font-size: 12vh;
+    line-height: 12.5vh;
+  }
+
+  #app.theme-cosmic .active-timer .description {
+    display: block;
+    margin-top: 0.6vh;
+    font-size: 2.2vh;
+    line-height: 3vh;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: #e8c15a;
+  }
+
+  /* Prayer cards: bottom row of five */
+  #app.theme-cosmic .prayer-info-container {
+    position: absolute;
+    top: auto;
+    right: 3vw;
+    bottom: 2.5vh;
+    left: 3vw;
+    display: flex;
+    flex-direction: row;
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    gap: 1.1vw;
+    background: transparent;
+    z-index: 6;
+  }
+
+  #app.theme-cosmic .prayer-info-container .prayer-info {
+    position: relative;
+    flex: 1 1 0;
+    width: auto;
+    height: auto;
+    min-height: 15vh;
+    margin: 0;
+    padding: 1.4vh 0.6rem 1.2vh;
+    background-color: rgba(8, 30, 30, 0.94);
+    background-image: linear-gradient(180deg, rgba(24, 84, 78, 0.97), rgba(5, 20, 21, 0.97));
+    border: 1px solid rgba(127, 216, 200, 0.22);
+    border-radius: 1.4vh;
+    box-shadow: 0 0.6vh 1.8vh rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    text-align: center;
+  }
+
+  #app.theme-cosmic .prayer-info-container .prayer-name {
+    display: block;
+    width: auto;
+    height: auto;
+    margin: 0 0 0.4vh 0;
+    padding: 0;
+    background: transparent !important;
+    font-size: 2.3vh;
+    line-height: 2.9vh;
+    font-weight: bold;
+    letter-spacing: 0.04em;
+    color: #eaf4f0;
+    opacity: 1;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  #app.theme-cosmic .prayer-info-container .prayer-name.is-sunrise-label {
+    background: transparent !important;
+    color: #eaf4f0 !important;
+  }
+
+  #app.theme-cosmic .prayer-info-container .prayer-time,
+  #app.theme-cosmic .prayer-info-container .iqamah-time {
+    position: static !important;
+    display: block !important;
+    width: auto;
+    height: auto;
+    transform: none !important;
+    opacity: 1 !important;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  #app.theme-cosmic .prayer-info-container .prayer-time {
+    font-size: 4.4vh;
+    line-height: 5vh;
+    font-weight: bold;
+    letter-spacing: 0.01em;
+    color: #ffffff;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
+  }
+
+  #app.theme-cosmic .prayer-info-container .prayer-time .am-pm {
+    display: none;
+  }
+
+  #app.theme-cosmic .prayer-info-container .iqamah-time {
+    margin-top: 0.4vh;
+    font-size: 2vh;
+    line-height: 2.6vh;
+    letter-spacing: 0.06em;
+    color: #e8c15a;
+  }
+
+  #app.theme-cosmic .prayer-info-container .iqamah-time .am-pm {
+    display: none;
+  }
+
+  #app.theme-cosmic .prayer-info-container .iqamah-time .iqamah-label {
+    position: static;
+    display: inline;
+    margin-right: 0.5rem;
+    font-size: 1.9vh;
+    line-height: 2.6vh;
+    letter-spacing: 0.1em;
+    color: #9fd8cf;
+  }
+
+  #app.theme-cosmic .prayer-info-container .prayer-info.is-current {
+    background-color: #e8b62a;
+    background-image: linear-gradient(180deg, #f7cf5e 0%, #e8b62a 55%, #cf9412 100%);
+    border-color: rgba(255, 255, 255, 0.55);
+    box-shadow: 0 0 3rem rgba(232, 182, 42, 0.45), 0 0.6vh 1.8vh rgba(0, 0, 0, 0.5);
+    transform: translateY(-0.8vh);
+  }
+
+  #app.theme-cosmic .prayer-info-container .prayer-info.is-current .prayer-name,
+  #app.theme-cosmic .prayer-info-container .prayer-info.is-current .prayer-time {
+    color: #1b2340;
+    text-shadow: none;
+  }
+
+  #app.theme-cosmic .prayer-info-container .prayer-info.is-current .iqamah-time,
+  #app.theme-cosmic .prayer-info-container .prayer-info.is-current .iqamah-time .iqamah-label {
+    color: #1b2340;
+  }
+
+  #app.theme-cosmic .prayer-info-container .prayer-info.is-current::after {
+    content: 'NEXT';
+    position: absolute;
+    top: 1vh;
+    right: 1vh;
+    padding: 0.15vh 0.9vh;
+    border-radius: 2vh;
+    background: #1b2340;
+    color: #e8c15a;
+    font-size: 1.6vh;
+    line-height: 2.4vh;
+    font-weight: bold;
+    letter-spacing: 0.12em;
+  }
+
+  #app.theme-cosmic .prayer-info-container .is-sunrise .iqamah-time,
+  #app.theme-cosmic .prayer-info-container .is-tarawih .iqamah-time {
+    color: #f279ff;
+  }
+
+  #app.theme-cosmic .prayer-times-applied-indicator-new {
+    display: none;
+  }
+
+  #app.theme-cosmic #version-info {
+    right: 0 !important;
+    padding: 0.25rem 0.5rem !important;
+  }
+
+  #app.theme-cosmic #version-info .version-text {
+    display: block !important;
+    margin-right: -0.25rem !important;
+    padding: 0.2rem 0.55rem !important;
+    border-radius: 0 !important;
+    background: rgba(6, 20, 22, 0.72) !important;
+    color: #e8c15a !important;
+  }
+
+  #app.theme-cosmic .alert-container {
+    position: fixed;
+    top: 6rem !important;
+    right: 4rem !important;
+    left: auto !important;
+    width: 7rem;
+    height: 7rem;
+    z-index: 85785;
+  }
+
+  #app.theme-cosmic .alert-container img {
+    width: 100%;
+    height: 100%;
+  }
+
+  #app.theme-cosmic .invalid-time-container {
+    left: 3vw;
+    right: 3vw;
+    color: #eaf4f0;
+    text-align: center;
+  }
+
+  #app.theme-cosmic .invalid-time-container h1,
+  #app.theme-cosmic .invalid-time-container h2,
+  #app.theme-cosmic .invalid-time-container h3 {
+    color: #e8c15a;
+  }
+
+  #app.theme-cosmic .toast-container .toast-item {
+    background: rgba(8, 28, 30, 0.94);
+    color: #eaf4f0;
+    border: 1px solid rgba(232, 193, 90, 0.5);
+  }
+
+}

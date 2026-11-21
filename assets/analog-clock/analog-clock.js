@@ -22,16 +22,25 @@ function AnalogClock() {
       },
       cap: { r: 0.045, c: '#f0c14b', dot: 0.018, dotC: '#141413' }
     },
-    galaxy: {
-      face: 'galaxy',
-      hands: {
-        hour: { len: 0.42, tail: 0.1, base: 0.05, tip: 0.02, c: '#f7fbff', edge: '#2a3b52' },
-        minute: { len: 0.62, tail: 0.12, base: 0.038, tip: 0.014, c: '#f7fbff', edge: '#2a3b52' },
-        second: { len: 0.72, tail: 0.2, base: 0.011, tip: 0.005, c: '#fc7878', edge: '#7a2020' }
+      galaxy: {
+        face: 'galaxy',
+        hands: {
+          hour: { len: 0.42, tail: 0.1, base: 0.05, tip: 0.02, c: '#f7fbff', edge: '#2a3b52' },
+          minute: { len: 0.62, tail: 0.12, base: 0.038, tip: 0.014, c: '#f7fbff', edge: '#2a3b52' },
+          second: { len: 0.72, tail: 0.2, base: 0.011, tip: 0.005, c: '#fc7878', edge: '#7a2020' }
+        },
+        cap: { r: 0.048, c: '#fc7878', dot: 0.02, dotC: '#0a1524' }
       },
-      cap: { r: 0.048, c: '#fc7878', dot: 0.02, dotC: '#0a1524' }
-    }
-  };
+      cosmic: {
+        face: 'cosmic',
+        hands: {
+          hour: { len: 0.42, tail: 0.1, base: 0.05, tip: 0.02, c: '#f4fbfa', edge: '#1d3a38' },
+          minute: { len: 0.62, tail: 0.12, base: 0.038, tip: 0.014, c: '#f4fbfa', edge: '#1d3a38' },
+          second: { len: 0.72, tail: 0.2, base: 0.011, tip: 0.005, c: '#e8c15a', edge: '#7a5c22' }
+        },
+        cap: { r: 0.048, c: '#e8c15a', dot: 0.02, dotC: '#062a28' }
+      }
+    };
 
   self.resolveContainer = function (el) {
     if (el && el.appendChild) {
