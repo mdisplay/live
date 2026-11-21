@@ -114,4 +114,30 @@
     background-image: repeating-radial-gradient(circle at 50% 55%, rgba(255, 255, 255, 0.05) 0, rgba(255, 255, 255, 0.05) 1px, rgba(255, 255, 255, 0) 1px, rgba(255, 255, 255, 0) 1rem), radial-gradient(ellipse at 50% 48%, rgba(2, 3, 6, 0.22), rgba(2, 3, 6, 0.08) 58%, rgba(2, 3, 6, 0) 80%), radial-gradient(ellipse at 0% 0%, rgba(129, 140, 248, 0.22), rgba(129, 140, 248, 0) 55%), linear-gradient(135deg, #1b2266 0%, #101444 46%, #070818 100%);
   }
 
+  #app.theme-moonlight-gradient.is-before .prayer-info-container .prayer-info.is-current {
+    background-image: linear-gradient(180deg, #9dff95 0%, #7eff74 55%, #5ef06a 100%);
+  }
+
+  #app.theme-moonlight-gradient.is-waiting .prayer-info-container .prayer-info.is-current,
+  #app.theme-moonlight-gradient.is-after .prayer-info-container .prayer-info.is-current {
+    background-image: linear-gradient(180deg, #fff27a 0%, #ffeb3b 55%, #ffdf2b 100%);
+  }
+
+  #app.theme-moonlight-gradient.is-before .prayer-info-container .prayer-info.is-current .prayer-name,
+  #app.theme-moonlight-gradient.is-before .prayer-info-container .prayer-info.is-current .prayer-time,
+  #app.theme-moonlight-gradient.is-before .prayer-info-container .prayer-info.is-current .iqamah-time,
+  #app.theme-moonlight-gradient.is-waiting .prayer-info-container .prayer-info.is-current .prayer-name,
+  #app.theme-moonlight-gradient.is-waiting .prayer-info-container .prayer-info.is-current .prayer-time,
+  #app.theme-moonlight-gradient.is-waiting .prayer-info-container .prayer-info.is-current .iqamah-time,
+  #app.theme-moonlight-gradient.is-after .prayer-info-container .prayer-info.is-current .prayer-name,
+  #app.theme-moonlight-gradient.is-after .prayer-info-container .prayer-info.is-current .prayer-time,
+  #app.theme-moonlight-gradient.is-after .prayer-info-container .prayer-info.is-current .iqamah-time {
+    background-image: linear-gradient(180deg, #242424 0%, #000 100%);
+    background-image: linear-gradient(180deg, #ffffff 0%, #222 20%, #111 66%, #000 100%);
+    font-weight: bold;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
 }

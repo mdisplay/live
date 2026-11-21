@@ -195,15 +195,15 @@ function App() {
       { id: 'moonlight', label: 'Moonlight', analogClock: false, baseThemes: ['moonlight-common', 'moonlight-basic', 'moonlight-gradient'], defaultFor: 'digital' },
       { id: 'moonlight-analog', label: 'Moonlight Analog', analogClock: true, analogClockTheme: 'galaxy', baseThemes: ['moonlight-common', 'moonlight-analog-basic', 'moonlight-gradient'], defaultFor: 'analog' },
       { id: 'digital-default', label: 'Classic Digital', analogClock: false, isLegacy: true },
-      { id: 'moonlight-basic', label: '[INTERNAL] Moonlight BASIC', analogClock: false, baseThemes: ['moonlight-common', 'moonlight-flat'], isInternal: true },
-      { id: 'moonlight-analog-basic', label: '[INTERNAL] Moonlight Analog BASIC', analogClock: true, analogClockTheme: 'galaxy', baseThemes: ['moonlight-common', 'moonlight-flat'], isInternal: true },
-      { id: 'moonlight-common', label: '[INTERNAL] Moonlight Common Shared', isInternal: true, isStyleOnly: true },
-      { id: 'moonlight-flat', label: '[INTERNAL] Moonlight Flat Shared', isInternal: true, isStyleOnly: true },
-      { id: 'moonlight-gradient', label: '[INTERNAL] Moonlight Gradient Shared', isInternal: true, isStyleOnly: true },
-      { id: 'sunrise', label: '[INTERNAL] Sunrise Panel', analogClock: true, analogClockTheme: 'sunrise', isInternal: true },
-      { id: 'night-sky', label: '[INTERNAL] Night Sky', analogClock: false, isInternal: true, isStyleOnly: false },
-      { id: 'cosmic', label: '[INTERNAL] Cosmic', analogClock: false, isInternal: true, isStyleOnly: false },
-      { id: 'cosmic-analog', label: '[INTERNAL] Cosmic Analog', analogClock: true, analogClockTheme: 'cosmic', isInternal: true, isStyleOnly: false },
+      { id: 'moonlight-basic', label: 'Moonlight BASIC', analogClock: false, baseThemes: ['moonlight-common', 'moonlight-flat'], isInternal: true },
+      { id: 'moonlight-analog-basic', label: 'Moonlight Analog BASIC', analogClock: true, analogClockTheme: 'galaxy', baseThemes: ['moonlight-common', 'moonlight-flat'], isInternal: true },
+      { id: 'moonlight-common', label: 'Moonlight Common Shared', isInternal: true, isStyleOnly: true },
+      { id: 'moonlight-flat', label: 'Moonlight Flat Shared', isInternal: true, isStyleOnly: true },
+      { id: 'moonlight-gradient', label: 'Moonlight Gradient Shared', isInternal: true, isStyleOnly: true },
+      { id: 'sunrise', label: 'Sunrise Panel', analogClock: true, analogClockTheme: 'sunrise', isInternal: true },
+      { id: 'night-sky', label: 'Night Sky', analogClock: false, isInternal: true, isStyleOnly: true },
+      { id: 'cosmic', label: 'Cosmic', analogClock: false, isInternal: true, isStyleOnly: true },
+      { id: 'cosmic-analog', label: 'Cosmic Analog', analogClock: true, analogClockTheme: 'cosmic', isInternal: true, isStyleOnly: true },
     ],
     timeOriginModes: [
       { id: 'auto', label: 'Auto (NTP first)' },
@@ -2094,6 +2094,13 @@ function App() {
       return option.id == selectedId;
     })[0];
     return selected ? selected.label : 'Not Selected';
+  };
+  self.getThemeLabel = function (id) {
+    var theme = id && id.id ? id : self.getTheme(id);
+    if (!theme) {
+      return 'Not Selected';
+    }
+    return (theme.isInternal ? '[INTERNAL] ' : '') + theme.label;
   };
   self.getTheme = function (id) {
     for (var i = 0; i < self.data.themes.length; i++) {
