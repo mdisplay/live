@@ -115,7 +115,7 @@ function App() {
       versionString: '0.0.0',
       versionNumber: 0,
     },
-    vStable: 239, // should be updated major version
+    vStable: 240, // should be updated major version
     latestApkVersion: '2.1.1',
     isDevDebugging: isDevDebugging,
     devDebugMessage: '',
@@ -135,7 +135,9 @@ function App() {
       Jummah: new IqamahTime(15),
       Tarawih: new IqamahTime(45),
     },
-    jummahEnd: new IqamahTime(DEFAULT_JUMMAH_DURATION_MINUTES),
+    // jummahEnd: new IqamahTime(DEFAULT_JUMMAH_DURATION_MINUTES),
+    jummahEnd: new IqamahTime(0, 13, true),
+    jummahEndEnabled: true,
     appUdate: {
       enabled: false,
       checking: false,
@@ -1024,12 +1026,14 @@ function App() {
     var luharPrayer;
     if (self.data.isFriday) {
       luharPrayer = new Prayer('Jummah', times.Luhar, iqamahTimes.Jummah, self.lang, time24Format);
-      luharPrayer.endTime = self.getJummahEndTime(iqamahTimes.Jummah, dateParams[1], dateParams[2]);
-      var luharEndMoment = moment(luharPrayer.endTime);
-      luharPrayer.endTimeDisplay = luharEndMoment.format(time24Format ? 'HH:mm' : 'hh:mm');
-      luharPrayer.endTimeHours = luharEndMoment.format(time24Format ? 'HH' : 'hh');
-      luharPrayer.endTimeMinutes = luharEndMoment.format('mm');
-      luharPrayer.endTimeAmPm = time24Format ? '' : luharEndMoment.format('A');
+      if (self.data.jummahEndEnabled) {
+        luharPrayer.endTime = self.getJummahEndTime(iqamahTimes.Jummah, dateParams[1], dateParams[2]);
+        var luharEndMoment = moment(luharPrayer.endTime);
+        luharPrayer.endTimeDisplay = luharEndMoment.format(time24Format ? 'HH:mm' : 'hh:mm');
+        luharPrayer.endTimeHours = luharEndMoment.format(time24Format ? 'HH' : 'hh');
+        luharPrayer.endTimeMinutes = luharEndMoment.format('mm');
+        luharPrayer.endTimeAmPm = time24Format ? '' : luharEndMoment.format('A');
+      }
     } else {
       luharPrayer = new Prayer('Luhar', times.Luhar, iqamahTimes.Luhar, self.lang, time24Format);
     }
@@ -1156,12 +1160,14 @@ function App() {
       return;
     }
     if (self.data.currentPrayer.name === 'Jummah') {
-      if (self.data.currentPrayerAfter) {
+      if (self.data.currentPrayer.endTime && self.data.currentPrayerAfter) {
         self.data.currentPrayerDescription = translations[self.lang].currentJummahEnd;
       } else if (self.data.currentPrayerWaiting) {
         self.data.currentPrayerDescription = translations[self.lang].currentJummahStart;
       } else if (self.data.currentPrayerBefore) {
         self.data.currentPrayerDescription = translations[self.lang].currentPrayerBefore;
+      } else if (self.data.currentPrayerAfter) {
+        self.data.currentPrayerDescription = translations[self.lang].currentPrayerAfter;
       }
       return;
     }
@@ -1518,6 +1524,11 @@ function App() {
       if (settings.jummahEnd) {
         self.data.jummahEnd = IqamahTime.fromRaw(settings.jummahEnd);
       }
+      if (typeof settings.jummahEndEnabled !== 'undefined') {
+        self.data.jummahEndEnabled = !!settings.jummahEndEnabled;
+      } else if (settings.jummahEnd) {
+        self.data.jummahEndEnabled = true;
+      }
       if (settings.timeOverrideEnabled) {
         self.data.timeOverrideEnabled = true;
       }
@@ -1577,6 +1588,7 @@ function App() {
       tarawihEnabled: self.data.tarawihEnabled,
       splashScreenMillis: self.data.splashScreenMillis,
       enableArrowKeyScroll: self.data.enableArrowKeyScroll,
+      jummahEndEnabled: self.data.jummahEndEnabled,
       jummahEnd: self.data.jummahEnd.toRaw(),
     };
     if (self.data.rememberedWifiSSID == '' || self.data.rememberedWifiSSID == '~') {

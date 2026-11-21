@@ -15,14 +15,14 @@
     <link rel="shortcut icon" href="assets/images/favicon.png" />
     <link rel="icon" type="image/png" href="assets/images/favicon.png" />
     <!-- common styles -->
-    <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=3.0.23-239" />
-    <link rel="stylesheet" type="text/css" href="assets/css/reset.css?v=3.0.23-239" />
-    <link rel="stylesheet" type="text/css" href="assets/css/common.css?v=3.0.23-239" />
-    <link rel="stylesheet" type="text/css" href="assets/css/app-settings.css?v=3.0.23-239" />
+    <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=3.0.23-240" />
+    <link rel="stylesheet" type="text/css" href="assets/css/reset.css?v=3.0.23-240" />
+    <link rel="stylesheet" type="text/css" href="assets/css/common.css?v=3.0.23-240" />
+    <link rel="stylesheet" type="text/css" href="assets/css/app-settings.css?v=3.0.23-240" />
     <!-- specific styles -->
-    <link rel="stylesheet" type="text/css" href="assets/css/theme-base.css?v=3.0.23-239" />
-    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock.css?v=3.0.23-239" />
-    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock-layout.css?v=3.0.23-239" />
+    <link rel="stylesheet" type="text/css" href="assets/css/theme-base.css?v=3.0.23-240" />
+    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock.css?v=3.0.23-240" />
+    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock-layout.css?v=3.0.23-240" />
   </head>
   <body>
     <div
@@ -582,7 +582,7 @@
                     </span>
                   </div>
                   <template v-for="(iqamahTime, name) in iqamahTimes">
-                  <div class="config-item time-config config-time-input" :key="name">
+                  <div class="config-item time-config config-time-input"  :class="['config-item-prayer-' + name]"  :key="name">
                     <label v-if="name == 'Tarawih'" for="tarawih-enabled-check" class="label">
                       <input
                         id="tarawih-enabled-check"
@@ -593,7 +593,7 @@
                       />
                       Tarawih
                     </label>
-                    <span v-else class="label">{{ name == 'Jummah' ? 'Jummah Start' : name }}</span>
+                    <span v-else class="label" :class="['label-' + name]">{{ name == 'Jummah' ? 'Jummah Start' : name }}</span>
                     <!-- {{ name }}: {{ iqamahTime }} -->
                     <!-- <input type="checkbox" v-model="iqamahTime.absolute" @change="updateSettings()"> -->
                     <template v-if="name == 'Tarawih' ? tarawihEnabled : true">
@@ -630,39 +630,50 @@
                       </span>
                     </template>
                   </div>
-                  <div v-if="name == 'Jummah'" class="config-item time-config config-time-input" :key="name + '-end'">
-                    <span class="label">Jummah End</span>
-                    <span
-                      class="toggle-absolute"
-                      :class="{'is-absolute': jummahEnd.absolute, 'is-not-absolute': !jummahEnd.absolute}"
-                      @click="toggleAbsolute(jummahEnd)"
-                    >
-                      <span class="at" v-if="jummahEnd.absolute">@</span>
-                      <span class="plus" v-else>+</span>
-                    </span>
-                    <template v-if="jummahEnd.absolute">
+                  <div v-if="name == 'Jummah'" class="config-item time-config config-time-input config-item-prayer-Jummah-End" :key="name + '-end'">
+                    <label for="jummah-end-enabled-check" class="label jummah-end-label">
+                      <input
+                        id="jummah-end-enabled-check"
+                        type="checkbox"
+                        name="jummah-end-enabled-check"
+                        v-model="jummahEndEnabled"
+                        @change="updateSettings()"
+                      />
+                      Jummah End
+                    </label>
+                    <template v-if="jummahEndEnabled">
+                      <span
+                        class="toggle-absolute"
+                        :class="{'is-absolute': jummahEnd.absolute, 'is-not-absolute': !jummahEnd.absolute}"
+                        @click="toggleAbsolute(jummahEnd)"
+                      >
+                        <span class="at" v-if="jummahEnd.absolute">@</span>
+                        <span class="plus" v-else>+</span>
+                      </span>
+                      <template v-if="jummahEnd.absolute">
+                        <input
+                          class="time-input"
+                          type="number"
+                          v-model="jummahEnd.hours"
+                          @input="updateSettings()"
+                          @change="updateSettings()"
+                        />
+                        <span class="time-input-colon">:</span>
+                      </template>
                       <input
                         class="time-input"
                         type="number"
-                        v-model="jummahEnd.hours"
+                        v-model="jummahEnd.minutes"
                         @input="updateSettings()"
                         @change="updateSettings()"
                       />
-                      <span class="time-input-colon">:</span>
-                    </template>
-                    <input
-                      class="time-input"
-                      type="number"
-                      v-model="jummahEnd.minutes"
-                      @input="updateSettings()"
-                      @change="updateSettings()"
-                    />
-                    <span class="time-info">
-                      <span v-if="jummahEnd.absolute">
-                        <small>(24h)</small>
+                      <span class="time-info">
+                        <span v-if="jummahEnd.absolute">
+                          <small>(24h)</small>
+                        </span>
+                        <span class="" v-else>minutes</span>
                       </span>
-                      <span class="" v-else>minutes</span>
-                    </span>
+                    </template>
                   </div>
                   </template>
                 </div>
@@ -890,19 +901,19 @@
                 <small class="label" v-if="display.prayer.name != 'Sunrise'">{{ translate('prayer.label') }}</small>
               </span>
               <!-- <small class="am-pm">{{ display.prayer.timeAmPm }}</small> -->
-              <span class="iqamah-time" :class="{'showing-tarawih': display.prayer.name == 'Tarawih' || (display.type == 'next' && showTarawihNext), 'is-jummah-end-time': display.type == 'active' && display.prayer.name == 'Jummah' && currentPrayerAfter}" v-if="display.prayer.name != 'Sunrise'" :style="display.prayer.name == 'Tarawih' || (display.type == 'next' && showTarawihNext) ? [{'display': 'block'}, currentPrayerWaiting || currentPrayerAfter ? {} : {bottom:  '8.5rem'}] : {}">
+              <span class="iqamah-time" :class="{'showing-tarawih': display.prayer.name == 'Tarawih' || (display.type == 'next' && showTarawihNext), 'is-jummah-end-time': display.type == 'active' && display.prayer.name == 'Jummah' && currentPrayerAfter && currentPrayer.endTime}" v-if="display.prayer.name != 'Sunrise'" :style="display.prayer.name == 'Tarawih' || (display.type == 'next' && showTarawihNext) ? [{'display': 'block'}, currentPrayerWaiting || currentPrayerAfter ? {} : {bottom:  '8.5rem'}] : {}">
                 <span class="hours">
                   <span v-if="display.type == 'next' && showTarawihNext">{{ prayers[6].iqamahTimeHours }}</span>
-                  <span v-else-if="display.type == 'active' && display.prayer.name == 'Jummah' && currentPrayerAfter">{{ display.prayer.endTimeHours }}</span>
+                  <span v-else-if="display.type == 'active' && display.prayer.name == 'Jummah' && currentPrayerAfter && currentPrayer.endTime">{{ display.prayer.endTimeHours }}</span>
                   <span v-else>{{ display.prayer.iqamahTimeHours }}</span>
                 </span><span class="colon">:</span
                 ><span class="minutes">
                   <span v-if="display.type == 'next' && showTarawihNext">{{ prayers[6].iqamahTimeMinutes }}</span>
-                  <span v-else-if="display.type == 'active' && display.prayer.name == 'Jummah' && currentPrayerAfter">{{ display.prayer.endTimeMinutes }}</span>
+                  <span v-else-if="display.type == 'active' && display.prayer.name == 'Jummah' && currentPrayerAfter && currentPrayer.endTime">{{ display.prayer.endTimeMinutes }}</span>
                   <span v-else>{{ display.prayer.iqamahTimeMinutes }}</span>
                 </span>
-                <small class="iqamah-am-pm">{{ display.type == 'active' && display.prayer.name == 'Jummah' && currentPrayerAfter ? display.prayer.endTimeAmPm : display.prayer.iqamahTimeAmPm }}</small>
-                <small class="iqamah-label">{{ translate(display.prayer.name == 'Jummah' ? (display.type == 'active' && currentPrayerAfter ? 'currentJummahEnd' : 'currentJummahStart') : 'prayer.iqamah-label') }}</small>
+                <small class="iqamah-am-pm">{{ display.type == 'active' && display.prayer.name == 'Jummah' && currentPrayerAfter && currentPrayer.endTime ? display.prayer.endTimeAmPm : display.prayer.iqamahTimeAmPm }}</small>
+                <small class="iqamah-label">{{ translate(display.prayer.name == 'Jummah' ? (display.type == 'active' && currentPrayerAfter && currentPrayer.endTime ? 'currentJummahEnd' : 'currentJummahStart') : 'prayer.iqamah-label') }}</small>
               </span>
               <!-- <small class="iqamah-am-pm">{{ display.prayer.iqamahTimeAmPm }}</small> -->
             </div>
@@ -1006,17 +1017,17 @@
         </div>
       </div>
     </div>
-    <script type="text/javascript" src="prayer-data.js?v=3.0.23-239"></script>
-    <script type="text/javascript" src="prayernew-data.js?v=3.0.23-239"></script>
-    <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=3.0.23-239"></script>
-    <script type="text/javascript" src="assets/vendors/vue.min.js?v=3.0.23-239"></script>
-    <script type="text/javascript" src="assets/vendors/moment.min.js?v=3.0.23-239"></script>
-    <script type="text/javascript" src="assets/vendors/hijri.js?v=3.0.23-239"></script>
-    <script type="text/javascript" src="assets/vendors/jquery-3.6.0.min.js?v=3.0.23-239"></script>
-    <script type="text/javascript" src="assets/js/translations.js?v=3.0.23-239"></script>
+    <script type="text/javascript" src="prayer-data.js?v=3.0.23-240"></script>
+    <script type="text/javascript" src="prayernew-data.js?v=3.0.23-240"></script>
+    <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=3.0.23-240"></script>
+    <script type="text/javascript" src="assets/vendors/vue.min.js?v=3.0.23-240"></script>
+    <script type="text/javascript" src="assets/vendors/moment.min.js?v=3.0.23-240"></script>
+    <script type="text/javascript" src="assets/vendors/hijri.js?v=3.0.23-240"></script>
+    <script type="text/javascript" src="assets/vendors/jquery-3.6.0.min.js?v=3.0.23-240"></script>
+    <script type="text/javascript" src="assets/js/translations.js?v=3.0.23-240"></script>
     <script type="text/javascript" src="cdvfile://localhost/assets/www/cordova.js"></script>
-    <script type="text/javascript" src="assets/analog-clock/analog-clock.js?v=3.0.23-239"></script>
-    <script type="text/javascript" src="assets/js/app.js?v=3.0.23-239"></script>
+    <script type="text/javascript" src="assets/analog-clock/analog-clock.js?v=3.0.23-240"></script>
+    <script type="text/javascript" src="assets/js/app.js?v=3.0.23-240"></script>
     <script type="text/javascript">
       // WARNING: do not use ES6 syntax
       // The code should only be authored in ES5
@@ -1037,7 +1048,7 @@
       }
 
 
-      var fullVersion = '?v=3.0.23-239';
+      var fullVersion = '?v=3.0.23-240';
       window.mdApp.data.appVersion = window.mdApp.parseVersion(fullVersion);
 
       var hasCordova = !!window.cordova;

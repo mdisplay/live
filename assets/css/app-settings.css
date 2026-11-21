@@ -140,6 +140,27 @@
   /* height: 100%; */
 }
 
+#app #settings_mode .config-item.config-item-prayer-Jummah,
+#app #settings_mode .config-item.config-item-prayer-Jummah-End {
+  background: linear-gradient(180deg, #ffffff 0%, #ffffff 20%, #ffeb3b 66%, #ffb300 100%);
+  background: #ffb300;
+  background: #ffeb3b;  
+}
+
+#app #settings_mode .config-item.config-item-prayer-Jummah-End {
+  background: linear-gradient(180deg, #ffffff 0%, #ffffff 20%, #f279ff 66%, #ed4cff 100%);
+  background: #ed4cff;
+  background: #f279ff;
+}
+
+#app #settings_mode .config-item .label.label-Jummah,
+#app #settings_mode .config-item .label.jummah-end-label {
+  /* width: 11rem;
+  white-space: nowrap; */
+  font-size: 1rem;
+  font-weight: bold;
+}
+
 #app #settings_mode .config-item .time-input {
   width: 20px;
   width: 4rem;
