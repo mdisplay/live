@@ -5,10 +5,10 @@ if (workbox) {
   console.log("Boo! Workbox didn't load 😬");
 }
 var baseUrl = '/live/';
-var appVersion = '3.0.23-233';
-var dataVersion = '10';
-var vendorVersion = '71';
-var bgVersion = '9';
+var appVersion = '3.0.23-234';
+var dataVersion = '12';
+var vendorVersion = '72';
+var bgVersion = '10';
 
 // Detailed logging is very useful during development
 workbox.setConfig({
@@ -38,7 +38,7 @@ var precacheList = [
   },
   {
     url: toUrl('prayernew-data.js'),
-    revision: appVersion,
+    revision: dataVersion,
   },
   // vendors
   {

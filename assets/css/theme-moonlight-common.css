@@ -186,4 +186,24 @@
   #app.theme-moonlight-common .prayer-info-container .prayer-info.is-current {
   }
 
+  /* Focus mode: dim all UI except the current prayer hero, timer, current card and alert */
+  #app.theme-moonlight-common.focus-active-timer .branding-bar,
+  #app.theme-moonlight-common.focus-active-timer .digital-clock,
+  #app.theme-moonlight-common.focus-active-timer .analog-clock-container,
+  #app.theme-moonlight-common.focus-active-timer #version-info,
+  #app.theme-moonlight-common.focus-active-timer .toast-container,
+  #app.theme-moonlight-common.focus-active-timer .prayer-info-container .prayer-info {
+    opacity: 0.5 !important;
+  }
+
+  #app.theme-moonlight-common.focus-active-timer .prayer-info-container,
+  #app.theme-moonlight-common.focus-active-timer .prayer-info-container .prayer-info.is-current {
+    /* opacity: 1 !important; */
+  }
+
+  #app.theme-moonlight-common.focus-active-timer .digital-clock .date-display,
+  #app.theme-moonlight-common.focus-active-timer .digital-clock .seconds-container {
+    opacity: 1 !important;
+  }
+
 }
