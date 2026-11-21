@@ -530,5 +530,18 @@
     text-shadow: 0 0 2.5rem rgba(252, 120, 120, 0.12);
   }
 
+  
+  #app.theme-moonlight-common .alert-container {
+    position: fixed;
+    top: 5.5rem !important;
+    /* left: 4rem !important; */
+    left: auto !important;
+    right: 70vw !important;
+    right: calc((100vw - 13rem)/2 + 17rem) !important;
+    height: calc((100vw - 13rem - 4rem - 7rem - 4rem) / 2.28);
+    width: calc((100vw - 13rem - 4rem - 7rem - 4rem) / 2.28);
+    z-index: 85785;
+  }
+
 
 }

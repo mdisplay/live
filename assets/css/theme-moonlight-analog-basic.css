@@ -181,6 +181,14 @@
 
 
 
+  #app.theme-moonlight-common .alert-container {
+    top: 7.5rem !important;
+    left: 4rem !important;
+    width: 40vw;
+    height: 40vw;
+    max-width: calc(100vh - 16.75rem);
+    max-height: calc(100vh - 16.75rem);
+  }
 
 
 
