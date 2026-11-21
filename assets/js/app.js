@@ -424,7 +424,7 @@ function App() {
   // self.afterSeconds = 1*60;
   self.afterSeconds = 2 * 60;
   self.pauseSeconds = 15;
-  self.data.bgVersion = '9';
+  self.data.bgVersion = '12';
 
   // METHODS begin
 
@@ -1121,7 +1121,7 @@ function App() {
     //   'https://images.unsplash.com/photo-1523821741446-edb2b68bb7a0?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max',
     // ];
     // return (self.data.backgroundImage = backgroundImages[0]);
-    self.data.backgroundImage = 'backgrounds/' + self.data.time.getMinutes() + '.jpg?v=' + self.data.bgVersion;
+    self.data.backgroundImage = 'backgrounds/' + self.data.time.getMinutes() + '.svg?v=' + self.data.bgVersion;
   };
   self.commitCurrentPrayer = function () {
     if (!self.data.currentPrayer) {

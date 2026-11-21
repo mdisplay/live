@@ -5,10 +5,10 @@ if (workbox) {
   console.log("Boo! Workbox didn't load 😬");
 }
 var baseUrl = '/live/';
-var appVersion = '3.0.23-235';
+var appVersion = '3.0.23-236';
 var dataVersion = '12';
 var vendorVersion = '72';
-var bgVersion = '10';
+var bgVersion = '12';
 
 // Detailed logging is very useful during development
 workbox.setConfig({
@@ -164,7 +164,7 @@ for (var analogIndex = 0; analogIndex < analogThemes.length; analogIndex++) {
 var backgroundsList = [];
 for (var i = 0; i <= 59; i++) {
   backgroundsList.push({
-    url: toUrl('backgrounds/' + i + '.jpg'),
+    url: toUrl('backgrounds/' + i + '.svg'),
     revision: bgVersion,
   });
 }
@@ -176,7 +176,7 @@ workbox.precaching.precacheAndRoute(precacheList, {
 });
 
 // workbox.routing.registerRoute(
-//   new RegExp(toUrl('backgrounds/.+.jpg')),
+//   new RegExp(toUrl('backgrounds/.+.svg')),
 //   new workbox.strategies.CacheFirst({
 //     // Use a custom cache name
 //     cacheName: 'md-bg-' + bgVersion,

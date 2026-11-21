@@ -543,5 +543,8 @@
     z-index: 85785;
   }
 
+  #app #bgful .bgful-image, #app #bgful .bgful-overlay {
+    right: 13rem;
+  }
 
 }
