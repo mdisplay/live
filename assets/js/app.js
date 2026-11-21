@@ -866,6 +866,12 @@ function App() {
         }, 5 * 1000);
       }
     }
+    self.updateTimeDisplay();
+  };
+  self.updateTimeDisplay = function () {
+    if (!self.data.time) {
+      return;
+    }
     var m = moment(self.data.time);
     var time24Format = self.data.time24Format;
     self.data.timeFormatted = m.format('DD MMM YYYY, ' + (time24Format ? 'HH:mm:ss' : 'h:mm:ss A'));
@@ -876,6 +882,17 @@ function App() {
     self.data.timeDisplayColon = self.data.timeDisplayColon == ':' ? '' : ':';
     self.data.timeDisplayAmPm = time24Format ? '' : m.format('A');
     self.updateInternetTime();
+  };
+  self.jumpToMinuteEnd = function () {
+    if (!self.data.isDevDebugging || !self.data.time || !self.data.timeIsValid) {
+      return;
+    }
+    var d = new Date(self.data.time.getTime());
+    d.setSeconds(59, 0);
+    self.useDeviceTimeOnly = false;
+    self.data.timeOverridden = true;
+    self.forceTimeUpdate(d);
+    self.updateTimeDisplay();
   };
   self.getDateParams = function (date) {
     return [date.getFullYear(), date.getMonth(), date.getDate()];
@@ -1758,6 +1775,7 @@ function App() {
       ARROW_UP: 38,
       ARROW_RIGHT: 39,
       ARROW_DOWN: 40,
+      NINE: 57,
     };
     var KEY_CODES_STR = {
       ENTER: 'Enter',
@@ -1765,7 +1783,9 @@ function App() {
       ARROW_UP: 'ArrowUp',
       ARROW_RIGHT: 'ArrowRight',
       ARROW_DOWN: 'ArrowDown',
-    }
+      NINE: 'Digit9',
+      NUMPAD_NINE: 'Numpad9',
+    };
     var body = document.querySelector('body');
     body.onkeydown = function (event) {
       var pressed = {
@@ -1773,7 +1793,8 @@ function App() {
         arrowLeft: false,
         arrowUp: false,
         arrowRight: false,
-        arrowDown: false
+        arrowDown: false,
+        nine: false
       };
       if (!event.metaKey) {
         // e.preventDefault();
@@ -1785,6 +1806,7 @@ function App() {
         pressed.arrowUp = code == KEY_CODES.ARROW_UP;
         pressed.arrowRight = code == KEY_CODES.ARROW_RIGHT;
         pressed.arrowDown = code == KEY_CODES.ARROW_DOWN;
+        pressed.nine = code == KEY_CODES.NINE;
       } else {
         var code = event.code;
         pressed.enter = code == KEY_CODES_STR.ENTER;
@@ -1792,6 +1814,17 @@ function App() {
         pressed.arrowUp = code == KEY_CODES_STR.ARROW_UP;
         pressed.arrowRight = code == KEY_CODES_STR.ARROW_RIGHT;
         pressed.arrowDown = code == KEY_CODES_STR.ARROW_DOWN;
+        pressed.nine = code == KEY_CODES_STR.NINE || code == KEY_CODES_STR.NUMPAD_NINE;
+      }
+      if (pressed.nine && !event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey) {
+        var target = event.target;
+        var tag = target && target.tagName ? target.tagName.toUpperCase() : '';
+        var isTyping = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (target && target.isContentEditable);
+        if (self.data.isDevDebugging && !isTyping) {
+          event.preventDefault();
+          self.jumpToMinuteEnd();
+          return;
+        }
       }
       // alert('keyCode: ' + keyCode);
       if (pressed.enter) {
