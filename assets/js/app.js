@@ -5,6 +5,8 @@
 var isDevDebugging = false;
 var isLocalhost = window.location.hostname == 'localhost' || window.location.hostname.indexOf('192.168.1.') != -1 || window.location.hostname == localStorage.getItem('local-ip');
 
+var DEFAULT_JUMMAH_DURATION_MINUTES = 42;
+
 if(isLocalhost || window.location.href.indexOf('stage') != -1) {
   isDevDebugging = true;
 }
@@ -130,10 +132,10 @@ function App() {
       Asr: new IqamahTime(15),
       Magrib: new IqamahTime(10),
       Isha: new IqamahTime(15),
-      Jummah: new IqamahTime(45),
+      Jummah: new IqamahTime(15),
       Tarawih: new IqamahTime(45),
     },
-    jummahEnd: new IqamahTime(30),
+    jummahEnd: new IqamahTime(DEFAULT_JUMMAH_DURATION_MINUTES),
     appUdate: {
       enabled: false,
       checking: false,
@@ -1139,7 +1141,7 @@ function App() {
       endTime = self.getTime(startTime.getFullYear(), monthParam, dayParam, end.toTime());
     } else {
       if (isNaN(durationMinutes) || durationMinutes <= 0) {
-        durationMinutes = 30;
+        durationMinutes = DEFAULT_JUMMAH_DURATION_MINUTES;
       }
       endTime = new Date(startTime.getTime() + durationMinutes * 60 * 1000);
     }
