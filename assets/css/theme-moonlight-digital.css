@@ -1,0 +1,22 @@
+/* Theme: Moonlight Digital (digital clock colors for Moonlight Analog layout) */
+
+@media (orientation: landscape) {
+
+  #app.theme-moonlight-digital .digital-clock .time .hours .h,
+  #app.theme-moonlight-digital .digital-clock .time .minutes .m {
+    background-image: linear-gradient(180deg, #ffffff 0%, #ffffff 20%, #bee5ff 46%, #5cbcff 66%, #0097ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  #app.theme-moonlight-digital .digital-clock .time .colon-main {
+    color: #d9f7ff;
+    text-shadow: 0 0 1rem rgba(191, 234, 255, 0.8), 0 0 3rem rgba(43, 210, 255, 0.4);
+  }
+
+  #app.theme-moonlight-digital .digital-clock .seconds-ring {
+    filter: drop-shadow(0 0 0.35rem rgba(127, 216, 255, 0.55));
+  }
+
+}

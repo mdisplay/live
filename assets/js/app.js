@@ -197,11 +197,11 @@ function App() {
     //   analogClock: true -> shows the canvas analog clock
     //   analogClockTheme (optional): engine theme name in analog-clock.js, falls back to 'galaxy'
     themes: [
-      { id: 'moonlight', label: 'Moonlight', analogClock: false, baseThemes: ['moonlight-common', 'moonlight-basic', 'moonlight-gradient'], defaultFor: 'digital' },
       { id: 'moonlight-analog', label: 'Moonlight Analog', analogClock: true, analogClockTheme: 'galaxy', baseThemes: ['moonlight-common', 'moonlight-analog-basic', 'moonlight-gradient'], defaultFor: 'analog' },
+      { id: 'moonlight-digital', label: 'Moonlight Digital', analogClock: false, analogClockTheme: 'galaxy', baseThemes: ['moonlight-common', 'moonlight-analog-basic', 'moonlight-digital-basic', 'moonlight-gradient'], defaultFor: 'digital' },
       { id: 'digital-default', label: 'Classic Digital', analogClock: false, isLegacy: true },
-      { id: 'moonlight-basic', label: 'Moonlight BASIC', analogClock: false, baseThemes: ['moonlight-common', 'moonlight-flat'], isInternal: true },
       { id: 'moonlight-analog-basic', label: 'Moonlight Analog BASIC', analogClock: true, analogClockTheme: 'galaxy', baseThemes: ['moonlight-common', 'moonlight-flat'], isInternal: true },
+      { id: 'moonlight-digital-basic', label: 'Moonlight Digital BASIC', analogClock: false, baseThemes: ['moonlight-common', 'moonlight-flat', 'moonlight-analog-basic'], isInternal: true },
       { id: 'moonlight-common', label: 'Moonlight Common Shared', isInternal: true, isStyleOnly: true },
       { id: 'moonlight-flat', label: 'Moonlight Flat Shared', isInternal: true, isStyleOnly: true },
       { id: 'moonlight-gradient', label: 'Moonlight Gradient Shared', isInternal: true, isStyleOnly: true },
@@ -210,6 +210,9 @@ function App() {
       { id: 'cosmic', label: 'Cosmic', analogClock: false, isInternal: true, isStyleOnly: true },
       { id: 'cosmic-analog', label: 'Cosmic Analog', analogClock: true, analogClockTheme: 'cosmic', isInternal: true, isStyleOnly: true },
     ],
+    themeAliases: {
+      moonlight: 'moonlight-analog',
+    },
     timeOriginModes: [
       { id: 'auto', label: 'Auto (NTP first)' },
       { id: 'device', label: 'Device Only' },
@@ -223,7 +226,7 @@ function App() {
     analogClockActive: false,
     alertEnabled: true,
     analogClockTheme: 'galaxy',
-    activeTheme: 'moonlight',
+    activeTheme: 'moonlight-analog',
     masjidName: localStorage.getItem('mdisplay.masjidName') || 'Enter Masjid Name in Settings (Call: 076 964 9494)',
     networkTimeInitialized: false,
     timeIsValid: false,
@@ -1567,7 +1570,7 @@ function App() {
       if (settings.enableArrowKeyScroll) {
         self.data.enableArrowKeyScroll = true;
       }
-      themeId = settings.activeTheme || themeId;
+      themeId = self.resolveThemeId(settings.activeTheme || themeId);
       // ...
     }
 
@@ -2222,6 +2225,10 @@ function App() {
     }
     return (theme.isInternal ? '[INTERNAL] ' : '') + theme.label;
   };
+  self.resolveThemeId = function (themeId) {
+    var aliases = self.data.themeAliases || {};
+    return aliases[themeId] || themeId;
+  };
   self.getTheme = function (id) {
     for (var i = 0; i < self.data.themes.length; i++) {
       if (self.data.themes[i].id === id) {
@@ -2386,6 +2393,7 @@ function App() {
   };
   self.activateTheme = function (themeId, callback) {
     callback = callback || function () {};
+    themeId = self.resolveThemeId(themeId);
     var theme = self.getTheme(themeId);
     if (!theme || theme.isStyleOnly) {
       theme = self.getDefaultTheme(false);
@@ -2409,6 +2417,7 @@ function App() {
     });
   };
   self.selectTheme = function (themeId) {
+    themeId = self.resolveThemeId(themeId);
     var theme = self.getTheme(themeId);
     if (!theme || theme.isStyleOnly) {
       return;
