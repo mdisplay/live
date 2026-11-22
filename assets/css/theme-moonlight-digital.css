@@ -1,9 +1,44 @@
-/* Theme: Moonlight Digital (digital clock colors for Moonlight Analog layout) */
+/* Theme: Moonlight Digital (digital clock styling) */
 
 @media (orientation: landscape) {
 
+  #app.theme-moonlight-digital .digital-clock .time {
+    position: absolute;
+    top: 5.5rem;
+    right: auto;
+    bottom: auto;
+    left: 2rem;
+    display: block;
+    width: 50vw;
+    height: 50vw;
+    max-width: calc(100vh - 12.75rem);
+    max-height: calc(100vh - 12.75rem);
+    font-size: 0;
+    line-height: 0;
+  }
+
   #app.theme-moonlight-digital .digital-clock .time .hours .h,
   #app.theme-moonlight-digital .digital-clock .time .minutes .m {
+    position: absolute;
+    top: 50%;
+    height: auto;
+    font-size: calc((100vh - 12.75rem) / 3.1);
+    line-height: 1;
+    transform: translateY(-50%);
+  }
+
+  #app.theme-moonlight-digital .digital-clock .time .hours .h {
+    right: calc(50% + 1.5rem);
+    left: auto;
+    background-image: linear-gradient(180deg, #ffffff 0%, #ffffff 20%, #bee5ff 46%, #5cbcff 66%, #0097ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  #app.theme-moonlight-digital .digital-clock .time .minutes .m {
+    right: auto;
+    left: calc(50% + 1.5rem);
     background-image: linear-gradient(180deg, #ffffff 0%, #ffffff 20%, #bee5ff 46%, #5cbcff 66%, #0097ff 100%);
     -webkit-background-clip: text;
     background-clip: text;
@@ -11,12 +46,74 @@
   }
 
   #app.theme-moonlight-digital .digital-clock .time .colon-main {
+    position: absolute;
+    top: 50%;
+    right: auto;
+    left: 50%;
+    display: block;
+    width: auto;
+    height: auto;
+    margin: 0;
+    font-size: calc((100vh - 12.75rem) / 3.1);
+    line-height: 1;
+    text-align: center;
     color: #d9f7ff;
     text-shadow: 0 0 1rem rgba(191, 234, 255, 0.8), 0 0 3rem rgba(43, 210, 255, 0.4);
+    transform: translate(-50%, -50%);
+  }
+
+  #app.theme-moonlight-digital .digital-clock .time .seconds-container {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    bottom: auto;
+    left: auto;
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-top: 0;
+    transform: none;
+    font-size: 1.5rem;
+    line-height: 3.5rem;
+    text-align: center;
   }
 
   #app.theme-moonlight-digital .digital-clock .seconds-ring {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 3.5rem;
+    height: 3.5rem;
     filter: drop-shadow(0 0 0.35rem rgba(127, 216, 255, 0.55));
+  }
+
+  #app.theme-moonlight-digital .digital-clock .seconds-ring-track {
+    stroke: rgba(242, 242, 242, 0.12);
+  }
+
+  #app.theme-moonlight-digital .digital-clock .seconds-ring-progress {
+    stroke: #f2f2f2;
+  }
+
+  #app.theme-moonlight-digital .digital-clock .seconds-ring-head {
+    fill: #f2f2f2;
+  }
+
+  #app.theme-moonlight-digital .digital-clock .seconds {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    font-size: 1.5rem;
+    line-height: 3.5rem;
+    text-align: center;
+    opacity: 0.9;
+    color: #f2f2f2;
+  }
+
+  #app.theme-moonlight-digital .digital-clock .seconds .colon {
+    display: none;
   }
 
 }

@@ -144,7 +144,7 @@ var precacheList = [
 ];
 
 // theme CSS files (one file per theme)
-var themeCssFiles = ['theme-digital-default.css', 'theme-sunrise.css', 'theme-moonlight-common.css', 'theme-moonlight-flat.css', 'theme-moonlight-analog-basic.css', 'theme-moonlight-digital-basic.css', 'theme-moonlight-gradient.css', 'theme-moonlight-digital.css', 'theme-moonlight-analog.css', 'theme-night-sky.css', 'theme-cosmic.css', 'theme-cosmic-analog.css'];
+var themeCssFiles = ['theme-digital-default.css', 'theme-sunrise.css', 'theme-moonlight-common.css', 'theme-moonlight-digital.css', 'theme-moonlight-analog.css', 'theme-night-sky.css', 'theme-cosmic.css', 'theme-cosmic-analog.css'];
 for (var themeIndex = 0; themeIndex < themeCssFiles.length; themeIndex++) {
   precacheList.push({
     url: toUrl('assets/css/' + themeCssFiles[themeIndex]),

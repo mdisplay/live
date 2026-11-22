@@ -197,14 +197,10 @@ function App() {
     //   analogClock: true -> shows the canvas analog clock
     //   analogClockTheme (optional): engine theme name in analog-clock.js, falls back to 'galaxy'
     themes: [
-      { id: 'moonlight-analog', label: 'Moonlight Analog', analogClock: true, analogClockTheme: 'galaxy', baseThemes: ['moonlight-common', 'moonlight-analog-basic', 'moonlight-gradient'], defaultFor: 'analog' },
-      { id: 'moonlight-digital', label: 'Moonlight Digital', analogClock: false, analogClockTheme: 'galaxy', baseThemes: ['moonlight-common', 'moonlight-analog-basic', 'moonlight-digital-basic', 'moonlight-gradient'], defaultFor: 'digital' },
+      { id: 'moonlight-analog', label: 'Moonlight Analog', analogClock: true, analogClockTheme: 'galaxy', baseThemes: ['moonlight-common'], defaultFor: 'analog' },
+      { id: 'moonlight-digital', label: 'Moonlight Digital', analogClock: false, baseThemes: ['moonlight-common'], defaultFor: 'digital' },
       { id: 'digital-default', label: 'Classic Digital', analogClock: false, isLegacy: true },
-      { id: 'moonlight-analog-basic', label: 'Moonlight Analog BASIC', analogClock: true, analogClockTheme: 'galaxy', baseThemes: ['moonlight-common', 'moonlight-flat'], isInternal: true },
-      { id: 'moonlight-digital-basic', label: 'Moonlight Digital BASIC', analogClock: false, baseThemes: ['moonlight-common', 'moonlight-flat', 'moonlight-analog-basic'], isInternal: true },
       { id: 'moonlight-common', label: 'Moonlight Common Shared', isInternal: true, isStyleOnly: true },
-      { id: 'moonlight-flat', label: 'Moonlight Flat Shared', isInternal: true, isStyleOnly: true },
-      { id: 'moonlight-gradient', label: 'Moonlight Gradient Shared', isInternal: true, isStyleOnly: true },
       { id: 'sunrise', label: 'Sunrise Panel', analogClock: true, analogClockTheme: 'sunrise', isInternal: true },
       { id: 'night-sky', label: 'Night Sky', analogClock: false, isInternal: true, isStyleOnly: true },
       { id: 'cosmic', label: 'Cosmic', analogClock: false, isInternal: true, isStyleOnly: true },
