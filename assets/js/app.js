@@ -115,7 +115,7 @@ function App() {
       versionString: '0.0.0',
       versionNumber: 0,
     },
-    vStable: 242, // should be updated major version
+    vStable: 243, // should be updated major version
     latestApkVersion: '2.1.1',
     isDevDebugging: isDevDebugging,
     devDebugMessage: '',
@@ -254,6 +254,7 @@ function App() {
     asrMadhab: 'shafie',
     tarawihEnabled: false,
     showSunriseNow: false,
+    showJummahEndNow: false,
     expanded: {
       prayerTimesData: false,
       prayerNewTimesData: false,
@@ -326,6 +327,13 @@ function App() {
       return self.data.prayers.filter(function (prayer) {
         return prayer.name != 'Sunrise' && prayer.name != 'Tarawih';
       });
+    },
+    showJummahEndTimetable: function () {
+      return !!(
+        self.data.isFriday &&
+        self.data.jummahEndEnabled &&
+        self.data.showJummahEndNow
+      );
     },
     showTarawihNext: function () {
       return self.data.nextPrayer && self.data.nextPrayer.name == 'Isha' && self.data.tarawihEnabled && self.data.prayers[6] 
@@ -1125,6 +1133,7 @@ function App() {
 
     self.data.hijriDate = hijriDate;
     self.data.prayerInfo = 'athan';
+    self.data.showJummahEndNow = false;
     self.updateBackground(true);
   };
   self.updateBackground = function (isInit) {
@@ -1315,6 +1324,9 @@ function App() {
             self.data.showSunriseLabel = false;
           }
         }, 2000);
+        if (self.data.isFriday && self.data.jummahEndEnabled) {
+          self.data.showJummahEndNow = !self.data.showJummahEndNow;
+        }
       }
     }
     var nowTime = self.data.time.getTime();

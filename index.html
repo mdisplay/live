@@ -15,14 +15,14 @@
     <link rel="shortcut icon" href="assets/images/favicon.png" />
     <link rel="icon" type="image/png" href="assets/images/favicon.png" />
     <!-- common styles -->
-    <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=3.1.0-242" />
-    <link rel="stylesheet" type="text/css" href="assets/css/reset.css?v=3.1.0-242" />
-    <link rel="stylesheet" type="text/css" href="assets/css/common.css?v=3.1.0-242" />
-    <link rel="stylesheet" type="text/css" href="assets/css/app-settings.css?v=3.1.0-242" />
+    <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=3.1.0-243" />
+    <link rel="stylesheet" type="text/css" href="assets/css/reset.css?v=3.1.0-243" />
+    <link rel="stylesheet" type="text/css" href="assets/css/common.css?v=3.1.0-243" />
+    <link rel="stylesheet" type="text/css" href="assets/css/app-settings.css?v=3.1.0-243" />
     <!-- specific styles -->
-    <link rel="stylesheet" type="text/css" href="assets/css/theme-base.css?v=3.1.0-242" />
-    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock.css?v=3.1.0-242" />
-    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock-layout.css?v=3.1.0-242" />
+    <link rel="stylesheet" type="text/css" href="assets/css/theme-base.css?v=3.1.0-243" />
+    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock.css?v=3.1.0-243" />
+    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock-layout.css?v=3.1.0-243" />
   </head>
   <body>
     <div
@@ -970,9 +970,10 @@
         </div>
 
         <div class="prayer-info-container" v-if="timeIsValid">
-          <div class="prayer-info" v-for="prayer in prayersListDisplay" :class="{'is-current': prayer === currentPrayer, 'is-sunrise': (prayer.name == 'Subah' && showSunriseNow) || tarawihEnabled && prayers[6] && prayer.name == 'Isha' && showSunriseNow, 'is-tarawih': tarawihEnabled && prayers[6] && prayer.name == 'Isha' && showSunriseNow}">
+          <div class="prayer-info" v-for="prayer in prayersListDisplay" :class="{'is-current': prayer === currentPrayer, 'is-sunrise': (prayer.name == 'Subah' && showSunriseNow) || (tarawihEnabled && prayers[6] && prayer.name == 'Isha' && showSunriseNow) || (prayer.name == 'Jummah' && prayer.endTime && showJummahEndTimetable && prayerInfo == 'iqamah'), 'is-jummah-end': prayer.name == 'Jummah' && prayer.endTime && showJummahEndTimetable && prayerInfo == 'iqamah', 'is-tarawih': tarawihEnabled && prayers[6] && prayer.name == 'Isha' && showSunriseNow}">
             <div v-if="tarawihEnabled && prayers[6] && prayer.name == 'Isha' && showSunriseLabel" class="prayer-name is-sunrise-label" style="background-color: #7b4c12; color: #FFF;">{{ translate('Tarawih') }}</div>
               <div v-else-if="prayer.name == 'Subah' && showSunriseLabel" class="prayer-name is-sunrise-label" style="background-color: #7b4c12; color: #FFF;">{{ translate('Sunrise') }}</div>
+              <div v-else-if="prayer.name == 'Jummah' && prayer.endTime && showJummahEndTimetable && prayerInfo == 'iqamah'" class="prayer-name is-jummah-end-label">{{ translate('currentJummahEnd') }}</div>
             <div v-else class="prayer-name">{{ prayer.nameDisplay }}</div>
             <!-- <transition name="fade" mode="out-in"> -->
             <div class="prayer-time" xv-if="prayerInfo == 'athan'">
@@ -985,6 +986,10 @@
               </span>
               <span v-else-if="prayer.name == 'Subah' && showSunriseNow">
                 {{ prayers[1].timeDisplay }}
+              </span>
+              <span v-else-if="prayer.name == 'Jummah' && prayer.endTime && showJummahEndTimetable">
+                {{ prayer.endTimeDisplay }}
+                <span class="am-pm">{{ prayer.endTimeAmPm }}</span>
               </span>
               <template v-else>
                 {{ prayer.iqamahTimeDisplay }}
@@ -1017,17 +1022,17 @@
         </div>
       </div>
     </div>
-    <script type="text/javascript" src="prayer-data.js?v=3.1.0-242"></script>
-    <script type="text/javascript" src="prayernew-data.js?v=3.1.0-242"></script>
-    <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=3.1.0-242"></script>
-    <script type="text/javascript" src="assets/vendors/vue.min.js?v=3.1.0-242"></script>
-    <script type="text/javascript" src="assets/vendors/moment.min.js?v=3.1.0-242"></script>
-    <script type="text/javascript" src="assets/vendors/hijri.js?v=3.1.0-242"></script>
-    <script type="text/javascript" src="assets/vendors/jquery-3.6.0.min.js?v=3.1.0-242"></script>
-    <script type="text/javascript" src="assets/js/translations.js?v=3.1.0-242"></script>
+    <script type="text/javascript" src="prayer-data.js?v=3.1.0-243"></script>
+    <script type="text/javascript" src="prayernew-data.js?v=3.1.0-243"></script>
+    <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=3.1.0-243"></script>
+    <script type="text/javascript" src="assets/vendors/vue.min.js?v=3.1.0-243"></script>
+    <script type="text/javascript" src="assets/vendors/moment.min.js?v=3.1.0-243"></script>
+    <script type="text/javascript" src="assets/vendors/hijri.js?v=3.1.0-243"></script>
+    <script type="text/javascript" src="assets/vendors/jquery-3.6.0.min.js?v=3.1.0-243"></script>
+    <script type="text/javascript" src="assets/js/translations.js?v=3.1.0-243"></script>
     <script type="text/javascript" src="cdvfile://localhost/assets/www/cordova.js"></script>
-    <script type="text/javascript" src="assets/analog-clock/analog-clock.js?v=3.1.0-242"></script>
-    <script type="text/javascript" src="assets/js/app.js?v=3.1.0-242"></script>
+    <script type="text/javascript" src="assets/analog-clock/analog-clock.js?v=3.1.0-243"></script>
+    <script type="text/javascript" src="assets/js/app.js?v=3.1.0-243"></script>
     <script type="text/javascript">
       // WARNING: do not use ES6 syntax
       // The code should only be authored in ES5
@@ -1048,7 +1053,7 @@
       }
 
 
-      var fullVersion = '?v=3.1.0-242';
+      var fullVersion = '?v=3.1.0-243';
       window.mdApp.data.appVersion = window.mdApp.parseVersion(fullVersion);
 
       var hasCordova = !!window.cordova;

@@ -173,6 +173,12 @@
     background: transparent;
   }
 
+  #app.theme-moonlight-analog-basic .prayer-info-container .prayer-name.is-jummah-end-label {
+    font-size: 1.75rem;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
 
 
 

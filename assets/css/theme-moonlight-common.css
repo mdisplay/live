@@ -113,6 +113,10 @@
     color: #c391ff !important;
   }
 
+  #app.theme-moonlight-common .prayer-info-container .is-jummah-end .iqamah-time {
+    color: #c391ff !important;
+  }
+
   #app.theme-moonlight-common .prayer-info-container .prayer-info.is-current {
     background-image: none;
     border-left-color: rgba(0, 0, 0, 0.2) !important;
@@ -129,6 +133,10 @@
 
   #app.theme-moonlight-common.active-prayer-info-iqamah .prayer-info-container .prayer-info.is-current.is-sunrise:not(.is-tarawih) {
     background-color: #f279ff;
+  }
+
+  #app.theme-moonlight-common.active-prayer-info-iqamah .prayer-info-container .prayer-info.is-current.is-jummah-end.is-sunrise {
+    background-color: #c391ff;
   }
 
   #app.theme-moonlight-common .prayer-info-container .prayer-info.is-current .prayer-name,
@@ -200,13 +208,13 @@
   }
 
   #app.theme-moonlight-common .prayer-display .iqamah-time.is-jummah-end-time {
-    color: #f279ff;
-    text-shadow: 0 0 2.5rem rgba(255, 143, 0, 0.12);
-    filter: drop-shadow(0 0 0.55rem rgba(255, 143, 0, 0.32));
+    color: #c391ff;
+    text-shadow: 0 0 2.5rem rgba(195, 145, 255, 0.18);
+    filter: drop-shadow(0 0 0.55rem rgba(195, 145, 255, 0.4));
   }
 
   #app.theme-moonlight-common .prayer-display .iqamah-time.is-jummah-end-time .iqamah-label {
-    color: #f279ff;
+    color: #c391ff;
   }
 
 }

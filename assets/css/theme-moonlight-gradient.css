@@ -52,6 +52,10 @@
     background-image: linear-gradient(180deg, #ffffff 0%, #ffffff 20%, #c391ff 66%, #8a4dff 100%);
   }
 
+  #app.theme-moonlight-gradient .prayer-info-container .is-jummah-end .iqamah-time {
+    background-image: linear-gradient(180deg, #ffffff 0%, #ffffff 20%, #c391ff 66%, #8a4dff 100%);
+  }
+
   #app.theme-moonlight-gradient .branding-bar::after {
     height: 2px;
     background: linear-gradient(90deg, rgba(43, 210, 255, 0.65), rgba(124, 92, 255, 0.5) 48%, rgba(255, 95, 158, 0.4) 78%, rgba(255, 255, 255, 0));
@@ -91,8 +95,8 @@
   }
 
   #app.theme-moonlight-gradient .prayer-display .iqamah-time.is-jummah-end-time .hours, #app.theme-moonlight-gradient .prayer-display .iqamah-time.is-jummah-end-time .colon, #app.theme-moonlight-gradient .prayer-display .iqamah-time.is-jummah-end-time .minutes {
-    color: #f279ff;
-    background-image: linear-gradient(180deg, #ffffff 0%, #ffffff 20%, #f279ff 66%, #ed4cff 100%);
+    color: #c391ff;
+    background-image: linear-gradient(180deg, #ffffff 0%, #ffffff 20%, #c391ff 66%, #8a4dff 100%);
   }
 
   #app.theme-moonlight-gradient .prayer-display .time, #app.theme-moonlight-gradient .prayer-display .iqamah-time {
@@ -133,6 +137,12 @@
 
   #app.theme-moonlight-gradient.active-prayer-info-iqamah .prayer-info-container .prayer-info.is-current.is-sunrise:not(.is-tarawih) {
     background-image: linear-gradient(180deg, #f279ff 0%, #FFF 46%, #ed4cff 100%);
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  #app.theme-moonlight-gradient.active-prayer-info-iqamah .prayer-info-container .prayer-info.is-current.is-jummah-end.is-sunrise {
+    background-image: linear-gradient(180deg, #c391ff 0%, #FFF 46%, #8a4dff 100%);
     background-repeat: no-repeat;
     background-size: cover;
   }
