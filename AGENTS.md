@@ -30,3 +30,9 @@ This applies to every `.js` file and all inline `<script>` blocks (e.g. `index.h
 - Comments in code should only be added when explicitly requested
 
 If you are about to write JS in this repo, first verify it parses as ES5 before finishing.
+
+## STRICT RULE: `vStable` is manually maintained
+
+Do not change `vStable` in `assets/js/app.js` or `check-internet.js` unless the user explicitly requests that specific change.
+
+Feature work, version bumps, and release preparation must leave `vStable` untouched. It is primarily a manual responsibility; if a task appears to require changing it, ask first.
