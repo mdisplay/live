@@ -818,7 +818,7 @@
           <img :src="'assets/images/' + currentlyShowingAlert">
         </div>
         <div class="branding-bar" v-if="showBrandingBar">
-          <span class="masjid-name">{{ masjidName || 'Enter Masjid Name in Settings (Call: 076 964 9494)' }}</span>
+          <span class="masjid-name">{{ masjidName }}</span>
         </div>
         <div class="digital-clock" v-if="timeIsValid">
           <span class="time">

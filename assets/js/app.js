@@ -224,7 +224,7 @@ function App() {
     alertEnabled: true,
     analogClockTheme: 'galaxy',
     activeTheme: 'moonlight',
-    masjidName: localStorage.getItem('mdisplay.masjidName') || '',
+    masjidName: localStorage.getItem('mdisplay.masjidName') || 'Enter Masjid Name in Settings (Call: 076 964 9494)',
     networkTimeInitialized: false,
     timeIsValid: false,
     timeFetchingMessage: undefined,
