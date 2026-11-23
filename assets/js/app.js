@@ -198,7 +198,7 @@ function App() {
     //   analogClockTheme (optional): engine theme name in analog-clock.js, falls back to 'galaxy'
     themes: [
       { id: 'moonlight-analog', label: 'Moonlight Analog', analogClock: true, analogClockTheme: 'galaxy', baseThemes: ['moonlight-common'], defaultFor: 'analog' },
-      { id: 'moonlight-digital', label: 'Moonlight Digital', analogClock: false, baseThemes: ['moonlight-common'], defaultFor: 'digital' },
+      { id: 'moonlight-digital', label: 'Moonlight Digital', analogClock: false, digitalClockSkin: 'modern', baseThemes: ['moonlight-common'], defaultFor: 'digital' },
       { id: 'digital-default', label: 'Classic Digital', analogClock: false, isLegacy: true },
       { id: 'moonlight-common', label: 'Moonlight Common Shared', isInternal: true, isStyleOnly: true },
       { id: 'sunrise', label: 'Sunrise Panel', analogClock: true, analogClockTheme: 'sunrise', isInternal: true },
@@ -209,6 +209,11 @@ function App() {
     themeAliases: {
       moonlight: 'moonlight-analog',
     },
+    digitalClockSkins: [
+      { id: 'modern', label: 'Modern' },
+    ],
+    digitalClockSkin: 'text',
+    digitalClockSkinFailed: false,
     timeOriginModes: [
       { id: 'auto', label: 'Auto (NTP first)' },
       { id: 'device', label: 'Device Only' },
@@ -351,6 +356,9 @@ function App() {
         seconds = 0;
       }
       return seconds * 6;
+    },
+    usingDigitalClockSkin: function () {
+      return !!self.data.digitalClockSkin && self.data.digitalClockSkin !== 'text' && !self.data.digitalClockSkinFailed;
     },
     themeClasses: function () {
       var chain = self.getThemeChain(self.data.activeTheme);
@@ -2225,6 +2233,45 @@ function App() {
     var aliases = self.data.themeAliases || {};
     return aliases[themeId] || themeId;
   };
+  self.getDigitalClockSkin = function (id) {
+    for (var i = 0; i < self.data.digitalClockSkins.length; i++) {
+      if (self.data.digitalClockSkins[i].id === id) {
+        return self.data.digitalClockSkins[i];
+      }
+    }
+    return undefined;
+  };
+  self.digitalClockSkinPath = function (file) {
+    return 'assets/digital-clock/skins/' + self.data.digitalClockSkin + '/' + file + '.svg';
+  };
+  self.digitalClockDigitsFor = function (value) {
+    if (value === undefined || value === null) {
+      return [];
+    }
+    return String(value).split('');
+  };
+  self.digitalClockDigitSrc = function (digit) {
+    return self.digitalClockSkinPath(digit);
+  };
+  self.digitalClockColonSrc = function () {
+    return self.digitalClockSkinPath('colon');
+  };
+  self.digitalClockSkinOpacity = function () {
+    return self.data.timeDisplayColon ? 1 : 0.15;
+  };
+  self.handleDigitalClockSkinError = function () {
+    self.data.digitalClockSkinFailed = true;
+  };
+  self.preloadDigitalClockSkin = function (skin) {
+    if (!skin || skin === 'text' || !self.getDigitalClockSkin(skin)) {
+      return;
+    }
+    var files = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'colon'];
+    for (var i = 0; i < files.length; i++) {
+      var image = new Image();
+      image.src = 'assets/digital-clock/skins/' + skin + '/' + files[i] + '.svg';
+    }
+  };
   self.getTheme = function (id) {
     for (var i = 0; i < self.data.themes.length; i++) {
       if (self.data.themes[i].id === id) {
@@ -2495,6 +2542,7 @@ function App() {
     var chain = self.getThemeChain(theme.id);
     var analogClock = false;
     var analogClockTheme = 'galaxy';
+    var digitalClockSkin = 'text';
     for (var i = 0; i < chain.length; i++) {
       if (chain[i].analogClock !== undefined) {
         analogClock = !!chain[i].analogClock;
@@ -2502,10 +2550,16 @@ function App() {
       if (chain[i].analogClockTheme) {
         analogClockTheme = chain[i].analogClockTheme;
       }
+      if (chain[i].digitalClockSkin && self.getDigitalClockSkin(chain[i].digitalClockSkin)) {
+        digitalClockSkin = chain[i].digitalClockSkin;
+      }
     }
     self.data.activeTheme = theme.id;
     self.data.analogClockActive = analogClock;
     self.data.analogClockTheme = analogClockTheme;
+    self.data.digitalClockSkin = digitalClockSkin;
+    self.data.digitalClockSkinFailed = false;
+    self.preloadDigitalClockSkin(digitalClockSkin);
   };
   self.deviceReady = function () {
     self.isDeviceReady = true;

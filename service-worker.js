@@ -161,6 +161,18 @@ for (var analogIndex = 0; analogIndex < analogThemes.length; analogIndex++) {
   });
 }
 
+// digital clock skins that ship their own SVG files
+var digitalClockSkins = ['modern'];
+var digitalClockSkinFiles = ['0.svg', '1.svg', '2.svg', '3.svg', '4.svg', '5.svg', '6.svg', '7.svg', '8.svg', '9.svg', 'colon.svg'];
+for (var digitalSkinIndex = 0; digitalSkinIndex < digitalClockSkins.length; digitalSkinIndex++) {
+  for (var digitalFileIndex = 0; digitalFileIndex < digitalClockSkinFiles.length; digitalFileIndex++) {
+    precacheList.push({
+      url: toUrl('assets/digital-clock/skins/' + digitalClockSkins[digitalSkinIndex] + '/' + digitalClockSkinFiles[digitalFileIndex]),
+      revision: vendorVersion,
+    });
+  }
+}
+
 var backgroundsList = [];
 for (var i = 0; i <= 59; i++) {
   backgroundsList.push({

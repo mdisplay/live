@@ -759,6 +759,20 @@
   opacity: 1;
 }
 
+.digital-clock.has-digital-clock-skin .time .hours .h,
+.digital-clock.has-digital-clock-skin .time .minutes .m,
+.digital-clock.has-digital-clock-skin .time .colon-main {
+  background: none;
+  color: transparent;
+  text-shadow: none;
+  -webkit-text-fill-color: transparent;
+}
+
+.digital-clock.has-digital-clock-skin img.digit-svg {
+  height: 1em;
+  width: auto;
+}
+
 
 
 /* //////////////////////////////////////// */

@@ -77,6 +77,10 @@
     text-align: center;
   }
 
+  #app.theme-moonlight-digital .digital-clock.has-digital-clock-skin img.digit-svg {
+    filter: drop-shadow(0 0 0.35rem rgba(127, 216, 255, 0.55));
+  }
+
   #app.theme-moonlight-digital .digital-clock .seconds-ring {
     position: absolute;
     top: 0;

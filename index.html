@@ -820,10 +820,10 @@
         <div class="branding-bar" v-if="showBrandingBar">
           <span class="masjid-name">{{ masjidName }}</span>
         </div>
-        <div class="digital-clock" v-if="timeIsValid">
+        <div class="digital-clock" :class="{'has-digital-clock-skin': usingDigitalClockSkin}" v-if="timeIsValid">
           <span class="time">
             <span class="hours"
-              ><span class="h">{{ timeDisplayHours }}</span>
+              ><span class="h"><template v-if="!usingDigitalClockSkin">{{ timeDisplayHours }}</template><template v-else><img v-for="(digit, digitIndex) in digitalClockDigitsFor(timeDisplayHours)" :key="'hour-' + digitIndex" class="digit-svg" :src="digitalClockDigitSrc(digit)" :alt="digit" @error="handleDigitalClockSkinError"></template></span>
               <span class="date-display">
                 <span v-if="!(currentPrayer && focusActiveTimer)" class="alert-container" :style="{opacity: showAlert ? '1' : '0'}">
                   <img :src="'assets/images/' + currentlyShowingAlert">
@@ -843,9 +843,9 @@
                   />
                 </span>
               </span> </span
-            ><span class="colon colon-main">{{ timeDisplayColon }}</span
+            ><span class="colon colon-main"><template v-if="!usingDigitalClockSkin">{{ timeDisplayColon }}</template><template v-else><img class="digit-svg colon-svg" :src="digitalClockColonSrc()" :style="{opacity: digitalClockSkinOpacity()}" alt=":" @error="handleDigitalClockSkinError"></template></span
             ><span class="minutes"
-              ><span class="m">{{ timeDisplayMinutes }}</span>
+              ><span class="m"><template v-if="!usingDigitalClockSkin">{{ timeDisplayMinutes }}</template><template v-else><img v-for="(digit, digitIndex) in digitalClockDigitsFor(timeDisplayMinutes)" :key="'minute-' + digitIndex" class="digit-svg" :src="digitalClockDigitSrc(digit)" :alt="digit" @error="handleDigitalClockSkinError"></template></span>
 
               <span class="seconds-container">
                 <svg class="seconds-ring" viewBox="0 0 64 64" aria-hidden="true" v-if="activeTheme == 'moonlight-digital'">
@@ -1152,6 +1152,21 @@
             },
             getThemeLabel: function(themeId) {
               return window.mdApp.getThemeLabel(themeId);
+            },
+            digitalClockDigitsFor: function(value) {
+              return window.mdApp.digitalClockDigitsFor(value);
+            },
+            digitalClockDigitSrc: function(digit) {
+              return window.mdApp.digitalClockDigitSrc(digit);
+            },
+            digitalClockColonSrc: function() {
+              return window.mdApp.digitalClockColonSrc();
+            },
+            digitalClockSkinOpacity: function() {
+              return window.mdApp.digitalClockSkinOpacity();
+            },
+            handleDigitalClockSkinError: function() {
+              return window.mdApp.handleDigitalClockSkinError();
             },
             onRestoreFileChange: function(event) {
               return window.mdApp.onRestoreFileChange(event);
