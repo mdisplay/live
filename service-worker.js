@@ -1,14 +1,14 @@
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.0.0/workbox-sw.js');
 if (workbox) {
-  console.log('Yay! Workbox is loaded 🎉');
+  console.log(`Yay! Workbox is loaded 🎉`);
 } else {
-  console.log("Boo! Workbox didn't load 😬");
+  console.log(`Boo! Workbox didn't load 😬`);
 }
 var baseUrl = '/live/';
-var appVersion = '3.1.0-243';
-var dataVersion = '12';
-var vendorVersion = '76';
-var bgVersion = '12';
+var appVersion = '2.19.0-173';
+var dataVersion = '10';
+var vendorVersion = '12';
+var bgVersion = '9';
 
 // Detailed logging is very useful during development
 workbox.setConfig({
@@ -38,7 +38,7 @@ var precacheList = [
   },
   {
     url: toUrl('prayernew-data.js'),
-    revision: dataVersion,
+    revision: appVersion,
   },
   // vendors
   {
@@ -79,27 +79,7 @@ var precacheList = [
     revision: vendorVersion,
   },
   {
-    url: toUrl('assets/images/alert-phone-moonlight.svg'),
-    revision: vendorVersion,
-  },
-  {
     url: toUrl('assets/images/alert2.gif'),
-    revision: vendorVersion,
-  },
-  {
-    url: toUrl('assets/images/galaxy-bg1.svg'),
-    revision: vendorVersion,
-  },
-  {
-    url: toUrl('assets/images/sunrise-bg.svg'),
-    revision: vendorVersion,
-  },
-  {
-    url: toUrl('assets/images/night-sky-bg.svg'),
-    revision: vendorVersion,
-  },
-  {
-    url: toUrl('assets/images/cosmic-bg.svg'),
     revision: vendorVersion,
   },
   // /app
@@ -116,23 +96,15 @@ var precacheList = [
     revision: appVersion,
   },
   {
-    url: toUrl('assets/css/common.css'),
-    revision: appVersion,
-  },
-  {
-    url: toUrl('assets/css/reset.css'),
-    revision: appVersion,
-  },
-  {
-    url: toUrl('assets/css/app-settings.css'),
-    revision: appVersion,
-  },
-  {
-    url: toUrl('assets/css/theme-base.css'),
+    url: toUrl('assets/css/app.css'),
     revision: appVersion,
   },
   {
     url: toUrl('assets/analog-clock/analog-clock.css'),
+    revision: appVersion,
+  },
+  {
+    url: toUrl('assets/css/theme-default.css'),
     revision: appVersion,
   },
   {
@@ -143,44 +115,34 @@ var precacheList = [
   // 'assets/**/*.{css,js}',
 ];
 
-// theme CSS files (one file per theme)
-var themeCssFiles = ['theme-digital-default.css', 'theme-sunrise.css', 'theme-moonlight-common.css', 'theme-moonlight-digital.css', 'theme-moonlight-analog.css', 'theme-night-sky.css', 'theme-cosmic.css', 'theme-cosmic-analog.css'];
-for (var themeIndex = 0; themeIndex < themeCssFiles.length; themeIndex++) {
-  precacheList.push({
-    url: toUrl('assets/css/' + themeCssFiles[themeIndex]),
-    revision: vendorVersion,
-  });
-}
-
-// analog clock faces that ship their own SVG file
-var analogThemes = ['sunrise', 'galaxy', 'cosmic'];
-for (var analogIndex = 0; analogIndex < analogThemes.length; analogIndex++) {
-  precacheList.push({
-    url: toUrl('assets/analog-clock/themes/' + analogThemes[analogIndex] + '/face.svg'),
-    revision: vendorVersion,
-  });
-}
-
-// digital clock skins that ship their own SVG files
-var digitalClockSkins = ['modern'];
-var digitalClockSkinFiles = ['0.svg', '1.svg', '2.svg', '3.svg', '4.svg', '5.svg', '6.svg', '7.svg', '8.svg', '9.svg', 'colon.svg'];
-for (var digitalSkinIndex = 0; digitalSkinIndex < digitalClockSkins.length; digitalSkinIndex++) {
-  for (var digitalFileIndex = 0; digitalFileIndex < digitalClockSkinFiles.length; digitalFileIndex++) {
-    precacheList.push({
-      url: toUrl('assets/digital-clock/skins/' + digitalClockSkins[digitalSkinIndex] + '/' + digitalClockSkinFiles[digitalFileIndex]),
-      revision: vendorVersion,
-    });
-  }
-}
-
 var backgroundsList = [];
 for (var i = 0; i <= 59; i++) {
   backgroundsList.push({
-    url: toUrl('backgrounds/' + i + '.svg'),
+    url: toUrl('backgrounds/' + i + '.jpg'),
     revision: bgVersion,
   });
 }
 precacheList = precacheList.concat(backgroundsList);
+
+var analogClockThemes = ['default', 'modern'];
+var analogClockThemeFileNames = [
+  'clock-face.png',
+  'clock-hand-hours.png',
+  'clock-hand-minutes.png',
+  'clock-hand-seconds.png',
+  'clock-center-circle.png',
+];
+
+var analogClockThemeFiles = [];
+for (var i = 0; i < analogClockThemes.length; i++) {
+  for (var j = 0; j < analogClockThemeFileNames.length; j++) {
+    analogClockThemeFiles.push({
+      url: toUrl('assets/analog-clock/themes/' + analogClockThemes[i] + '/' + analogClockThemeFileNames[j]),
+      revision: vendorVersion,
+    });
+  }
+}
+precacheList = precacheList.concat(analogClockThemeFiles);
 
 // precache all the site files
 workbox.precaching.precacheAndRoute(precacheList, {
@@ -188,7 +150,7 @@ workbox.precaching.precacheAndRoute(precacheList, {
 });
 
 // workbox.routing.registerRoute(
-//   new RegExp(toUrl('backgrounds/.+.svg')),
+//   new RegExp(toUrl('backgrounds/.+.jpg')),
 //   new workbox.strategies.CacheFirst({
 //     // Use a custom cache name
 //     cacheName: 'md-bg-' + bgVersion,

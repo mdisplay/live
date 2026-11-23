@@ -1,0 +1,454 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  /*font-size: 16px;*/
+  font-size: 1.6vw;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  background: #000;
+  /*background: green;*/
+  color: #fff;
+  text-align: center;
+}
+
+#app {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  /*top: 20px;*/
+  top: 1.5rem;
+  /*right: 30px;*/
+  right: 2rem;
+  /*bottom: 20px;*/
+  /*bottom: 1.5rem;*/
+  bottom: 6rem;
+  /*left: 30px;*/
+  left: 2rem;
+}
+
+#app * {
+  z-index: 10;
+}
+
+#splash {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 20;
+  background: #000;
+  width: 100vw;
+  height: 100vh;
+}
+
+#splash .splash-content {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  margin-top: -5rem;
+  text-align: center;
+  height: 10rem;
+  font-size: 2rem;
+  line-height: 10rem;
+}
+
+#splash .splash-content img {
+  height: 100%;
+}
+
+#app .alert-container {
+  position: absolute;
+  width: 30vw;
+  height: 30vw;
+  width: 17.5rem;
+  height: 17.5rem;
+  left: 0;
+  top: 0;
+  transition: all 300ms;
+}
+
+#app .alert-container img {
+  width: 100%;
+  height: 100%;
+  opacity: 0.9;
+  float: left;
+}
+
+.prayer-info-container {
+  background: gray;
+  bottom: -6rem;
+  height: 6rem;
+}
+
+.prayer-info {
+  width: 20%;
+  /*width: 16.66%;*/
+  display: inline-block;
+}
+
+.analog-clock {
+  background: #333;
+  color: #eee;
+}
+
+.analog-clock-container {
+  width: 272px;
+  height: 272px;
+  position: relative;
+}
+
+.analog-clock-container .border-clock {
+  display: none;
+}
+
+.analog-clock-container .analog-clock {
+  border: 0;
+}
+
+/*.date-display,
+.date-display .hijri-date,
+.date-display .date,
+.digital-clock,
+.digital-clock .time,
+.digital-clock .seconds,
+.digital-clock .am-pm,
+.prayer-info-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}*/
+
+#bgful .bgful-image,
+#bgful .bgful-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+}
+
+#bgful .bgful-overlay {
+  background: rgba(0, 0, 0, 0.75);
+  /*  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);*/
+  z-index: 2;
+}
+
+#bgful .bgful-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  -webkit-filter: blur(10px);
+  filter: blur(10px);
+  object-fit: fill;
+}
+
+#app .modal-wrapper {
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  color: #000;
+}
+
+#app .modal-overlay {
+  background: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+}
+
+#app .modal-dialog {
+  background: rgba(255, 255, 255, 0.95);
+  background: #afafaf;
+  background: #646464;
+  /*width: 500px;*/
+  width: 36rem;
+  height: calc(100vh - 6rem);
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  padding: 1rem;
+  overflow-y: auto;
+  width: 100%;
+  height: 100%;
+}
+
+#app .modal-close {
+  font-size: 1.5rem;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.5);
+  background: rgba(121, 180, 201, 0.3);
+  background: #343434;
+  color: #bbb;
+  line-height: 2.25rem;
+  height: 2.25rem;
+
+  position: absolute;
+  right: 0;
+  left: 0;
+}
+
+#app .modal-close-top {
+  /* margin-bottom: 0.5rem;
+  margin-top: -1rem;
+  margin-right: -1rem;
+  margin-left: -1rem; */
+  top: 0;
+}
+
+#app .modal-close-bottom {
+  margin-top: 1rem;
+  /* border-radius: 6px; */
+  bottom: 0;
+}
+
+#app .modal-content {
+  position: absolute;
+  top: 2.25rem;
+  bottom: 2.25rem;
+  left: 0;
+  right: 0;
+  overflow: auto;
+  padding: 1rem 0.5rem;
+}
+
+#app .config-wrapper {
+
+}
+
+#app .config-wrapper:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+#app .config-container {
+  text-align: left;
+  width: 50%;
+  float: left;
+  border: 1px solid #555;
+  border-radius: 5px;
+  border: 2px solid #fff;
+  box-shadow: 2px 2px 10px -2px #000;
+  background: #d2d2d2;
+}
+
+#app .times-config {
+  width: calc(50% - 1rem);
+  margin-right: 1rem;
+}
+
+#app .others-config {
+  float: right;
+}
+
+#app .config-item {
+  /* height: 4rem; */
+  /* height: 3.5rem; */
+  line-height: 2rem;
+  font-size: 1.5rem;
+  padding: 0.5rem;
+}
+
+#app .config-item .label,
+#app .config-item .time-input,
+#app .config-item .time-input-colon,
+#app .config-item .toggle-absolute,
+#app .config-item .time-info {
+  /* font-size: 2rem; */
+  /* line-height: 2.5rem; */
+  height: 2rem;
+  display: inline-block;
+}
+
+#app .config-item:nth-child(even) {
+  background: #dadada;
+  background: #e9e9e9;
+}
+
+#app .config-item .label {
+  /* font-size: 2rem;
+  height: 2.5rem; */
+  width: 7rem;
+  width: 7.75rem;
+  width: 9rem;
+  display: inline-block;
+  /* height: 100%; */
+}
+
+#app .config-item .time-input {
+  width: 20px;
+  width: 4rem;
+  /* font-size: 2rem;
+  line-height: 2.5rem; */
+  border: 2px solid #aaa;
+  outline: 0;
+  display: inline-block;
+  /* height: 100%; */
+}
+
+#app .config-item .time-input-colon {
+  /* font-size: 2rem; */
+}
+
+#app .config-item .time-input:focus {
+  border-color: #0f6f9b;
+  outline: 0;
+}
+
+#app .config-item .toggle-absolute {
+  /* font-size: 2rem;
+  line-height: 2.5rem; */
+  width: 2.5rem;
+  text-align: center;
+  display: inline-block;
+  color: #fff;
+  background: #518d0b;
+  border: none;
+}
+
+#app .config-item .toggle-absolute.is-absolute {
+  font-size: 1.5rem;
+  background: #555;
+}
+
+#app .config-item .time-info {
+  /* font-size: 2rem; */
+  margin-left: 0.5rem;
+}
+
+#app .configured-info {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  position: absolute;
+  top: 0.5rem;
+  left: 1rem;
+  color: #EEE;
+}
+
+#app .configured-info .not-configured {
+  color: #d91010;
+}
+
+#app .configured-info .configured {
+  color: #1eb624;
+}
+
+#app .close-buttons-container {
+  padding-top: 1rem;
+}
+
+#app .close-buttons-container .setting-close-button {
+  display: block;
+  color: #000;
+  font-weight: bold;
+  padding: 0.5rem;
+  font-size: 1.5rem;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  /* width: 50%;
+  float: left; */
+}
+
+#app .close-buttons-container .settings-save {
+  background-color: #357ae8;
+  color: #FFF;
+}
+
+#app .close-buttons-container .settings-close {
+  background-color: #aaa;
+}
+
+#app .update-info {
+  font-size: 1rem;
+  position: absolute;
+  /*top: 0.5rem;*/
+  right: 1rem;
+  bottom: 0.25rem;
+  text-align: right;
+}
+
+#app .prayer-times-applied-indicator {
+  border-radius: 50%;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 1px solid #000;
+  margin-left: 0.5rem;
+  display: inline-block;
+}
+
+#app .prayer-times-applied-indicator-new {
+  background: #00aaff;
+}
+
+#app .prayer-times-applied-indicator-old {
+  background: #ff2b2b;
+  background: #ff5a25;
+}
+
+/* #app .config-item {
+  padding: 0.25rem;
+  height: 3.5rem;
+  line-height: 3rem;
+} */
+
+/* #app .config-item {
+  padding: 0.5rem;
+  height: 3rem;
+  line-height: 2rem;
+}
+
+#app .config-item .label {
+  font-size: 1.5rem;
+}
+
+#app .config-item .time-input {
+  width: 4.5rem;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  height: 2rem;
+  padding: 0 0.25rem;
+}
+
+#app .config-item .toggle-absolute {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+#app .config-item .time-info {
+  font-size: 1.5rem;
+} */
+
+/* @media screen and (min-width: 320px) and (max-width: 767px) and (orientation: portrait) {
+  html {
+    transform: rotate(-90deg);
+    transform-origin: left top;
+    width: 100vh;
+    height: 100vw;
+    overflow-x: hidden;
+    position: absolute;
+    top: 100%;
+    left: 0;
+  }
+} */
