@@ -369,7 +369,7 @@ function App() {
   // self.afterSeconds = 1*60;
   self.afterSeconds = 2 * 60;
   self.pauseSeconds = 15;
-  self.data.bgVersion = '9';
+  self.data.bgVersion = '13';
 
   // METHODS begin
 
