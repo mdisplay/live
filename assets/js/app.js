@@ -5,8 +5,6 @@
 var isDevDebugging = false;
 var isLocalhost = window.location.hostname == 'localhost' || window.location.hostname.indexOf('192.168.1.') != -1 || window.location.hostname == localStorage.getItem('local-ip');
 
-var DEFAULT_JUMMAH_DURATION_MINUTES = 42;
-
 if(isLocalhost || window.location.href.indexOf('stage') != -1) {
   isDevDebugging = true;
 }
@@ -105,9 +103,6 @@ function App() {
   self.retryWifiCount = 0;
   self.retryLastMillis = 0;
   self.useDeviceTimeOnly = false;
-  self.themeLinks = {};
-  self.themeLoadToken = 0;
-  self.themeStylesMarker = null;
 
   self.data = {
     appVersion: {
@@ -115,10 +110,10 @@ function App() {
       versionString: '0.0.0',
       versionNumber: 0,
     },
-    vStable: 243, // should be updated major version
+    vStable: 173, // should be updated major version
     latestApkVersion: '2.1.1',
     isDevDebugging: isDevDebugging,
-    devDebugMessage: '',
+    devDebugMessage: 'dev - testing 3',
     showSplash: true,
     // currentPrayerWaiting: false,
     // time: new Date(),
@@ -132,12 +127,9 @@ function App() {
       Asr: new IqamahTime(15),
       Magrib: new IqamahTime(10),
       Isha: new IqamahTime(15),
-      Jummah: new IqamahTime(15),
+      Jummah: new IqamahTime(45),
       Tarawih: new IqamahTime(45),
     },
-    // jummahEnd: new IqamahTime(DEFAULT_JUMMAH_DURATION_MINUTES),
-    jummahEnd: new IqamahTime(0, 13, true),
-    jummahEndEnabled: true,
     appUdate: {
       enabled: false,
       checking: false,
@@ -191,24 +183,11 @@ function App() {
       { id: 'ZONE12', label: 'Zone 12: Galle & Matara District', type: 'NEW'},
       { id: 'ZONE13', label: 'Zone 13: Hambantota District', type: 'NEW'},
     ],
-    // Themes: each theme is a separate, self-contained identity.
-    // To add a theme: add a list entry below and CSS to
-    // assets/css/theme-<id>.css (scoped by the theme-<id> class).
-    //   analogClock: true -> shows the canvas analog clock
-    //   analogClockTheme (optional): engine theme name in analog-clock.js, falls back to 'galaxy'
-    themes: [
-      { id: 'moonlight', label: 'Moonlight', analogClock: false, baseThemes: ['moonlight-common', 'moonlight-basic', 'moonlight-gradient'], defaultFor: 'digital' },
-      { id: 'moonlight-analog', label: 'Moonlight Analog', analogClock: true, analogClockTheme: 'galaxy', baseThemes: ['moonlight-common', 'moonlight-analog-basic', 'moonlight-gradient'], defaultFor: 'analog' },
-      { id: 'digital-default', label: 'Classic Digital', analogClock: false, isLegacy: true },
-      { id: 'moonlight-basic', label: 'Moonlight BASIC', analogClock: false, baseThemes: ['moonlight-common', 'moonlight-flat'], isInternal: true },
-      { id: 'moonlight-analog-basic', label: 'Moonlight Analog BASIC', analogClock: true, analogClockTheme: 'galaxy', baseThemes: ['moonlight-common', 'moonlight-flat'], isInternal: true },
-      { id: 'moonlight-common', label: 'Moonlight Common Shared', isInternal: true, isStyleOnly: true },
-      { id: 'moonlight-flat', label: 'Moonlight Flat Shared', isInternal: true, isStyleOnly: true },
-      { id: 'moonlight-gradient', label: 'Moonlight Gradient Shared', isInternal: true, isStyleOnly: true },
-      { id: 'sunrise', label: 'Sunrise Panel', analogClock: true, analogClockTheme: 'sunrise', isInternal: true },
-      { id: 'night-sky', label: 'Night Sky', analogClock: false, isInternal: true, isStyleOnly: true },
-      { id: 'cosmic', label: 'Cosmic', analogClock: false, isInternal: true, isStyleOnly: true },
-      { id: 'cosmic-analog', label: 'Cosmic Analog', analogClock: true, analogClockTheme: 'cosmic', isInternal: true, isStyleOnly: true },
+    clockThemes: [
+      { id: 'digitalDefault', label: 'Classic Digital' },
+      { id: 'digitalModern', label: 'Modern Digital' },
+      { id: 'analogDefault', label: 'Classic Analog' },
+      { id: 'analogModern', label: 'Modern Analog' },
     ],
     timeOriginModes: [
       { id: 'auto', label: 'Auto (NTP first)' },
@@ -222,9 +201,9 @@ function App() {
     ],
     analogClockActive: false,
     alertEnabled: true,
-    analogClockTheme: 'galaxy',
-    activeTheme: 'moonlight',
-    masjidName: localStorage.getItem('mdisplay.masjidName') || 'Enter Masjid Name in Settings (Call: 076 964 9494)',
+    analogClockTheme: 'default',
+    digitalClockTheme: 'default',
+    activeClockTheme: 'digitalDefault',
     networkTimeInitialized: false,
     timeIsValid: false,
     timeFetchingMessage: undefined,
@@ -254,11 +233,10 @@ function App() {
     asrMadhab: 'shafie',
     tarawihEnabled: false,
     showSunriseNow: false,
-    showJummahEndNow: false,
     expanded: {
       prayerTimesData: false,
       prayerNewTimesData: false,
-      themes: false,
+      clockThemes: false,
       languages: false,
       timeOriginModes: false,
       timeAdjustNew: false,
@@ -277,7 +255,7 @@ function App() {
     isCordovaReady: false,
     isDownloadsListOpen: false,
     downloadedFiles: [],
-    alertImages: ['alert-phone-moonlight.svg', 'alert2.gif'],
+    alertImages: ['alert1.png', 'alert2.gif'],
     showSunriseLabel: false,
     splashScreenMillis: 4000,
     isPrayerNewDataApplied: false,
@@ -328,55 +306,9 @@ function App() {
         return prayer.name != 'Sunrise' && prayer.name != 'Tarawih';
       });
     },
-    showJummahEndTimetable: function () {
-      return !!(
-        self.data.isFriday &&
-        self.data.jummahEndEnabled &&
-        self.data.showJummahEndNow
-      );
-    },
     showTarawihNext: function () {
       return self.data.nextPrayer && self.data.nextPrayer.name == 'Isha' && self.data.tarawihEnabled && self.data.prayers[6] 
       && (self.data.showSunriseNow);
-    },
-    secondsRingOffset: function () {
-      var seconds = parseInt(self.data.timeDisplaySeconds, 10);
-      if (isNaN(seconds)) {
-        seconds = 0;
-      }
-      return (2 * Math.PI * 28) * (1 - seconds / 60);
-    },
-    secondsRingAngle: function () {
-      var seconds = parseInt(self.data.timeDisplaySeconds, 10);
-      if (isNaN(seconds)) {
-        seconds = 0;
-      }
-      return seconds * 6;
-    },
-    themeClasses: function () {
-      var chain = self.getThemeChain(self.data.activeTheme);
-      var classes = [];
-      for (var i = 0; i < chain.length; i++) {
-        classes.push('theme-' + chain[i].id);
-      }
-      if (!classes.length) {
-        classes.push('theme-' + self.data.activeTheme);
-      }
-      return classes;
-    },
-    visibleThemes: function () {
-      if (self.data.isDevDebugging) {
-        return self.data.themes.filter(function (theme) {
-          return !theme.isStyleOnly;
-        });
-      }
-      return self.data.themes.filter(function (theme) {
-        return !theme.isInternal && !theme.isStyleOnly;
-      });
-    },
-    showBrandingBar: function () {
-      var theme = self.getTheme(self.data.activeTheme);
-      return !theme || !theme.isLegacy;
     },
   };
 
@@ -437,8 +369,7 @@ function App() {
   // self.afterSeconds = 1*60;
   self.afterSeconds = 2 * 60;
   self.pauseSeconds = 15;
-  self.jummahStartPauseSeconds = 60;
-  self.data.bgVersion = '12';
+  self.data.bgVersion = '13';
 
   // METHODS begin
 
@@ -785,7 +716,7 @@ function App() {
           self.data.time = newDate;
           self.data.timeOverridden = false;
         }
-        self.data.timeOverrideEnabled = self.data.isDevDebugging;
+        self.data.timeOverrideEnabled = false;
         self.writeStorage(); // make sure override is disabled in next page load
       } else {
         self.data.time = new Date();
@@ -880,12 +811,6 @@ function App() {
         }, 5 * 1000);
       }
     }
-    self.updateTimeDisplay();
-  };
-  self.updateTimeDisplay = function () {
-    if (!self.data.time) {
-      return;
-    }
     var m = moment(self.data.time);
     var time24Format = self.data.time24Format;
     self.data.timeFormatted = m.format('DD MMM YYYY, ' + (time24Format ? 'HH:mm:ss' : 'h:mm:ss A'));
@@ -896,17 +821,6 @@ function App() {
     self.data.timeDisplayColon = self.data.timeDisplayColon == ':' ? '' : ':';
     self.data.timeDisplayAmPm = time24Format ? '' : m.format('A');
     self.updateInternetTime();
-  };
-  self.jumpToMinuteEnd = function () {
-    if (!self.data.isDevDebugging || !self.data.time || !self.data.timeIsValid) {
-      return;
-    }
-    var d = new Date(self.data.time.getTime());
-    d.setSeconds(59, 0);
-    self.useDeviceTimeOnly = false;
-    self.data.timeOverridden = true;
-    self.forceTimeUpdate(d);
-    self.updateTimeDisplay();
   };
   self.getDateParams = function (date) {
     return [date.getFullYear(), date.getMonth(), date.getDate()];
@@ -1031,20 +945,6 @@ function App() {
     var iqamahTimes = self.getIqamahTimes(times, dateParams[1], dateParams[2]);
     times.Tarawih = new Date(iqamahTimes.Tarawih.getTime() - (self.beforeSeconds * 1000));
     var time24Format = self.data.time24Format;
-    var luharPrayer;
-    if (self.data.isFriday) {
-      luharPrayer = new Prayer('Jummah', times.Luhar, iqamahTimes.Jummah, self.lang, time24Format);
-      if (self.data.jummahEndEnabled) {
-        luharPrayer.endTime = self.getJummahEndTime(iqamahTimes.Jummah, dateParams[1], dateParams[2]);
-        var luharEndMoment = moment(luharPrayer.endTime);
-        luharPrayer.endTimeDisplay = luharEndMoment.format(time24Format ? 'HH:mm' : 'hh:mm');
-        luharPrayer.endTimeHours = luharEndMoment.format(time24Format ? 'HH' : 'hh');
-        luharPrayer.endTimeMinutes = luharEndMoment.format('mm');
-        luharPrayer.endTimeAmPm = time24Format ? '' : luharEndMoment.format('A');
-      }
-    } else {
-      luharPrayer = new Prayer('Luhar', times.Luhar, iqamahTimes.Luhar, self.lang, time24Format);
-    }
     self.todayPrayers = [
       new Prayer('Subah', times.Subah, iqamahTimes.Subah, self.lang, time24Format),
       // new Prayer('Sunrise', times[1], 10, self.lang),
@@ -1056,7 +956,13 @@ function App() {
         self.lang,
         time24Format
       ),
-      luharPrayer,
+      new Prayer(
+        self.data.isFriday ? 'Jummah' : 'Luhar',
+        times.Luhar,
+        self.data.isFriday ? iqamahTimes.Jummah : iqamahTimes.Luhar,
+        self.lang,
+        time24Format
+      ),
       new Prayer('Asr', times.Asr, iqamahTimes.Asr, self.lang, time24Format),
       new Prayer('Magrib', times.Magrib, iqamahTimes.Magrib, self.lang, time24Format),
       new Prayer('Isha', times.Isha, iqamahTimes.Isha, self.lang, time24Format),
@@ -1133,7 +1039,6 @@ function App() {
 
     self.data.hijriDate = hijriDate;
     self.data.prayerInfo = 'athan';
-    self.data.showJummahEndNow = false;
     self.updateBackground(true);
   };
   self.updateBackground = function (isInit) {
@@ -1144,40 +1049,11 @@ function App() {
     //   'https://images.unsplash.com/photo-1523821741446-edb2b68bb7a0?ixlib=rb-1.2.1&q=80&fm=jpg&crop=entropy&cs=tinysrgb&w=1080&fit=max',
     // ];
     // return (self.data.backgroundImage = backgroundImages[0]);
-    self.data.backgroundImage = 'backgrounds/' + self.data.time.getMinutes() + '.svg?v=' + self.data.bgVersion;
-  };
-  self.getJummahEndTime = function (startTime, monthParam, dayParam) {
-    var end = self.data.jummahEnd;
-    var durationMinutes = end ? parseInt(end.minutes, 10) : NaN;
-    var endTime;
-    if (end && end.absolute && end.hours) {
-      endTime = self.getTime(startTime.getFullYear(), monthParam, dayParam, end.toTime());
-    } else {
-      if (isNaN(durationMinutes) || durationMinutes <= 0) {
-        durationMinutes = DEFAULT_JUMMAH_DURATION_MINUTES;
-      }
-      endTime = new Date(startTime.getTime() + durationMinutes * 60 * 1000);
-    }
-    if (endTime.getTime() <= startTime.getTime()) {
-      endTime = new Date(startTime.getTime() + 30 * 60 * 1000);
-    }
-    return endTime;
+    self.data.backgroundImage = 'backgrounds/' + self.data.time.getMinutes() + '.jpg?v=' + self.data.bgVersion;
   };
   self.commitCurrentPrayer = function () {
     if (!self.data.currentPrayer) {
       self.data.currentPrayerDescription = '';
-      return;
-    }
-    if (self.data.currentPrayer.name === 'Jummah') {
-      if (self.data.currentPrayer.endTime && self.data.currentPrayerAfter) {
-        self.data.currentPrayerDescription = translations[self.lang].currentJummahEnd;
-      } else if (self.data.currentPrayerWaiting) {
-        self.data.currentPrayerDescription = translations[self.lang].currentJummahStart;
-      } else if (self.data.currentPrayerBefore) {
-        self.data.currentPrayerDescription = translations[self.lang].currentPrayerBefore;
-      } else if (self.data.currentPrayerAfter) {
-        self.data.currentPrayerDescription = translations[self.lang].currentPrayerAfter;
-      }
       return;
     }
     if (self.data.currentPrayerWaiting) {
@@ -1191,42 +1067,20 @@ function App() {
   self.checkCurrentPrayer = function (currentPrayer) {
     var nowTime = self.data.time.getTime();
     var iqamahTime = currentPrayer.iqamahTime.getTime();
-    var isJummah = !!currentPrayer.endTime;
-    var endTime = isJummah ? currentPrayer.endTime.getTime() : iqamahTime + self.afterSeconds * 1000;
     if (nowTime >= iqamahTime) {
-      if (isJummah && nowTime < iqamahTime + self.jummahStartPauseSeconds * 1000 && nowTime < endTime) {
-        self.data.currentPrayer = currentPrayer;
-        self.data.currentPrayerBefore = false;
-        self.data.currentPrayerAfter = false;
-        self.data.currentPrayerWaiting = {
-          minutes: '00',
-          colon: ':',
-          seconds: '00',
-        };
-        return;
-      }
-      if (nowTime < endTime) {
+      if (nowTime - iqamahTime < self.afterSeconds * 1000) {
         self.data.currentPrayer = currentPrayer;
         self.data.currentPrayerBefore = false;
         // self.data.currentPrayerAfter = true;
-        if (isJummah) {
-          var remainingSeconds = Math.max(0, Math.floor((endTime - nowTime) / 1000));
-          self.data.currentPrayerAfter = {
-            minutes: padZero(Math.floor(remainingSeconds / 60)),
-            colon: self.data.currentPrayerAfter && self.data.currentPrayerAfter.colon == ':' ? ':' : ':',
-            seconds: padZero(remainingSeconds % 60),
-          };
-        } else {
-          var duration = moment.duration(nowTime - iqamahTime, 'milliseconds');
-          // self.data.currentPrayerAfter = padZero(duration.minutes()) + ':' + padZero(duration.seconds());
-          var pause = nowTime - iqamahTime < self.pauseSeconds * 1000;
-          pause = true;
-          self.data.currentPrayerAfter = {
-            minutes: pause ? '00' : padZero(duration.minutes()),
-            colon: self.data.currentPrayerAfter && self.data.currentPrayerAfter.colon == ':' ? ':' : ':',
-            seconds: pause ? '00' : padZero(duration.seconds()),
-          };
-        }
+        var duration = moment.duration(nowTime - iqamahTime, 'milliseconds');
+        // self.data.currentPrayerAfter = padZero(duration.minutes()) + ':' + padZero(duration.seconds());
+        var pause = nowTime - iqamahTime < self.pauseSeconds * 1000;
+        pause = true;
+        self.data.currentPrayerAfter = {
+          minutes: pause ? '00' : padZero(duration.minutes()),
+          colon: self.data.currentPrayerAfter && self.data.currentPrayerAfter.colon == ':' ? ':' : ':',
+          seconds: pause ? '00' : padZero(duration.seconds()),
+        };
         self.data.currentPrayerWaiting = false;
       } else {
         if (currentPrayer.name === 'Isha') {
@@ -1324,9 +1178,6 @@ function App() {
             self.data.showSunriseLabel = false;
           }
         }, 2000);
-        if (self.data.isFriday && self.data.jummahEndEnabled) {
-          self.data.showJummahEndNow = !self.data.showJummahEndNow;
-        }
       }
     }
     var nowTime = self.data.time.getTime();
@@ -1445,12 +1296,7 @@ function App() {
     // self.simulateTime = 50;
     self.updateTime();
     if (self.analogClock && self.data.analogClockActive) {
-      self.analogClock.init(document.getElementById('analog-clock-container'), self.data.time);
-      self.analogResizeHandler = function () {
-        self.analogClock.resize();
-        self.analogClock.nextTick(self.data.time);
-      };
-      window.addEventListener('resize', self.analogResizeHandler);
+      self.analogClock.init(document.getElementById('analog-clock-container'), self.initialTestTime);
     }
     if ((self.data.timeOriginMode == 'auto' || self.data.timeOriginMode == 'network') && self.simulateTime) {
       console.warn('Warning: simulateTime feature is not compatible with network time');
@@ -1470,15 +1316,10 @@ function App() {
     if (window._theInterval) {
       window.clearInterval(window._theInterval);
     }
-    if (self.analogResizeHandler) {
-      window.removeEventListener('resize', self.analogResizeHandler);
-      self.analogResizeHandler = null;
-    }
   };
   self.initStorage = function (callback) {
     var iqamahTimes;
     var settings;
-    var themeId = self.data.activeTheme;
     try {
       settings = JSON.parse(localStorage.getItem('mdisplay.settings'));
     } catch (e) {}
@@ -1486,9 +1327,7 @@ function App() {
       iqamahTimes = JSON.parse(localStorage.getItem('mdisplay.iqamahTimes'));
     } catch (e) {}
     if (!iqamahTimes) {
-      return self.activateTheme(themeId, function () {
-        callback();
-      });
+      return callback();
     }
     var iqamahTimesConfigured = localStorage.getItem('mdisplay.iqamahTimesConfigured');
     for (var name in iqamahTimes) {
@@ -1533,14 +1372,6 @@ function App() {
       if (settings.focusActiveTimerNew1 === false) {
         self.data.focusActiveTimer = false;
       }
-      if (settings.jummahEnd) {
-        self.data.jummahEnd = IqamahTime.fromRaw(settings.jummahEnd);
-      }
-      if (typeof settings.jummahEndEnabled !== 'undefined') {
-        self.data.jummahEndEnabled = !!settings.jummahEndEnabled;
-      } else if (settings.jummahEnd) {
-        self.data.jummahEndEnabled = true;
-      }
       if (settings.timeOverrideEnabled) {
         self.data.timeOverrideEnabled = true;
       }
@@ -1567,13 +1398,32 @@ function App() {
       if (settings.enableArrowKeyScroll) {
         self.data.enableArrowKeyScroll = true;
       }
-      themeId = settings.activeTheme || themeId;
+      if (typeof settings.activeClockTheme2 === 'string') {
+        // self.data.activeClockTheme = settings.activeClockTheme2;
+        // switch (settings.activeClockTheme2) {
+        //   case 'digitalModern':
+        //     self.data.analogClockActive = false;
+        //     self.data.digitalClockTheme = 'modern';
+        //     break;
+        //   case 'analogDefault':
+        //     self.data.analogClockActive = true;
+        //     self.data.analogClockTheme = 'default';
+        //     break;
+        //   case 'analogModern':
+        //     self.data.analogClockActive = true;
+        //     self.data.analogClockTheme = 'modern';
+        //     break;
+        //   default:
+        //     // invalid or digitalDefault
+        //     self.data.analogClockActive = false;
+        //     self.data.digitalClockTheme = 'default';
+        //     break;
+        // }
+      }
       // ...
     }
 
-    self.activateTheme(themeId, function () {
-      callback();
-    });
+    callback();
   };
   self.writeStorage = function (callback) {
     var iqamahTimes = {};
@@ -1586,7 +1436,8 @@ function App() {
       timeAdjustmentMinutes: self.data.timeAdjustmentMinutes,
       timeAdjustNew: self.data.timeAdjustNew,
       // analogClockActive: self.data.analogClockActive,
-      activeTheme: self.data.activeTheme,
+      activeClockTheme: 'digitalDefault', // reset to default for possible later usage
+      activeClockTheme2: self.data.activeClockTheme,
       alertEnabled: self.data.alertEnabled,
       focusActiveTimerNew1: self.data.focusActiveTimer,
       time24Format: self.data.time24Format,
@@ -1600,8 +1451,6 @@ function App() {
       tarawihEnabled: self.data.tarawihEnabled,
       splashScreenMillis: self.data.splashScreenMillis,
       enableArrowKeyScroll: self.data.enableArrowKeyScroll,
-      jummahEndEnabled: self.data.jummahEndEnabled,
-      jummahEnd: self.data.jummahEnd.toRaw(),
     };
     if (self.data.rememberedWifiSSID == '' || self.data.rememberedWifiSSID == '~') {
       settings.rememberWifi = false;
@@ -1621,14 +1470,6 @@ function App() {
     localStorage.setItem('mdisplay.prayerDataId', self.data.selectedPrayerDataId);
     localStorage.setItem('mdisplay.prayerNewDataId', self.data.selectedPrayerNewDataId);
     localStorage.setItem('mdisplay.sunriseSupport', self.data.sunriseSupport ? 1 : 0);
-
-    var masjidName = (self.data.masjidName || '').replace(/^\s+|\s+$/g, '');
-    self.data.masjidName = masjidName;
-    if (masjidName) {
-      localStorage.setItem('mdisplay.masjidName', masjidName);
-    } else {
-      localStorage.removeItem('mdisplay.masjidName');
-    }
 
     if (callback) {
       callback();
@@ -1663,7 +1504,6 @@ function App() {
       'mdisplay.prayerDataId': true,
       'mdisplay.prayerNewDataId': true,
       'mdisplay.sunriseSupport': true,
-      'mdisplay.masjidName': true,
     }) {
       backupData[key] = localStorage.getItem(key);
     }
@@ -1862,7 +1702,6 @@ function App() {
       ARROW_UP: 38,
       ARROW_RIGHT: 39,
       ARROW_DOWN: 40,
-      NINE: 57,
     };
     var KEY_CODES_STR = {
       ENTER: 'Enter',
@@ -1870,9 +1709,7 @@ function App() {
       ARROW_UP: 'ArrowUp',
       ARROW_RIGHT: 'ArrowRight',
       ARROW_DOWN: 'ArrowDown',
-      NINE: 'Digit9',
-      NUMPAD_NINE: 'Numpad9',
-    };
+    }
     var body = document.querySelector('body');
     body.onkeydown = function (event) {
       var pressed = {
@@ -1880,8 +1717,7 @@ function App() {
         arrowLeft: false,
         arrowUp: false,
         arrowRight: false,
-        arrowDown: false,
-        nine: false
+        arrowDown: false
       };
       if (!event.metaKey) {
         // e.preventDefault();
@@ -1893,7 +1729,6 @@ function App() {
         pressed.arrowUp = code == KEY_CODES.ARROW_UP;
         pressed.arrowRight = code == KEY_CODES.ARROW_RIGHT;
         pressed.arrowDown = code == KEY_CODES.ARROW_DOWN;
-        pressed.nine = code == KEY_CODES.NINE;
       } else {
         var code = event.code;
         pressed.enter = code == KEY_CODES_STR.ENTER;
@@ -1901,17 +1736,6 @@ function App() {
         pressed.arrowUp = code == KEY_CODES_STR.ARROW_UP;
         pressed.arrowRight = code == KEY_CODES_STR.ARROW_RIGHT;
         pressed.arrowDown = code == KEY_CODES_STR.ARROW_DOWN;
-        pressed.nine = code == KEY_CODES_STR.NINE || code == KEY_CODES_STR.NUMPAD_NINE;
-      }
-      if (pressed.nine && !event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey) {
-        var target = event.target;
-        var tag = target && target.tagName ? target.tagName.toUpperCase() : '';
-        var isTyping = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || (target && target.isContentEditable);
-        if (self.data.isDevDebugging && !isTyping) {
-          event.preventDefault();
-          self.jumpToMinuteEnd();
-          return;
-        }
       }
       // alert('keyCode: ' + keyCode);
       if (pressed.enter) {
@@ -2215,293 +2039,6 @@ function App() {
     })[0];
     return selected ? selected.label : 'Not Selected';
   };
-  self.getThemeLabel = function (id) {
-    var theme = id && id.id ? id : self.getTheme(id);
-    if (!theme) {
-      return 'Not Selected';
-    }
-    return (theme.isInternal ? '[INTERNAL] ' : '') + theme.label;
-  };
-  self.getTheme = function (id) {
-    for (var i = 0; i < self.data.themes.length; i++) {
-      if (self.data.themes[i].id === id) {
-        return self.data.themes[i];
-      }
-    }
-    return undefined;
-  };
-  self.getThemeChain = function (id) {
-    var chain = [];
-    var theme = self.getTheme(id);
-    if (!theme) {
-      return chain;
-    }
-    var bases = theme.baseThemes || (theme.baseTheme ? [theme.baseTheme] : []);
-    var seen = {};
-    for (var i = 0; i < bases.length; i++) {
-      var baseId = bases[i];
-      if (!baseId || baseId === id || seen[baseId]) {
-        continue;
-      }
-      var base = self.getTheme(baseId);
-      if (base) {
-        seen[baseId] = true;
-        chain.push(base);
-      }
-    }
-    chain.push(theme);
-    return chain;
-  };
-  self.getThemeCssHref = function (themeId) {
-    var version = self.data.appVersion && self.data.appVersion.fullVersion ? self.data.appVersion.fullVersion : '';
-    return 'assets/css/theme-' + themeId + '.css' + (version ? '?v=' + version : '');
-  };
-  self.getThemeStylesMarker = function () {
-    if (!self.themeStylesMarker) {
-      var head = document.head || document.getElementsByTagName('head')[0];
-      var marker = document.createComment('theme-styles');
-      head.appendChild(marker);
-      self.themeStylesMarker = marker;
-    }
-    return self.themeStylesMarker;
-  };
-  self.ensureThemeLink = function (themeId, callback) {
-    var existing = self.themeLinks[themeId];
-    if (existing) {
-      if (existing._mdLoaded) {
-        callback(null);
-      } else if (existing._mdError) {
-        callback(existing._mdError);
-      } else {
-        existing._mdCallbacks.push(callback);
-      }
-      return;
-    }
-    var head = document.head || document.getElementsByTagName('head')[0];
-    var link = document.createElement('link');
-    link.id = 'theme-css-' + themeId;
-    link.rel = 'stylesheet';
-    link.type = 'text/css';
-    link.setAttribute('data-theme', themeId);
-    link.href = self.getThemeCssHref(themeId);
-    link._mdLoaded = false;
-    link._mdError = null;
-    link._mdCallbacks = [callback];
-    var finish = function (err) {
-      if (link._mdLoaded || link._mdError) {
-        return;
-      }
-      link._mdLoaded = !err;
-      link._mdError = err || null;
-      var callbacks = link._mdCallbacks;
-      link._mdCallbacks = [];
-      for (var i = 0; i < callbacks.length; i++) {
-        callbacks[i](err || null);
-      }
-    };
-    link.onload = function () {
-      finish(null);
-    };
-    link.onerror = function () {
-      finish(new Error('Failed to load theme CSS: ' + themeId));
-    };
-    self.themeLinks[themeId] = link;
-    head.insertBefore(link, self.getThemeStylesMarker());
-    setTimeout(function () {
-      finish(new Error('Timed out loading theme CSS: ' + themeId));
-    }, 8000);
-  };
-  self.loadThemeStyles = function (themeId, callback) {
-    callback = callback || function () {};
-    var theme = self.getTheme(themeId);
-    if (!theme || theme.isStyleOnly) {
-      theme = self.getDefaultTheme(false);
-    }
-    var chain = self.getThemeChain(theme.id);
-    if (!chain.length) {
-      theme = self.getDefaultTheme(false);
-      chain = self.getThemeChain(theme.id);
-    }
-    var ids = [];
-    var desired = {};
-    for (var i = 0; i < chain.length; i++) {
-      if (!desired[chain[i].id]) {
-        desired[chain[i].id] = true;
-        ids.push(chain[i].id);
-      }
-    }
-    var token = ++self.themeLoadToken;
-    var remaining = ids.length;
-    var firstError = null;
-    var complete = function (err) {
-      if (err && !firstError) {
-        firstError = err;
-      }
-      remaining -= 1;
-      if (remaining > 0) {
-        return;
-      }
-      if (token !== self.themeLoadToken) {
-        return;
-      }
-      if (firstError) {
-        for (var failedId in self.themeLinks) {
-          var failed = self.themeLinks[failedId];
-          if (failed && failed._mdError) {
-            if (failed.parentNode) {
-              failed.parentNode.removeChild(failed);
-            }
-            delete self.themeLinks[failedId];
-          }
-        }
-        callback(firstError);
-        return;
-      }
-      var head = document.head || document.getElementsByTagName('head')[0];
-      var marker = self.getThemeStylesMarker();
-      for (var j = 0; j < ids.length; j++) {
-        var link = self.themeLinks[ids[j]];
-        if (link) {
-          head.insertBefore(link, marker);
-        }
-      }
-      callback(null);
-      for (var oldId in self.themeLinks) {
-        if (!desired[oldId]) {
-          var oldLink = self.themeLinks[oldId];
-          if (oldLink.parentNode) {
-            oldLink.parentNode.removeChild(oldLink);
-          }
-          delete self.themeLinks[oldId];
-        }
-      }
-    };
-    if (!remaining) {
-      callback(null);
-      return;
-    }
-    for (var k = 0; k < ids.length; k++) {
-      self.ensureThemeLink(ids[k], complete);
-    }
-  };
-  self.activateTheme = function (themeId, callback) {
-    callback = callback || function () {};
-    var theme = self.getTheme(themeId);
-    if (!theme || theme.isStyleOnly) {
-      theme = self.getDefaultTheme(false);
-    }
-    self.loadThemeStyles(theme.id, function (err) {
-      if (err) {
-        var fallback = self.getDefaultTheme(false);
-        if (fallback && fallback.id !== theme.id) {
-          self.loadThemeStyles(fallback.id, function (fallbackErr) {
-            self.applyTheme(fallback);
-            callback(fallbackErr || err);
-          });
-          return;
-        }
-        self.applyTheme(theme);
-        callback(err);
-        return;
-      }
-      self.applyTheme(theme);
-      callback(null);
-    });
-  };
-  self.selectTheme = function (themeId) {
-    var theme = self.getTheme(themeId);
-    if (!theme || theme.isStyleOnly) {
-      return;
-    }
-    self.loadThemeStyles(theme.id, function (err) {
-      if (err) {
-        self.loadThemeStyles(self.data.activeTheme, function () {
-          self.showToast('Failed to load theme: ' + themeId, 3000);
-        });
-        return;
-      }
-      self.applyTheme(theme);
-      self.data.expanded.themes = false;
-      self.updateSettings();
-    });
-  };
-  self.validateThemes = function () {
-    var themes = self.data.themes;
-    var ids = {};
-    var digitalDefaults = 0;
-    var analogDefaults = 0;
-    for (var i = 0; i < themes.length; i++) {
-      var theme = themes[i];
-      if (ids[theme.id]) {
-        console.warn('Duplicate theme id: ' + theme.id);
-      }
-      ids[theme.id] = true;
-      if (theme.isStyleOnly && theme.defaultFor) {
-        console.warn('Style-only theme cannot be a default: ' + theme.id);
-      }
-      if (theme.defaultFor === 'digital') {
-        digitalDefaults += 1;
-      }
-      if (theme.defaultFor === 'analog') {
-        analogDefaults += 1;
-      }
-      var bases = theme.baseThemes || (theme.baseTheme ? [theme.baseTheme] : []);
-      var seenBases = {};
-      for (var j = 0; j < bases.length; j++) {
-        var baseId = bases[j];
-        if (!baseId || baseId === theme.id) {
-          console.warn('Invalid base theme for ' + theme.id + ': ' + baseId);
-          continue;
-        }
-        if (seenBases[baseId]) {
-          console.warn('Duplicate base theme for ' + theme.id + ': ' + baseId);
-        }
-        seenBases[baseId] = true;
-        if (!self.getTheme(baseId)) {
-          console.warn('Missing base theme for ' + theme.id + ': ' + baseId);
-        }
-      }
-    }
-    if (digitalDefaults !== 1) {
-      console.warn('Expected exactly one digital default theme, found ' + digitalDefaults);
-    }
-    if (analogDefaults > 1) {
-      console.warn('Expected at most one analog default theme, found ' + analogDefaults);
-    }
-  };
-  self.getDefaultTheme = function (isAnalog) {
-    var fallback;
-    var target = isAnalog ? 'analog' : 'digital';
-    for (var i = 0; i < self.data.themes.length; i++) {
-      var theme = self.data.themes[i];
-      if (theme.defaultFor === 'digital' && !fallback) {
-        fallback = theme;
-      }
-      if (theme.defaultFor === target) {
-        return theme;
-      }
-    }
-    return fallback || self.data.themes[0];
-  };
-  self.applyTheme = function (theme) {
-    if (!theme) {
-      theme = self.getDefaultTheme(false);
-    }
-    var chain = self.getThemeChain(theme.id);
-    var analogClock = false;
-    var analogClockTheme = 'galaxy';
-    for (var i = 0; i < chain.length; i++) {
-      if (chain[i].analogClock !== undefined) {
-        analogClock = !!chain[i].analogClock;
-      }
-      if (chain[i].analogClockTheme) {
-        analogClockTheme = chain[i].analogClockTheme;
-      }
-    }
-    self.data.activeTheme = theme.id;
-    self.data.analogClockActive = analogClock;
-    self.data.analogClockTheme = analogClockTheme;
-  };
   self.deviceReady = function () {
     self.isDeviceReady = true;
     if (window.cordova) {
@@ -2520,7 +2057,7 @@ function App() {
       setTimeout(function() {
         window.plugins.bringtofront();
       }, 10 * 1000);
-    } else if(window.cordova) {
+    } else {
       self.data.devDebugMessage = 'bringtofront NOT available!';
     }
   };
@@ -2765,7 +2302,6 @@ function App() {
   self.init = function (initialTestTime, callback, analogClock) {
     self.initialTestTime = initialTestTime;
     self.analogClock = analogClock;
-    self.validateThemes();
     self.initStorage(function () {
       self.nextTick();
       if (callback) {

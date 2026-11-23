@@ -14,20 +14,16 @@
     <title>MDisplay Live</title>
     <link rel="shortcut icon" href="assets/images/favicon.png" />
     <link rel="icon" type="image/png" href="assets/images/favicon.png" />
-    <!-- common styles -->
-    <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=3.1.0-243" />
-    <link rel="stylesheet" type="text/css" href="assets/css/reset.css?v=3.1.0-243" />
-    <link rel="stylesheet" type="text/css" href="assets/css/common.css?v=3.1.0-243" />
-    <link rel="stylesheet" type="text/css" href="assets/css/app-settings.css?v=3.1.0-243" />
-    <!-- specific styles -->
-    <link rel="stylesheet" type="text/css" href="assets/css/theme-base.css?v=3.1.0-243" />
-    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock.css?v=3.1.0-243" />
-    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock-layout.css?v=3.1.0-243" />
+    <link rel="stylesheet" type="text/css" href="assets/vendors/reboot.css?v=4.0.0-244" />
+    <link rel="stylesheet" type="text/css" href="assets/css/app.css?v=4.0.0-244" />
+    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock.css?v=4.0.0-244" />
+    <link rel="stylesheet" type="text/css" href="assets/analog-clock/analog-clock-layout.css?v=4.0.0-244" />
+    <link rel="stylesheet" type="text/css" href="assets/css/theme-default.css?v=4.0.0-244" />
   </head>
   <body>
     <div
       id="app"
-      :class="[{'is-showing-alert': showAlert, 'analog-clock-active': analogClockActive, 'is-active': currentPrayer, 'is-waiting': currentPrayerWaiting, 'is-before': currentPrayerBefore, 'is-after': currentPrayerAfter, 'focus-active-timer': currentPrayer && focusActiveTimer}, 'active-prayer-info-' + prayerInfo, themeClasses]"
+      :class="[{'is-showing-alert': showAlert, 'analog-clock-active': analogClockActive, 'is-active': currentPrayer, 'is-waiting': currentPrayerWaiting, 'is-before': currentPrayerBefore, 'is-after': currentPrayerAfter, 'focus-active-timer': currentPrayer && focusActiveTimer}, 'active-prayer-info-' + prayerInfo, 'analog-clock-theme-' + analogClockTheme, 'digital-clock-theme-' + digitalClockTheme]"
     >
     
       <div v-show="true" v-if="isDevDebugging" style="display: none; background: red; position: fixed; z-index: 999999999999;">{{ devDebugMessage }}</div>
@@ -57,7 +53,7 @@
 
       <div id="active-overlay"></div>
 
-        <div id="settings_mode" style="display: none" v-show="true" class="modal-wrapper" v-if="settingsMode">
+        <div style="display: none" v-show="true" class="modal-wrapper" v-if="settingsMode">
           <div class="modal-overlay"></div>
           <div class="modal-dialog">
             <div @click="scrollUp()" class="modal-close modal-close-top">Scroll UP &#9650;
@@ -103,6 +99,16 @@
                     </template>
                   </button> -->
                 </div>
+                <!-- <div class="" v-if="appUdate.enabled">
+                  AUTO UPDATE: <button type="button" @click="checkForUpdates()">Check</button>
+                  <span class="error" v-if="appUdate.error">ERROR: {{ appUdate.error }}</span>
+                  <span class="checking" v-if="appUdate.checking">Checking...</span>
+                  <span class="updated" v-if="appUdate.updated"
+                    >Updated. Version {{ '?v=4.0.0-244'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1 ($2)') }}.</span
+                  >
+                  <span class="updating" v-if="appUdate.updating">Updating...</span>
+                </div>
+                <div class="" v-else>AUTO UPDATE: <button type="button" @click="checkForUpdates()">Check</button></div> -->
               </div>
               <div class="config-wrapper">
 
@@ -397,7 +403,32 @@
                       </div>
                   </section>
                   </div>
-
+                  <div class="config-item other-config" style="height: auto;">
+                    <div>
+                      <small>Clock Theme</small>
+                      <small>
+                        >
+                        <a href="#" @click="expanded.clockThemes = !expanded.clockThemes;">
+                          <span v-if="expanded.clockThemes">dismiss</span>
+                          <span v-else>{{ getSelected(clockThemes, activeClockTheme) }}</span>
+                        </a>
+                      </small>
+                    </div>
+                    <div v-if="expanded.clockThemes">
+                    <label v-for="clockTheme in clockThemes" :for="'clock-theme-select-' + clockTheme.id" style="display: block;">
+                      <input
+                        :id="'clock-theme-select-' + clockTheme.id"
+                        type="radio"
+                        name="clock-theme-select"
+                        :value="clockTheme.id"
+                        v-model="activeClockTheme"
+                        @change="expanded.clockThemes = false; updateSettings()"
+                      />
+                      {{ clockTheme.label }}
+                      &nbsp;
+                    </label>
+                    </div>
+                  </div>
                   <div class="config-item other-config">
                     <label for="time24-format-check">
                       <input
@@ -521,50 +552,6 @@
                   </div>
                 </div>
 
-                <div class="config-container times-config" v-if="!isDownloadsListOpen" style="margin-bottom: 0.5rem;">
-                  <div class="config-item other-config" style="height: auto;">
-                    <label for="masjid-name-input"><small>Masjid / Brand Name</small></label>
-                    <input
-                      id="masjid-name-input"
-                      type="text"
-                      name="masjid-name-input"
-                      v-model="masjidName"
-                      @change="updateSettings()"
-                      class="time-input"
-                      style="width: 100%; box-sizing: border-box;"
-                      placeholder="Enter Masjid Name"
-                      maxlength="80"
-                    />
-                    <div><small>Shown in new themes.</small></div>
-                  </div>
-                  <div class="config-item other-config" style="height: auto;">
-                    <div>
-                      <small>Theme</small>
-                      <small>
-                        >
-                        <a href="#" @click="expanded.themes = !expanded.themes;">
-                          <span v-if="expanded.themes">dismiss</span>
-                          <span v-else>{{ getThemeLabel(activeTheme) }}</span>
-                        </a>
-                      </small>
-                    </div>
-                    <div v-if="expanded.themes">
-                    <label v-for="theme in visibleThemes" :for="'theme-select-' + theme.id" style="display: block;">
-                      <input
-                        :id="'theme-select-' + theme.id"
-                        type="radio"
-                        name="theme-select"
-                        :value="theme.id"
-                        :checked="activeTheme === theme.id"
-                        @change="selectTheme(theme.id)"
-                      />
-                      {{ getThemeLabel(theme) }}
-                      &nbsp;
-                    </label>
-                    </div>
-                  </div>
-                </div>
-
                 <div class="config-container times-config" v-if="!isDownloadsListOpen">
                   <!-- <div>
                     <small>Iqamah Times</small>
@@ -581,8 +568,7 @@
                       buttons to use either adjacent or absolute time
                     </span>
                   </div>
-                  <template v-for="(iqamahTime, name) in iqamahTimes">
-                  <div class="config-item time-config config-time-input"  :class="['config-item-prayer-' + name]"  :key="name">
+                  <div class="config-item time-config config-time-input" v-for="(iqamahTime, name) in iqamahTimes">
                     <label v-if="name == 'Tarawih'" for="tarawih-enabled-check" class="label">
                       <input
                         id="tarawih-enabled-check"
@@ -593,7 +579,7 @@
                       />
                       Tarawih
                     </label>
-                    <span v-else class="label" :class="['label-' + name]">{{ name == 'Jummah' ? 'Jummah Start' : name }}</span>
+                    <span v-else class="label">{{ name }}</span>
                     <!-- {{ name }}: {{ iqamahTime }} -->
                     <!-- <input type="checkbox" v-model="iqamahTime.absolute" @change="updateSettings()"> -->
                     <template v-if="name == 'Tarawih' ? tarawihEnabled : true">
@@ -630,52 +616,6 @@
                       </span>
                     </template>
                   </div>
-                  <div v-if="name == 'Jummah'" class="config-item time-config config-time-input config-item-prayer-Jummah-End" :key="name + '-end'">
-                    <label for="jummah-end-enabled-check" class="label jummah-end-label">
-                      <input
-                        id="jummah-end-enabled-check"
-                        type="checkbox"
-                        name="jummah-end-enabled-check"
-                        v-model="jummahEndEnabled"
-                        @change="updateSettings()"
-                      />
-                      Jummah End
-                    </label>
-                    <template v-if="jummahEndEnabled">
-                      <span
-                        class="toggle-absolute"
-                        :class="{'is-absolute': jummahEnd.absolute, 'is-not-absolute': !jummahEnd.absolute}"
-                        @click="toggleAbsolute(jummahEnd)"
-                      >
-                        <span class="at" v-if="jummahEnd.absolute">@</span>
-                        <span class="plus" v-else>+</span>
-                      </span>
-                      <template v-if="jummahEnd.absolute">
-                        <input
-                          class="time-input"
-                          type="number"
-                          v-model="jummahEnd.hours"
-                          @input="updateSettings()"
-                          @change="updateSettings()"
-                        />
-                        <span class="time-input-colon">:</span>
-                      </template>
-                      <input
-                        class="time-input"
-                        type="number"
-                        v-model="jummahEnd.minutes"
-                        @input="updateSettings()"
-                        @change="updateSettings()"
-                      />
-                      <span class="time-info">
-                        <span v-if="jummahEnd.absolute">
-                          <small>(24h)</small>
-                        </span>
-                        <span class="" v-else>minutes</span>
-                      </span>
-                    </template>
-                  </div>
-                  </template>
                 </div>
 
                 <div class="config-container times-config" v-if="!isDownloadsListOpen" style="margin-top: 0.5rem;">
@@ -769,7 +709,7 @@
             top: 0;
             height: 3rem;
             display: none;
-            z-index: 5555;
+            z-index: 511;
             padding-right: 2rem;
             padding-top: 1.25rem;
           "
@@ -779,13 +719,17 @@
             <span style="padding: 0.25rem; color: #ff0000; font-weight: bold; opacity: 0.75">No Internet</span>
           </div>
           <div v-else>
+            <!-- <span style="opacity: 0.25"> Version {{ '?v=4.0.0-244'.replace(/\?v=(\d+\.\d+\.\d+)-(\d+)/, '$1') }} </span> -->
 
-            <span class="settings-text" style="opacity: 0.5">
+            <span style="opacity: 0.5">
               <svg style="height: 1em; color: #FFF; fill: #FFF;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                 <path d="M352 320c88.4 0 160-71.6 160-160c0-15.3-2.2-30.1-6.2-44.2c-3.1-10.8-16.4-13.2-24.3-5.3l-76.8 76.8c-3 3-7.1 4.7-11.3 4.7H336c-8.8 0-16-7.2-16-16V118.6c0-4.2 1.7-8.3 4.7-11.3l76.8-76.8c7.9-7.9 5.4-21.2-5.3-24.3C382.1 2.2 367.3 0 352 0C263.6 0 192 71.6 192 160c0 19.1 3.4 37.5 9.5 54.5L19.9 396.1C7.2 408.8 0 426.1 0 444.1C0 481.6 30.4 512 67.9 512c18 0 35.3-7.2 48-19.9L297.5 310.5c17 6.2 35.4 9.5 54.5 9.5zM80 408a24 24 0 1 1 0 48 24 24 0 1 1 0-48z"/>
               </svg>
                 Settings
             </span>
+            <svg style="display: none;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+              <path d="M487.4 315.7l-42.6-24.6c4.3-23.2 4.3-47 0-70.2l42.6-24.6c4.9-2.8 7.1-8.6 5.5-14-11.1-35.6-30-67.8-54.7-94.6-3.8-4.1-10-5.1-14.8-2.3L380.8 110c-17.9-15.4-38.5-27.3-60.8-35.1V25.8c0-5.6-3.9-10.5-9.4-11.7-36.7-8.2-74.3-7.8-109.2 0-5.5 1.2-9.4 6.1-9.4 11.7V75c-22.2 7.9-42.8 19.8-60.8 35.1L88.7 85.5c-4.9-2.8-11-1.9-14.8 2.3-24.7 26.7-43.6 58.9-54.7 94.6-1.7 5.4 .6 11.2 5.5 14L67.3 221c-4.3 23.2-4.3 47 0 70.2l-42.6 24.6c-4.9 2.8-7.1 8.6-5.5 14 11.1 35.6 30 67.8 54.7 94.6 3.8 4.1 10 5.1 14.8 2.3l42.6-24.6c17.9 15.4 38.5 27.3 60.8 35.1v49.2c0 5.6 3.9 10.5 9.4 11.7 36.7 8.2 74.3 7.8 109.2 0 5.5-1.2 9.4-6.1 9.4-11.7v-49.2c22.2-7.9 42.8-19.8 60.8-35.1l42.6 24.6c4.9 2.8 11 1.9 14.8-2.3 24.7-26.7 43.6-58.9 54.7-94.6 1.5-5.5-.7-11.3-5.6-14.1zM256 336c-44.1 0-80-35.9-80-80s35.9-80 80-80 80 35.9 80 80-35.9 80-80 80z"/>
+            </svg>
             <span
               class="version-text"
               style="
@@ -803,7 +747,7 @@
           </div>
         </div>
         <div style="visibility: hidden; position: fixed; top: -125%;">
-          <img v-for="i in 60" :src="'backgrounds/' + (i - 1) + '.svg?v=' + bgVersion" />
+          <img v-for="i in 60" :src="'backgrounds/' + (i - 1) + '.jpg?v=' + bgVersion" />
           <img v-for="image in alertImages" :src="'assets/images/' + image + '?v=' + bgVersion" />
         </div>
 
@@ -813,12 +757,8 @@
             <img :src="backgroundImage" />
           </div>
         </div>
-        <div class="bgful-theme"></div>
         <div v-if="currentPrayer && focusActiveTimer" class="alert-container" :style="{opacity: showAlert ? '1' : '0'}">
           <img :src="'assets/images/' + currentlyShowingAlert">
-        </div>
-        <div class="branding-bar" v-if="showBrandingBar">
-          <span class="masjid-name">{{ masjidName }}</span>
         </div>
         <div class="digital-clock" v-if="timeIsValid">
           <span class="time">
@@ -848,13 +788,6 @@
               ><span class="m">{{ timeDisplayMinutes }}</span>
 
               <span class="seconds-container">
-                <svg class="seconds-ring" viewBox="0 0 64 64" aria-hidden="true" v-if="activeTheme == 'moonlight' || activeTheme == 'moonlight-basic'">
-                  <circle class="seconds-ring-track" cx="32" cy="32" r="28" fill="none" stroke-width="4"></circle>
-                  <circle class="seconds-ring-progress" cx="32" cy="32" r="28" fill="none" stroke-width="4" stroke-linecap="round" stroke-dasharray="175.93" transform="rotate(-90 32 32)" :stroke-dashoffset="secondsRingOffset"></circle>
-                  <g :transform="'rotate(' + secondsRingAngle + ' 32 32)'">
-                    <circle class="seconds-ring-head" cx="32" cy="4" r="3.2"></circle>
-                  </g>
-                </svg>
                 <span class="seconds"
                   ><span class="colon">&nbsp;{{ timeDisplayColon }}</span>{{ timeDisplaySeconds }}</span
                 >
@@ -901,19 +834,17 @@
                 <small class="label" v-if="display.prayer.name != 'Sunrise'">{{ translate('prayer.label') }}</small>
               </span>
               <!-- <small class="am-pm">{{ display.prayer.timeAmPm }}</small> -->
-              <span class="iqamah-time" :class="{'showing-tarawih': display.prayer.name == 'Tarawih' || (display.type == 'next' && showTarawihNext), 'is-jummah-end-time': display.type == 'active' && display.prayer.name == 'Jummah' && currentPrayerAfter && currentPrayer.endTime}" v-if="display.prayer.name != 'Sunrise'" :style="display.prayer.name == 'Tarawih' || (display.type == 'next' && showTarawihNext) ? [{'display': 'block'}, currentPrayerWaiting || currentPrayerAfter ? {} : {bottom:  '8.5rem'}] : {}">
+              <span class="iqamah-time" v-if="display.prayer.name != 'Sunrise'" :style="display.prayer.name == 'Tarawih' || (display.type == 'next' && showTarawihNext) ? [{'display': 'block'}, currentPrayerWaiting || currentPrayerAfter ? {} : {bottom:  '8.5rem'}] : {}">
                 <span class="hours">
                   <span v-if="display.type == 'next' && showTarawihNext">{{ prayers[6].iqamahTimeHours }}</span>
-                  <span v-else-if="display.type == 'active' && display.prayer.name == 'Jummah' && currentPrayerAfter && currentPrayer.endTime">{{ display.prayer.endTimeHours }}</span>
                   <span v-else>{{ display.prayer.iqamahTimeHours }}</span>
                 </span><span class="colon">:</span
                 ><span class="minutes">
                   <span v-if="display.type == 'next' && showTarawihNext">{{ prayers[6].iqamahTimeMinutes }}</span>
-                  <span v-else-if="display.type == 'active' && display.prayer.name == 'Jummah' && currentPrayerAfter && currentPrayer.endTime">{{ display.prayer.endTimeMinutes }}</span>
                   <span v-else>{{ display.prayer.iqamahTimeMinutes }}</span>
                 </span>
-                <small class="iqamah-am-pm">{{ display.type == 'active' && display.prayer.name == 'Jummah' && currentPrayerAfter && currentPrayer.endTime ? display.prayer.endTimeAmPm : display.prayer.iqamahTimeAmPm }}</small>
-                <small class="iqamah-label">{{ translate(display.prayer.name == 'Jummah' ? (display.type == 'active' && currentPrayerAfter && currentPrayer.endTime ? 'currentJummahEnd' : 'currentJummahStart') : 'prayer.iqamah-label') }}</small>
+                <small class="iqamah-am-pm">{{ display.prayer.iqamahTimeAmPm }}</small>
+                <small class="iqamah-label" v-if="display.prayer.name != 'Jummah'">{{ translate('prayer.iqamah-label') }}</small>
               </span>
               <!-- <small class="iqamah-am-pm">{{ display.prayer.iqamahTimeAmPm }}</small> -->
             </div>
@@ -926,12 +857,12 @@
       </div>
     </div> -->
         <template v-if="timeIsValid">
-          <div class="active-timer" :class="{'is-tarawih': currentPrayer.name == 'Tarawih', 'is-jummah': currentPrayer.name == 'Jummah' && (currentPrayerWaiting || currentPrayerAfter), 'is-jummah-start': currentPrayer.name == 'Jummah' && currentPrayerWaiting && !currentPrayerAfter, 'is-jummah-end': currentPrayer.name == 'Jummah' && currentPrayerAfter}" v-if="currentPrayer">
+          <div class="active-timer" v-if="currentPrayer">
             <div class="timer timer-is-before" v-if="currentPrayerBefore" :style="currentPrayer.name == 'Tarawih' ? {display: 'none'} : {}">
               <div class="time">
                 <!-- {{ currentPrayerBefore }} -->
                 <span class="minutes">{{ currentPrayerBefore.minutes }}</span
-                ><span class="colon"><span v-if="currentPrayerBefore.colon == ''">&nbsp;</span><span v-else>{{ currentPrayerBefore.colon }}</span></span
+                ><span class="colon">{{ currentPrayerBefore.colon }}</span
                 ><span class="seconds">{{ currentPrayerBefore.seconds }}</span>
               </div>
               <div class="description">{{ currentPrayerDescription }}</div>
@@ -940,7 +871,7 @@
               <div class="time">
                 <!-- {{ currentPrayerAfter }} -->
                 <span class="minutes">{{ currentPrayerAfter.minutes }}</span
-                ><span class="colon"><span v-if="currentPrayerAfter.colon == ''">&nbsp;</span><span v-else></span>{{ currentPrayerAfter.colon }}</span></span
+                ><span class="colon">{{ currentPrayerAfter.colon }}</span
                 ><span class="seconds">{{ currentPrayerAfter.seconds }}</span>
               </div>
               <div class="description">{{ currentPrayerDescription }}</div>
@@ -949,7 +880,7 @@
               <div class="time">
                 <!-- {{ currentPrayerWaiting }} -->
                 <span class="minutes">{{ currentPrayerWaiting.minutes }}</span
-                ><span class="colon"><span v-if="currentPrayerWaiting.colon == ''">&nbsp;</span><span v-else></span>{{ currentPrayerWaiting.colon }}</span></span
+                ><span class="colon">{{ currentPrayerWaiting.colon }}</span
                 ><span class="seconds">{{ currentPrayerWaiting.seconds }}</span>
               </div>
               <div class="description">{{ currentPrayerDescription }}</div>
@@ -958,22 +889,44 @@
         </template>
 
         <div
-          id="analog-clock-container"
           class="analog-clock-container"
           :style="{'visibility': timeIsValid ? 'visible' : 'hidden'}"
         >
+          <img class="analog-clock-bg" :src="'assets/analog-clock/themes/' + analogClockTheme + '/clock-face.png'"></span>
+          <span class="analog-clock-overalay"></span>
+          <!-- HOURS' HAND -->
           <img
-            class="analog-clock-face"
-            alt=""
-            :src="'assets/analog-clock/themes/' + analogClockTheme + '/face.svg'"
+            id="analog-clock-hand-hours"
+            :src="'assets/analog-clock/themes/' + analogClockTheme + '/clock-hand-hours.png'"
+            alt="HOURS HAND"
+          />
+
+          <!-- MINUTES' HAND -->
+          <img
+            id="analog-clock-hand-minutes"
+            :src="'assets/analog-clock/themes/' + analogClockTheme + '/clock-hand-minutes.png'"
+            alt="MINUTES HAND"
+          />
+
+          <!-- SECONDS' HAND -->
+          <img
+            id="analog-clock-hand-seconds"
+            :src="'assets/analog-clock/themes/' + analogClockTheme + '/clock-hand-seconds.png'"
+            alt="SECONDS HAND"
+          />
+
+          <!-- CENTER CIRCLE -->
+          <img
+            class="analog-clock-center-circle"
+            :src="'assets/analog-clock/themes/' + analogClockTheme + '/clock-center-circle.png'"
+            alt="CENTER CIRCLE"
           />
         </div>
 
         <div class="prayer-info-container" v-if="timeIsValid">
-          <div class="prayer-info" v-for="prayer in prayersListDisplay" :class="{'is-current': prayer === currentPrayer, 'is-sunrise': (prayer.name == 'Subah' && showSunriseNow) || (tarawihEnabled && prayers[6] && prayer.name == 'Isha' && showSunriseNow) || (prayer.name == 'Jummah' && prayer.endTime && showJummahEndTimetable && prayerInfo == 'iqamah'), 'is-jummah-end': prayer.name == 'Jummah' && prayer.endTime && showJummahEndTimetable && prayerInfo == 'iqamah', 'is-tarawih': tarawihEnabled && prayers[6] && prayer.name == 'Isha' && showSunriseNow}">
-            <div v-if="tarawihEnabled && prayers[6] && prayer.name == 'Isha' && showSunriseLabel" class="prayer-name is-sunrise-label" style="background-color: #7b4c12; color: #FFF;">{{ translate('Tarawih') }}</div>
-              <div v-else-if="prayer.name == 'Subah' && showSunriseLabel" class="prayer-name is-sunrise-label" style="background-color: #7b4c12; color: #FFF;">{{ translate('Sunrise') }}</div>
-              <div v-else-if="prayer.name == 'Jummah' && prayer.endTime && showJummahEndTimetable && prayerInfo == 'iqamah'" class="prayer-name is-jummah-end-label">{{ translate('currentJummahEnd') }}</div>
+          <div class="prayer-info" v-for="prayer in prayersListDisplay" :class="{'is-current': prayer === currentPrayer, 'is-sunrise': (prayer.name == 'Subah' && showSunriseNow) || tarawihEnabled && prayers[6] && prayer.name == 'Isha' && showSunriseNow}">
+            <div v-if="tarawihEnabled && prayers[6] && prayer.name == 'Isha' && showSunriseLabel" class="prayer-name" style="background-color: #7b4c12; color: #FFF;">{{ translate('Tarawih') }}</div>
+              <div v-else-if="prayer.name == 'Subah' && showSunriseLabel" class="prayer-name" style="background-color: #7b4c12; color: #FFF;">{{ translate('Sunrise') }}</div>
             <div v-else class="prayer-name">{{ prayer.nameDisplay }}</div>
             <!-- <transition name="fade" mode="out-in"> -->
             <div class="prayer-time" xv-if="prayerInfo == 'athan'">
@@ -986,10 +939,6 @@
               </span>
               <span v-else-if="prayer.name == 'Subah' && showSunriseNow">
                 {{ prayers[1].timeDisplay }}
-              </span>
-              <span v-else-if="prayer.name == 'Jummah' && prayer.endTime && showJummahEndTimetable">
-                {{ prayer.endTimeDisplay }}
-                <span class="am-pm">{{ prayer.endTimeAmPm }}</span>
               </span>
               <template v-else>
                 {{ prayer.iqamahTimeDisplay }}
@@ -1022,17 +971,17 @@
         </div>
       </div>
     </div>
-    <script type="text/javascript" src="prayer-data.js?v=3.1.0-243"></script>
-    <script type="text/javascript" src="prayernew-data.js?v=3.1.0-243"></script>
-    <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=3.1.0-243"></script>
-    <script type="text/javascript" src="assets/vendors/vue.min.js?v=3.1.0-243"></script>
-    <script type="text/javascript" src="assets/vendors/moment.min.js?v=3.1.0-243"></script>
-    <script type="text/javascript" src="assets/vendors/hijri.js?v=3.1.0-243"></script>
-    <script type="text/javascript" src="assets/vendors/jquery-3.6.0.min.js?v=3.1.0-243"></script>
-    <script type="text/javascript" src="assets/js/translations.js?v=3.1.0-243"></script>
+    <script type="text/javascript" src="prayer-data.js?v=4.0.0-244"></script>
+    <script type="text/javascript" src="prayernew-data.js?v=4.0.0-244"></script>
+    <script type="text/javascript" src="assets/vendors/workbox-window.prod.umd.js?v=4.0.0-244"></script>
+    <script type="text/javascript" src="assets/vendors/vue.min.js?v=4.0.0-244"></script>
+    <script type="text/javascript" src="assets/vendors/moment.min.js?v=4.0.0-244"></script>
+    <script type="text/javascript" src="assets/vendors/hijri.js?v=4.0.0-244"></script>
+    <script type="text/javascript" src="assets/vendors/jquery-3.6.0.min.js?v=4.0.0-244"></script>
+    <script type="text/javascript" src="assets/js/translations.js?v=4.0.0-244"></script>
     <script type="text/javascript" src="cdvfile://localhost/assets/www/cordova.js"></script>
-    <script type="text/javascript" src="assets/analog-clock/analog-clock.js?v=3.1.0-243"></script>
-    <script type="text/javascript" src="assets/js/app.js?v=3.1.0-243"></script>
+    <script type="text/javascript" src="assets/analog-clock/analog-clock.js?v=4.0.0-244"></script>
+    <script type="text/javascript" src="assets/js/app.js?v=4.0.0-244"></script>
     <script type="text/javascript">
       // WARNING: do not use ES6 syntax
       // The code should only be authored in ES5
@@ -1053,7 +1002,7 @@
       }
 
 
-      var fullVersion = '?v=3.1.0-243';
+      var fullVersion = '?v=4.0.0-244';
       window.mdApp.data.appVersion = window.mdApp.parseVersion(fullVersion);
 
       var hasCordova = !!window.cordova;
@@ -1113,9 +1062,6 @@
             updateSettings: function updateSettings() {
               window.mdApp.updateSettings();
             },
-            selectTheme: function selectTheme(themeId) {
-              window.mdApp.selectTheme(themeId);
-            },
             scrollUp: function scrollUp() {
               window.mdApp.scrollUp();
             },
@@ -1149,9 +1095,6 @@
             },
             getSelected: function(options, selectedId) {
               return window.mdApp.getSelected(options, selectedId);
-            },
-            getThemeLabel: function(themeId) {
-              return window.mdApp.getThemeLabel(themeId);
             },
             onRestoreFileChange: function(event) {
               return window.mdApp.onRestoreFileChange(event);
